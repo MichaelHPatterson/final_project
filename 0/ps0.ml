@@ -48,6 +48,6 @@ let print_survey () =
 print_survey ();;
 
 (* type "make" to compile the file.
-  type ./survey to run the program and print the output.
+  type ./ps0.native to run the program and print the output.
   Make sure all the values look right.  If they do, submit and
   you're done! *)
