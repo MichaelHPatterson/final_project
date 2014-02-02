@@ -151,7 +151,10 @@ few_divisors 4 3;;
 few_divisors 4 4;;
 - : bool = true
 
-*)
+ * Do not worry about negative integers at all. We will not test
+ * your code using negative values for n and m, and do not
+ * consider negative integers for divisors (e.g. don't worry about
+ * -2 being a divisor of 4) *)
 
 (* The type signature for few_divisors is: *)
 (* few_divisors : int -> int -> bool *)
