@@ -140,7 +140,7 @@ let lex_number_string = match_while (fun c -> is_digit c || c = '.')
 let lex_number (l:char list) : (token * char list) option =
   let (s,l') = lex_number_string l in
     try Some (NumT (Float.of_string s), l')
-    with Failure _ -> None ;;
+    with Invalid_argument _ -> None ;;
 
 let rec match_string (l:char list) (s:string) : char list option =
   if s = "" then Some l else
