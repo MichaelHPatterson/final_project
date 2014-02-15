@@ -231,8 +231,8 @@ let plus (b1 : bignum) (b2 : bignum) : bignum =
  * problems?
  * 4. If your code is buggy, test helper functions individually instead of
  * the entire set at once.
- * 5. Assuming positivity in some of your helper functions (and therefore
- * ensuring )
+ * 5. Assuming positivity in some of your helper functions is okay to
+ * simplify code, as long as you respect that invariant.
 *)
 let times (b1 : bignum) (b2 : bignum) : bignum =
   raise ImplementMe
@@ -283,6 +283,8 @@ let rec divmod (b1 : bignum) (b2 : bignum): bignum * bignum =
 (**************************** Challenge 1: RSA ******************************)
 
 (** Support code for RSA **)
+(* Hint: each part of this problem can be implemented in approximately one
+ * line of code. *)
 
 (* Returns b to the power of e mod m *)
 let rec expmod (b : bignum) (e : bignum) (m : bignum) : bignum =
