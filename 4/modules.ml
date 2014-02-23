@@ -22,7 +22,7 @@ end
 
 (*
  * Write a signature called LIST that only exposes the functions length,
- * fold_left, and rev. The Core.Std.List documentation might be helpful:
+ * fold_right, and rev. The Core.Std.List documentation might be helpful:
  * https://ocaml.janestreet.com/ocaml-core/109.60.00/doc/core/#Std.List
  *)
 
