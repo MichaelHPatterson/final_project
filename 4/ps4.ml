@@ -476,18 +476,18 @@ struct
 
 (*>* Problem 3.4 *>*)
   let take (q : queue) =
-    if is_empty q then raise QueueEmpty
-    else
-      let rec take_helper (q : queue) : elt * queue =
-        match q with
-	| [e] -> (e, [])
-	| e :: q' ->
-          let (e_rest, q_rest) = take_helper q' in
-          match C.compare e e_rest with
-	  | Less -> (e, q')
-	  | Equal
-	  | Greater -> (e_rest, e :: q_rest)
-      in take_helper q
+    let rec take_helper (q : queue) : elt * queue =
+      match q with
+      | empty -> raise QueueEmpty
+      | [e] -> (e, [])
+      | e :: q' ->
+        let (e_rest, q_rest) = take_helper q' in
+        match C.compare e e_rest with
+	| Less -> (e, q')
+	| Equal
+	| Greater -> (e_rest, e :: q_rest)
+    in
+    take_helper q
       
 
   let run_tests () = raise ImplementMe
@@ -501,9 +501,7 @@ end
 (* Now implement a priority queue using a Binary Search Tree.
  * Luckily, you should be able to use *a lot* of your code from above! *)
 
-(* Uncomment when you finish! *)
-(*
-module TreeQueue(C : COMPARABLE) : PRIOQUEUE with type elt = C.t=
+module TreeQueue(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
 struct
   exception QueueEmpty
 
@@ -511,10 +509,24 @@ struct
    * e.g. T.insert *)
   module T = (BinSTree(C) : BINTREE with type elt = C.t)
 
-  (* Implement the remainder of the module! *)
+  type elt = T.elt
+  
+  type queue = T.tree
+
+  let empty : queue = T.empty
+
+  let is_empty (q : queue) : bool = (q = empty)
+
+  let add (e : elt) (q : queue) : queue = T.insert e q
+
+  (* NOTE: HAVE TO DEAL WITH EMPTYTREE EXCEPTION *)
+  let take (q : queue) : elt * queue =
+    let e : elt = T.getmin q in (e, T.delete e)
+
+  (* HAVE TO WRITE RUN_TESTS *)
+  let run_tests () = raise ImplementMe
 
 end
-*)
 
 (*****************************************************************************)
 (*                               Part 4                                      *)
@@ -616,12 +628,45 @@ struct
 
   (* Simply returns the top element of the tree t (i.e., just a single pattern
    * match in *)
-  let get_top (t : tree) : elt = raise ImplementMe
+  let get_top (t : tree) : elt =
+    match t with
+    | Leaf e
+    | OneBranch (e, _)
+    | TwoBranch (_, e, _, _) -> e
 
   (* Takes a tree, and if the top node is greater than its children, fixes
    * it. If fixing it results in a subtree where the node is greater than its
    * children, then you must (recursively) fix this tree too. *)
-  let rec fix (t : tree) : tree = raise ImplementMe
+  let rec fix (t : tree) : tree =
+    match t with
+    | Leaf _ -> t
+    | OneBranch (e1, e2) ->
+      if (C.compare e1 e2 = Less) then OneBranch (e1, e2)
+      else OneBranch (e2, e1)
+    | TwoBranch (b, e, t1, t2) ->
+      let switch_left ((b, e, t1, t2) : balance * elt * tree * tree) : tree =
+         (match t1 with
+	 | Leaf e' -> TwoBranch (b, e', Leaf e, t2)
+	 | OneBranch (e1, e2) -> TwoBranch(b, e1, fix (OneBranch (e, e2)), t2)
+         | TwoBranch (b', e', t1', t2') ->
+           TwoBranch (b, e', fix (TwoBranch (b', e, t1', t2')), t2))
+      in
+      let switch_right ((b, e, t1, t2) : balance * elt * tree * tree) : tree =
+         (match t2 with
+	 | Leaf e' -> TwoBranch (b, e', t1, Leaf e)
+	 | OneBranch (e1, e2) -> TwoBranch(b, e1, t1, fix (OneBranch (e, e2)))
+         | TwoBranch (b', e', t1', t2') ->
+           TwoBranch (b, e', t1, fix (TwoBranch (b', e, t1', t2'))))
+      in
+      let top1 = get_top t1 in
+      let top2 = get_top t2 in
+      match C.compare e top1, C.compare top2 with
+      | Greater, Greater ->
+        if (C.compare top1 top2 = Less) then fix (switch_left (b, e, t1, t2))
+	else fix (switch_right (b, e, t1, t2))
+      | Greater, _ -> switch_left (b, e, t1, t2)
+      | _, Greater -> switch_right (b, e, t1, t2)
+      | _ -> t
 
   let extract_tree (q : queue) : tree =
     match q with
