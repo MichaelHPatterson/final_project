@@ -16,12 +16,23 @@ end
 
 (* Write a module called Math that implements the MATH signature above *)
 
-
+module Math : MATH =
+  struct
+    let pi = 4.0 *. atan 1.0
+    let cos = cos
+    let sin = sin
+    let sum = (+.)
+    let max lst = 
+      let rec max_helper = function
+	| x :: [] -> x
+	| x :: xs' -> if x > (max_helper xs') then x else max_helper xs'
+	| [] -> failwith "empty list" in
+      match lst with
+      | [] -> None
+      | _ -> Some (max_helper lst)
+  end
 
 (*>* Problem 1.1 *>*)
-
-(* TEST COMMENT FROM MADHU *)
-(* another test comment *)
 
 (*
  * Write a signature called LIST that only exposes the functions length,
