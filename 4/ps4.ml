@@ -285,7 +285,15 @@ struct
    * The exception "EmptyTree", defined within this module, might come in
    * handy. *)
 
-  let getmin (t : tree) : elt = raise ImplementMe
+  let getmin (t : tree) : elt =
+    let rec min_helper tr = function
+      | Leaf -> raise EmptyTree
+      | Branch (Leaf, lst, _) -> (
+	match List.rev lst with
+	| [] -> failwith "Invalid tree: empty list as node"
+	| x :: _ -> x)
+      | Branch (l, _, _) -> min_helper l in
+    min_helper t
 
 (*>* Problem 2.3 *>*)
 
