@@ -40,19 +40,26 @@ module Math : MATH =
  * https://ocaml.janestreet.com/ocaml-core/109.60.00/doc/core/#Std.List
  *)
 
+module type LIST =
+sig
+ (* if I write "type 'a t" I get type errors. The following line works perfectly
+  * but seems wrong compared to section notes. However it seems necessary b/c we
+  * can't put it in the module itself. *)
+  type 'a t = 'a list
+  val length : 'a t -> int
+  val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init: 'b -> 'b
+  val rev : 'a t -> 'a t
+end
 
 (* The following should work after you have created your signature (you
  * can uncomment them *)
 
-
-(*
 module MyList = (List : LIST);;
 
 let _ =
     assert(MyList.length [1;2;3] = 3);
     assert(MyList.fold_right ~f:(+) ~init:0 [1;2;3] = 6);
     assert(MyList.rev [1;2;3] = [3;2;1])
-*)
 
 
 (* Even with your signature, the following line should never compile:
@@ -145,6 +152,15 @@ end
 
 (* Write a signature TF that exposes as much of *both* Ben
  * and Rob as possible. *)
+
+module type TF =
+sig
+  type info
+  val info : info
+  val hometown : string
+  val fold : int list -> init:int -> int
+end
+
 
 (* The follow should work after you define the TF signature *)
 (*
