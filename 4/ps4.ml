@@ -286,7 +286,7 @@ struct
    * handy. *)
 
   let getmin (t : tree) : elt =
-    let rec min_helper tr = function
+    let rec min_helper = function
       | Leaf -> raise EmptyTree
       | Branch (Leaf, lst, _) -> (
 	match List.rev lst with
