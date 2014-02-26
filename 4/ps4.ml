@@ -459,10 +459,10 @@ struct
   type queue = elt list
 
 (*>* Problem 3.1 *>*)
-  let empty = raise ImplementMe
+  let empty = []
 
 (*>* Problem 3.2 *>*)
-  let is_empty (t : queue) = raise ImplementMe
+  let is_empty (t : queue) = (t = empty)
 
 
 (*>* Problem 3.3 *>*)
@@ -472,10 +472,23 @@ struct
    * module simply becomes a regular queue (i.e., elements inserted earlier
    * should be removed before elements of the same priority inserted later)
    *)
-  let rec add (e : elt) (q : queue) = raise ImplementMe
+  let rec add (e : elt) (q : queue) = e :: q
 
 (*>* Problem 3.4 *>*)
-  let take (q : queue) = raise ImplementMe
+  let take (q : queue) =
+    if is_empty q then raise QueueEmpty
+    else
+      let rec take_helper (q : queue) : elt * queue =
+        match q with
+	| [e] -> (e, [])
+	| e :: q' ->
+          let (e_rest, q_rest) = take_helper q' in
+          match C.compare e e_rest with
+	  | Less -> (e, q')
+	  | Equal
+	  | Greater -> (e_rest, e :: q_rest)
+      in take_helper q
+      
 
   let run_tests () = raise ImplementMe
 end
