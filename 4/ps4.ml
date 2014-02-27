@@ -1,6 +1,6 @@
 (* PS4
  * CS51 Spring 2014
- * Author(s): YOUR NAME(S) HERE
+ * Author(s): Madhu Vijay & Michael Patterson
  *)
 
 (* NOTE: Please read (and understand) all of the comments in this file! *)
@@ -301,7 +301,15 @@ struct
 
   (* Simply returns the maximum value of the tree t. Similarly should
    * return the last element in the matching list. *)
-  let rec getmax (t : tree) : elt = raise ImplementMe
+  let rec getmax (t : tree) : elt =
+    let rec max_helper = function
+      | Leaf -> raise EmptyTree
+      | Branch (_, lst, Leaf) -> (
+	match List.rev lst with
+	| [] -> failwith "Invalid tree: empty list as node"
+	| x :: _ -> x)
+      | Branch (_, _, r) -> max_helper r in
+    max_helper t
 
   let test_insert () =
     let x = C.generate () in
