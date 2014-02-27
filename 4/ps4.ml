@@ -15,6 +15,8 @@ exception ImplementMe
 
 type order = Equal | Less | Greater
 
+let _ = Random.self_init ()
+
 (*****************************************************************************)
 (*                              Part 1.5                                     *)
 (*****************************************************************************)
@@ -484,12 +486,11 @@ struct
         let (e_rest, q_rest) = take_helper q' in
         match C.compare e e_rest with
 	| Less -> (e, q')
-	| Equal
-	| Greater -> (e_rest, e :: q_rest)
+	| Equal | Greater -> (e_rest, e :: q_rest)
     in
     take_helper q
       
-
+  (* IMPLEMENT THIS *)
   let run_tests () = raise ImplementMe
 end
 
@@ -525,7 +526,7 @@ struct
 
   (* NOTE: HAVE TO DEAL WITH EMPTYTREE EXCEPTION *)
   let take (q : queue) : elt * queue =
-    let e : elt = T.getmin q in (e, T.delete e)
+    let e : elt = T.getmin q in (e, T.delete e q)
 
   (* HAVE TO WRITE RUN_TESTS *)
   let run_tests () = raise ImplementMe
@@ -551,7 +552,7 @@ module IntTreeQueue = TreeQueue(IntCompare)
  * priority are removed. Yes, this means it's not really a "queue", but
  * it is easier to implement without that restriction.
  *)
-module BinaryHeap(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
+module BinaryHeap(C : COMPARABLE) (*: PRIOQUEUE with type elt = C.t*) =
 struct
 
   exception QueueEmpty
@@ -642,7 +643,8 @@ struct
 
   (* Takes a tree, and if the top node is greater than its children, fixes
    * it. If fixing it results in a subtree where the node is greater than its
-   * children, then you must (recursively) fix this tree too. *)
+   * children, then you must (recursively) fix this tree too. Assumes that
+   * everything is in order at the start, except the head element. *)
   let rec fix (t : tree) : tree =
     match t with
     | Leaf _ -> t
@@ -664,9 +666,9 @@ struct
          | TwoBranch (b', e', t1', t2') ->
            TwoBranch (b, e', t1, fix (TwoBranch (b', e, t1', t2'))))
       in
-      let top1 = get_top t1 in
-      let top2 = get_top t2 in
-      match C.compare e top1, C.compare top2 with
+      let top1 : elt = get_top t1 in
+      let top2 : elt = get_top t2 in
+      match C.compare e top1, C.compare e top2 with
       | Greater, Greater ->
         if (C.compare top1 top2 = Less) then fix (switch_left (b, e, t1, t2))
 	else fix (switch_right (b, e, t1, t2))
@@ -692,7 +694,20 @@ struct
    * down into a new node at the bottom of the tree. *This* is the node
    * that we want you to return.
    *)
-  let rec get_last (t : tree) : elt * queue = raise ImplementMe
+  let rec get_last (t : tree) : elt * queue =
+    match t with
+    | Leaf e -> (e, Empty)
+    | OneBranch (e1, e2) -> (e2, Tree (Leaf e1))
+    | TwoBranch (Even, e, t1, t2) ->
+      (let (e', q') = get_last t2 in
+      match q' with
+      | Empty -> (e', Tree (OneBranch (e, get_top t1)))
+      | Tree t2' -> (e', Tree (TwoBranch (Odd, e, t1, t2'))))
+    | TwoBranch (Odd, e, t1, t2) ->
+      (let (e', q') = get_last t1 in
+      match q' with
+      | Empty -> (e', Tree (OneBranch (e, get_top t2)))
+      | Tree t1' -> (e', Tree (TwoBranch (Even, e, t1', t2))))
 
   (* Implements the algorithm described in the writeup. You must finish this
    * implementation, as well as the implementations of get_last and fix, which
@@ -718,7 +733,11 @@ struct
        | Empty -> (e, Tree (fix (OneBranch (last, get_top t1))))
        | Tree t2' -> (e, Tree (fix (TwoBranch (Odd, last, t1, t2')))))
     (* Implement the odd case! *)
-    | TwoBranch (Odd, e, t1, t2) -> raise ImplementMe
+    | TwoBranch (Odd, e, t1, t2) ->
+      let (last, q1') = get_last t1 in
+      (* No need for matching -- the only possible previous state is an Odd
+       * TwoBranch Tree. *)
+      (e, Tree (fix (TwoBranch (Even, last, extract_tree q1', t2))))
 
   let run_tests () = raise ImplementMe
 end
@@ -747,17 +766,13 @@ module IntListQueue = (ListQueue(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
 module IntHeapQueue = (BinaryHeap(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
-(*
 module IntTreeQueue = (TreeQueue(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
-*)
 
 (* store the whole modules in these variables *)
 let list_module = (module IntListQueue : PRIOQUEUE with type elt = IntCompare.t)
 let heap_module = (module IntHeapQueue : PRIOQUEUE with type elt = IntCompare.t)
-(*
 let tree_module = (module IntTreeQueue : PRIOQUEUE with type elt = IntCompare.t)
-*)
 
 (* Implements sort using generic priority queues. *)
 let sort (m : (module PRIOQUEUE with type elt=IntCompare.t)) (lst : int list) =
@@ -782,9 +797,7 @@ let heapsort = sort heap_module
  * implementation is *almost* equivalent to treesort;
  * a real treesort relies on self-balancing binary search trees *)
 
-(*
 let treesort = sort tree_module
-*)
 
 (* Sorting with a priority queue with an underlying unordered list
  * implementation is equivalent to heap sort! If your implementation of
@@ -793,6 +806,19 @@ let selectionsort = sort list_module
 
 (* You should test that these sorts all correctly work, and that
  * lists are returned in non-decreasing order!! *)
+
+(* *)
+let sort_tester (sort : int list -> int list) (size : int) : unit =
+  let rec rand_list (size : int) : int list =
+    if size = 0 then []
+    else
+      let value : int = Random.int Int.max_value - (Int.max_value / 2) in
+      value :: (rand_list (size - 1))
+  in
+  let rec check_non_decr : int list -> bool = function
+    | [] | [_] -> true
+    | x :: y :: lst' -> x <= y && check_non_decr (y :: lst')
+  in assert (check_non_decr (sort (rand_list size)))
 
 
 (*****************************************************************************)
@@ -805,6 +831,31 @@ let selectionsort = sort list_module
  * a COMPARABLE module as an argument, and allows for sorting on the
  * type defined by that module. You should use your BinaryHeap module.
  *)
+
+(* Functor that takes a COMPARABLE module as an argument and enables sorting
+ * on the type defined by that module, using BinaryHeap and the "sort"
+ * function inside. *)
+module Sorter (C : COMPARABLE) =
+struct
+  (* Element type derived from the COMPARABLE module passed in. *)
+  type c = C.t
+
+  (* DUMB-SOUNDING NAME *)
+  module CHeap = BinaryHeap(C)
+
+  (* Sorts a list of c's by turning them into a heap and then extracting
+   * them from the heap in order. *)
+  let sort (lst : c list) : c list =
+    let newheap = List.fold_right ~f:CHeap.add ~init:CHeap.empty lst in
+    let rec extract (heap : CHeap.queue) (curr_list : c list) =
+      if CHeap.is_empty heap then curr_list
+      else
+        let (x, heap') = CHeap.take heap in
+        extract heap' (x :: curr_list)
+    in
+    List.rev (extract newheap [])
+end
+
 
 (*>* Problem N.1 *>*)
 (* Challenge problem:
