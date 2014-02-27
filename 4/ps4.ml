@@ -478,7 +478,7 @@ struct
   let take (q : queue) =
     let rec take_helper (q : queue) : elt * queue =
       match q with
-      | empty -> raise QueueEmpty
+      | [] -> raise QueueEmpty (* NOTE: WHY CAN'T I USE 'EMPTY', INSTEAD OF []? *)
       | [e] -> (e, [])
       | e :: q' ->
         let (e_rest, q_rest) = take_helper q' in
@@ -495,6 +495,10 @@ end
 
 (* IMPORTANT: Don't forget to actually *call* run_tests, as with
  * IntTree above! *)
+
+(* List priority queue of ints, for testing *)
+module IntListQueue = ListQueue(IntCompare)
+
 
 (*>* Problem 3.5 *>*)
 
@@ -527,6 +531,8 @@ struct
   let run_tests () = raise ImplementMe
 
 end
+
+module IntTreeQueue = TreeQueue(IntCompare)
 
 (*****************************************************************************)
 (*                               Part 4                                      *)
@@ -641,7 +647,7 @@ struct
     match t with
     | Leaf _ -> t
     | OneBranch (e1, e2) ->
-      if (C.compare e1 e2 = Less) then OneBranch (e1, e2)
+      if (C.compare e1 e2 = Less) then t
       else OneBranch (e2, e1)
     | TwoBranch (b, e, t1, t2) ->
       let switch_left ((b, e, t1, t2) : balance * elt * tree * tree) : tree =
