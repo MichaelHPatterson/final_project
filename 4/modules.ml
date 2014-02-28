@@ -1,3 +1,9 @@
+(* PS4
+ * CS51 Spring 2014
+ * Authors: Madhu Vijay & Michael Patterson
+ * Module warmup exercises.
+ *)
+
 (*****************************************************************************)
 (*                           Part 1 - Warmup                                 *)
 (*****************************************************************************)
@@ -5,6 +11,8 @@
 open Core.Std
 
 (*>* Problem 1.0 *>*)
+
+(* Module signature for some mathematical values and functions. *)
 module type MATH =
 sig
     val pi : float
@@ -14,18 +22,18 @@ sig
     val max : float list -> float option
 end
 
-(* Write a module called Math that implements the MATH signature above *)
-
+(* Module implementing the MATH signature above. *)
 module Math : MATH =
   struct
+    (* Uses built-in functions and values for pi, cos, sin, and sum. *)
     let pi = 4.0 *. atan 1.0
     let cos = cos
     let sin = sin
     let sum = (+.)
     let max lst = 
       let rec max_helper = function
-        | x :: [] -> x
-        | x :: xs' -> if x > (max_helper xs') then x else max_helper xs'
+        | [x] -> x
+        | x :: xs' -> max x (max_helper xs')
         | [] -> failwith "empty list" in
       match lst with
       | [] -> None
@@ -161,12 +169,8 @@ sig
   val fold : int list -> init:int -> int
 end
 
-
-(* The follow should work after you define the TF signature *)
-(*
 module TFBen = (Ben : TF)
 module TFRob = (Rob : TF)
-*)
 
 (*>* Problem 1.3 *>*)
 

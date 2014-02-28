@@ -1,27 +1,17 @@
 (* PS4
  * CS51 Spring 2014
- * Author(s): Madhu Vijay & Michael Patterson
+ * Authors: Madhu Vijay & Michael Patterson
+ * Exercises related to modules and functors.
  *)
 
-(* NOTE: Please read (and understand) all of the comments in this file! *)
-
 open Core.Std
-
-(* Things related to the TreeQueue module in this file are commented out
- * because this file would not compile otherwise. Please uncomment them as you
- * get to them. *)
 
 exception ImplementMe
 
 type order = Equal | Less | Greater
 
+(* Initializes pseudo-random number generator, used for testing sorts. *)
 let _ = Random.self_init ()
-
-(*****************************************************************************)
-(*                              Part 1.5                                     *)
-(*****************************************************************************)
-
-(* Please read motivation.ml for some background on why we use functors here *)
 
 (*****************************************************************************)
 (*                               Part 2                                      *)
@@ -75,10 +65,6 @@ sig
   type t
   val compare : t -> t -> order
   val to_string : t -> string
-
-  (* See the testing.ml for an explanation of
-   * what these "generate*" functions do, and why we included them in
-   * this signature. *)
 
   (* Generate a value of type t *)
   val generate: unit -> t
@@ -140,34 +126,11 @@ struct
     if higher - lower < 2 then None else Some (higher - 1, s2)
 end
 
-(* BinSTree is a *functor*, which takes an argument C which is a module
- * that implements the COMPARABLE signature. BinSTree ultimately
- * must return a module which matches the BINTREE signature.
- * We can do further abstraction by specifying a signature for
- * the functor, but won't do that here.
- *
- * Now that we are passing in a COMPARABLE module, which separately
- * defines a type and comparison for that type, we can just implement something
- * matching BINTREE's signature in terms of that type and comparison function,
- * and can wait until later to actually say what that type and comparison
- * function are.
- *
- * Here, you'll fill in the implementation of a binary search tree. Unlike a
- * usual binary search tree, this implementation keeps a list with each node in
- * the tree that contains each instance of the value inserted into the tree. For
- * example, if the integer 3 is inserted into an Int BinSTree 5 times, then
- * there will be a node with [3;3;3;3;3] in the tree, and the node will only be
- * removed after 5 deletions on 3 (assuming no further intermediate insertions
- * of 3).
- *)
 
+(* Functor that takes a COMPARABLE module and produces a binary search
+ * tree matching the BINTREE signature. *)
 module BinSTree(C : COMPARABLE) : BINTREE with type elt = C.t =
 struct
-  (* Inside of here, you can use C.t to refer to the type defined in
-   * the C module (which matches the COMPARABLE signature), and
-   * C.compare to access the function which compares elements of type
-   * C.t
-   *)
   exception EmptyTree
   exception NodeNotFound
 
@@ -185,64 +148,41 @@ struct
 
 (*>* Problem 2.0 *>*)
 
-  (* Define a method to insert element x into the tree t.
-   * The left subtree of a given node should only have "smaller"
-   * elements than that node, while the right subtree should only have
-   * "greater". Remember that "equal" elements should all be stored in
-   * a list. *The most recently inserted elements should be at the front
-   * of the list* (this is important for later).
-   *
-   * Hint: use C.compare. See delete for inspiration
-   *)
+  (* Inserts an element x into the tree t in the correct place. Puts x
+   * at the front of a list, if a list of equal values exists. *)
   let rec insert (x : elt) (t : tree) : tree =
     match t with
     | Leaf -> Branch (Leaf, [x], Leaf)
     | Branch (l, lst, r) ->
-       match lst with
-       | [] -> failwith "Invalid tree: empty list as node"
-       | hd::tl -> 
-	  match C.compare x hd with
-	  | Less -> Branch (insert x l, lst, r)
-	  | Greater -> Branch (l, lst, insert x r)
-	  | Equal -> Branch (l, x :: lst, r)
+      match lst with
+      (* This "failwith" matches the code provided for "delete". *)
+      | [] -> failwith "Invalid tree: empty list as node"
+      | hd :: _ -> 
+        match C.compare x hd with
+	| Less -> Branch (insert x l, lst, r)
+	| Greater -> Branch (l, lst, insert x r)
+	| Equal -> Branch (l, x :: lst, r)
 
 (*>* Problem 2.1 *>*)
 
-  (* Returns true if the element x is in tree t, else false *)
-  (* Hint: multiple values might compare Equal to x, but
-   * that doesn't necessarily mean that x itself is in the
-   * tree.
-   *)
+  (* Returns true iff the element x is in tree t. Uses C.to_string
+   * as a stronger criterion than C.compare returning "Equal". *)
   let rec search (x : elt) (t : tree) : bool =
     match t with
     | Leaf -> false
     | Branch (l, lst, r) ->
-       match lst with
-       | [] -> failwith "Invalid tree: empty list as node"
-       | hd::tl ->
-	  match C.compare x hd with
-	  | Less -> search x l
-	  | Greater -> search x r
-	  | Equal -> 
-	     List.fold_right lst ~f: (fun x' acc -> (C.to_string x' = 
-               C.to_string x) || acc) ~init: false
+      match lst with
+      | [] -> failwith "Invalid tree: empty list as node"
+      | hd :: _ ->
+        match C.compare x hd with
+	| Less -> search x l
+	| Greater -> search x r
+	| Equal -> 
+	  List.fold_right ~f:(fun x' -> (||) (C.to_string x' = C.to_string x))
+                          ~init:false lst
 
-  (* A useful function for removing the node with the minimum value from
-   * a binary tree, returning that node and the new tree.
-   *
-   * Notice that the pull_min function is not defined in the signature BINTREE.
-   * When you're working on a structure that implements a signature like
-   * BINTREE, you are free to write "helper" functions for your implementation
-   * (such as pull_min) that are not defined in the signature.  Note, however,
-   * that if a function foo IS defined in a signature BAR, and you attempt to
-   * make a structure satisfying the signature BAR, then you MUST define the
-   * function foo in your structure.  Otherwise the compiler will complain that
-   * your structure does not, in fact, satisfy the signature BAR (but you claim
-   * that it does).
-   * So, if it's in the signature, it needs to be in the structure.  But if
-   * it's in the structure, it doesn't necessarily need to show up in the
-   * signature.
-   *)
+  (* Removes the node with the minimum value, returning that node and the new
+   * tree without that node. *)
   let rec pull_min (t : tree) : elt list * tree =
     match t with
     | Leaf -> raise EmptyTree
@@ -276,22 +216,13 @@ struct
 
 (*>* Problem 2.2 *>*)
 
-  (* Simply returns the minimum value of the tree t. If there are multiple
-   * minimum values, it should return the one that was inserted first (note
-   * that, even though the list might look like [3;3;3;3;3], you should
-   * return the *last* 3 in the list. This is because we might pass in
-   * a module to this functor that defines a type and comparison function
-   * where each element in the list *is* distinct, but are Equal
-   * from the perspective of the comparison function (like IntStringCompare).
-   *
-   * The exception "EmptyTree", defined within this module, might come in
-   * handy. *)
-
+  (* Returns the minimum value of the tree t. Returns the minimum value that
+   * was inserted first, if there's a tie. *)
   let getmin (t : tree) : elt =
     let rec min_helper = function
       | Leaf -> raise EmptyTree
-      | Branch (Leaf, lst, _) -> (
-	match List.rev lst with
+      | Branch (Leaf, lst, _) ->
+	(match List.rev lst with
 	| [] -> failwith "Invalid tree: empty list as node"
 	| x :: _ -> x)
       | Branch (l, _, _) -> min_helper l in
@@ -299,9 +230,8 @@ struct
 
 (*>* Problem 2.3 *>*)
 
-  (* Simply returns the maximum value of the tree t. Similarly should
-   * return the last element in the matching list. *)
-  let rec getmax (t : tree) : elt =
+  (* Returns the maximum value of the tree t. *)
+  let getmax (t : tree) : elt =
     let rec max_helper = function
       | Leaf -> raise EmptyTree
       | Branch (_, lst, Leaf) -> (
@@ -311,6 +241,7 @@ struct
       | Branch (_, _, r) -> max_helper r in
     max_helper t
 
+  (* Tests the insert function. *)
   let test_insert () =
     let x = C.generate () in
     let t = insert x empty in
@@ -327,7 +258,6 @@ struct
                         [x;x],
                         Branch(Leaf, [y], Leaf)
                       ));
-    (* Can add further cases here *)
     ()
 
   (* Insert a bunch of elements, and test to make sure that we
@@ -355,13 +285,7 @@ struct
     in
     List.iter ~f:(fun value -> assert (search value full_tree)) values_inserted
 
-  (* None of these tests are particularly exhaustive.
-   * For instance, we could try varying the order in which we insert
-   * values, and making sure that the result is still correct.
-   * So, the strategy here is more to try to build up a reasonable degree
-   * of coverage across the various code-paths, rather than it is to
-   * test exhaustively that our code does the right thing on every single
-   * possible input. *)
+  (* Test function for getmax. *)
   let test_getmax () =
       let x = C.generate () in
       let x2 = C.generate_lt x () in
@@ -369,6 +293,7 @@ struct
       let x4 = C.generate_lt x3 () in
       assert (getmax (insert x4 (insert x3 (insert x2 (insert x empty)))) = x)
 
+  (* Test function for getmin. *)
   let test_getmin () =
       let x = C.generate () in
       let x2 = C.generate_gt x () in
@@ -376,6 +301,7 @@ struct
       let x4 = C.generate_gt x3 () in
       assert (getmin (insert x2 (insert x4 (insert x (insert x3 empty)))) = x)
 
+  (* Test function for delete. *)
   let test_delete () =
       let x = C.generate () in
       let x2 = C.generate_lt x () in
@@ -384,6 +310,7 @@ struct
       let after_ins = insert x4 (insert x3 (insert x2 (insert x empty))) in
       assert (delete x (delete x4 (delete x3 (delete x2 after_ins))) = empty)
 
+  (* Runs all the test functions. *)
   let run_tests () =
     test_insert ();
     test_search ();
@@ -394,34 +321,20 @@ struct
 
 end
 
-(* Here is how you would define an int binary tree using the BinSTree
- * functor, which expects a module to be passed in as an argument.
- * You should write tests using the IntTree module (or you can
- * give the module a different type), and you should use
- * this call to a functor as an example for how to test modules further
- * down in the pset.
- *)
-
+(* Defines an int binary tree using the BinSTree functor and the IntCompare
+ * module. Used for testing below. *)
 module IntTree = BinSTree(IntCompare)
 
-(* Please read the entirety of "testing.ml" for an explanation of how
- * testing works.
- *)
+(* Runs the tests from BinSTree. *)
 let _ = IntTree.run_tests ()
+
+
 
 (*****************************************************************************)
 (*                               Part 3                                      *)
 (*****************************************************************************)
 
-(* A signature for a priority queue. See the pset specification on the
- * course website and section notes for week 4
- * for more information if you are unfamiliar with priority queues.
- *
- * IMPORTANT: In your implementations of priority queues, the MINIMUM
- * valued element corresponds to the HIGHEST priority. For example,
- * in just an int prioqueue, the integer 4 has lower priority than
- * the integer 2.
- *)
+(* Signature for a priority queue *)
 module type PRIOQUEUE =
 sig
   exception QueueEmpty
@@ -454,14 +367,9 @@ end
 
 (*>* Problem 3.0 *>*)
 
-(* Implement a priority queue using lists
- * You can use OCaml's built-in lists (i.e. [] and ::)
- * You are also free to use anything from the List module,
- *)
+(* Priority queue implementation using lists. *)
 module ListQueue(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
 struct
-  (* Remember to use the "C" (COMPARABLE) module! You may want to
-   * look above at BinSTree for inspiration *)
   exception QueueEmpty
 
   (* Element type *)
@@ -481,11 +389,8 @@ struct
 
 (*>* Problem 3.3 *>*)
 
-  (* Like with getmin and getmax in your binary tree, you should implement
-   * add and take such that, if all elements have the same priority, this
-   * module simply becomes a regular queue (i.e., elements inserted earlier
-   * should be removed before elements of the same priority inserted later)
-   *)
+  (* Adds an element to a queue, in the correct order. Adds newer elements
+   * later if there is a tie. *)
   let rec add (e : elt) (q : queue) =
     match q with
     | [] -> [e]
@@ -495,26 +400,17 @@ struct
       | Equal | Greater -> e' :: add e q'
 
 (*>* Problem 3.4 *>*)
+  (* Returns the first (i.e. highest-priority) element and the rest of the queue.
+   * Raises QueueEmpty exception if necessary. *)
   let take (q : queue) =
     match q with
-    | empty -> raise QueueEmpty
+    | [] -> raise QueueEmpty
     | e :: q' -> (e, q')
-    (*let rec take_helper (q : queue) : elt * queue =
-      match q with
-      | [] -> raise QueueEmpty (* NOTE: WHY CAN'T I USE 'EMPTY', INSTEAD OF []? *)
-      | [e] -> (e, [])
-      | e :: q' ->
-        let (e_rest, q_rest) = take_helper q' in
-        match C.compare e e_rest with
-	| Less -> (e, q')
-	| Equal | Greater -> (e_rest, e :: q_rest)
-    in
-    take_helper q*)
 
   (* Simple testing function for "empty" and "is_empty". *)
   let test_empty () =
     assert(is_empty empty);
-    let x = C.generate () in assert( not (is_empty (add x empty)))
+    let x = C.generate () in assert(not (is_empty (add x empty)))
 
   (* Helper function for test_add and test_take. Generates a queue of <size>
    * elts, all of which exceed <last>. *)
@@ -524,18 +420,17 @@ struct
       let next = C.generate_gt last () in
       add next (gen_queue (size - 1) next)
 
-  (* Tests "add" by creating a queue of 10000 elts and checking that it is
+  (* Tests "add" by creating a queue of 1000 elts and checking that it is
    * in the right order. *)
   let test_add () =
     let rec check_queue (q : queue) : bool =
       match q with
-      | [] -> true (* NOTE: WHY AM I NOT ABLE TO DO "| [] | [e] -> true"? CAUSES A COMPILER ERROR *)
-      | [e] -> true
+      | [] | [_] -> true
       | e1 :: e2 :: q' -> (C.compare e1 e2 <> Greater && check_queue (e2 :: q'))
     in
-    assert(check_queue (gen_queue 10000 (C.generate ())))
+    assert(check_queue (gen_queue 1000 (C.generate ())))
 
-  (* Test take by creating a queue of 10000 elts, removing the elements,
+  (* Test "take" by creating a queue of 1000 elts, removing the elements,
    * and making sure they come out in the right order. *)
   let test_take () = 
     let rec check_priority (e : elt) (q : queue) : bool =
@@ -544,9 +439,9 @@ struct
       | e' :: q' -> (C.compare e e' <> Greater && check_priority e' q')
     in
     let min_val = C.generate () in
-    assert(check_priority min_val (gen_queue 10000 min_val))
+    assert(check_priority min_val (gen_queue 1000 min_val))
 
-  (* Runs the test functions for the ListQueue. *)
+  (* Runs test functions for the ListQueue. *)
   let run_tests () =
     test_empty ();
     test_add ();
@@ -554,28 +449,22 @@ struct
     ()
 end
 
-(* IMPORTANT: Don't forget to actually *call* run_tests, as with
- * IntTree above! *)
-
 (* List priority queue of ints, for testing *)
 module IntListQueue = ListQueue(IntCompare)
 
-(* Runs test functions. *)
+(* Runs test functions for ListQueue. *)
 let _ = IntListQueue.run_tests ()
 
 
-(*>* Problem 3.5 *>*)
 
-(* Now implement a priority queue using a Binary Search Tree.
- * Luckily, you should be able to use *a lot* of your code from above! *)
+(*>* Problem 3.5 *>*)
 
 (* Priority queue implementation using a binary search tree. *)
 module TreeQueue(C : COMPARABLE) : (PRIOQUEUE with type elt = C.t) =
 struct
   exception QueueEmpty
 
-  (* You can use the module T to access the functions defined in BinSTree,
-   * e.g. T.insert *)
+  (* Binary search tree module using the COMPARABLE module passed in *)
   module T = (BinSTree(C) : BINTREE with type elt = C.t)
 
   (* Element type *)
@@ -605,7 +494,7 @@ struct
     assert (is_empty T.empty);
     assert (not (is_empty (add (C.generate ()) empty)))
 
-  (* Tests add by adding 1000 elements to a queue, and checking each time to
+  (* Tests "add" by adding 1000 elements to a queue, and checking each time to
    * make sure the last element was properly added. *)
   let test_add () =
     let rec test_add_helper (size : int) (last : elt) (curr : queue) : unit =
@@ -618,9 +507,9 @@ struct
     let first = C.generate () in
     test_add_helper 1000 first (add first empty)
 
-  (* Tests take (and, indirectly, add). Creates a queue of 1000 elements,
+  (* Tests "take" (and, indirectly, "add"). Creates a queue of 1000 elements,
    * removes those elements, and makes sure they come out in order. *)
-  let rec test_take () =
+  let test_take () =
     let rec gen_queue (size : int) (last : elt) : queue =
       if size = 0 then empty
       else
@@ -659,17 +548,7 @@ let _ = IntTreeQueue.run_tests ()
 
 (*>* Problem 4.0 *>*)
 
-(* Now for the good stuff :-) Implement a priority queue using a binary heap.
- * See the pset spec for more info.
- *
- * You should implement a min-heap, i.e. the top of your heap stores the
- * smallest element in the entire heap.
- *
- * Note that, unlike for your tree and list implementations of priority queues,
- * you do *not* need to worry about the order in which elements of equal
- * priority are removed. Yes, this means it's not really a "queue", but
- * it is easier to implement without that restriction.
- *)
+(* Implementation of a priority queue using a binary heap. *)
 module BinaryHeap(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
 struct
 
@@ -677,22 +556,6 @@ struct
 
   type elt = C.t
 
-  (* Be sure to read the pset spec for hints and clarifications.
-   *
-   * Remember the invariants of the tree that make up your queue:
-   * 1) A tree is ODD if its left subtree has 1 more node than its right
-   * subtree. It is EVEN if its left and right subtrees have the same number of
-   * nodes. The tree can never be in any other state. This is the WEAK
-   * invariant, and should never be false.
-   *
-   * 2) All nodes in the subtrees of a node should be *greater* than (or equal
-   * to) the value of that node. This, combined with the previous invariant,
-   * makes a STRONG invariant. Any tree that a user passes in to your module
-   * and receives back from it should satisfy this invariant.  However, in the
-   * process of, say, adding a node to the tree, the tree may intermittently
-   * not satisfy the order invariant. If so, you *must* fix the tree before
-   * returning it to the user.  Fill in the rest of the module below!
-   *)
   (* A node in the tree is either even or odd *)
   type balance = Even | Odd
 
@@ -706,8 +569,10 @@ struct
   (* A queue is either empty, or a tree *)
   type queue = Empty | Tree of tree
 
+  (* An empty queue *)
   let empty = Empty
 
+  (* Checks whether a queue is empty *)
   let is_empty (q : queue) = q = Empty
 
   (* Adds element e to the queue q *)
@@ -901,17 +766,19 @@ let _ = IntHeapQueue.run_tests ()
  * COMPARABLE module for integers, resulting in priority queues
  * tailored for ints
  *)
-module IntListQueue = (ListQueue(IntCompare) :
+(* Note: Added ' after the module names, to make the names different from
+ * their earlier equivalents, to prevent compiler errors. *)
+module IntListQueue' = (ListQueue(IntCompare) :
+                         PRIOQUEUE with type elt = IntCompare.t)
+module IntHeapQueue' = (BinaryHeap(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
-module IntHeapQueue = (BinaryHeap(IntCompare) :
-                        PRIOQUEUE with type elt = IntCompare.t)
-module IntTreeQueue = (TreeQueue(IntCompare) :
+module IntTreeQueue' = (TreeQueue(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
 
 (* store the whole modules in these variables *)
-let list_module = (module IntListQueue : PRIOQUEUE with type elt = IntCompare.t)
-let heap_module = (module IntHeapQueue : PRIOQUEUE with type elt = IntCompare.t)
-let tree_module = (module IntTreeQueue : PRIOQUEUE with type elt = IntCompare.t)
+let list_module = (module IntListQueue' : PRIOQUEUE with type elt = IntCompare.t)
+let heap_module = (module IntHeapQueue' : PRIOQUEUE with type elt = IntCompare.t)
+let tree_module = (module IntTreeQueue' : PRIOQUEUE with type elt = IntCompare.t)
 
 (* Implements sort using generic priority queues. *)
 let sort (m : (module PRIOQUEUE with type elt=IntCompare.t)) (lst : int list) =
@@ -959,17 +826,16 @@ let sort_tester (sort : int list -> int list) (size : int) : unit =
     | x :: y :: lst' -> x <= y && check_non_decr (y :: lst')
   in assert (check_non_decr (sort (rand_list size)))
 
+(* Use sort_tester to test the three sort functions. *)
+let _ = sort_tester heapsort 10000
+let _ = sort_tester treesort 10000
+let _ = sort_tester selectionsort 1000
 
 (*****************************************************************************)
 (*                               Part N                                      *)
 (*****************************************************************************)
 
 (*>* Problem N.0 *>*)
-(* *Highly recommended (and easy)* Challenge problem:
- * Above, we only allow for sorting on int lists. Write a functor that will take
- * a COMPARABLE module as an argument, and allows for sorting on the
- * type defined by that module. You should use your BinaryHeap module.
- *)
 
 (* Functor that takes a COMPARABLE module as an argument and enables sorting
  * on the type defined by that module, using BinaryHeap and the "sort"
@@ -979,7 +845,7 @@ struct
   (* Element type derived from the COMPARABLE module passed in. *)
   type c = C.t
 
-  (* DUMB-SOUNDING NAME *)
+  (* Heap created using BinaryHeap *)
   module CHeap = BinaryHeap(C)
 
   (* Sorts a list of c's by turning them into a heap and then extracting
@@ -997,15 +863,8 @@ end
 
 
 (*>* Problem N.1 *>*)
-(* Challenge problem:
- * Now that you are learning about asymptotic complexity, try to
- * write some functions to analyze the running time of
- * the three different sorts. Record in a comment here the results of
- * running each type of sort on lists of various sizes (you may find
- * it useful to make a function to generate large lists).
- * Of course include your code for how you performed the measurements below.
- * Be convincing when establishing the algorithmic complexity of each sort.
- * See the Sys module for functions related to keeping track of time *)
 
 (*>* Problem N.2 *>*)
-let minutes_spent : int = raise ImplementMe
+
+(* Minutes spent by both of us, combined *)
+let minutes_spent : int = 1000
