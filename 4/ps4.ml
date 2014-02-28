@@ -594,7 +594,7 @@ module IntTreeQueue = TreeQueue(IntCompare)
  * priority are removed. Yes, this means it's not really a "queue", but
  * it is easier to implement without that restriction.
  *)
-module BinaryHeap(C : COMPARABLE) (*: PRIOQUEUE with type elt = C.t*) =
+module BinaryHeap(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
 struct
 
   exception QueueEmpty
@@ -781,9 +781,30 @@ struct
        * TwoBranch Tree. *)
       (e, Tree (fix (TwoBranch (Even, last, extract_tree q1', t2))))
 
-  let run_tests () = raise ImplementMe
+  let take_tests () =
+    let x = C.generate () in
+    let t = add x empty in
+    assert (t = Tree (Leaf x));
+    let t = add x t in
+    assert (t = Tree( OneBranch (x, x)));
+    let (test, t') = take t in
+    assert ((test, t') = (x, Tree(Leaf x)));
+    let y = C.generate_gt x () in
+    let t = add y t in
+    assert (t = Tree( TwoBranch (Even, x, Leaf x, Leaf y)));
+    let (test, t') = take t in
+    assert ((test, t') = (x, Tree (OneBranch (x, y))))
+
+  let run_tests () = take_tests ()
 end
 
+(* Defining an IntHeapQueue with the BinaryHeap functor *)
+
+module IntHeapQueue = (BinaryHeap(IntCompare) :
+                        PRIOQUEUE with type elt = IntCompare.t)
+
+(* Using testing functions in the BinaryHeap *)
+let _ = IntHeapQueue.run_tests ()
 
 
 (* Now to actually use our priority queue implementations for something useful!
