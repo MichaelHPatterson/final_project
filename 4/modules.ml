@@ -24,9 +24,9 @@ module Math : MATH =
     let sum = (+.)
     let max lst = 
       let rec max_helper = function
-	| x :: [] -> x
-	| x :: xs' -> if x > (max_helper xs') then x else max_helper xs'
-	| [] -> failwith "empty list" in
+        | x :: [] -> x
+        | x :: xs' -> if x > (max_helper xs') then x else max_helper xs'
+        | [] -> failwith "empty list" in
       match lst with
       | [] -> None
       | _ -> Some (max_helper lst)
