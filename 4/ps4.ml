@@ -722,21 +722,57 @@ struct
        * TwoBranch Tree. *)
       (e, Tree (fix (TwoBranch (Even, last, extract_tree q1', t2))))
 
-  let take_tests () =
+
+(* Tests for take. Elts are added, and 'take' is tested on resulting heaps.
+ * Note the order of priority for elts: c < w < x < y < z < a < b < d *)
+  let run_tests () =
+    (* Add elt to make one-elt heap, and test 'take' *)
     let x = C.generate () in
     let t = add x empty in
     assert (t = Tree (Leaf x));
+    assert (take t = (x, Empty));
+
+    (* Add elt to make two-elt heap, and test 'take' *)
     let t = add x t in
-    assert (t = Tree( OneBranch (x, x)));
-    let (test, t') = take t in
-    assert ((test, t') = (x, Tree(Leaf x)));
+    assert (t = Tree( OneBranch (x,x)));
+    assert (take t = (x, Tree(Leaf x)));
+
+    (* Add elt to make three-elt heap, and test 'take' *)
     let y = C.generate_gt x () in
     let t = add y t in
     assert (t = Tree( TwoBranch (Even, x, Leaf x, Leaf y)));
-    let (test, t') = take t in
-    assert ((test, t') = (x, Tree (OneBranch (x, y))))
+    assert (take t = (x, Tree (OneBranch (x,y))));
 
-  let run_tests () = take_tests ()
+    (* Add elts to make seven-elt heap, and test 'take' *)
+    let z = C.generate_gt y () in
+    let t = add z t in
+    assert (t = Tree (TwoBranch (Odd, x, OneBranch (x,z), Leaf y)));
+    let a = C.generate_gt z () in
+    let t = add a t in
+    assert (t = Tree (TwoBranch (Even, x, OneBranch (x,z), OneBranch(y,a))));
+    let b = C.generate_gt a () in
+    let t = add b t in
+    assert (t = Tree (TwoBranch (Odd, x, TwoBranch (Even, x, Leaf z, Leaf b),
+    OneBranch(y,a))));
+    let c = C.generate_lt x () in
+    let t = add c t in
+    assert (t = Tree (TwoBranch (Even, c, TwoBranch (Even, x, Leaf z, Leaf b),
+    TwoBranch (Even, x, Leaf a, Leaf y))));
+    assert(take t = (c, Tree (TwoBranch (Odd, x, 
+    TwoBranch (Even, x, Leaf z, Leaf b), OneBranch(y,a)))));
+
+    (* Test 'take' after another the first 'take' on seven-elt *)
+    let (test, t') = take (snd (take t)) in
+    assert ((test, t') = (x, Tree (TwoBranch (Even, x, OneBranch (z, b),
+    OneBranch (y, a)))));
+
+    (* Add elt to make eight-elt heap, and test 'take' *)
+    let d = C.generate_gt b () in
+    let t = add d t in
+    assert (t = Tree (TwoBranch (Odd, c, TwoBranch(Odd, x, (OneBranch (z,d)),
+    Leaf b), TwoBranch (Even, x, Leaf a, Leaf y))));
+    assert (take t = (c, Tree (TwoBranch (Even, x, TwoBranch(Even, x, Leaf z,
+    Leaf b), TwoBranch (Even, y, Leaf a, Leaf d)))))    
 end
 
 (* Defining an IntHeapQueue with the BinaryHeap functor *)
