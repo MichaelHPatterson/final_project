@@ -40,27 +40,20 @@ module Math : MATH =
       | _ -> Some (max_helper lst)
   end
 
+
 (*>* Problem 1.1 *>*)
 
-(*
- * Write a signature called LIST that only exposes the functions length,
- * fold_right, and rev. The Core.Std.List documentation might be helpful:
- * https://ocaml.janestreet.com/ocaml-core/109.60.00/doc/core/#Std.List
- *)
-
+(* Simple signature for lists. *)
 module type LIST =
 sig
- (* if I write "type 'a t" I get type errors. The following line works perfectly
-  * but seems wrong compared to section notes. However it seems necessary b/c we
-  * can't put it in the module itself. *)
+ (* If I write "type 'a t" I get type errors. The following line works
+  * perfectly but seems wrong compared to section notes. However it seems
+  * necessary because we can't put it in the module itself. *)
   type 'a t = 'a list
   val length : 'a t -> int
   val fold_right : 'a t -> f:('a -> 'b -> 'b) -> init: 'b -> 'b
   val rev : 'a t -> 'a t
 end
-
-(* The following should work after you have created your signature (you
- * can uncomment them *)
 
 module MyList = (List : LIST);;
 
@@ -70,14 +63,11 @@ let _ =
     assert(MyList.rev [1;2;3] = [3;2;1])
 
 
-(* Even with your signature, the following line should never compile:
-
-MyList.fold_left ~f:(+) ~init:0 [1;2;3]
-
-*)
 
 
 (*>* Problem 1.2 *>*)
+
+(* Module for Rob *)
 module Rob =
 struct
     type house =
@@ -123,6 +113,7 @@ struct
 
 end
 
+(* Module for Ben *)
 module Ben =
 struct
     type info = {
@@ -158,8 +149,7 @@ struct
 
 end
 
-(* Write a signature TF that exposes as much of *both* Ben
- * and Rob as possible. *)
+(* TF signature that exposes as much of "*both" Ben and Rob as possible. *)
 
 module type TF =
 sig
@@ -173,14 +163,3 @@ module TFBen = (Ben : TF)
 module TFRob = (Rob : TF)
 
 (*>* Problem 1.3 *>*)
-
-(* Challenge (worth 1 point)!
-
- * Write another module that matches sig TF. Try to fill
- * in the info of your own TF! If you don't have a TF, or
- * your TF is already listed here, then feel free to
- * create a module for Henry, Jesse, or yourself.
- *
- * You should not trivially reuse any of the same values as
- * were used above in order to implement the module.
- *)

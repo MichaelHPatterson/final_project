@@ -400,8 +400,9 @@ struct
       | Equal | Greater -> e' :: add e q'
 
 (*>* Problem 3.4 *>*)
-  (* Returns the first (i.e. highest-priority) element and the rest of the queue.
-   * Raises QueueEmpty exception if necessary. *)
+
+  (* Returns the first (i.e. highest-priority) element and the rest of the
+   * queue. Raises QueueEmpty exception if necessary. *)
   let take (q : queue) =
     match q with
     | [] -> raise QueueEmpty
@@ -426,7 +427,8 @@ struct
     let rec check_queue (q : queue) : bool =
       match q with
       | [] | [_] -> true
-      | e1 :: e2 :: q' -> (C.compare e1 e2 <> Greater && check_queue (e2 :: q'))
+      | e1 :: e2 :: q' ->
+        (C.compare e1 e2 <> Greater && check_queue (e2 :: q'))
     in
     assert(check_queue (gen_queue 1000 (C.generate ())))
 
@@ -450,10 +452,12 @@ struct
 end
 
 (* List priority queue of ints, for testing *)
-module IntListQueue = ListQueue(IntCompare)
+(* Added ' to differentiate from IntListQueue used for sorting, to prevent
+ * compiler error. *)
+module IntListQueue' = ListQueue(IntCompare)
 
 (* Runs test functions for ListQueue. *)
-let _ = IntListQueue.run_tests ()
+let _ = IntListQueue'.run_tests ()
 
 
 
@@ -535,10 +539,12 @@ struct
 end
 
 (* TreeQueue of ints using IntCompare, for testing. *)
-module IntTreeQueue = TreeQueue(IntCompare)
+(* Added ' to differentiate from IntTreeQueue used for sorting, to prevent
+ * compiler error. *)
+module IntTreeQueue' = TreeQueue(IntCompare)
 
 (* Run tests on IntTreeQueue. *)
-let _ = IntTreeQueue.run_tests ()
+let _ = IntTreeQueue'.run_tests ()
 
 
 
@@ -578,10 +584,10 @@ struct
   (* Adds element e to the queue q *)
   let add (e : elt) (q : queue) : queue =
     (* Given a tree, where e will be inserted is deterministic based on the
-     * invariants. If we encounter a node in the tree where its value is greater
-     * than the element being inserted, then we place the new elt in that spot
-     * and propagate what used to be at that spot down toward where the new
-     * element would have been inserted *)
+     * invariants. If we encounter a node in the tree where its value is
+     * greater than the element being inserted, then we place the new elt in
+     * that spot and propagate what used to be at that spot down toward where
+     * the new element would have been inserted *)
     let rec add_to_tree (e : elt) (t : tree) : tree =
       match t with
       (* If the tree is just a Leaf, then we end up with a OneBranch *)
@@ -616,8 +622,7 @@ struct
     | Empty -> Tree (Leaf e)
     | Tree t -> Tree (add_to_tree e t)
 
-  (* Simply returns the top element of the tree t (i.e., just a single pattern
-   * match in *)
+  (* Simply returns the top element of the tree t. *)
   let get_top (t : tree) : elt =
     match t with
     | Leaf e
@@ -626,7 +631,7 @@ struct
 
   (* Takes a tree, and if the top node is greater than its children, fixes
    * it. If fixing it results in a subtree where the node is greater than its
-   * children, then you must (recursively) fix this tree too. Assumes that
+   * children, then it recursively fixes the subtree tree. Assumes that
    * everything is in order at the start, except the head element. *)
   let rec fix (t : tree) : tree =
     match t with
@@ -658,25 +663,17 @@ struct
       | Greater, _ -> switch_left (b, e, t1, t2)
       | _, Greater -> switch_right (b, e, t1, t2)
       | _ -> t
-
+  
+  (* Takes a queue and returns the tree it contains (or QueueEmpty if
+   * it doesn't contain a tree. *)
   let extract_tree (q : queue) : tree =
     match q with
     | Empty -> raise QueueEmpty
     | Tree t -> t
 
-  (* Takes a tree, and returns the item that was most recently inserted into
-   * that tree, as well as the queue that results from removing that element.
-   * Notice that a queue is returned (since removing an element from just a leaf
-   * would result in an empty case, which is captured by the queue type
-   *
-   * By "item most recently inserted", we don't mean the
-   * most recently inserted *value*, but rather the newest node that was
-   * added to the bottom-level of the tree. If you follow the implementation
-   * of add carefully, you'll see that the newest value may end up somewhere
-   * in the middle of the tree, but there is always *some* value brought
-   * down into a new node at the bottom of the tree. *This* is the node
-   * that we want you to return.
-   *)
+  (* Takes a queue, and returns (1) the item that was most recently added to
+   * its bottom-level, and (2) the queue that results from removing that
+   * element. *)
   let rec get_last (t : tree) : elt * queue =
     match t with
     | Leaf e -> (e, Empty)
@@ -692,9 +689,7 @@ struct
       | Empty -> (e', Tree (OneBranch (e, get_top t2)))
       | Tree t1' -> (e', Tree (TwoBranch (Even, e, t1', t2))))
 
-  (* Implements the algorithm described in the writeup. You must finish this
-   * implementation, as well as the implementations of get_last and fix, which
-   * take uses *)
+  (* Removes the top elt in the tree, and returns that elt and a new tree. *)
   let take (q : queue) : elt * queue =
     match extract_tree q with
     (* If the tree is just a Leaf, then return the value of that leaf, and the
@@ -723,8 +718,8 @@ struct
       (e, Tree (fix (TwoBranch (Even, last, extract_tree q1', t2))))
 
 
-(* Tests for take. Elts are added, and 'take' is tested on resulting heaps.
- * Note the order of priority for elts: c < w < x < y < z < a < b < d *)
+  (* Tests for take. Elts are added, and 'take' is tested on resulting heaps.
+   * Note the order of priority for elts: c < w < x < y < z < a < b < d *)
   let run_tests () =
     (* Add elt to make one-elt heap, and test 'take' *)
     let x = C.generate () in
@@ -753,51 +748,53 @@ struct
     let b = C.generate_gt a () in
     let t = add b t in
     assert (t = Tree (TwoBranch (Odd, x, TwoBranch (Even, x, Leaf z, Leaf b),
-    OneBranch(y,a))));
+            OneBranch(y,a))));
     let c = C.generate_lt x () in
     let t = add c t in
     assert (t = Tree (TwoBranch (Even, c, TwoBranch (Even, x, Leaf z, Leaf b),
-    TwoBranch (Even, x, Leaf a, Leaf y))));
+            TwoBranch (Even, x, Leaf a, Leaf y))));
     assert(take t = (c, Tree (TwoBranch (Odd, x, 
-    TwoBranch (Even, x, Leaf z, Leaf b), OneBranch(y,a)))));
+           TwoBranch (Even, x, Leaf z, Leaf b), OneBranch(y,a)))));
 
     (* Test 'take' after another the first 'take' on seven-elt *)
     let (test, t') = take (snd (take t)) in
     assert ((test, t') = (x, Tree (TwoBranch (Even, x, OneBranch (z, b),
-    OneBranch (y, a)))));
+            OneBranch (y, a)))));
 
     (* Add elt to make eight-elt heap, and test 'take' *)
     let d = C.generate_gt b () in
     let t = add d t in
     assert (t = Tree (TwoBranch (Odd, c, TwoBranch(Odd, x, (OneBranch (z,d)),
-    Leaf b), TwoBranch (Even, x, Leaf a, Leaf y))));
+            Leaf b), TwoBranch (Even, x, Leaf a, Leaf y))));
     assert (take t = (c, Tree (TwoBranch (Even, x, TwoBranch(Even, x, Leaf z,
-    Leaf b), TwoBranch (Even, y, Leaf a, Leaf d)))))    
+            Leaf b), TwoBranch (Even, y, Leaf a, Leaf d)))))    
 end
 
 (* Defining an IntHeapQueue with the BinaryHeap functor *)
-module IntHeapQueue = (BinaryHeap(IntCompare) :
+(* Added ' to differentiate from IntHeapQueue used for sorting, to prevent
+ * compiler error. *)
+module IntHeapQueue' = (BinaryHeap(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
 
 (* Using testing functions in the BinaryHeap *)
-let _ = IntHeapQueue.run_tests ()
+let _ = IntHeapQueue'.run_tests ()
 
 
 
 (* Priority queue modules for use in sorting.
  *: Added ' after the module names, to make the names different from
  * their earlier equivalents, to prevent compiler errors. *)
-module IntListQueue' = (ListQueue(IntCompare) :
+module IntListQueue = (ListQueue(IntCompare) :
                          PRIOQUEUE with type elt = IntCompare.t)
-module IntHeapQueue' = (BinaryHeap(IntCompare) :
+module IntHeapQueue = (BinaryHeap(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
-module IntTreeQueue' = (TreeQueue(IntCompare) :
+module IntTreeQueue = (TreeQueue(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
 
 (* store the whole modules in these variables *)
-let list_module = (module IntListQueue' : PRIOQUEUE with type elt = IntCompare.t)
-let heap_module = (module IntHeapQueue' : PRIOQUEUE with type elt = IntCompare.t)
-let tree_module = (module IntTreeQueue' : PRIOQUEUE with type elt = IntCompare.t)
+let list_module = (module IntListQueue : PRIOQUEUE with type elt = IntCompare.t)
+let heap_module = (module IntHeapQueue : PRIOQUEUE with type elt = IntCompare.t)
+let tree_module = (module IntTreeQueue : PRIOQUEUE with type elt = IntCompare.t)
 
 (* Implements sort using generic priority queues. *)
 let sort (m : (module PRIOQUEUE with type elt=IntCompare.t)) (lst : int list) =
