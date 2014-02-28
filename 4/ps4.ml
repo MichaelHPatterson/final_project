@@ -740,7 +740,6 @@ struct
 end
 
 (* Defining an IntHeapQueue with the BinaryHeap functor *)
-
 module IntHeapQueue = (BinaryHeap(IntCompare) :
                         PRIOQUEUE with type elt = IntCompare.t)
 
@@ -748,25 +747,9 @@ module IntHeapQueue = (BinaryHeap(IntCompare) :
 let _ = IntHeapQueue.run_tests ()
 
 
-(* Now to actually use our priority queue implementations for something useful!
- *
- * Priority queues are very closely related to sorts. Remember that removal of
- * elements from priority queues removes elements in highest priority to lowest
- * priority order. So, if your priority for an element is directly related to
- * the value of the element, then you should be able to come up with a simple
- * way to use a priority queue for sorting...
- *
- * In OCaml 3.12, modules can be turned into first-class
- * values, and so can be passed to functions! Here, we're using that to avoid
- * having to create a functor for sort. Creating the appropriate functor
- * is a challenge problem :-)
- *)
 
-(* The following code is simply using our functors and passing in a
- * COMPARABLE module for integers, resulting in priority queues
- * tailored for ints
- *)
-(* Note: Added ' after the module names, to make the names different from
+(* Priority queue modules for use in sorting.
+ *: Added ' after the module names, to make the names different from
  * their earlier equivalents, to prevent compiler errors. *)
 module IntListQueue' = (ListQueue(IntCompare) :
                          PRIOQUEUE with type elt = IntCompare.t)
@@ -792,28 +775,17 @@ let sort (m : (module PRIOQUEUE with type elt=IntCompare.t)) (lst : int list) =
   List.rev (extractor pq [])
 
 
-(* Hurray!! Now, we can pass in the modules into sort and get out
- * different sorts!! *)
-
-(* Sorting with a priority queue with an underlying heap
- * implementation is equivalent to heap sort! *)
+(* Sort function with a priority queue using a heap implementation. *)
 let heapsort = sort heap_module
 
-(* Sorting with a priority queue with your underlying tree
- * implementation is *almost* equivalent to treesort;
- * a real treesort relies on self-balancing binary search trees *)
-
+(* Sorting with a priority queue with a tree implementation. *)
 let treesort = sort tree_module
 
-(* Sorting with a priority queue with an underlying unordered list
- * implementation is equivalent to heap sort! If your implementation of
- * ListQueue used ordered ilsts, then this is really insertion sort *)
+(* This is really insertion sort; sorts with a priority queue using ordered
+ * lists. The name was preserved so as not to confuse you. *)
 let selectionsort = sort list_module
 
-(* You should test that these sorts all correctly work, and that
- * lists are returned in non-decreasing order!! *)
-
-(* *)
+(* Function that sorts a test function using large int lists of size <size>. *)
 let sort_tester (sort : int list -> int list) (size : int) : unit =
   let rec rand_list (size : int) : int list =
     if size = 0 then []
@@ -830,6 +802,8 @@ let sort_tester (sort : int list -> int list) (size : int) : unit =
 let _ = sort_tester heapsort 10000
 let _ = sort_tester treesort 10000
 let _ = sort_tester selectionsort 1000
+
+
 
 (*****************************************************************************)
 (*                               Part N                                      *)
