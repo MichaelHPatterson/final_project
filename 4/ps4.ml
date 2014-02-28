@@ -464,16 +464,18 @@ struct
    * look above at BinSTree for inspiration *)
   exception QueueEmpty
 
+  (* Element type *)
   type elt = C.t
 
+  (* Queue type *)
   type queue = elt list
 
 (*>* Problem 3.1 *>*)
-  (* the empty list *)
+  (* The empty list *)
   let empty = []
 
 (*>* Problem 3.2 *>*)
-  (* checks if t is the empty list *)
+  (* Checks if t is the empty list *)
   let is_empty (t : queue) = (t = empty)
 
 
@@ -508,26 +510,47 @@ struct
 	| Equal | Greater -> (e_rest, e :: q_rest)
     in
     take_helper q*)
-      
+
+  (* Simple testing function for "empty" and "is_empty". *)
   let test_empty () =
     assert(is_empty empty);
     let x = C.generate () in assert( not (is_empty (add x empty)))
 
+  (* Helper function for test_add and test_take. Generates a queue of <size>
+   * elts, all of which exceed <last>. *)
+  let rec gen_queue (size : int) (last : elt) : queue =
+    if size = 0 then empty
+    else
+      let next = C.generate_gt last () in
+      add next (gen_queue (size - 1) next)
+
+  (* Tests "add" by creating a queue of 10000 elts and checking that it is
+   * in the right order. *)
   let test_add () =
     let rec check_queue (q : queue) : bool =
       match q with
-      | [] | [e] -> true
-      | e1 :: e2 :: q' -> (C.compare e1 e2 = Less && check_queue e2 :: q')
+      | [] -> true (* NOTE: WHY AM I NOT ABLE TO DO "| [] | [e] -> true"? CAUSES A COMPILER ERROR *)
+      | [e] -> true
+      | e1 :: e2 :: q' -> (C.compare e1 e2 <> Greater && check_queue (e2 :: q'))
     in
-    let gen_queue (size : int) : queue =
-      if size = 0 then []
-      else C.generate () :: gen_queue (size - 1)
-    in
-    assert (true) (* FIX THIS *)
+    assert(check_queue (gen_queue 10000 (C.generate ())))
 
-  (* IMPLEMENT THIS *)
+  (* Test take by creating a queue of 10000 elts, removing the elements,
+   * and making sure they come out in the right order. *)
+  let test_take () = 
+    let rec check_priority (e : elt) (q : queue) : bool =
+      match q with
+      | [] -> true
+      | e' :: q' -> (C.compare e e' <> Greater && check_priority e' q')
+    in
+    let min_val = C.generate () in
+    assert(check_priority min_val (gen_queue 10000 min_val))
+
+  (* Runs the test functions for the ListQueue. *)
   let run_tests () =
     test_empty ();
+    test_add ();
+    test_take ();
     ()
 end
 
@@ -537,6 +560,7 @@ end
 (* List priority queue of ints, for testing *)
 module IntListQueue = ListQueue(IntCompare)
 
+(* Runs test functions. *)
 let _ = IntListQueue.run_tests ()
 
 
@@ -545,37 +569,89 @@ let _ = IntListQueue.run_tests ()
 (* Now implement a priority queue using a Binary Search Tree.
  * Luckily, you should be able to use *a lot* of your code from above! *)
 
-(* Priority queue implementation using a binary search tree.
- * Added parentheses before "struct" and after "end" to avoid an odd compiler
- * error, as Jesse suggested. *)
+(* Priority queue implementation using a binary search tree. *)
 module TreeQueue(C : COMPARABLE) : (PRIOQUEUE with type elt = C.t) =
-(struct
+struct
   exception QueueEmpty
 
   (* You can use the module T to access the functions defined in BinSTree,
    * e.g. T.insert *)
   module T = (BinSTree(C) : BINTREE with type elt = C.t)
 
+  (* Element type *)
   type elt = T.elt
   
+  (* Queue type *)
   type queue = T.tree
 
+  (* Empty tree, from the BinSTree module. *)
   let empty : queue = T.empty
 
+  (* Checks if q is the empty tree. *)
   let is_empty (q : queue) : bool = (q = empty)
 
+  (* Uses the "insert" function from BinSTree to add an element. *)
   let add (e : elt) (q : queue) : queue = T.insert e q
 
-  (* NOTE: HAVE TO DEAL WITH EMPTYTREE EXCEPTION *)
+  (* Uses "getmin" to take the highest-priority element and return
+   * the rest of the tree.
+   * Throws "QueueEmpty" instead of "EmptyTree" to maintain abstraction. *)
   let take (q : queue) : elt * queue =
-    let e : elt = T.getmin q in (e, T.delete e q)
+    try (let e : elt = T.getmin q in (e, T.delete e q))
+    with T.EmptyTree -> raise QueueEmpty
 
-  (* HAVE TO WRITE RUN_TESTS *)
-  let run_tests () = raise ImplementMe
+  (* Short testing function for "empty" and "is_empty". *)
+  let test_empty () =
+    assert (is_empty T.empty);
+    assert (not (is_empty (add (C.generate ()) empty)))
 
-end)
+  (* Tests add by adding 1000 elements to a queue, and checking each time to
+   * make sure the last element was properly added. *)
+  let test_add () =
+    let rec test_add_helper (size : int) (last : elt) (curr : queue) : unit =
+      assert(T.search last curr);
+      if size = 0 then ()
+      else
+        let next = C.generate_gt last () in
+        test_add_helper (size - 1) next (add next curr)
+    in
+    let first = C.generate () in
+    test_add_helper 1000 first (add first empty)
 
+  (* Tests take (and, indirectly, add). Creates a queue of 1000 elements,
+   * removes those elements, and makes sure they come out in order. *)
+  let rec test_take () =
+    let rec gen_queue (size : int) (last : elt) : queue =
+      if size = 0 then empty
+      else
+        let next = C.generate_gt last () in
+        add next (gen_queue (size - 1) next)
+    in
+    let rec check_priority (e : elt) (q : queue) : bool =
+      if is_empty q then true
+      else
+        let (e', q') = take q in
+        (C.compare e e' <> Greater && check_priority e' q')
+    in
+    let min_val = C.generate () in
+    assert(check_priority min_val (gen_queue 1000 min_val))
+
+  (* Runs the test functions for TreeQueue. *)
+  let run_tests () =
+    test_empty ();
+    test_add ();
+    test_take ();
+    ()
+
+end
+
+(* TreeQueue of ints using IntCompare, for testing. *)
 module IntTreeQueue = TreeQueue(IntCompare)
+
+(* Run tests on IntTreeQueue. *)
+let _ = IntTreeQueue.run_tests ()
+
+
 
 (*****************************************************************************)
 (*                               Part 4                                      *)
