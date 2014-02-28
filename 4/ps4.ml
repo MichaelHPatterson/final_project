@@ -469,9 +469,11 @@ struct
   type queue = elt list
 
 (*>* Problem 3.1 *>*)
+  (* the empty list *)
   let empty = []
 
 (*>* Problem 3.2 *>*)
+  (* checks if t is the empty list *)
   let is_empty (t : queue) = (t = empty)
 
 
@@ -482,11 +484,20 @@ struct
    * module simply becomes a regular queue (i.e., elements inserted earlier
    * should be removed before elements of the same priority inserted later)
    *)
-  let rec add (e : elt) (q : queue) = e :: q
+  let rec add (e : elt) (q : queue) =
+    match q with
+    | [] -> [e]
+    | e' :: q' ->
+      match C.compare e e' with
+      | Less -> e :: q
+      | Equal | Greater -> e' :: add e q'
 
 (*>* Problem 3.4 *>*)
   let take (q : queue) =
-    let rec take_helper (q : queue) : elt * queue =
+    match q with
+    | empty -> raise QueueEmpty
+    | e :: q' -> (e, q')
+    (*let rec take_helper (q : queue) : elt * queue =
       match q with
       | [] -> raise QueueEmpty (* NOTE: WHY CAN'T I USE 'EMPTY', INSTEAD OF []? *)
       | [e] -> (e, [])
@@ -496,10 +507,28 @@ struct
 	| Less -> (e, q')
 	| Equal | Greater -> (e_rest, e :: q_rest)
     in
-    take_helper q
+    take_helper q*)
       
+  let test_empty () =
+    assert(is_empty empty);
+    let x = C.generate () in assert( not (is_empty (add x empty)))
+
+  let test_add () =
+    let rec check_queue (q : queue) : bool =
+      match q with
+      | [] | [e] -> true
+      | e1 :: e2 :: q' -> (C.compare e1 e2 = Less && check_queue e2 :: q')
+    in
+    let gen_queue (size : int) : queue =
+      if size = 0 then []
+      else C.generate () :: gen_queue (size - 1)
+    in
+    assert (true) (* FIX THIS *)
+
   (* IMPLEMENT THIS *)
-  let run_tests () = raise ImplementMe
+  let run_tests () =
+    test_empty ();
+    ()
 end
 
 (* IMPORTANT: Don't forget to actually *call* run_tests, as with
@@ -508,14 +537,19 @@ end
 (* List priority queue of ints, for testing *)
 module IntListQueue = ListQueue(IntCompare)
 
+let _ = IntListQueue.run_tests ()
+
 
 (*>* Problem 3.5 *>*)
 
 (* Now implement a priority queue using a Binary Search Tree.
  * Luckily, you should be able to use *a lot* of your code from above! *)
 
-module TreeQueue(C : COMPARABLE) : PRIOQUEUE with type elt = C.t =
-struct
+(* Priority queue implementation using a binary search tree.
+ * Added parentheses before "struct" and after "end" to avoid an odd compiler
+ * error, as Jesse suggested. *)
+module TreeQueue(C : COMPARABLE) : (PRIOQUEUE with type elt = C.t) =
+(struct
   exception QueueEmpty
 
   (* You can use the module T to access the functions defined in BinSTree,
@@ -539,7 +573,7 @@ struct
   (* HAVE TO WRITE RUN_TESTS *)
   let run_tests () = raise ImplementMe
 
-end
+end)
 
 module IntTreeQueue = TreeQueue(IntCompare)
 
