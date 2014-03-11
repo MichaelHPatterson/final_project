@@ -68,6 +68,9 @@ let print s =
  * reached the maximum number of links (n) or the frontier is empty. *)
 let rec crawl (n:int) (frontier: LinkSet.set)
     (visited : LinkSet.set) (d:WordDict.dict) : WordDict.dict =
+  Printf.printf "Number of pages left: %i \n" n;
+  Printf.printf "My frontier: %s \n" (LinkSet.string_of_set frontier);
+  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d);
   if n = 0 then d else (
   if LinkSet.is_empty(frontier) then d else (
   let set_val my_set = 
@@ -76,19 +79,21 @@ let rec crawl (n:int) (frontier: LinkSet.set)
     | Some (x, y) -> (x, y) in
   let add_to_dict my_dict word_list page_url =
     List.fold_right word_list ~f:(fun x acc -> 
-     match lookup acc x with
-     | None -> WordDict.insert acc x page_url
+     match WordDict.lookup acc x with
+     | None -> WordDict.insert acc x (LinkSet.singleton page_url)
      | Some x' -> WordDict.insert acc x (LinkSet.insert page_url x'))
-     ~init:my_dict in
+     ~init: my_dict in
   let add_to_frontier my_frontier link_list my_visited =
     List.fold_right link_list ~f:(fun x acc ->
       if LinkSet.member my_visited x then acc
       else LinkSet.insert x acc) ~init:my_frontier in
-  match CrawlerServices.get_page (fst (set_val frontier)) with
+  let set_elt = fst (set_val frontier) in
+  let set_rest = snd (set_val frontier) in
+  match CrawlerServices.get_page set_elt with
 	| None -> failwith "page not found"
-	| Some {url = x; links = y; words = z} -> 
-	   crawl (n-1) (add_to_frontier frontier y visited)
-		 (LinkSet.insert x visited) (add_to_dict d z x)
+	| Some {url = my_url; links = y; words = z} -> 
+	   crawl (n-1) (add_to_frontier set_rest y visited)
+		 (LinkSet.insert my_url visited) (add_to_dict d z my_url)))
 ;;
 
 let crawler () =
