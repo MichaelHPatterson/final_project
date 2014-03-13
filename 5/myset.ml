@@ -228,16 +228,70 @@ end
 (* DictSet: a functor that creates a SET by calling our           *)
 (* Dict.Make functor                                              *)
 (******************************************************************)
-(*
+
 module DictSet(C : COMPARABLE) : (SET with type elt = C.t) =
 struct
-  module D = Dict.Make(struct
-      ??? fill this in!
+  module D = Dict.Make(
+    struct
+      type key = C.t
+      type value = unit
+      let compare = C.compare
+      let string_of_key = C.string_of_t
+      let string_of_value () = ""
+
+      let gen_key () = C.gen ()
+      let gen_key_gt x () = C.gen_gt x ()
+      let gen_key_lt x () = C.gen_lt x ()
+      let gen_key_random () = C.gen_random ()
+      let gen_key_between x y () = C.gen_between x y ()
+      let gen_value () = ()
+      let gen_pair () = (gen_key (), gen_value ())
   end)
 
   type elt = D.key
   type set = D.dict
-  let empty = ???
+
+
+  (* The following functions are organized such that functions required by those
+   * lower in the module are placed higher. *)
+
+  let empty = D.empty
+
+  let choose d = match D.choose d with
+    | None -> None
+    | Some (k, _, d) -> Some (k,d)
+
+  (* takes advantage of fact that choose returns None if dict is empty *)
+  let is_empty s = (choose s = None)
+
+  let insert x s = D.insert s x ()
+
+  let singleton x = insert x empty
+
+  (* backup fold in case something goes horribly wrong *)
+  (*
+  let rec fold f init d =
+      match choose d with
+      | None -> init
+      | Some (k, d) -> f k (fold f init d)
+   *)
+  (* based off the fold in AssocListDict, found in dict.ml *)
+  let fold f init d = D.fold (fun k () acc -> f k acc) init d
+    
+  (* based off the union given in ListSet *)
+  let union xs ys = fold insert ys xs
+
+  let member d k = D.member d k
+
+  let intersect xs ys = 
+    let rec intersect_helper xs ys =
+      match choose xs with
+      | None -> empty
+      | Some (k, d) -> if member ys k then insert k (intersect_helper d ys)
+			  else intersect_helper d ys in
+    if (is_empty xs || is_empty ys) then empty else intersect_helper xs ys
+
+  let remove k d = D.remove d k
 
   (* implement the rest of the functions in the signature! *)
 
@@ -255,7 +309,6 @@ struct
   let run_tests () =
     ()
 end
-*)
 
 
 
