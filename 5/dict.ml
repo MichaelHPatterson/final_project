@@ -357,22 +357,17 @@ struct
   (* TODO:
    * Implement fold. Read the specification in the DICT signature above. *)
   let fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
+    let rec fold_h (f: key -> value -> 'a -> 'a) (dict1 : dict) (u: 'a) : 'a =
       match dict1 with
-      | Leaf -> failwith "empty dict"
-      | Two (left, (k, v), right) -> fold_rec left (fold_rec right (f k v u))
-      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
-	 fold_rec left (fold_rec (f k1 v1 (fold_rec mid (f k2 v2 u)))) in
-    let rec fold_rec (f: key -> value -> 'a -> 'a) (dict : dict) (u: 'a) : 'a =
-      match dict with
       | Leaf -> u
-      | Two (left, (k, v), right) -> fold_rec left (fold_rec right (f k v u))
+      | Two (left, (k, v), right) -> fold_h f left (fold_h f right (f k v u)) 
       | Three (left, (k1, v1), mid, (k2, v2), right) -> 
-	 fold_rec left (fold_rec (f k1 v1 (fold_rec mid (f k2 v2 u))))
-
-match d with
-    | Leaf -> 
-    | Two
-    | Three
+	 fold_h f left (fold_h f mid (f k1 v1 (fold_h f right (f k2 v2 u)))) in
+      match d with
+      | Leaf -> failwith "empty dict"
+      | Two (left, (k, v), right) -> fold_h f left (fold_h f right (f k v u))
+      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
+	 fold_h f left (fold_h f mid (f k1 v1 (fold_h f right (f k2 v2 u))))
 
   (* TODO:
    * Implement these to-string functions *)

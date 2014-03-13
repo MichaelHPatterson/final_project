@@ -68,9 +68,10 @@ let print s =
  * reached the maximum number of links (n) or the frontier is empty. *)
 let rec crawl (n:int) (frontier: LinkSet.set)
     (visited : LinkSet.set) (d:WordDict.dict) : WordDict.dict =
+  (*
   Printf.printf "Number of pages left: %i \n" n;
   Printf.printf "My frontier: %s \n" (LinkSet.string_of_set frontier);
-  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d);
+  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d); *)
   if n = 0 then d else (
   if LinkSet.is_empty(frontier) then d else (
   let set_val my_set = 
