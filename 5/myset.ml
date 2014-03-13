@@ -275,6 +275,7 @@ struct
       | None -> init
       | Some (k, d) -> f k (fold f init d)
    *)
+
   (* based off the fold in AssocListDict, found in dict.ml *)
   let fold f init d = D.fold (fun k () acc -> f k acc) init d
     

@@ -278,7 +278,7 @@ end
 (* BTDict: a functor that implements our DICT signature           *)
 (* using a balanced tree (2-3 trees)                              *)
 (******************************************************************)
-(*
+
 module BTDict(D:DICT_ARG) : (DICT with type key = D.key
 with type value = D.value) =
 struct
@@ -356,8 +356,23 @@ struct
 
   (* TODO:
    * Implement fold. Read the specification in the DICT signature above. *)
-  let rec fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
-    raise TODO
+  let fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
+      match dict1 with
+      | Leaf -> failwith "empty dict"
+      | Two (left, (k, v), right) -> fold_rec left (fold_rec right (f k v u))
+      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
+	 fold_rec left (fold_rec (f k1 v1 (fold_rec mid (f k2 v2 u)))) in
+    let rec fold_rec (f: key -> value -> 'a -> 'a) (dict : dict) (u: 'a) : 'a =
+      match dict with
+      | Leaf -> u
+      | Two (left, (k, v), right) -> fold_rec left (fold_rec right (f k v u))
+      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
+	 fold_rec left (fold_rec (f k1 v1 (fold_rec mid (f k2 v2 u))))
+
+match d with
+    | Leaf -> 
+    | Two
+    | Three
 
   (* TODO:
    * Implement these to-string functions *)
@@ -647,7 +662,22 @@ struct
    *    _______________
    *)
   let rec balanced (d: dict) : bool =
-    raise TODO
+    let rec b_count (dict1: dict) : int option =
+      match dict1 with
+      | Leaf -> Some 1
+      | Two (left, _, right) -> (
+	match (b_count left, b_count right) with
+	| (None, _) -> None
+	| (_, None) -> None
+	| (Some x, Some y) -> if x = y then Some ((x + y) / 2) else None)
+      | Three (left, _, mid, _, right) -> (
+	match (b_count left, b_count mid, b_count right) with
+	| (None, _, _) -> None
+	| (_, None, _) -> None
+	| (_, _, None) -> None
+	| (Some x, Some y, Some z) -> 
+          if (x = y && y = z) then Some ((x + y + z) / 3) else None) in
+    not (b_count d = None)
 
 
   (********************************************************************)
@@ -680,7 +710,7 @@ struct
     else
       (D.gen_key_random(), D.gen_value()) :: (generate_random_list (size - 1))
 
-(*
+
   let test_balance () =
     let d1 = Leaf in
     assert(balanced d1) ;
@@ -720,7 +750,7 @@ struct
                    D.gen_pair(),Leaf,D.gen_pair(),Two(Leaf,D.gen_pair(),Leaf))
     in
     assert(not (balanced d7)) ;
-    () *)
+    ()
 
 (*
   let test_remove_nothing () =
@@ -782,7 +812,7 @@ struct
     () *)
 
   let run_tests () =
-(*    test_balance() ; *)
+    test_balance() ;
 (*    test_remove_nothing() ;
     test_remove_from_nothing() ;
     test_remove_in_order() ;
@@ -791,7 +821,7 @@ struct
     ()
 
 end
-*)
+
 
 
 
@@ -809,10 +839,10 @@ IntStringListDict.run_tests();;
  *
  * Uncomment out the lines below when you are ready to test your
  * 2-3 tree implementation. *)
-(*
+(* Not sure if should be uncommented now *)
 module IntStringBTDict = BTDict(IntStringDictArg) ;;
 IntStringBTDict.run_tests();;
-*)
+
 
 
 
