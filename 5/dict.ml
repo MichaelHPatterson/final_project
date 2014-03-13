@@ -376,8 +376,8 @@ match d with
 
   (* TODO:
    * Implement these to-string functions *)
-  let string_of_key = raise TODO
-  let string_of_value = raise TODO
+  let string_of_key = D.string_of_key
+  let string_of_value = D.string_of_value
   let string_of_dict (d: dict) : string = raise TODO
 
   (* Debugging function. This will print out the tree in text format.
