@@ -1,0 +1,236 @@
+### Starting build.
+# Target: moogle.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:moogle.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules moogle.ml > moogle.ml.depends
+# Target: crawl.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:crawl.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules crawl.ml > crawl.ml.depends
+# Target: dict.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:dict.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules dict.ml > dict.ml.depends
+# Target: order.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:order.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules order.ml > order.ml.depends
+# Target: order.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:order.cmo, file:order.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o order.cmo order.ml
+# Target: pagerank.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:pagerank.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules pagerank.ml > pagerank.ml.depends
+# Target: dict.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:dict.cmo, file:dict.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o dict.cmo dict.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o dict.cmo dict.ml
+File "dict.ml", line 211, characters 6-26:
+Warning 32: unused value insert_list_reversed.
+File "dict.ml", line 225, characters 10-30:
+Warning 32: unused value generate_random_list.
+File "dict.ml", line 241, characters 17-18:
+Warning 27: unused variable v.
+# Target: graph.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:graph.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules graph.ml > graph.ml.depends
+# Target: myset.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:myset.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules myset.ml > myset.ml.depends
+# Target: myset.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:myset.cmo, file:myset.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o myset.cmo myset.ml
+# Target: nodescore.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:nodescore.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules nodescore.ml > nodescore.ml.depends
+# Target: graph.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:graph.cmo, file:graph.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o graph.cmo graph.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o graph.cmo graph.ml
+File "graph.ml", line 63, characters 19-20:
+Warning 27: unused variable x.
+File "graph.ml", line 64, characters 19-20:
+Warning 27: unused variable x.
+File "graph.ml", line 65, characters 24-25:
+Warning 27: unused variable x.
+File "graph.ml", line 65, characters 26-27:
+Warning 27: unused variable y.
+File "graph.ml", line 77, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 78, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 79, characters 26-27:
+Warning 27: unused variable x.
+File "graph.ml", line 79, characters 28-29:
+Warning 27: unused variable y.
+File "graph.ml", line 93, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 94, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 95, characters 26-27:
+Warning 27: unused variable x.
+File "graph.ml", line 95, characters 28-29:
+Warning 27: unused variable y.
+File "graph.ml", line 117, characters 25-26:
+Warning 27: unused variable v.
+File "graph.ml", line 218, characters 28-30:
+Warning 3: deprecated feature: operator (or); you should use (||) instead
+# Target: util.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:util.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules util.ml > util.ml.depends
+# Target: nodescore.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:nodescore.cmo, file:nodescore.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o nodescore.cmo nodescore.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o nodescore.cmo nodescore.ml
+File "nodescore.ml", line 50, characters 21-22:
+Warning 27: unused variable x.
+File "nodescore.ml", line 51, characters 21-22:
+Warning 27: unused variable x.
+File "nodescore.ml", line 53, characters 26-27:
+Warning 27: unused variable x.
+File "nodescore.ml", line 53, characters 28-29:
+Warning 27: unused variable y.
+File "nodescore.ml", line 63, characters 16-17:
+Warning 27: unused variable n.
+File "nodescore.ml", line 70, characters 18-19:
+Warning 27: unused variable s.
+# Target: util.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:util.cmo, file:util.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o util.cmo util.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o util.cmo util.ml
+File "util.ml", line 283, characters 12-15:
+Warning 27: unused variable exn.
+# Target: query.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:query.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules query.ml > query.ml.depends
+# Target: pagerank.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:pagerank.cmo, file:pagerank.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o pagerank.cmo pagerank.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o pagerank.cmo pagerank.ml
+File "pagerank.ml", line 18, characters 19-20:
+Warning 27: unused variable x.
+File "pagerank.ml", line 19, characters 19-20:
+Warning 27: unused variable x.
+File "pagerank.ml", line 21, characters 24-25:
+Warning 27: unused variable x.
+File "pagerank.ml", line 21, characters 26-27:
+Warning 27: unused variable y.
+File "pagerank.ml", line 32, characters 15-16:
+Warning 27: unused variable x.
+File "pagerank.ml", line 33, characters 15-16:
+Warning 27: unused variable y.
+File "pagerank.ml", line 35, characters 20-21:
+Warning 27: unused variable x.
+File "pagerank.ml", line 35, characters 22-23:
+Warning 27: unused variable y.
+File "pagerank.ml", line 44, characters 15-16:
+Warning 27: unused variable x.
+File "pagerank.ml", line 45, characters 15-16:
+Warning 27: unused variable y.
+File "pagerank.ml", line 47, characters 20-21:
+Warning 27: unused variable x.
+File "pagerank.ml", line 47, characters 22-23:
+Warning 27: unused variable y.
+# Target: query.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:query.cmo, file:query.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o query.cmo query.ml
+# Target: crawl.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:crawl.cmo, file:crawl.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o crawl.cmo crawl.ml
++ ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o crawl.cmo crawl.ml
+File "crawl.ml", line 36, characters 19-20:
+Warning 27: unused variable x.
+File "crawl.ml", line 37, characters 19-20:
+Warning 27: unused variable x.
+File "crawl.ml", line 39, characters 24-25:
+Warning 27: unused variable x.
+File "crawl.ml", line 39, characters 26-27:
+Warning 27: unused variable y.
+# Target: moogle.cmo, tags: { annot, bin_annot, byte, compile, debug, extension:cmo, extension:ml, file:moogle.cmo, file:moogle.ml, implem, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlc -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o moogle.cmo moogle.ml
+# Target: order.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:order.cmx, file:order.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o order.cmx order.ml
+# Target: dict.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:dict.cmx, file:dict.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o dict.cmx dict.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o dict.cmx dict.ml
+File "dict.ml", line 211, characters 6-26:
+Warning 32: unused value insert_list_reversed.
+File "dict.ml", line 225, characters 10-30:
+Warning 32: unused value generate_random_list.
+File "dict.ml", line 241, characters 17-18:
+Warning 27: unused variable v.
+# Target: myset.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:myset.cmx, file:myset.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o myset.cmx myset.ml
+# Target: graph.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:graph.cmx, file:graph.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o graph.cmx graph.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o graph.cmx graph.ml
+File "graph.ml", line 63, characters 19-20:
+Warning 27: unused variable x.
+File "graph.ml", line 64, characters 19-20:
+Warning 27: unused variable x.
+File "graph.ml", line 65, characters 24-25:
+Warning 27: unused variable x.
+File "graph.ml", line 65, characters 26-27:
+Warning 27: unused variable y.
+File "graph.ml", line 77, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 78, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 79, characters 26-27:
+Warning 27: unused variable x.
+File "graph.ml", line 79, characters 28-29:
+Warning 27: unused variable y.
+File "graph.ml", line 93, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 94, characters 21-22:
+Warning 27: unused variable x.
+File "graph.ml", line 95, characters 26-27:
+Warning 27: unused variable x.
+File "graph.ml", line 95, characters 28-29:
+Warning 27: unused variable y.
+File "graph.ml", line 117, characters 25-26:
+Warning 27: unused variable v.
+File "graph.ml", line 218, characters 28-30:
+Warning 3: deprecated feature: operator (or); you should use (||) instead
+# Target: nodescore.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:nodescore.cmx, file:nodescore.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o nodescore.cmx nodescore.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o nodescore.cmx nodescore.ml
+File "nodescore.ml", line 50, characters 21-22:
+Warning 27: unused variable x.
+File "nodescore.ml", line 51, characters 21-22:
+Warning 27: unused variable x.
+File "nodescore.ml", line 53, characters 26-27:
+Warning 27: unused variable x.
+File "nodescore.ml", line 53, characters 28-29:
+Warning 27: unused variable y.
+File "nodescore.ml", line 63, characters 16-17:
+Warning 27: unused variable n.
+File "nodescore.ml", line 70, characters 18-19:
+Warning 27: unused variable s.
+# Target: util.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:util.cmx, file:util.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o util.cmx util.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o util.cmx util.ml
+File "util.ml", line 283, characters 12-15:
+Warning 27: unused variable exn.
+# Target: pagerank.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:pagerank.cmx, file:pagerank.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o pagerank.cmx pagerank.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o pagerank.cmx pagerank.ml
+File "pagerank.ml", line 18, characters 19-20:
+Warning 27: unused variable x.
+File "pagerank.ml", line 19, characters 19-20:
+Warning 27: unused variable x.
+File "pagerank.ml", line 21, characters 24-25:
+Warning 27: unused variable x.
+File "pagerank.ml", line 21, characters 26-27:
+Warning 27: unused variable y.
+File "pagerank.ml", line 32, characters 15-16:
+Warning 27: unused variable x.
+File "pagerank.ml", line 33, characters 15-16:
+Warning 27: unused variable y.
+File "pagerank.ml", line 35, characters 20-21:
+Warning 27: unused variable x.
+File "pagerank.ml", line 35, characters 22-23:
+Warning 27: unused variable y.
+File "pagerank.ml", line 44, characters 15-16:
+Warning 27: unused variable x.
+File "pagerank.ml", line 45, characters 15-16:
+Warning 27: unused variable y.
+File "pagerank.ml", line 47, characters 20-21:
+Warning 27: unused variable x.
+File "pagerank.ml", line 47, characters 22-23:
+Warning 27: unused variable y.
+# Target: query.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:query.cmx, file:query.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o query.cmx query.ml
+# Target: crawl.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:crawl.cmx, file:crawl.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o crawl.cmx crawl.ml
++ ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o crawl.cmx crawl.ml
+File "crawl.ml", line 36, characters 19-20:
+Warning 27: unused variable x.
+File "crawl.ml", line 37, characters 19-20:
+Warning 27: unused variable x.
+File "crawl.ml", line 39, characters 24-25:
+Warning 27: unused variable x.
+File "crawl.ml", line 39, characters 26-27:
+Warning 27: unused variable y.
+# Target: moogle.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:moogle.cmx, file:moogle.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o moogle.cmx moogle.ml
+# Target: moogle.native, tags: { annot, bin_annot, debug, dont_link_with, extension:native, file:moogle.native, link, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), program, quiet, short_paths, syntax(camlp4o), thread }
+ocamlfind ocamlopt str.cmxa -linkpkg -g -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core order.cmx dict.cmx myset.cmx graph.cmx nodescore.cmx util.cmx pagerank.cmx query.cmx crawl.cmx moogle.cmx -o moogle.native
+# Compilation successful.
