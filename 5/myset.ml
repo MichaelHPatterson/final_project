@@ -239,7 +239,7 @@ struct
       let compare = C.compare
       let string_of_key = C.string_of_t
       let string_of_value () = ""
-      let gen_key = C.gen
+      let gen_key () = C.gen ()
       let gen_key_gt k () = C.gen_gt k ()
       let gen_key_lt k () = C.gen_lt k ()
       let gen_key_random () = C.gen_random ()
@@ -309,25 +309,25 @@ struct
   (****************************************************************)
   
   (* simple substitute for calling keygen function *)
-  let key_generator = C.gen_random ()
+  (* let key_generator = (C.gen_random ()) *)
 
 
   let test_is_empty () = 
       assert (is_empty empty);
-      assert (not (is_empty (singleton key_generator)));
-      assert (not (insert key_generator (insert key_generator empty)));
+      assert (not (is_empty (singleton (C.gen_random ()))));
+      assert (not (is_empty (insert (C.gen_random ()) (insert (C.gen_random ()) empty))));
       ()
 
 
   let test_singleton () =
-    let x = key_generator in
+    let x = (C.gen_random ()) in
     let s_x = singleton x in
     assert (member s_x x)
 
   (* adapted from 'generate_random_list' given in implementation above *)
   let rec generate_list (size : int) : elt list =
       if size <= 0 then []
-      else (D.gen_key_random () :: (generate_list (size - 1)))
+      else (C.gen_random () :: (generate_list (size - 1)))
 
   
   let test_insert () =
@@ -391,7 +391,8 @@ struct
    * the first value being elt_init *)
   let rec greater_list (n : int) (elt_init : elt) : elt list =
     if n = 0 then [] else 
-      let new_key = D.gen_key_gt () in new_key :: (greater_list (n - 1) new_key)
+      let new_key = C.gen_gt elt_init () in 
+      new_key :: (greater_list (n - 1) new_key)
 
   (* get the last elt in a list *)
   let rec last_elt (lst : elt list) : elt =
@@ -414,7 +415,7 @@ struct
   (* tests if the set representing the union of two sets is identical to the
    * union put together manually *)
   let test_union () = 
-    let a_key = key_generator in
+    let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
     let b_list = greater_list 100 (last_elt a_list) in
     let c_list = greater_list 100 (last_elt b_list) in
@@ -428,20 +429,20 @@ struct
   (* tests if the set representing the intersection of two sets is identical
    * to the intersection put together manually *)
   let test_intersect () =
-    let a_key = key_generator in
+    let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
     let b_list = greater_list 100 (last_elt a_list) in
     let c_list = greater_list 100 (last_elt b_list) in
     let set1 = insert_list empty (a_list @ b_list) in
     let set2 = insert_list empty (b_list @ c_list) in
     let intersection_set = insert_list empty (b_list) in
-    assert (set_compare (intersect set1 set 2) intersection_set);
+    assert (set_compare (intersect set1 set2) intersection_set);
     ()
   
   (* makes a set from a list, then uses member to check that every member of the
    * list is in the set with member *)
   let test_member () =
-    let a_key = key_generator in
+    let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
     let a_set = insert_list empty a_list in
     (* checks every value in list to see if it's in the set *)
@@ -452,9 +453,10 @@ struct
     assert (list_checker a_list a_set);
     ()
   
-  (* searches a list and uses D.compare to find a specific element *)
+  (* searches a list and uses C.compare to find a specific element *)
   let search_in_list (elmt : elt) (lst : elt list) : bool =
-    List.fold_right my_list ~f: (fun a acc -> (D.compare a elmt = Equal) || acc)
+    List.fold_right lst ~f: (fun a acc -> (C.compare a elmt = Equal) || acc)
+		    ~init: false
   
   (* removes one instance of some element from a list. If the element is not
    * found, then return the normal list *)
@@ -462,7 +464,7 @@ struct
     match lst with
     | [] -> acc
     | x :: xs -> 
-       if (D.compare x elmt = Equal) then acc @ xs
+       if (C.compare x elmt = Equal) then acc @ xs
        else list_remove elmt xs ([x] @ acc)
   
   (* checks if two lists are identical *)
@@ -482,7 +484,7 @@ struct
   (* inserts a list of elts into a set, then uses choose to reassemble the list.
    * Checks if the two lists are identical. *)	 
   let test_choose () =
-    let a_key = key_generator in
+    let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
     let set1 = insert_list empty a_list in
     let rec choose_test (my_set : set) : elt list =
@@ -492,17 +494,47 @@ struct
     assert (lists_checker (choose_test set1) a_list);
     ()
   
+  (* Removes a string from a stringlist. If the string is not found, then 
+   * return the regular list *)
+  let rec str_remove (elmt : string) (lst : string list) 
+		     (acc: string list) : string list =
+    match lst with
+    | [] -> acc
+    | x :: xs -> 
+       if (String.equal x elmt) then acc @ xs
+       else str_remove elmt xs ([x] @ acc)
+
+  (* Searches a string list for a sepcific string *)
+  let search_str_list (elmt : string) (lst : string list) : bool =
+    List.fold_right lst ~f: (fun a acc -> (String.equal a elmt) || acc)
+		    ~init: false
+
+
+  (* Checks if two string lists are identical *)
+  let rec stringlist_checker list1 list2 =
+    match (List.is_empty list1, List.is_empty list2) with
+      | (true, true) -> true
+      | (false, true) -> false
+      | (true, false) -> false
+      | (false, false) -> (
+	match list1 with
+	| [] -> failwith "empty list"
+	| x :: xs -> 
+	   if search_str_list x list2
+	   then stringlist_checker xs (str_remove x list2 [])
+	   else false)
+
   (* Tests the fold function by comparing the results of converting a list of 
    * elts into a list of strings with List.map and the results of converting a 
    * set of functions into a list of strings *)  
   let test_fold () =
-    let a_key = key_generator in
+    let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
     let set1 = insert_list empty a_list in
     let stringify (lst : elt list) : string list = 
-      List.map lst ~f: string_of_t in
-    let fold_function = (fun x acc -> string_of_t x :: acc) in
-    assert (lists_checker (stringify a_list) (fold fold_function [] set1));
+      List.map lst ~f: C.string_of_t in
+    let fold_function = (fun x acc -> (C.string_of_t x) :: acc) in
+    assert (stringlist_checker (stringify a_list) (fold fold_function [] set1));
     ()
     
   (* add your test functions to run_tests *)
@@ -547,6 +579,6 @@ IntDictSet.run_tests();;
 module Make(C : COMPARABLE) : (SET with type elt = C.t) =
   (* Change this line to use our dictionary implementation when your are
    * finished. *)
-  ListSet (C)
-  (* DictSet (C) *)
+  (* ListSet (C) *)
+   DictSet (C)
 
