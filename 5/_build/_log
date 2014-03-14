@@ -22,15 +22,13 @@ File "dict.ml", line 239, characters 17-18:
 Warning 27: unused variable v.
 File "dict.ml", line 366, characters 22-23:
 Warning 27: unused variable d.
-File "dict.ml", line 382, characters 10-24:
-Warning 32: unused value string_of_tree.
 File "dict.ml", line 697, characters 14-15:
 Warning 27: unused variable d.
-File "dict.ml", line 814, characters 6-26:
-Warning 32: unused value test_remove_in_order.
-File "dict.ml", line 832, characters 6-31:
+File "dict.ml", line 815, characters 11-12:
+Warning 27: unused variable v.
+File "dict.ml", line 861, characters 6-31:
 Warning 32: unused value test_remove_reverse_order.
-File "dict.ml", line 848, characters 6-30:
+File "dict.ml", line 877, characters 6-30:
 Warning 32: unused value test_remove_random_order.
 # Target: graph.ml.depends, tags: { annot, bin_annot, debug, extension:ml, file:graph.ml, ocaml, ocamldep, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
 ocamlfind ocamldep -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -modules graph.ml > graph.ml.depends # cached
@@ -71,15 +69,13 @@ File "dict.ml", line 239, characters 17-18:
 Warning 27: unused variable v.
 File "dict.ml", line 366, characters 22-23:
 Warning 27: unused variable d.
-File "dict.ml", line 382, characters 10-24:
-Warning 32: unused value string_of_tree.
 File "dict.ml", line 697, characters 14-15:
 Warning 27: unused variable d.
-File "dict.ml", line 814, characters 6-26:
-Warning 32: unused value test_remove_in_order.
-File "dict.ml", line 832, characters 6-31:
+File "dict.ml", line 815, characters 11-12:
+Warning 27: unused variable v.
+File "dict.ml", line 861, characters 6-31:
 Warning 32: unused value test_remove_reverse_order.
-File "dict.ml", line 848, characters 6-30:
+File "dict.ml", line 877, characters 6-30:
 Warning 32: unused value test_remove_random_order.
 # Target: myset.cmx, tags: { annot, bin_annot, compile, debug, extension:cmx, extension:ml, file:myset.cmx, file:myset.ml, implem, native, ocaml, package(bin_prot.syntax), package(core), package(sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax), quiet, short_paths, syntax(camlp4o), thread }
 ocamlfind ocamlopt -c -w A-4-33-40-41-42-43-34-44 -strict-sequence -g -annot -bin-annot -short-paths -thread -syntax camlp4o -package bin_prot.syntax -package sexplib.syntax,comparelib.syntax,fieldslib.syntax,variantslib.syntax -package core -o myset.cmx myset.ml

@@ -489,7 +489,7 @@ struct
       else Done (Two (d, (k1,v1), dict_other))
     | Up (w_left, w, w_right) ->
       insert_upward_two w w_left w_right (k1,v1) dict_other
-        
+
 
   (* Downward phase on a Three node. (k,v) is the (key,value) we are inserting,
    * (k1,v1) and (k2,v2) are the two (key,value) pairs in our Three node, and
@@ -796,6 +796,32 @@ struct
     ()
 
 
+  let test_insert () =
+    let (k1, v1) = D.gen_pair () in
+    let (k2, v2) = D.gen_pair () in
+    let (k3, v3) = D.gen_pair () in
+    let (k4, v4) = D.gen_pair () in
+    let d = insert (insert (insert (insert empty k1 v1) k2 v2) k3 v3) k4 v4 in
+    assert(balanced d);
+    assert(member d k1 && member d k2 && member d k3 && member d k4);
+    ()
+
+  let test_remove_simple () =
+    let pairs = generate_pair_list 13 in
+    let d = insert_list_reversed empty pairs in
+    let rec traverse (pairs : pair list) (d : dict) =
+      match pairs with
+      | [] -> ()
+      | (k,v) :: pairs' ->
+        let d = remove d k in
+        assert(not (member d k));
+        assert(balanced d);
+        print_endline (string_of_key k);
+        print_endline (string_of_tree d);
+        traverse pairs' d;
+    in
+    traverse pairs d
+
   let test_remove_nothing () =
     let pairs1 = generate_pair_list 26 in
     let d1 = insert_list empty pairs1 in
@@ -812,12 +838,15 @@ struct
     ()
 
   let test_remove_in_order () =
-    let pairs1 = generate_pair_list 26 in
+    let pairs1 = generate_pair_list 12 in
     let d1 = insert_list empty pairs1 in
+    print_endline (string_of_tree d1);
+    assert(balanced d1);
     List.iter
       pairs1
       ~f:(fun (k,_) ->
         let r = remove d1 k in
+        print_endline (string_of_tree r);
         let _ = List.iter
           pairs1
           ~f:(fun (k2,v2) ->
@@ -826,7 +855,7 @@ struct
           )
         in
         assert(balanced r)
-      ) ;
+      );
     ()
 
   let test_remove_reverse_order () =
@@ -849,18 +878,20 @@ struct
     let pairs5 = generate_random_list 100 in
     let d5 = insert_list empty pairs5 in
     let r5 = List.fold_right pairs5 ~f:(fun (k,_) d -> remove d k) ~init:d5 in
-    List.iter pairs5 ~f:(fun (k,_) -> assert(not (member r5 k))) ;
-    assert(r5 = empty) ;
-    assert(balanced r5) ;
+    List.iter pairs5 ~f:(fun (k,_) -> assert(not (member r5 k)));
+    assert(r5 = empty);
+    assert(balanced r5);
     ()
 
   let run_tests () =
     test_balance();
+    test_insert();
+    test_remove_simple();
     test_remove_nothing();
     test_remove_from_nothing();
-    (*test_remove_in_order() ;*)
-    (*test_remove_reverse_order() ;*)
-    (*test_remove_random_order() ; *)
+    test_remove_in_order();
+    (*test_remove_reverse_order();*)
+    (*test_remove_random_order();*)
     ()
 
 end
