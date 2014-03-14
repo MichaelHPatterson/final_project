@@ -47,10 +47,10 @@ struct
       let string_of_key = N.string_of_node
       let string_of_value = Float.to_string
       let gen_key = N.gen
-      let gen_key_lt x () = N.gen ()
-      let gen_key_gt x () = N.gen ()
+      let gen_key_lt _ () = N.gen ()
+      let gen_key_gt _ () = N.gen ()
       let gen_key_random = N.gen
-      let gen_key_between x y () = None
+      let gen_key_between _ _ () = None
       let gen_value () = 0.0
       let gen_pair () = (gen_key(),gen_value())
     end)
@@ -60,14 +60,14 @@ struct
   let scale ns v =
     D.fold (fun n s r -> D.insert r n (v *. s)) D.empty ns
   let sum ns =
-    D.fold (fun n s r -> s +. r) 0.0 ns
+    D.fold (fun _ s r -> s +. r) 0.0 ns
 
   let normalize ns =
     let s = sum ns in
       if s = 0.0 then ns else scale ns (1.0 /. s)
 
   let nodes ns =
-    D.fold (fun n s r -> n :: r) [] ns
+    D.fold (fun n _ r -> n :: r) [] ns
 
   let get_score ns n =
     D.lookup ns n

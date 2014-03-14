@@ -98,7 +98,6 @@ end
  * for testing. *)
 module IntStringDictArg : DICT_ARG =
 struct
-  open Order
   type key = int
   type value = string
   let compare x y = if x < y then Less else if x > y then Greater else Equal
@@ -142,7 +141,6 @@ end
 module AssocListDict(D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
 struct
-  open Order;;
   type key = D.key;;
   type value = D.value;;
   type dict = (key * value) list;;
@@ -282,8 +280,6 @@ end
 module BTDict(D:DICT_ARG) : (DICT with type key = D.key
 with type value = D.value) =
 struct
-  open Order
-
   exception TODO
 
   type key = D.key
@@ -359,9 +355,9 @@ struct
   let rec fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
     match d with
     | Leaf -> u
-    | Two (left, (k, v), right) -> fold f left (fold f right (f k v u))
+    | Two (left, (k, v), right) -> fold f (fold f (f k v u) right) left
     | Three (left, (k1, v1), mid, (k2, v2), right) -> 
-      fold f left (fold f mid (f k1 v1 (fold f right (f k2 v2 u))))
+      fold f (fold f (f k1 v1 (fold f (f k2 v2 u) right)) mid) left
 
   (* TODO:
    * Implement these to-string functions *)
@@ -425,19 +421,19 @@ struct
     (* Using two if/then/elses instead of a combined match avoids making an
      * unnecessary comparison in some cases. *)
     if D.compare wk yk = Greater then
-      let left = Three (other_left, x, other_right) in
-      let right = Three (w_left, w, w_right) in
-      Up (Three (left, y, right))
+      let left = Two (other_left, x, other_right) in
+      let right = Two (w_left, w, w_right) in
+      Up (left, y, right)
     else
       let (xk, _) = x in
       if D.compare wk xk = Greater then
-        let left = Three (other_left, x, w_left) in
-        let right = Three (other_right, y, w_right) in
-        Up (Three (left, w, right))
+        let left = Two (other_left, x, w_left) in
+        let right = Two (other_right, y, w_right) in
+        Up (left, w, right)
       else
-        let left = Three (w_left, w, w_right) in
-        let right = Three (other_left, y, other_right) in
-        Up (Three (left, x, right))
+        let left = Two (w_left, w, w_right) in
+        let right = Two (other_left, y, other_right) in
+        Up (left, x, right)
 
   (* Downward phase for inserting (k,v) into our dictionary d.
    * The downward phase returns a "kicked" up configuration, where
@@ -493,7 +489,7 @@ struct
       else Done (Two (d, (k1,v1), dict_other))
     | Up (w_left, w, w_right) ->
       insert_upward_two w w_left w_right (k1,v1) dict_other
-        
+
 
   (* Downward phase on a Three node. (k,v) is the (key,value) we are inserting,
    * (k1,v1) and (k2,v2) are the two (key,value) pairs in our Three node, and
@@ -529,10 +525,10 @@ struct
   let remove_upward_two (n: pair) (rem: pair option)
       (left: dict) (right: dict) (dir: direction2) : hole =
     match dir,n,left,right with
-      | Left2,x,l,Two(m,y,r) -> Hole(rem,Three(l,x,m,y,r))
-      | Right2,y,Two(l,x,m),r -> raise TODO
-      | Left2,x,a,Three(b,y,c,z,d) -> raise TODO
-      | Right2,z,Three(a,x,b,y,c),d -> raise TODO
+      | Left2,x,l,Two(m,y,r)
+      | Right2,y,Two(l,x,m),r -> Hole(rem,Three(l,x,m,y,r))
+      | Left2,x,a,Three(b,y,c,z,d)
+      | Right2,z,Three(a,x,b,y,c),d -> Hole(rem,Two(Two(a,x,b),y,Two(c,z,d)))
       | Left2,_,_,_ | Right2,_,_,_ -> Absorbed(rem,Two(Leaf,n,Leaf))
 
   (* Upward phase for removal where the parent of the hole is a Three node.
@@ -543,14 +539,16 @@ struct
   let remove_upward_three (n1: pair) (n2: pair) (rem: pair option)
       (left: dict) (middle: dict) (right: dict) (dir: direction3) : hole =
     match dir,n1,n2,left,middle,right with
-      | Left3,x,z,a,Two(b,y,c),d -> Absorbed(rem,Two(Three(a,x,b,y,c),z,d))
-      | Mid3,y,z,Two(a,x,b),c,d -> raise TODO
-      | Mid3,x,y,a,b,Two(c,z,d) -> raise TODO
-      | Right3,x,z,a,Two(b,y,c),d -> raise TODO
-      | Left3,w,z,a,Three(b,x,c,y,d),e -> raise TODO
-      | Mid3,y,z,Three(a,w,b,x,c),d,e -> raise TODO
-      | Mid3,w,x,a,b,Three(c,y,d,z,e) -> raise TODO
-      | Right3,w,z,a,Three(b,x,c,y,d),e -> raise TODO
+      | Left3,x,z,a,Two(b,y,c),d
+      | Mid3,y,z,Two(a,x,b),c,d -> Absorbed(rem,Two(Three(a,x,b,y,c),z,d))
+      | Mid3,x,y,a,b,Two(c,z,d)
+      | Right3,x,z,a,Two(b,y,c),d -> Absorbed(rem,Two(a,x,Three(b,y,c,z,d)))
+      | Left3,w,z,a,Three(b,x,c,y,d),e
+      | Mid3,y,z,Three(a,w,b,x,c),d,e ->
+        Absorbed(rem,Three(Two(a,w,b),x,Two(c,y,d),z,e))
+      | Mid3,w,x,a,b,Three(c,y,d,z,e)
+      | Right3,w,z,a,Three(b,x,c,y,d),e ->
+        Absorbed(rem,Three(a,w,Two(b,x,c),y,Two(d,z,e)))
       | Left3,_,_,_,_,_ | Mid3,_,_,_,_,_ | Right3,_,_,_,_,_ ->
         Absorbed(rem,Three(Leaf,n1,Leaf,n2,Leaf))
 
@@ -687,12 +685,10 @@ struct
 
   (* TODO:
    * Write a function to test if a given key is in our dictionary *)
-  (* NOTE: Would it be better to write this by calling the lookup function and seeing if it returns "Some _"? *)
+  (* NOTE: Would it be better to write this using the fold function? *)
   let member (d: dict) (k: key) : bool =
-    let check (k' : key) (_ : value) (curr : bool) : bool =
-      curr || (D.compare k k' = Equal) in
-    fold check false d
-
+    not (lookup d k = None)
+  
   (* TODO:
    * Write a function that removes any (key,value) pair from our
    * dictionary (your choice on which one to remove), and returns
@@ -711,7 +707,7 @@ struct
    * ANSWER:
    *    _______________
    *)
-  let rec balanced (d: dict) : bool =
+  let balanced (d: dict) : bool =
     let rec b_count (dict1: dict) : int option =
       match dict1 with
       | Leaf -> Some 0
@@ -799,7 +795,33 @@ struct
     assert(not (balanced d7)) ;
     ()
 
-(*
+
+  let test_insert () =
+    let (k1, v1) = D.gen_pair () in
+    let (k2, v2) = D.gen_pair () in
+    let (k3, v3) = D.gen_pair () in
+    let (k4, v4) = D.gen_pair () in
+    let d = insert (insert (insert (insert empty k1 v1) k2 v2) k3 v3) k4 v4 in
+    assert(balanced d);
+    assert(member d k1 && member d k2 && member d k3 && member d k4);
+    ()
+
+  let test_remove_simple () =
+    let pairs = generate_pair_list 13 in
+    let d = insert_list_reversed empty pairs in
+    let rec traverse (pairs : pair list) (d : dict) =
+      match pairs with
+      | [] -> ()
+      | (k,v) :: pairs' ->
+        let d = remove d k in
+        assert(not (member d k));
+        assert(balanced d);
+        print_endline (string_of_key k);
+        print_endline (string_of_tree d);
+        traverse pairs' d;
+    in
+    traverse pairs d
+
   let test_remove_nothing () =
     let pairs1 = generate_pair_list 26 in
     let d1 = insert_list empty pairs1 in
@@ -816,12 +838,15 @@ struct
     ()
 
   let test_remove_in_order () =
-    let pairs1 = generate_pair_list 26 in
+    let pairs1 = generate_pair_list 12 in
     let d1 = insert_list empty pairs1 in
+    print_endline (string_of_tree d1);
+    assert(balanced d1);
     List.iter
       pairs1
-      ~f:(fun (k,v) ->
+      ~f:(fun (k,_) ->
         let r = remove d1 k in
+        print_endline (string_of_tree r);
         let _ = List.iter
           pairs1
           ~f:(fun (k2,v2) ->
@@ -830,7 +855,7 @@ struct
           )
         in
         assert(balanced r)
-      ) ;
+      );
     ()
 
   let test_remove_reverse_order () =
@@ -838,7 +863,7 @@ struct
     let d1 = insert_list_reversed empty pairs1 in
     List.iter
       pairs1
-      ~f:(fun (k,v) ->
+      ~f:(fun (k,_) ->
         let r = remove d1 k in
         let _ = List.iter
           pairs1 ~f:(fun (k2,v2) ->
@@ -853,18 +878,20 @@ struct
     let pairs5 = generate_random_list 100 in
     let d5 = insert_list empty pairs5 in
     let r5 = List.fold_right pairs5 ~f:(fun (k,_) d -> remove d k) ~init:d5 in
-    List.iter pairs5 ~f:(fun (k,_) -> assert(not (member r5 k))) ;
-    assert(r5 = empty) ;
-    assert(balanced r5) ;
-    () *)
+    List.iter pairs5 ~f:(fun (k,_) -> assert(not (member r5 k)));
+    assert(r5 = empty);
+    assert(balanced r5);
+    ()
 
   let run_tests () =
-    test_balance() ;
-(*    test_remove_nothing() ;
-    test_remove_from_nothing() ;
-    test_remove_in_order() ;
-    test_remove_reverse_order() ;
-    test_remove_random_order() ; *)
+    test_balance();
+    test_insert();
+    test_remove_simple();
+    test_remove_nothing();
+    test_remove_from_nothing();
+    test_remove_in_order();
+    (*test_remove_reverse_order();*)
+    (*test_remove_random_order();*)
     ()
 
 end

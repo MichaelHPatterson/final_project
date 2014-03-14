@@ -60,9 +60,9 @@ struct
         let string_of_t = N.string_of_node
         let gen = N.gen
         let gen_random = N.gen
-        let gen_gt x () = N.gen ()
-        let gen_lt x () = N.gen ()
-        let gen_between x y () = None
+        let gen_gt _ () = N.gen ()
+        let gen_lt _ () = N.gen ()
+        let gen_between _ _ () = None
       end)
 
   module EdgeDict = Dict.Make(
@@ -74,9 +74,9 @@ struct
       let string_of_value ns = NeighborSet.string_of_set ns
       let gen_key = N.gen
       let gen_key_random = N.gen
-      let gen_key_gt x () = N.gen ()
-      let gen_key_lt x () = N.gen ()
-      let gen_key_between x y () = None
+      let gen_key_gt _ () = N.gen ()
+      let gen_key_lt _ () = N.gen ()
+      let gen_key_between _ _ () = None
       let gen_value () = NeighborSet.empty
       let gen_pair () = (gen_key(),gen_value())
     end)
@@ -90,9 +90,9 @@ struct
       let string_of_value = N.string_of_node
       let gen_key () = 0
       let gen_key_random () = 0
-      let gen_key_gt x () = 1
-      let gen_key_lt x () = (-1)
-      let gen_key_between x y () = None
+      let gen_key_gt _ () = 1
+      let gen_key_lt _ () = (-1)
+      let gen_key_between _ _ () = None
       let gen_value = N.gen
       let gen_pair () = (gen_key(),gen_value())
     end)
@@ -114,7 +114,7 @@ struct
          IntNode.insert g.index_to_node_map g.num_nodes n }
 
   let nodes g =
-    EdgeDict.fold (fun k v r -> k :: r) [] g.edges
+    EdgeDict.fold (fun k _ r -> k :: r) [] g.edges
 
   let is_empty g = (g.num_nodes = 0)
 
@@ -215,5 +215,5 @@ struct
     assert (G.neighbors g2 "d" = None) ;
 
     assert (let t = deopt_lst (G.neighbors g2 "a") in
-              t = ["b";"c"] or t = ["c";"b"]) )
+              t = ["b";"c"] || t = ["c";"b"]) )
 end

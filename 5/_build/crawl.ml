@@ -33,10 +33,10 @@ module WordDict = Dict.Make(
 
     (* These functions are for testing purposes *)
     let gen_key () = ""
-    let gen_key_gt x () = gen_key ()
-    let gen_key_lt x () = gen_key ()
+    let gen_key_gt _ () = gen_key ()
+    let gen_key_lt _ () = gen_key ()
     let gen_key_random () = gen_key ()
-    let gen_key_between x y () = None
+    let gen_key_between _ _ () = None
     let gen_value () = LinkSet.empty
     let gen_pair () = (gen_key(),gen_value())
   end)
@@ -68,9 +68,10 @@ let print s =
  * reached the maximum number of links (n) or the frontier is empty. *)
 let rec crawl (n:int) (frontier: LinkSet.set)
     (visited : LinkSet.set) (d:WordDict.dict) : WordDict.dict =
+  (*
   Printf.printf "Number of pages left: %i \n" n;
   Printf.printf "My frontier: %s \n" (LinkSet.string_of_set frontier);
-  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d);
+  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d); *)
   if n = 0 then d else (
   if LinkSet.is_empty(frontier) then d else (
   let set_val my_set = 

@@ -15,10 +15,10 @@ module RankDict = Dict.Make(
     let string_of_key = string_of_link
     let string_of_value = Float.to_string
     let gen_key () = {host=""; port=0; path=""}
-    let gen_key_gt x () = gen_key ()
-    let gen_key_lt x () = gen_key ()
+    let gen_key_gt _ () = gen_key ()
+    let gen_key_lt _ () = gen_key ()
     let gen_key_random () = gen_key ()
-    let gen_key_between x y () = None
+    let gen_key_between _ _ () = None
     let gen_value () = 0.0
     let gen_pair () = (gen_key(),gen_value())
   end)
@@ -29,10 +29,10 @@ module PageSet = Myset.Make(
     let compare = (fun a b -> link_compare (a.url) (b.url))
     let string_of_t = string_of_page
     let gen () = {url={host=""; port=0; path=""}; links=[]; words=[]}
-    let gen_lt x () = gen ()
-    let gen_gt y () = gen ()
+    let gen_lt _ () = gen ()
+    let gen_gt _ () = gen ()
     let gen_random () = gen ()
-    let gen_between x y () = None
+    let gen_between _ _ () = None
   end)
 
 module LinkSet = Myset.Make(
@@ -41,10 +41,10 @@ module LinkSet = Myset.Make(
     let compare = link_compare
     let string_of_t = string_of_link
     let gen () = {host=""; port=0; path=""}
-    let gen_lt x () = gen ()
-    let gen_gt y () = gen ()
+    let gen_lt _ () = gen ()
+    let gen_gt _ () = gen ()
     let gen_random () = gen ()
-    let gen_between x y () = None
+    let gen_between _ _ () = None
   end)
 
 module PageGraph = Graph (

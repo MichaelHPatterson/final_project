@@ -85,9 +85,6 @@ ident(
 type(
   'b
 )
-ident(
-  def x "crawl.ml" 36 844 865 "crawl.ml" 36 844 880
-)
 "crawl.ml" 36 844 865 "crawl.ml" 36 844 867
 type(
   unit
@@ -128,9 +125,6 @@ ident(
 "crawl.ml" 37 881 900 "crawl.ml" 37 881 901
 type(
   'c
-)
-ident(
-  def x "crawl.ml" 37 881 902 "crawl.ml" 37 881 917
 )
 "crawl.ml" 37 881 902 "crawl.ml" 37 881 904
 type(
@@ -206,15 +200,9 @@ ident(
 type(
   'd
 )
-ident(
-  def x "crawl.ml" 39 957 983 "crawl.ml" 39 957 994
-)
 "crawl.ml" 39 957 983 "crawl.ml" 39 957 984
 type(
   'e
-)
-ident(
-  def y "crawl.ml" 39 957 985 "crawl.ml" 39 957 994
 )
 "crawl.ml" 39 957 985 "crawl.ml" 39 957 987
 type(
@@ -402,322 +390,219 @@ type(
   int
 )
 ident(
-  def n "crawl.ml" 69 1905 1927 "crawl.ml" 96 3167 3228
+  def n "crawl.ml" 69 1905 1927 "crawl.ml" 97 3175 3236
 )
 "crawl.ml" 69 1905 1928 "crawl.ml" 69 1905 1936
 type(
   WordDict.value
 )
 ident(
-  def frontier "crawl.ml" 70 1951 1955 "crawl.ml" 96 3167 3228
+  def frontier "crawl.ml" 70 1951 1955 "crawl.ml" 97 3175 3236
 )
 "crawl.ml" 70 1951 1956 "crawl.ml" 70 1951 1963
 type(
   WordDict.value
 )
 ident(
-  def visited "crawl.ml" 70 1951 1979 "crawl.ml" 96 3167 3228
+  def visited "crawl.ml" 70 1951 1979 "crawl.ml" 97 3175 3236
 )
 "crawl.ml" 70 1951 1980 "crawl.ml" 70 1951 1981
 type(
   WordDict.dict
 )
 ident(
-  def d "crawl.ml" 70 1951 1997 "crawl.ml" 96 3167 3228
+  def d "crawl.ml" 70 1951 1997 "crawl.ml" 97 3175 3236
 )
-"crawl.ml" 71 2015 2017 "crawl.ml" 71 2015 2030
-type(
-  (int -> unit, out_channel, unit) format -> int -> unit
-)
-ident(
-  ext_ref Core.Std.Printf.printf
-)
-"crawl.ml" 71 2015 2031 "crawl.ml" 71 2015 2060
-type(
-  (int -> unit, out_channel, unit) format
-)
-"crawl.ml" 71 2015 2061 "crawl.ml" 71 2015 2062
+"crawl.ml" 75 2211 2216 "crawl.ml" 75 2211 2217
 type(
   int
 )
 ident(
   int_ref n "crawl.ml" 69 1905 1920 "crawl.ml" 69 1905 1921
 )
-"crawl.ml" 71 2015 2017 "crawl.ml" 71 2015 2062
-call(
-  stack
-)
-type(
-  unit
-)
-"crawl.ml" 72 2064 2066 "crawl.ml" 72 2064 2079
-type(
-  (string -> unit, out_channel, unit) format -> string -> unit
-)
-ident(
-  ext_ref Core.Std.Printf.printf
-)
-"crawl.ml" 72 2064 2080 "crawl.ml" 72 2064 2100
-type(
-  (string -> unit, out_channel, unit) format
-)
-"crawl.ml" 72 2064 2102 "crawl.ml" 72 2064 2123
-type(
-  WordDict.value -> string
-)
-ident(
-  ext_ref Pagerank.LinkSet.string_of_set
-)
-"crawl.ml" 72 2064 2124 "crawl.ml" 72 2064 2132
-type(
-  WordDict.value
-)
-ident(
-  int_ref frontier "crawl.ml" 69 1905 1928 "crawl.ml" 69 1905 1936
-)
-"crawl.ml" 72 2064 2102 "crawl.ml" 72 2064 2132
-call(
-  stack
-)
-type(
-  string
-)
-"crawl.ml" 72 2064 2066 "crawl.ml" 72 2064 2133
-call(
-  stack
-)
-type(
-  unit
-)
-"crawl.ml" 73 2135 2137 "crawl.ml" 73 2135 2150
-type(
-  (string -> unit, out_channel, unit) format -> string -> unit
-)
-ident(
-  ext_ref Core.Std.Printf.printf
-)
-"crawl.ml" 73 2135 2151 "crawl.ml" 73 2135 2173
-type(
-  (string -> unit, out_channel, unit) format
-)
-"crawl.ml" 73 2135 2175 "crawl.ml" 73 2135 2198
-type(
-  WordDict.dict -> string
-)
-ident(
-  ext_ref WordDict.string_of_dict
-)
-"crawl.ml" 73 2135 2199 "crawl.ml" 73 2135 2200
-type(
-  WordDict.dict
-)
-ident(
-  int_ref d "crawl.ml" 70 1951 1980 "crawl.ml" 70 1951 1981
-)
-"crawl.ml" 73 2135 2175 "crawl.ml" 73 2135 2200
-call(
-  stack
-)
-type(
-  string
-)
-"crawl.ml" 73 2135 2137 "crawl.ml" 73 2135 2201
-call(
-  stack
-)
-type(
-  unit
-)
-"crawl.ml" 74 2203 2208 "crawl.ml" 74 2203 2209
-type(
-  int
-)
-ident(
-  int_ref n "crawl.ml" 69 1905 1920 "crawl.ml" 69 1905 1921
-)
-"crawl.ml" 74 2203 2210 "crawl.ml" 74 2203 2211
+"crawl.ml" 75 2211 2218 "crawl.ml" 75 2211 2219
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"crawl.ml" 74 2203 2212 "crawl.ml" 74 2203 2213
+"crawl.ml" 75 2211 2220 "crawl.ml" 75 2211 2221
 type(
   int
 )
-"crawl.ml" 74 2203 2208 "crawl.ml" 74 2203 2213
+"crawl.ml" 75 2211 2216 "crawl.ml" 75 2211 2221
 type(
   bool
 )
-"crawl.ml" 74 2203 2219 "crawl.ml" 74 2203 2220
+"crawl.ml" 75 2211 2227 "crawl.ml" 75 2211 2228
 type(
   WordDict.dict
 )
 ident(
   int_ref d "crawl.ml" 70 1951 1980 "crawl.ml" 70 1951 1981
 )
-"crawl.ml" 75 2228 2233 "crawl.ml" 75 2228 2249
+"crawl.ml" 76 2236 2241 "crawl.ml" 76 2236 2257
 type(
   WordDict.value -> bool
 )
 ident(
   ext_ref Pagerank.LinkSet.is_empty
 )
-"crawl.ml" 75 2228 2250 "crawl.ml" 75 2228 2258
+"crawl.ml" 76 2236 2258 "crawl.ml" 76 2236 2266
 type(
   WordDict.value
 )
 ident(
   int_ref frontier "crawl.ml" 69 1905 1928 "crawl.ml" 69 1905 1936
 )
-"crawl.ml" 75 2228 2233 "crawl.ml" 75 2228 2259
+"crawl.ml" 76 2236 2241 "crawl.ml" 76 2236 2267
 call(
   stack
 )
 type(
   bool
 )
-"crawl.ml" 75 2228 2265 "crawl.ml" 75 2228 2266
+"crawl.ml" 76 2236 2273 "crawl.ml" 76 2236 2274
 type(
   WordDict.dict
 )
 ident(
   int_ref d "crawl.ml" 70 1951 1980 "crawl.ml" 70 1951 1981
 )
-"crawl.ml" 76 2274 2280 "crawl.ml" 76 2274 2287
+"crawl.ml" 77 2282 2288 "crawl.ml" 77 2282 2295
 type(
   WordDict.value -> link * WordDict.value
 )
 ident(
-  def set_val "crawl.ml" 80 2401 2403 "crawl.ml" 96 3167 3226
+  def set_val "crawl.ml" 81 2409 2411 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 76 2274 2288 "crawl.ml" 76 2274 2294
+"crawl.ml" 77 2282 2296 "crawl.ml" 77 2282 2302
 type(
   WordDict.value
 )
 ident(
-  def my_set "crawl.ml" 77 2298 2302 "crawl.ml" 79 2370 2397
+  def my_set "crawl.ml" 78 2306 2310 "crawl.ml" 80 2378 2405
 )
-"crawl.ml" 77 2298 2308 "crawl.ml" 77 2298 2322
+"crawl.ml" 78 2306 2316 "crawl.ml" 78 2306 2330
 type(
   WordDict.value -> (link * WordDict.value) option
 )
 ident(
   ext_ref Pagerank.LinkSet.choose
 )
-"crawl.ml" 77 2298 2323 "crawl.ml" 77 2298 2329
+"crawl.ml" 78 2306 2331 "crawl.ml" 78 2306 2337
 type(
   WordDict.value
 )
 ident(
-  int_ref my_set "crawl.ml" 76 2274 2288 "crawl.ml" 76 2274 2294
+  int_ref my_set "crawl.ml" 77 2282 2296 "crawl.ml" 77 2282 2302
 )
-"crawl.ml" 77 2298 2308 "crawl.ml" 77 2298 2329
+"crawl.ml" 78 2306 2316 "crawl.ml" 78 2306 2337
 call(
   stack
 )
 type(
   (link * WordDict.value) option
 )
-"crawl.ml" 78 2335 2341 "crawl.ml" 78 2335 2345
+"crawl.ml" 79 2343 2349 "crawl.ml" 79 2343 2353
 type(
   (link * WordDict.value) option
 )
-"crawl.ml" 78 2335 2349 "crawl.ml" 78 2335 2357
+"crawl.ml" 79 2343 2357 "crawl.ml" 79 2343 2365
 type(
   string -> link * WordDict.value
 )
 ident(
   ext_ref Pervasives.failwith
 )
-"crawl.ml" 78 2335 2358 "crawl.ml" 78 2335 2369
+"crawl.ml" 79 2343 2366 "crawl.ml" 79 2343 2377
 type(
   string
 )
-"crawl.ml" 78 2335 2349 "crawl.ml" 78 2335 2369
+"crawl.ml" 79 2343 2357 "crawl.ml" 79 2343 2377
 call(
   tail
 )
 type(
   link * WordDict.value
 )
-"crawl.ml" 79 2370 2382 "crawl.ml" 79 2370 2383
+"crawl.ml" 80 2378 2390 "crawl.ml" 80 2378 2391
 type(
   link
 )
 ident(
-  def x "crawl.ml" 79 2370 2392 "crawl.ml" 79 2370 2396
+  def x "crawl.ml" 80 2378 2400 "crawl.ml" 80 2378 2404
 )
-"crawl.ml" 79 2370 2385 "crawl.ml" 79 2370 2386
+"crawl.ml" 80 2378 2393 "crawl.ml" 80 2378 2394
 type(
   WordDict.value
 )
 ident(
-  def y "crawl.ml" 79 2370 2392 "crawl.ml" 79 2370 2396
+  def y "crawl.ml" 80 2378 2400 "crawl.ml" 80 2378 2404
 )
-"crawl.ml" 79 2370 2376 "crawl.ml" 79 2370 2387
+"crawl.ml" 80 2378 2384 "crawl.ml" 80 2378 2395
 type(
   (link * WordDict.value) option
 )
 type(
   link * WordDict.value
 )
-"crawl.ml" 79 2370 2392 "crawl.ml" 79 2370 2393
+"crawl.ml" 80 2378 2400 "crawl.ml" 80 2378 2401
 type(
   link
 )
 ident(
-  int_ref x "crawl.ml" 79 2370 2382 "crawl.ml" 79 2370 2383
+  int_ref x "crawl.ml" 80 2378 2390 "crawl.ml" 80 2378 2391
 )
-"crawl.ml" 79 2370 2395 "crawl.ml" 79 2370 2396
+"crawl.ml" 80 2378 2403 "crawl.ml" 80 2378 2404
 type(
   WordDict.value
 )
 ident(
-  int_ref y "crawl.ml" 79 2370 2385 "crawl.ml" 79 2370 2386
+  int_ref y "crawl.ml" 80 2378 2393 "crawl.ml" 80 2378 2394
 )
-"crawl.ml" 79 2370 2392 "crawl.ml" 79 2370 2396
+"crawl.ml" 80 2378 2400 "crawl.ml" 80 2378 2404
 type(
   link * WordDict.value
 )
-"crawl.ml" 77 2298 2302 "crawl.ml" 79 2370 2397
+"crawl.ml" 78 2306 2310 "crawl.ml" 80 2378 2405
 type(
   link * WordDict.value
 )
-"crawl.ml" 76 2274 2288 "crawl.ml" 79 2370 2397
+"crawl.ml" 77 2282 2296 "crawl.ml" 80 2378 2405
 type(
   WordDict.value -> link * WordDict.value
 )
-"crawl.ml" 80 2401 2407 "crawl.ml" 80 2401 2418
+"crawl.ml" 81 2409 2415 "crawl.ml" 81 2409 2426
 type(
   WordDict.dict -> string list -> link -> WordDict.dict
 )
 ident(
-  def add_to_dict "crawl.ml" 86 2693 2695 "crawl.ml" 96 3167 3226
+  def add_to_dict "crawl.ml" 87 2701 2703 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 80 2401 2419 "crawl.ml" 80 2401 2426
+"crawl.ml" 81 2409 2427 "crawl.ml" 81 2409 2434
 type(
   WordDict.dict
 )
 ident(
-  def my_dict "crawl.ml" 80 2401 2427 "crawl.ml" 85 2670 2689
+  def my_dict "crawl.ml" 81 2409 2435 "crawl.ml" 86 2678 2697
 )
-"crawl.ml" 80 2401 2427 "crawl.ml" 80 2401 2436
+"crawl.ml" 81 2409 2435 "crawl.ml" 81 2409 2444
 type(
   string list
 )
 ident(
-  def word_list "crawl.ml" 80 2401 2437 "crawl.ml" 85 2670 2689
+  def word_list "crawl.ml" 81 2409 2445 "crawl.ml" 86 2678 2697
 )
-"crawl.ml" 80 2401 2437 "crawl.ml" 80 2401 2445
+"crawl.ml" 81 2409 2445 "crawl.ml" 81 2409 2453
 type(
   link
 )
 ident(
-  def page_url "crawl.ml" 81 2448 2452 "crawl.ml" 85 2670 2689
+  def page_url "crawl.ml" 82 2456 2460 "crawl.ml" 86 2678 2697
 )
-"crawl.ml" 81 2448 2452 "crawl.ml" 81 2448 2467
+"crawl.ml" 82 2456 2460 "crawl.ml" 82 2456 2475
 type(
   string list ->
   f:(string -> WordDict.dict -> WordDict.dict) ->
@@ -726,242 +611,242 @@ type(
 ident(
   ext_ref Core.Std.List.fold_right
 )
-"crawl.ml" 81 2448 2468 "crawl.ml" 81 2448 2477
+"crawl.ml" 82 2456 2476 "crawl.ml" 82 2456 2485
 type(
   string list
 )
 ident(
-  int_ref word_list "crawl.ml" 80 2401 2427 "crawl.ml" 80 2401 2436
+  int_ref word_list "crawl.ml" 81 2409 2435 "crawl.ml" 81 2409 2444
 )
-"crawl.ml" 81 2448 2486 "crawl.ml" 81 2448 2487
+"crawl.ml" 82 2456 2494 "crawl.ml" 82 2456 2495
 type(
   string
 )
 ident(
-  def x "crawl.ml" 81 2448 2488 "crawl.ml" 84 2600 2668
+  def x "crawl.ml" 82 2456 2496 "crawl.ml" 85 2608 2676
 )
-"crawl.ml" 81 2448 2488 "crawl.ml" 81 2448 2491
+"crawl.ml" 82 2456 2496 "crawl.ml" 82 2456 2499
 type(
   WordDict.dict
 )
 ident(
-  def acc "crawl.ml" 82 2496 2501 "crawl.ml" 84 2600 2668
+  def acc "crawl.ml" 83 2504 2509 "crawl.ml" 85 2608 2676
 )
-"crawl.ml" 82 2496 2507 "crawl.ml" 82 2496 2522
+"crawl.ml" 83 2504 2515 "crawl.ml" 83 2504 2530
 type(
   WordDict.dict -> string -> WordDict.value option
 )
 ident(
   ext_ref WordDict.lookup
 )
-"crawl.ml" 82 2496 2523 "crawl.ml" 82 2496 2526
+"crawl.ml" 83 2504 2531 "crawl.ml" 83 2504 2534
 type(
   WordDict.dict
 )
 ident(
-  int_ref acc "crawl.ml" 81 2448 2488 "crawl.ml" 81 2448 2491
+  int_ref acc "crawl.ml" 82 2456 2496 "crawl.ml" 82 2456 2499
 )
-"crawl.ml" 82 2496 2527 "crawl.ml" 82 2496 2528
+"crawl.ml" 83 2504 2535 "crawl.ml" 83 2504 2536
 type(
   string
 )
 ident(
-  int_ref x "crawl.ml" 81 2448 2486 "crawl.ml" 81 2448 2487
+  int_ref x "crawl.ml" 82 2456 2494 "crawl.ml" 82 2456 2495
 )
-"crawl.ml" 82 2496 2507 "crawl.ml" 82 2496 2528
+"crawl.ml" 83 2504 2515 "crawl.ml" 83 2504 2536
 call(
   stack
 )
 type(
   WordDict.value option
 )
-"crawl.ml" 83 2534 2541 "crawl.ml" 83 2534 2545
+"crawl.ml" 84 2542 2549 "crawl.ml" 84 2542 2553
 type(
   WordDict.value option
 )
-"crawl.ml" 83 2534 2549 "crawl.ml" 83 2534 2564
+"crawl.ml" 84 2542 2557 "crawl.ml" 84 2542 2572
 type(
   WordDict.dict -> string -> WordDict.value -> WordDict.dict
 )
 ident(
   ext_ref WordDict.insert
 )
-"crawl.ml" 83 2534 2565 "crawl.ml" 83 2534 2568
+"crawl.ml" 84 2542 2573 "crawl.ml" 84 2542 2576
 type(
   WordDict.dict
 )
 ident(
-  int_ref acc "crawl.ml" 81 2448 2488 "crawl.ml" 81 2448 2491
+  int_ref acc "crawl.ml" 82 2456 2496 "crawl.ml" 82 2456 2499
 )
-"crawl.ml" 83 2534 2569 "crawl.ml" 83 2534 2570
+"crawl.ml" 84 2542 2577 "crawl.ml" 84 2542 2578
 type(
   string
 )
 ident(
-  int_ref x "crawl.ml" 81 2448 2486 "crawl.ml" 81 2448 2487
+  int_ref x "crawl.ml" 82 2456 2494 "crawl.ml" 82 2456 2495
 )
-"crawl.ml" 83 2534 2572 "crawl.ml" 83 2534 2589
+"crawl.ml" 84 2542 2580 "crawl.ml" 84 2542 2597
 type(
   link -> WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.singleton
 )
-"crawl.ml" 83 2534 2590 "crawl.ml" 83 2534 2598
+"crawl.ml" 84 2542 2598 "crawl.ml" 84 2542 2606
 type(
   link
 )
 ident(
-  int_ref page_url "crawl.ml" 80 2401 2437 "crawl.ml" 80 2401 2445
+  int_ref page_url "crawl.ml" 81 2409 2445 "crawl.ml" 81 2409 2453
 )
-"crawl.ml" 83 2534 2572 "crawl.ml" 83 2534 2598
+"crawl.ml" 84 2542 2580 "crawl.ml" 84 2542 2606
 call(
   stack
 )
 type(
   WordDict.value
 )
-"crawl.ml" 83 2534 2549 "crawl.ml" 83 2534 2599
+"crawl.ml" 84 2542 2557 "crawl.ml" 84 2542 2607
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 84 2600 2612 "crawl.ml" 84 2600 2614
+"crawl.ml" 85 2608 2620 "crawl.ml" 85 2608 2622
 type(
   WordDict.value
 )
 ident(
-  def x' "crawl.ml" 84 2600 2618 "crawl.ml" 84 2600 2668
+  def x' "crawl.ml" 85 2608 2626 "crawl.ml" 85 2608 2676
 )
-"crawl.ml" 84 2600 2607 "crawl.ml" 84 2600 2614
+"crawl.ml" 85 2608 2615 "crawl.ml" 85 2608 2622
 type(
   WordDict.value option
 )
-"crawl.ml" 84 2600 2618 "crawl.ml" 84 2600 2633
+"crawl.ml" 85 2608 2626 "crawl.ml" 85 2608 2641
 type(
   WordDict.dict -> string -> WordDict.value -> WordDict.dict
 )
 ident(
   ext_ref WordDict.insert
 )
-"crawl.ml" 84 2600 2634 "crawl.ml" 84 2600 2637
+"crawl.ml" 85 2608 2642 "crawl.ml" 85 2608 2645
 type(
   WordDict.dict
 )
 ident(
-  int_ref acc "crawl.ml" 81 2448 2488 "crawl.ml" 81 2448 2491
+  int_ref acc "crawl.ml" 82 2456 2496 "crawl.ml" 82 2456 2499
 )
-"crawl.ml" 84 2600 2638 "crawl.ml" 84 2600 2639
+"crawl.ml" 85 2608 2646 "crawl.ml" 85 2608 2647
 type(
   string
 )
 ident(
-  int_ref x "crawl.ml" 81 2448 2486 "crawl.ml" 81 2448 2487
+  int_ref x "crawl.ml" 82 2456 2494 "crawl.ml" 82 2456 2495
 )
-"crawl.ml" 84 2600 2641 "crawl.ml" 84 2600 2655
+"crawl.ml" 85 2608 2649 "crawl.ml" 85 2608 2663
 type(
   link -> WordDict.value -> WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.insert
 )
-"crawl.ml" 84 2600 2656 "crawl.ml" 84 2600 2664
+"crawl.ml" 85 2608 2664 "crawl.ml" 85 2608 2672
 type(
   link
 )
 ident(
-  int_ref page_url "crawl.ml" 80 2401 2437 "crawl.ml" 80 2401 2445
+  int_ref page_url "crawl.ml" 81 2409 2445 "crawl.ml" 81 2409 2453
 )
-"crawl.ml" 84 2600 2665 "crawl.ml" 84 2600 2667
+"crawl.ml" 85 2608 2673 "crawl.ml" 85 2608 2675
 type(
   WordDict.value
 )
 ident(
-  int_ref x' "crawl.ml" 84 2600 2612 "crawl.ml" 84 2600 2614
+  int_ref x' "crawl.ml" 85 2608 2620 "crawl.ml" 85 2608 2622
 )
-"crawl.ml" 84 2600 2641 "crawl.ml" 84 2600 2667
+"crawl.ml" 85 2608 2649 "crawl.ml" 85 2608 2675
 call(
   stack
 )
 type(
   WordDict.value
 )
-"crawl.ml" 84 2600 2618 "crawl.ml" 84 2600 2668
+"crawl.ml" 85 2608 2626 "crawl.ml" 85 2608 2676
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 82 2496 2501 "crawl.ml" 84 2600 2668
+"crawl.ml" 83 2504 2509 "crawl.ml" 85 2608 2676
 type(
   WordDict.dict
 )
-"crawl.ml" 81 2448 2488 "crawl.ml" 84 2600 2668
+"crawl.ml" 82 2456 2496 "crawl.ml" 85 2608 2676
 type(
   WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 81 2448 2486 "crawl.ml" 84 2600 2668
+"crawl.ml" 82 2456 2494 "crawl.ml" 85 2608 2676
 type(
   string -> WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 85 2670 2682 "crawl.ml" 85 2670 2689
+"crawl.ml" 86 2678 2690 "crawl.ml" 86 2678 2697
 type(
   WordDict.dict
 )
 ident(
-  int_ref my_dict "crawl.ml" 80 2401 2419 "crawl.ml" 80 2401 2426
+  int_ref my_dict "crawl.ml" 81 2409 2427 "crawl.ml" 81 2409 2434
 )
-"crawl.ml" 81 2448 2452 "crawl.ml" 85 2670 2689
+"crawl.ml" 82 2456 2460 "crawl.ml" 86 2678 2697
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 80 2401 2437 "crawl.ml" 85 2670 2689
+"crawl.ml" 81 2409 2445 "crawl.ml" 86 2678 2697
 type(
   link -> WordDict.dict
 )
-"crawl.ml" 80 2401 2427 "crawl.ml" 85 2670 2689
+"crawl.ml" 81 2409 2435 "crawl.ml" 86 2678 2697
 type(
   string list -> link -> WordDict.dict
 )
-"crawl.ml" 80 2401 2419 "crawl.ml" 85 2670 2689
+"crawl.ml" 81 2409 2427 "crawl.ml" 86 2678 2697
 type(
   WordDict.dict -> string list -> link -> WordDict.dict
 )
-"crawl.ml" 86 2693 2699 "crawl.ml" 86 2693 2714
+"crawl.ml" 87 2701 2707 "crawl.ml" 87 2701 2722
 type(
   WordDict.value -> link list -> WordDict.value -> WordDict.value
 )
 ident(
-  def add_to_frontier "crawl.ml" 90 2897 2899 "crawl.ml" 96 3167 3226
+  def add_to_frontier "crawl.ml" 91 2905 2907 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 86 2693 2715 "crawl.ml" 86 2693 2726
+"crawl.ml" 87 2701 2723 "crawl.ml" 87 2701 2734
 type(
   WordDict.value
 )
 ident(
-  def my_frontier "crawl.ml" 86 2693 2727 "crawl.ml" 89 2843 2893
+  def my_frontier "crawl.ml" 87 2701 2735 "crawl.ml" 90 2851 2901
 )
-"crawl.ml" 86 2693 2727 "crawl.ml" 86 2693 2736
+"crawl.ml" 87 2701 2735 "crawl.ml" 87 2701 2744
 type(
   link list
 )
 ident(
-  def link_list "crawl.ml" 86 2693 2737 "crawl.ml" 89 2843 2893
+  def link_list "crawl.ml" 87 2701 2745 "crawl.ml" 90 2851 2901
 )
-"crawl.ml" 86 2693 2737 "crawl.ml" 86 2693 2747
+"crawl.ml" 87 2701 2745 "crawl.ml" 87 2701 2755
 type(
   WordDict.value
 )
 ident(
-  def my_visited "crawl.ml" 87 2750 2754 "crawl.ml" 89 2843 2893
+  def my_visited "crawl.ml" 88 2758 2762 "crawl.ml" 90 2851 2901
 )
-"crawl.ml" 87 2750 2754 "crawl.ml" 87 2750 2769
+"crawl.ml" 88 2758 2762 "crawl.ml" 88 2758 2777
 type(
   link list ->
   f:(link -> WordDict.value -> WordDict.value) ->
@@ -970,543 +855,531 @@ type(
 ident(
   ext_ref Core.Std.List.fold_right
 )
-"crawl.ml" 87 2750 2770 "crawl.ml" 87 2750 2779
+"crawl.ml" 88 2758 2778 "crawl.ml" 88 2758 2787
 type(
   link list
 )
 ident(
-  int_ref link_list "crawl.ml" 86 2693 2727 "crawl.ml" 86 2693 2736
+  int_ref link_list "crawl.ml" 87 2701 2735 "crawl.ml" 87 2701 2744
 )
-"crawl.ml" 87 2750 2788 "crawl.ml" 87 2750 2789
+"crawl.ml" 88 2758 2796 "crawl.ml" 88 2758 2797
 type(
   link
 )
 ident(
-  def x "crawl.ml" 87 2750 2790 "crawl.ml" 89 2843 2874
+  def x "crawl.ml" 88 2758 2798 "crawl.ml" 90 2851 2882
 )
-"crawl.ml" 87 2750 2790 "crawl.ml" 87 2750 2793
+"crawl.ml" 88 2758 2798 "crawl.ml" 88 2758 2801
 type(
   WordDict.value
 )
 ident(
-  def acc "crawl.ml" 88 2797 2803 "crawl.ml" 89 2843 2874
+  def acc "crawl.ml" 89 2805 2811 "crawl.ml" 90 2851 2882
 )
-"crawl.ml" 88 2797 2806 "crawl.ml" 88 2797 2820
+"crawl.ml" 89 2805 2814 "crawl.ml" 89 2805 2828
 type(
   WordDict.value -> link -> bool
 )
 ident(
   ext_ref Pagerank.LinkSet.member
 )
-"crawl.ml" 88 2797 2821 "crawl.ml" 88 2797 2831
+"crawl.ml" 89 2805 2829 "crawl.ml" 89 2805 2839
 type(
   WordDict.value
 )
 ident(
-  int_ref my_visited "crawl.ml" 86 2693 2737 "crawl.ml" 86 2693 2747
+  int_ref my_visited "crawl.ml" 87 2701 2745 "crawl.ml" 87 2701 2755
 )
-"crawl.ml" 88 2797 2832 "crawl.ml" 88 2797 2833
+"crawl.ml" 89 2805 2840 "crawl.ml" 89 2805 2841
 type(
   link
 )
 ident(
-  int_ref x "crawl.ml" 87 2750 2788 "crawl.ml" 87 2750 2789
+  int_ref x "crawl.ml" 88 2758 2796 "crawl.ml" 88 2758 2797
 )
-"crawl.ml" 88 2797 2806 "crawl.ml" 88 2797 2833
+"crawl.ml" 89 2805 2814 "crawl.ml" 89 2805 2841
 call(
   stack
 )
 type(
   bool
 )
-"crawl.ml" 88 2797 2839 "crawl.ml" 88 2797 2842
+"crawl.ml" 89 2805 2847 "crawl.ml" 89 2805 2850
 type(
   WordDict.value
 )
 ident(
-  int_ref acc "crawl.ml" 87 2750 2790 "crawl.ml" 87 2750 2793
+  int_ref acc "crawl.ml" 88 2758 2798 "crawl.ml" 88 2758 2801
 )
-"crawl.ml" 89 2843 2854 "crawl.ml" 89 2843 2868
+"crawl.ml" 90 2851 2862 "crawl.ml" 90 2851 2876
 type(
   link -> WordDict.value -> WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.insert
 )
-"crawl.ml" 89 2843 2869 "crawl.ml" 89 2843 2870
+"crawl.ml" 90 2851 2877 "crawl.ml" 90 2851 2878
 type(
   link
 )
 ident(
-  int_ref x "crawl.ml" 87 2750 2788 "crawl.ml" 87 2750 2789
+  int_ref x "crawl.ml" 88 2758 2796 "crawl.ml" 88 2758 2797
 )
-"crawl.ml" 89 2843 2871 "crawl.ml" 89 2843 2874
+"crawl.ml" 90 2851 2879 "crawl.ml" 90 2851 2882
 type(
   WordDict.value
 )
 ident(
-  int_ref acc "crawl.ml" 87 2750 2790 "crawl.ml" 87 2750 2793
+  int_ref acc "crawl.ml" 88 2758 2798 "crawl.ml" 88 2758 2801
 )
-"crawl.ml" 89 2843 2854 "crawl.ml" 89 2843 2874
+"crawl.ml" 90 2851 2862 "crawl.ml" 90 2851 2882
 call(
   tail
 )
 type(
   WordDict.value
 )
-"crawl.ml" 88 2797 2803 "crawl.ml" 89 2843 2874
+"crawl.ml" 89 2805 2811 "crawl.ml" 90 2851 2882
 type(
   WordDict.value
 )
-"crawl.ml" 87 2750 2790 "crawl.ml" 89 2843 2874
+"crawl.ml" 88 2758 2798 "crawl.ml" 90 2851 2882
 type(
   WordDict.value -> WordDict.value
 )
-"crawl.ml" 87 2750 2788 "crawl.ml" 89 2843 2874
+"crawl.ml" 88 2758 2796 "crawl.ml" 90 2851 2882
 type(
   link -> WordDict.value -> WordDict.value
 )
-"crawl.ml" 89 2843 2882 "crawl.ml" 89 2843 2893
+"crawl.ml" 90 2851 2890 "crawl.ml" 90 2851 2901
 type(
   WordDict.value
 )
 ident(
-  int_ref my_frontier "crawl.ml" 86 2693 2715 "crawl.ml" 86 2693 2726
+  int_ref my_frontier "crawl.ml" 87 2701 2723 "crawl.ml" 87 2701 2734
 )
-"crawl.ml" 87 2750 2754 "crawl.ml" 89 2843 2893
+"crawl.ml" 88 2758 2762 "crawl.ml" 90 2851 2901
 call(
   tail
 )
 type(
   WordDict.value
 )
-"crawl.ml" 86 2693 2737 "crawl.ml" 89 2843 2893
+"crawl.ml" 87 2701 2745 "crawl.ml" 90 2851 2901
 type(
   WordDict.value -> WordDict.value
 )
-"crawl.ml" 86 2693 2727 "crawl.ml" 89 2843 2893
+"crawl.ml" 87 2701 2735 "crawl.ml" 90 2851 2901
 type(
   link list -> WordDict.value -> WordDict.value
 )
-"crawl.ml" 86 2693 2715 "crawl.ml" 89 2843 2893
+"crawl.ml" 87 2701 2723 "crawl.ml" 90 2851 2901
 type(
   WordDict.value -> link list -> WordDict.value -> WordDict.value
 )
-"crawl.ml" 90 2897 2903 "crawl.ml" 90 2897 2910
+"crawl.ml" 91 2905 2911 "crawl.ml" 91 2905 2918
 type(
   link
 )
 ident(
-  def set_elt "crawl.ml" 91 2939 2941 "crawl.ml" 96 3167 3226
+  def set_elt "crawl.ml" 92 2947 2949 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 90 2897 2913 "crawl.ml" 90 2897 2916
+"crawl.ml" 91 2905 2921 "crawl.ml" 91 2905 2924
 type(
   link * WordDict.value -> link
 )
 ident(
   ext_ref Pervasives.fst
 )
-"crawl.ml" 90 2897 2918 "crawl.ml" 90 2897 2925
+"crawl.ml" 91 2905 2926 "crawl.ml" 91 2905 2933
 type(
   WordDict.value -> link * WordDict.value
 )
 ident(
-  int_ref set_val "crawl.ml" 76 2274 2280 "crawl.ml" 76 2274 2287
+  int_ref set_val "crawl.ml" 77 2282 2288 "crawl.ml" 77 2282 2295
 )
-"crawl.ml" 90 2897 2926 "crawl.ml" 90 2897 2934
+"crawl.ml" 91 2905 2934 "crawl.ml" 91 2905 2942
 type(
   WordDict.value
 )
 ident(
   int_ref frontier "crawl.ml" 69 1905 1928 "crawl.ml" 69 1905 1936
 )
-"crawl.ml" 90 2897 2918 "crawl.ml" 90 2897 2934
+"crawl.ml" 91 2905 2926 "crawl.ml" 91 2905 2942
 call(
   stack
 )
 type(
   link * WordDict.value
 )
-"crawl.ml" 90 2897 2913 "crawl.ml" 90 2897 2935
+"crawl.ml" 91 2905 2921 "crawl.ml" 91 2905 2943
 type(
   link
 )
-"crawl.ml" 91 2939 2945 "crawl.ml" 91 2939 2953
+"crawl.ml" 92 2947 2953 "crawl.ml" 92 2947 2961
 type(
   WordDict.value
 )
 ident(
-  def set_rest "crawl.ml" 92 2982 2984 "crawl.ml" 96 3167 3226
+  def set_rest "crawl.ml" 93 2990 2992 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 91 2939 2956 "crawl.ml" 91 2939 2959
+"crawl.ml" 92 2947 2964 "crawl.ml" 92 2947 2967
 type(
   link * WordDict.value -> WordDict.value
 )
 ident(
   ext_ref Pervasives.snd
 )
-"crawl.ml" 91 2939 2961 "crawl.ml" 91 2939 2968
+"crawl.ml" 92 2947 2969 "crawl.ml" 92 2947 2976
 type(
   WordDict.value -> link * WordDict.value
 )
 ident(
-  int_ref set_val "crawl.ml" 76 2274 2280 "crawl.ml" 76 2274 2287
+  int_ref set_val "crawl.ml" 77 2282 2288 "crawl.ml" 77 2282 2295
 )
-"crawl.ml" 91 2939 2969 "crawl.ml" 91 2939 2977
+"crawl.ml" 92 2947 2977 "crawl.ml" 92 2947 2985
 type(
   WordDict.value
 )
 ident(
   int_ref frontier "crawl.ml" 69 1905 1928 "crawl.ml" 69 1905 1936
 )
-"crawl.ml" 91 2939 2961 "crawl.ml" 91 2939 2977
+"crawl.ml" 92 2947 2969 "crawl.ml" 92 2947 2985
 call(
   stack
 )
 type(
   link * WordDict.value
 )
-"crawl.ml" 91 2939 2956 "crawl.ml" 91 2939 2978
+"crawl.ml" 92 2947 2964 "crawl.ml" 92 2947 2986
 type(
   WordDict.value
 )
-"crawl.ml" 92 2982 2990 "crawl.ml" 92 2982 3014
+"crawl.ml" 93 2990 2998 "crawl.ml" 93 2990 3022
 type(
   link -> page option
 )
 ident(
   ext_ref Util.CrawlerServices.get_page
 )
-"crawl.ml" 92 2982 3015 "crawl.ml" 92 2982 3022
+"crawl.ml" 93 2990 3023 "crawl.ml" 93 2990 3030
 type(
   link
 )
 ident(
-  int_ref set_elt "crawl.ml" 90 2897 2903 "crawl.ml" 90 2897 2910
+  int_ref set_elt "crawl.ml" 91 2905 2911 "crawl.ml" 91 2905 2918
 )
-"crawl.ml" 92 2982 2990 "crawl.ml" 92 2982 3022
+"crawl.ml" 93 2990 2998 "crawl.ml" 93 2990 3030
 call(
   stack
 )
 type(
   page option
 )
-"crawl.ml" 93 3028 3031 "crawl.ml" 93 3028 3035
+"crawl.ml" 94 3036 3039 "crawl.ml" 94 3036 3043
 type(
   page option
 )
-"crawl.ml" 93 3028 3039 "crawl.ml" 93 3028 3047
+"crawl.ml" 94 3036 3047 "crawl.ml" 94 3036 3055
 type(
   string -> WordDict.dict
 )
 ident(
   ext_ref Pervasives.failwith
 )
-"crawl.ml" 93 3028 3048 "crawl.ml" 93 3028 3064
+"crawl.ml" 94 3036 3056 "crawl.ml" 94 3036 3072
 type(
   string
 )
-"crawl.ml" 93 3028 3039 "crawl.ml" 93 3028 3064
+"crawl.ml" 94 3036 3047 "crawl.ml" 94 3036 3072
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 94 3065 3080 "crawl.ml" 94 3065 3086
+"crawl.ml" 95 3073 3088 "crawl.ml" 95 3073 3094
 type(
   link
 )
 ident(
-  def my_url "crawl.ml" 95 3114 3118 "crawl.ml" 96 3167 3226
+  def my_url "crawl.ml" 96 3122 3126 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 94 3065 3096 "crawl.ml" 94 3065 3097
+"crawl.ml" 95 3073 3104 "crawl.ml" 95 3073 3105
 type(
   link list
 )
 ident(
-  def y "crawl.ml" 95 3114 3118 "crawl.ml" 96 3167 3226
+  def y "crawl.ml" 96 3122 3126 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 94 3065 3107 "crawl.ml" 94 3065 3108
+"crawl.ml" 95 3073 3115 "crawl.ml" 95 3073 3116
 type(
   string list
 )
 ident(
-  def z "crawl.ml" 95 3114 3118 "crawl.ml" 96 3167 3226
+  def z "crawl.ml" 96 3122 3126 "crawl.ml" 97 3175 3234
 )
-"crawl.ml" 94 3065 3073 "crawl.ml" 94 3065 3109
+"crawl.ml" 95 3073 3081 "crawl.ml" 95 3073 3117
 type(
   page
 )
-"crawl.ml" 94 3065 3068 "crawl.ml" 94 3065 3109
+"crawl.ml" 95 3073 3076 "crawl.ml" 95 3073 3117
 type(
   page option
 )
-"crawl.ml" 95 3114 3118 "crawl.ml" 95 3114 3123
+"crawl.ml" 96 3122 3126 "crawl.ml" 96 3122 3131
 type(
   int -> WordDict.value -> WordDict.value -> WordDict.dict -> WordDict.dict
 )
 ident(
   int_ref crawl "crawl.ml" 69 1905 1913 "crawl.ml" 69 1905 1918
 )
-"crawl.ml" 95 3114 3125 "crawl.ml" 95 3114 3126
+"crawl.ml" 96 3122 3133 "crawl.ml" 96 3122 3134
 type(
   int
 )
 ident(
   int_ref n "crawl.ml" 69 1905 1920 "crawl.ml" 69 1905 1921
 )
-"crawl.ml" 95 3114 3126 "crawl.ml" 95 3114 3127
+"crawl.ml" 96 3122 3134 "crawl.ml" 96 3122 3135
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( - )
 )
-"crawl.ml" 95 3114 3127 "crawl.ml" 95 3114 3128
+"crawl.ml" 96 3122 3135 "crawl.ml" 96 3122 3136
 type(
   int
 )
-"crawl.ml" 95 3114 3125 "crawl.ml" 95 3114 3128
+"crawl.ml" 96 3122 3133 "crawl.ml" 96 3122 3136
 type(
   int
 )
-"crawl.ml" 95 3114 3131 "crawl.ml" 95 3114 3146
+"crawl.ml" 96 3122 3139 "crawl.ml" 96 3122 3154
 type(
   WordDict.value -> link list -> WordDict.value -> WordDict.value
 )
 ident(
-  int_ref add_to_frontier "crawl.ml" 86 2693 2699 "crawl.ml" 86 2693 2714
+  int_ref add_to_frontier "crawl.ml" 87 2701 2707 "crawl.ml" 87 2701 2722
 )
-"crawl.ml" 95 3114 3147 "crawl.ml" 95 3114 3155
+"crawl.ml" 96 3122 3155 "crawl.ml" 96 3122 3163
 type(
   WordDict.value
 )
 ident(
-  int_ref set_rest "crawl.ml" 91 2939 2945 "crawl.ml" 91 2939 2953
+  int_ref set_rest "crawl.ml" 92 2947 2953 "crawl.ml" 92 2947 2961
 )
-"crawl.ml" 95 3114 3156 "crawl.ml" 95 3114 3157
+"crawl.ml" 96 3122 3164 "crawl.ml" 96 3122 3165
 type(
   link list
 )
 ident(
-  int_ref y "crawl.ml" 94 3065 3096 "crawl.ml" 94 3065 3097
+  int_ref y "crawl.ml" 95 3073 3104 "crawl.ml" 95 3073 3105
 )
-"crawl.ml" 95 3114 3158 "crawl.ml" 95 3114 3165
+"crawl.ml" 96 3122 3166 "crawl.ml" 96 3122 3173
 type(
   WordDict.value
 )
 ident(
   int_ref visited "crawl.ml" 70 1951 1956 "crawl.ml" 70 1951 1963
 )
-"crawl.ml" 95 3114 3131 "crawl.ml" 95 3114 3165
+"crawl.ml" 96 3122 3139 "crawl.ml" 96 3122 3173
 call(
   stack
 )
 type(
   WordDict.value
 )
-"crawl.ml" 96 3167 3171 "crawl.ml" 96 3167 3185
+"crawl.ml" 97 3175 3179 "crawl.ml" 97 3175 3193
 type(
   link -> WordDict.value -> WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.insert
 )
-"crawl.ml" 96 3167 3186 "crawl.ml" 96 3167 3192
+"crawl.ml" 97 3175 3194 "crawl.ml" 97 3175 3200
 type(
   link
 )
 ident(
-  int_ref my_url "crawl.ml" 94 3065 3080 "crawl.ml" 94 3065 3086
+  int_ref my_url "crawl.ml" 95 3073 3088 "crawl.ml" 95 3073 3094
 )
-"crawl.ml" 96 3167 3193 "crawl.ml" 96 3167 3200
+"crawl.ml" 97 3175 3201 "crawl.ml" 97 3175 3208
 type(
   WordDict.value
 )
 ident(
   int_ref visited "crawl.ml" 70 1951 1956 "crawl.ml" 70 1951 1963
 )
-"crawl.ml" 96 3167 3171 "crawl.ml" 96 3167 3200
+"crawl.ml" 97 3175 3179 "crawl.ml" 97 3175 3208
 call(
   stack
 )
 type(
   WordDict.value
 )
-"crawl.ml" 96 3167 3203 "crawl.ml" 96 3167 3214
+"crawl.ml" 97 3175 3211 "crawl.ml" 97 3175 3222
 type(
   WordDict.dict -> string list -> link -> WordDict.dict
 )
 ident(
-  int_ref add_to_dict "crawl.ml" 80 2401 2407 "crawl.ml" 80 2401 2418
+  int_ref add_to_dict "crawl.ml" 81 2409 2415 "crawl.ml" 81 2409 2426
 )
-"crawl.ml" 96 3167 3215 "crawl.ml" 96 3167 3216
+"crawl.ml" 97 3175 3223 "crawl.ml" 97 3175 3224
 type(
   WordDict.dict
 )
 ident(
   int_ref d "crawl.ml" 70 1951 1980 "crawl.ml" 70 1951 1981
 )
-"crawl.ml" 96 3167 3217 "crawl.ml" 96 3167 3218
+"crawl.ml" 97 3175 3225 "crawl.ml" 97 3175 3226
 type(
   string list
 )
 ident(
-  int_ref z "crawl.ml" 94 3065 3107 "crawl.ml" 94 3065 3108
+  int_ref z "crawl.ml" 95 3073 3115 "crawl.ml" 95 3073 3116
 )
-"crawl.ml" 96 3167 3219 "crawl.ml" 96 3167 3225
+"crawl.ml" 97 3175 3227 "crawl.ml" 97 3175 3233
 type(
   link
 )
 ident(
-  int_ref my_url "crawl.ml" 94 3065 3080 "crawl.ml" 94 3065 3086
+  int_ref my_url "crawl.ml" 95 3073 3088 "crawl.ml" 95 3073 3094
 )
-"crawl.ml" 96 3167 3203 "crawl.ml" 96 3167 3225
+"crawl.ml" 97 3175 3211 "crawl.ml" 97 3175 3233
 call(
   stack
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 95 3114 3118 "crawl.ml" 96 3167 3226
+"crawl.ml" 96 3122 3126 "crawl.ml" 97 3175 3234
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 92 2982 2984 "crawl.ml" 96 3167 3226
+"crawl.ml" 93 2990 2992 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 91 2939 2941 "crawl.ml" 96 3167 3226
+"crawl.ml" 92 2947 2949 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 90 2897 2899 "crawl.ml" 96 3167 3226
+"crawl.ml" 91 2905 2907 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 86 2693 2695 "crawl.ml" 96 3167 3226
+"crawl.ml" 87 2701 2703 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 80 2401 2403 "crawl.ml" 96 3167 3226
+"crawl.ml" 81 2409 2411 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 76 2274 2276 "crawl.ml" 96 3167 3226
+"crawl.ml" 77 2282 2284 "crawl.ml" 97 3175 3234
 type(
   WordDict.dict
 )
-"crawl.ml" 75 2228 2230 "crawl.ml" 96 3167 3227
+"crawl.ml" 76 2236 2238 "crawl.ml" 97 3175 3235
 type(
   WordDict.dict
 )
-"crawl.ml" 74 2203 2205 "crawl.ml" 96 3167 3228
-type(
-  WordDict.dict
-)
-"crawl.ml" 73 2135 2137 "crawl.ml" 96 3167 3228
-type(
-  WordDict.dict
-)
-"crawl.ml" 72 2064 2066 "crawl.ml" 96 3167 3228
-type(
-  WordDict.dict
-)
-"crawl.ml" 71 2015 2017 "crawl.ml" 96 3167 3228
+"crawl.ml" 75 2211 2213 "crawl.ml" 97 3175 3236
 type(
   WordDict.dict
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 70 1951 1979 "crawl.ml" 96 3167 3228
+"crawl.ml" 70 1951 1979 "crawl.ml" 97 3175 3236
 type(
   WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 70 1951 1955 "crawl.ml" 96 3167 3228
+"crawl.ml" 70 1951 1955 "crawl.ml" 97 3175 3236
 type(
   WordDict.value -> WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 69 1905 1927 "crawl.ml" 96 3167 3228
+"crawl.ml" 69 1905 1927 "crawl.ml" 97 3175 3236
 type(
   WordDict.value -> WordDict.value -> WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 69 1905 1919 "crawl.ml" 96 3167 3228
+"crawl.ml" 69 1905 1919 "crawl.ml" 97 3175 3236
 type(
   int -> WordDict.value -> WordDict.value -> WordDict.dict -> WordDict.dict
 )
-"crawl.ml" 99 3233 3237 "crawl.ml" 99 3233 3244
+"crawl.ml" 100 3241 3245 "crawl.ml" 100 3241 3252
 type(
   unit -> WordDict.dict
 )
 ident(
-  def crawler "crawl.ml" 101 3325 3343 "crawl.ml" 1 0 -1
+  def crawler "crawl.ml" 102 3333 3351 "crawl.ml" 1 0 -1
 )
-"crawl.ml" 99 3233 3245 "crawl.ml" 99 3233 3247
+"crawl.ml" 100 3241 3253 "crawl.ml" 100 3241 3255
 type(
   unit
 )
-"crawl.ml" 100 3250 3252 "crawl.ml" 100 3250 3257
+"crawl.ml" 101 3258 3260 "crawl.ml" 101 3258 3265
 type(
   int -> WordDict.value -> WordDict.value -> WordDict.dict -> WordDict.dict
 )
 ident(
   int_ref crawl "crawl.ml" 69 1905 1913 "crawl.ml" 69 1905 1918
 )
-"crawl.ml" 100 3250 3258 "crawl.ml" 100 3250 3277
+"crawl.ml" 101 3258 3266 "crawl.ml" 101 3258 3285
 type(
   int
 )
 ident(
   ext_ref Util.CrawlerServices.num_pages_to_search
 )
-"crawl.ml" 100 3250 3279 "crawl.ml" 100 3250 3296
+"crawl.ml" 101 3258 3287 "crawl.ml" 101 3258 3304
 type(
   link -> WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.singleton
 )
-"crawl.ml" 100 3250 3297 "crawl.ml" 100 3250 3309
+"crawl.ml" 101 3258 3305 "crawl.ml" 101 3258 3317
 type(
   link
 )
 ident(
   ext_ref Util.CrawlerServices.initial_link
 )
-"crawl.ml" 100 3250 3279 "crawl.ml" 100 3250 3309
+"crawl.ml" 101 3258 3287 "crawl.ml" 101 3258 3317
 call(
   stack
 )
 type(
   WordDict.value
 )
-"crawl.ml" 100 3250 3311 "crawl.ml" 100 3250 3324
+"crawl.ml" 101 3258 3319 "crawl.ml" 101 3258 3332
 type(
   WordDict.value
 )
 ident(
   ext_ref Pagerank.LinkSet.empty
 )
-"crawl.ml" 101 3325 3329 "crawl.ml" 101 3325 3343
+"crawl.ml" 102 3333 3337 "crawl.ml" 102 3333 3351
 type(
   WordDict.dict
 )
 ident(
   ext_ref WordDict.empty
 )
-"crawl.ml" 100 3250 3252 "crawl.ml" 101 3325 3343
+"crawl.ml" 101 3258 3260 "crawl.ml" 102 3333 3351
 call(
   tail
 )
 type(
   WordDict.dict
 )
-"crawl.ml" 99 3233 3245 "crawl.ml" 101 3325 3343
+"crawl.ml" 100 3241 3253 "crawl.ml" 102 3333 3351
 type(
   unit -> WordDict.dict
 )

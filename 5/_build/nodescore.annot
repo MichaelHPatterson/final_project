@@ -65,9 +65,6 @@ ident(
 type(
   'a
 )
-ident(
-  def x "nodescore.ml" 50 1617 1640 "nodescore.ml" 50 1617 1653
-)
 "nodescore.ml" 50 1617 1640 "nodescore.ml" 50 1617 1642
 type(
   unit
@@ -108,9 +105,6 @@ ident(
 "nodescore.ml" 51 1654 1675 "nodescore.ml" 51 1654 1676
 type(
   'b
-)
-ident(
-  def x "nodescore.ml" 51 1654 1677 "nodescore.ml" 51 1654 1690
 )
 "nodescore.ml" 51 1654 1677 "nodescore.ml" 51 1654 1679
 type(
@@ -167,15 +161,9 @@ ident(
 type(
   'c
 )
-ident(
-  def x "nodescore.ml" 53 1724 1752 "nodescore.ml" 53 1724 1763
-)
 "nodescore.ml" 53 1724 1752 "nodescore.ml" 53 1724 1753
 type(
   'd
-)
-ident(
-  def y "nodescore.ml" 53 1724 1754 "nodescore.ml" 53 1724 1763
 )
 "nodescore.ml" 53 1724 1754 "nodescore.ml" 53 1724 1756
 type(
@@ -458,9 +446,6 @@ ident(
 type(
   node
 )
-ident(
-  def n "nodescore.ml" 63 1997 2015 "nodescore.ml" 63 1997 2028
-)
 "nodescore.ml" 63 1997 2015 "nodescore.ml" 63 1997 2016
 type(
   float
@@ -692,9 +677,6 @@ ident(
 "nodescore.ml" 70 2149 2167 "nodescore.ml" 70 2149 2168
 type(
   float
-)
-ident(
-  def s "nodescore.ml" 70 2149 2169 "nodescore.ml" 70 2149 2180
 )
 "nodescore.ml" 70 2149 2169 "nodescore.ml" 70 2149 2170
 type(
