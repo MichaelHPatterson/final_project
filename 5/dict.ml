@@ -236,7 +236,7 @@ struct
     let d1 = insert_list empty pairs1 in
     List.iter
       pairs1
-      ~f:(fun (k,v) ->
+      ~f:(fun (k,_) ->
         let r = remove d1 k in
         List.iter
           pairs1
@@ -280,64 +280,34 @@ end
 module BTDict(D:DICT_ARG) : (DICT with type key = D.key
 with type value = D.value) =
 struct
-  exception TODO
-
   type key = D.key
   type value = D.value
 
-  (* A dictionary entry is a (key,value) pair. We compare two (key,value)
-   * pairs with the provided key-comparison function D.compare. For example,
-   * we may choose to keep a dictionary mapping links to their ranks. In this
-   * case, our (key,value) pairs will be (link,rank) pairs, and we compare
-   * links using string comparison. *)
+  (* A dictionary entry is a (key,value) pair. *)
   type pair = key * value
 
-  (* Type definition for dictionary, which we choose to represent as a 2-3 Tree.
-   * This is almost the same as the binary search tree definition from pset4 and
-   * lecture, except we add one more case: a Three-node.
-   *
-   * A Three-node contains two pairs and three subtrees: left, middle, and
-   * right, represented by the 3 dicts in the definition below. *)
+  (* Type definition for dictionary, as a 2-3 Tree. *)
   type dict =
     | Leaf
     | Two of dict * pair * dict
     | Three of dict * pair * dict * pair * dict
 
-  (* INVARIANTS:
-   * 2-node: Two(left,(k1,v1),right)
-   * (1) Every key k appearing in subtree left must be k < k1.
-   * (2) Every key k appearing in subtree right must be k > k1.
-   * (3) The length of the path from the 2-node to
-   *     every leaf in its two subtrees must be the same.
-   *
-   * 3-node: Three(left,(k1,v1),middle,(k2,v2),right)
-   * (1) k1 < k2.
-   * (2) Every key k appearing in subtree left must be k < k1.
-   * (3) Every key k appearing in subtree right must be k > k2.
-   * (4) Every key k appearing in subtree middle must be k1 < k < k2.
-   * (5) The length of the path from the 3-node to every leaf in its three
-   *     subtrees must be the same.
-   *)
-
-  (* FOR INSERTION:
-   * A kicked configuration returned by going downwards on insertion.
+  (* A kicked configuration returned by going downwards on insertion.
    * We can only kick up Two nodes, hence Up takes a dict * pair * dict *)
   type kicked =
     | Up of dict * pair * dict
     | Done of dict
 
-  (* FOR REMOVAL:
-   * A hole configuration returned by going downwards on removal. We
+  (* A hole configuration returned by going downwards on removal. We
    * include a pair option whenever we remove the minimum of the right
    * subtree of the current pair in order the current pair *)
   type hole =
     | Hole of pair option * dict
     | Absorbed of pair option * dict
 
-  (* FOR REMOVAL:
-   * A direction will distinguish which configuration we came from in the
-   * removal cases. We use direction2 for cases (1-2) on the handout, and
-   * we use direction3 for cases (3-4) on the handout. *)
+  (* For removal: A direction will distinguish which configuration we came from
+   * in the removal cases. We use direction2 when the parent is a 2-node, and
+   * direction3 if the parent is a 3-node. *)
   type direction2 =
     | Left2
     | Right2
@@ -347,11 +317,9 @@ struct
     | Mid3
     | Right3
 
-  (* How do we represent an empty dictionary with 2-3 trees? *)
+  (* Represents an empty dictionary as an empty 2-3 tree *)
   let empty : dict = Leaf
 
-  (* TODO:
-   * Implement fold. Read the specification in the DICT signature above. *)
   (* Reduce the dictionary based on a function f and a base case u.
    * Returns f k1 v1 (f k2 v2 (f ... (f kn vn u))). *)
   let rec fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
@@ -373,20 +341,8 @@ struct
     fold f "" d
 
 
-  (* Debugging function. This will print out the tree in text format.
-   * Use this function to see the actual structure of your 2-3 tree. *
-   *
-   * e.g.      (4,d)   (6,f)
-   *         /       |       \
-   *      (2,b)    (4,d)     Leaf
-   *      /  \     /   \
-   *   Leaf  Leaf Leaf  Leaf
-   *
-   * string_of_tree will output:
-   * Three(Two(Leaf,(2,b),Leaf),(4,d),Two(Leaf,(5,e),Leaf),(6,f),Leaf)
-   *
-   * Note that this tree is NOT balanced, because all the paths from (6,f)
-   * to its leaves do NOT all have the same length. *)
+  (* Debugging function that prints out the structure of the tree in text
+   * format. *)
   let rec string_of_tree (d: dict) : string =
     match d with
       | Leaf -> "Leaf"
@@ -425,7 +381,7 @@ struct
       let (xk, _) = x in
       if D.compare wk xk = Greater then
         let left = Two (other_left, x, w_left) in
-        let right = Two (other_right, y, w_right) in
+        let right = Two (w_right, y, other_right) in
         Up (left, w, right)
       else
         let left = Two (w_left, w, w_right) in
@@ -523,7 +479,7 @@ struct
       | Left2,x,l,Two(m,y,r)
       | Right2,y,Two(l,x,m),r -> Hole(rem,Three(l,x,m,y,r))
       | Left2,x,a,Three(b,y,c,z,d)
-      | Right2,z,Three(a,x,b,y,c),d -> Hole(rem,Two(Two(a,x,b),y,Two(c,z,d)))
+      | Right2,z,Three(a,x,b,y,c),d -> Absorbed(rem,Two(Two(a,x,b),y,Two(c,z,d))) (* CHECK THISSSSSSSSSSSSSSSSSSSSS *)
       | Left2,_,_,_ | Right2,_,_,_ -> Absorbed(rem,Two(Leaf,n,Leaf))
 
   (* Upward phase for removal where the parent of the hole is a Three node.
@@ -717,11 +673,11 @@ struct
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
-    List.fold_left lst ~f:(fun r (k,v) -> insert r k v) ~init:d
+    List.fold_left lst ~f:(fun r (k,v) -> print_endline(string_of_tree(insert r k v)); insert r k v) ~init:d
 
   (* adds a list of (key,value) pairs in right-to-left order *)
   let insert_list_reversed (d: dict) (lst: (key * value) list) : dict =
-    List.fold_right lst ~f:(fun (k,v) r -> insert r k v) ~init:d
+    List.fold_right lst ~f:(fun (k,v) r -> print_endline(string_of_tree(insert r k v)); insert r k v) ~init:d
 
   (* generates a (key,value) list with n distinct keys in increasing order *)
   let generate_pair_list (size: int) : (key * value) list =
@@ -781,42 +737,42 @@ struct
     assert(not (balanced d7)) ;
     ()
 
-  (* Tests insert and member by generating 100 pairs, adding them to a
+  (* Tests insert and member concurrently by generating 300 pairs, adding them to a
    * dictionary, checking that the tree is balanced, and using the member
    * function to make sure that each added element is in the dictionary. *)
   let test_insert_member () =
-    let pairs1 = generate_pair_list 50 in
-    let pairs2 = generate_pair_list 50 in
-    let d = insert_list_reversed (insert_list empty pairs1) pairs2 in
-    print_endline (string_of_tree d);
+    let pairs1 = generate_pair_list 100 in
+    let pairs2 = generate_pair_list 100 in
+    let pairs3 = generate_random_list 100 in
+    (* Check insertion in order, in reverse order, and in random order *)
+    let d = insert_list empty pairs1 in
+    let d = insert_list_reversed d pairs2 in
+    let d = insert_list d pairs3 in
+    (*let d = insert_list (insert_list_reversed (insert_list empty pairs1) pairs2) pairs3) in*) (* FIX THIS LIIIIIIIIIINE *)
     assert(balanced d);
     let rec check (pairs : pair list) : unit =
       match pairs with
       | [] -> ()
-      | (k,v) :: pairs' ->
-        (*assert(member d k);*)
-        print_string (string_of_key k);
-        print_string " ";
-        print_endline (string_of_value (let Some v = lookup d k in v));
+      | (k,_) :: pairs' ->
+        assert(member d k);
         check pairs'
     in
     check pairs1;
     check pairs2;
+    check pairs3;
     ()
 
   let test_remove_simple () =
     let pairs = generate_pair_list 13 in
     let d = insert_list_reversed empty pairs in
-    let rec traverse (pairs : pair list) (d : dict) =
+    let rec traverse (pairs : pair list) (d : dict) : unit =
       match pairs with
       | [] -> ()
-      | (k,v) :: pairs' ->
+      | (k,_) :: pairs' ->
         let d = remove d k in
         assert(not (member d k));
         assert(balanced d);
-        print_endline (string_of_key k);
-        print_endline (string_of_tree d);
-        traverse pairs' d;
+        traverse pairs' d
     in
     traverse pairs d
 
@@ -887,9 +843,9 @@ struct
     test_remove_simple();
     test_remove_nothing();
     test_remove_from_nothing();
-    (*test_remove_in_order();*)
-    (*test_remove_reverse_order();*)
-    (*test_remove_random_order();*)
+    test_remove_in_order();
+    test_remove_reverse_order();
+    test_remove_random_order();
     ()
 
 end
