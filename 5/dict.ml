@@ -914,8 +914,8 @@ IntStringListDict.run_tests();;
  * Uncomment out the lines below when you are ready to test your
  * 2-3 tree implementation. *)
 (* Not sure if should be uncommented now *)
-module IntStringBTDict = BTDict(IntStringDictArg) ;;
-IntStringBTDict.run_tests();;
+(* module IntStringBTDict = BTDict(IntStringDictArg) ;;
+ * IntStringBTDict.run_tests();; *)
 
 
 
