@@ -316,9 +316,6 @@ ident(
   int_ref y "dict.ml" 110 3289 3313 "dict.ml" 110 3289 3314
 )
 "dict.ml" 111 3320 3347 "dict.ml" 111 3320 3354
-call(
-  stack
-)
 type(
   key
 )
@@ -344,9 +341,6 @@ ident(
   int_ref y "dict.ml" 110 3289 3313 "dict.ml" 110 3289 3314
 )
 "dict.ml" 111 3320 3356 "dict.ml" 111 3320 3363
-call(
-  stack
-)
 type(
   key
 )
@@ -467,9 +461,6 @@ type(
   unit
 )
 "dict.ml" 114 3450 3462 "dict.ml" 114 3450 3481
-call(
-  stack
-)
 type(
   unit
 )
@@ -489,9 +480,6 @@ type(
   key
 )
 "dict.ml" 115 3485 3500 "dict.ml" 115 3485 3516
-call(
-  tail
-)
 type(
   key
 )
@@ -623,9 +611,6 @@ type(
   key
 )
 "dict.ml" 121 3680 3720 "dict.ml" 121 3680 3734
-call(
-  tail
-)
 type(
   value
 )
@@ -928,9 +913,6 @@ ident(
   int_ref possible_values "dict.ml" 124 3780 3786 "dict.ml" 124 3780 3801
 )
 "dict.ml" 127 4002 4021 "dict.ml" 127 4002 4048
-call(
-  stack
-)
 type(
   key
 )
@@ -1059,9 +1041,6 @@ ident(
   int_ref index "dict.ml" 131 4161 4169 "dict.ml" 131 4161 4174
 )
 "dict.ml" 133 4227 4254 "dict.ml" 133 4227 4281
-call(
-  tail
-)
 type(
   value
 )
@@ -1130,9 +1109,6 @@ ident(
   int_ref index "dict.ml" 131 4161 4169 "dict.ml" 131 4161 4174
 )
 "dict.ml" 135 4292 4327 "dict.ml" 135 4292 4354
-call(
-  tail
-)
 type(
   value
 )
@@ -1175,9 +1151,6 @@ type(
   unit
 )
 "dict.ml" 136 4356 4377 "dict.ml" 136 4356 4393
-call(
-  stack
-)
 type(
   key
 )
@@ -1193,9 +1166,6 @@ type(
   unit
 )
 "dict.ml" 136 4356 4395 "dict.ml" 136 4356 4406
-call(
-  stack
-)
 type(
   value
 )
@@ -1300,9 +1270,6 @@ ident(
   int_ref a "dict.ml" 154 4747 4787 "dict.ml" 154 4747 4788
 )
 "dict.ml" 154 4747 4799 "dict.ml" 154 4747 4806
-call(
-  tail
-)
 type(
   'd
 )
@@ -1322,9 +1289,6 @@ ident(
   int_ref d "dict.ml" 154 4747 4760 "dict.ml" 154 4747 4761
 )
 "dict.ml" 154 4747 4764 "dict.ml" 154 4747 4815
-call(
-  tail
-)
 type(
   ('b * 'c) list -> 'd
 )
@@ -1423,9 +1387,6 @@ ident(
   int_ref k1 "dict.ml" 159 4876 4885 "dict.ml" 159 4876 4887
 )
 "dict.ml" 160 4899 4914 "dict.ml" 160 4899 4928
-call(
-  stack
-)
 type(
   Ordering.t
 )
@@ -1470,9 +1431,6 @@ ident(
   int_ref k "dict.ml" 156 4817 4836 "dict.ml" 156 4817 4837
 )
 "dict.ml" 162 4963 4986 "dict.ml" 162 4963 4997
-call(
-  tail
-)
 type(
   'e option
 )
@@ -1543,9 +1501,6 @@ ident(
   int_ref k "dict.ml" 165 5022 5037 "dict.ml" 165 5022 5038
 )
 "dict.ml" 166 5041 5051 "dict.ml" 166 5041 5061
-call(
-  stack
-)
 type(
   'f option
 )
@@ -1697,9 +1652,6 @@ ident(
   int_ref k1 "dict.ml" 173 5177 5186 "dict.ml" 173 5177 5188
 )
 "dict.ml" 174 5200 5215 "dict.ml" 174 5200 5229
-call(
-  stack
-)
 type(
   Ordering.t
 )
@@ -1820,9 +1772,6 @@ ident(
   int_ref v "dict.ml" 170 5113 5134 "dict.ml" 170 5113 5135
 )
 "dict.ml" 177 5295 5328 "dict.ml" 177 5295 5341
-call(
-  stack
-)
 type(
   (key * 'g) list
 )
@@ -1937,9 +1886,6 @@ ident(
   int_ref k1 "dict.ml" 182 5402 5411 "dict.ml" 182 5402 5413
 )
 "dict.ml" 183 5425 5433 "dict.ml" 183 5425 5447
-call(
-  stack
-)
 type(
   Ordering.t
 )
@@ -1998,9 +1944,6 @@ ident(
   int_ref k "dict.ml" 179 5345 5364 "dict.ml" 179 5345 5365
 )
 "dict.ml" 185 5477 5510 "dict.ml" 185 5477 5521
-call(
-  stack
-)
 type(
   (key * 'h) list
 )
@@ -2243,9 +2186,6 @@ ident(
   int_ref k "dict.ml" 196 5758 5778 "dict.ml" 196 5758 5779
 )
 "dict.ml" 196 5758 5803 "dict.ml" 196 5758 5820
-call(
-  stack
-)
 type(
   string
 )
@@ -2282,9 +2222,6 @@ ident(
   int_ref v "dict.ml" 196 5758 5780 "dict.ml" 196 5758 5781
 )
 "dict.ml" 197 5823 5844 "dict.ml" 197 5823 5863
-call(
-  stack
-)
 type(
   string
 )
@@ -2300,37 +2237,22 @@ type(
   string
 )
 "dict.ml" 197 5823 5844 "dict.ml" 197 5823 5869
-call(
-  stack
-)
 type(
   string
 )
 "dict.ml" 197 5823 5829 "dict.ml" 197 5823 5869
-call(
-  stack
-)
 type(
   string
 )
 "dict.ml" 196 5758 5803 "dict.ml" 197 5823 5869
-call(
-  stack
-)
 type(
   string
 )
 "dict.ml" 196 5758 5790 "dict.ml" 197 5823 5869
-call(
-  stack
-)
 type(
   string
 )
 "dict.ml" 196 5758 5786 "dict.ml" 197 5823 5869
-call(
-  tail
-)
 type(
   string
 )
@@ -2369,9 +2291,6 @@ ident(
   int_ref d "dict.ml" 195 5716 5738 "dict.ml" 195 5716 5739
 )
 "dict.ml" 198 5874 5878 "dict.ml" 198 5874 5908
-call(
-  tail
-)
 type(
   string
 )
@@ -2475,9 +2394,6 @@ ident(
   int_ref v "dict.ml" 208 6383 6419 "dict.ml" 208 6383 6420
 )
 "dict.ml" 208 6383 6425 "dict.ml" 208 6383 6437
-call(
-  tail
-)
 type(
   dict
 )
@@ -2497,9 +2413,6 @@ ident(
   int_ref d "dict.ml" 207 6320 6339 "dict.ml" 207 6320 6340
 )
 "dict.ml" 208 6383 6387 "dict.ml" 208 6383 6446
-call(
-  tail
-)
 type(
   dict
 )
@@ -2603,9 +2516,6 @@ ident(
   int_ref v "dict.ml" 212 6584 6619 "dict.ml" 212 6584 6620
 )
 "dict.ml" 212 6584 6627 "dict.ml" 212 6584 6639
-call(
-  tail
-)
 type(
   dict
 )
@@ -2625,9 +2535,6 @@ ident(
   int_ref d "dict.ml" 211 6512 6540 "dict.ml" 211 6512 6541
 )
 "dict.ml" 212 6584 6588 "dict.ml" 212 6584 6648
-call(
-  tail
-)
 type(
   dict
 )
@@ -2729,9 +2636,6 @@ type(
   unit
 )
 "dict.ml" 219 6895 6921 "dict.ml" 219 6895 6944
-call(
-  stack
-)
 type(
   key
 )
@@ -2754,9 +2658,6 @@ type(
   unit
 )
 "dict.ml" 220 6948 6970 "dict.ml" 220 6948 6983
-call(
-  stack
-)
 type(
   value
 )
@@ -2801,9 +2702,6 @@ ident(
   int_ref new_current "dict.ml" 219 6895 6907 "dict.ml" 219 6895 6918
 )
 "dict.ml" 220 6948 6989 "dict.ml" 220 6948 7018
-call(
-  stack
-)
 type(
   (key * value) list
 )
@@ -2856,16 +2754,10 @@ type(
   unit
 )
 "dict.ml" 222 7027 7044 "dict.ml" 222 7027 7056
-call(
-  stack
-)
 type(
   key
 )
 "dict.ml" 222 7027 7031 "dict.ml" 222 7027 7057
-call(
-  tail
-)
 type(
   (key * value) list
 )
@@ -2932,9 +2824,6 @@ type(
   unit
 )
 "dict.ml" 228 7222 7229 "dict.ml" 228 7222 7247
-call(
-  stack
-)
 type(
   key
 )
@@ -2950,9 +2839,6 @@ type(
   unit
 )
 "dict.ml" 228 7222 7249 "dict.ml" 228 7222 7262
-call(
-  stack
-)
 type(
   value
 )
@@ -2990,9 +2876,6 @@ type(
   int
 )
 "dict.ml" 228 7222 7268 "dict.ml" 228 7222 7299
-call(
-  stack
-)
 type(
   (key * value) list
 )
@@ -3041,9 +2924,6 @@ type(
   int
 )
 "dict.ml" 231 7325 7342 "dict.ml" 231 7325 7363
-call(
-  stack
-)
 type(
   (key * value) list
 )
@@ -3076,9 +2956,6 @@ ident(
   int_ref pairs1 "dict.ml" 231 7325 7333 "dict.ml" 231 7325 7339
 )
 "dict.ml" 232 7367 7380 "dict.ml" 232 7367 7404
-call(
-  stack
-)
 type(
   dict
 )
@@ -3136,9 +3013,6 @@ ident(
   int_ref k "dict.ml" 233 7408 7438 "dict.ml" 233 7408 7439
 )
 "dict.ml" 233 7408 7453 "dict.ml" 233 7408 7464
-call(
-  stack
-)
 type(
   value option
 )
@@ -3173,9 +3047,6 @@ type(
   key * value -> unit
 )
 "dict.ml" 233 7408 7412 "dict.ml" 233 7408 7475
-call(
-  stack
-)
 type(
   unit
 )
@@ -3229,9 +3100,6 @@ type(
   int
 )
 "dict.ml" 237 7509 7526 "dict.ml" 237 7509 7547
-call(
-  stack
-)
 type(
   (key * value) list
 )
@@ -3264,9 +3132,6 @@ ident(
   int_ref pairs1 "dict.ml" 237 7509 7517 "dict.ml" 237 7509 7523
 )
 "dict.ml" 238 7551 7564 "dict.ml" 238 7551 7588
-call(
-  stack
-)
 type(
   dict
 )
@@ -3331,9 +3196,6 @@ ident(
   int_ref k "dict.ml" 241 7619 7634 "dict.ml" 241 7619 7635
 )
 "dict.ml" 242 7642 7658 "dict.ml" 242 7642 7669
-call(
-  stack
-)
 type(
   dict
 )
@@ -3416,9 +3278,6 @@ ident(
   int_ref k2 "dict.ml" 245 7708 7727 "dict.ml" 245 7708 7729
 )
 "dict.ml" 246 7737 7771 "dict.ml" 246 7737 7782
-call(
-  stack
-)
 type(
   value option
 )
@@ -3463,9 +3322,6 @@ ident(
   int_ref k2 "dict.ml" 245 7708 7727 "dict.ml" 245 7708 7729
 )
 "dict.ml" 247 7791 7815 "dict.ml" 247 7791 7826
-call(
-  stack
-)
 type(
   value option
 )
@@ -3504,9 +3360,6 @@ type(
   key * value -> unit
 )
 "dict.ml" 243 7673 7681 "dict.ml" 248 7838 7849
-call(
-  tail
-)
 type(
   unit
 )
@@ -3519,9 +3372,6 @@ type(
   key * value -> unit
 )
 "dict.ml" 239 7592 7596 "dict.ml" 249 7850 7857
-call(
-  stack
-)
 type(
   unit
 )
@@ -3644,9 +3494,6 @@ type(
   unit
 )
 "dict.ml" 265 8010 8014 "dict.ml" 265 8010 8027
-call(
-  stack
-)
 type(
   unit
 )
@@ -3662,9 +3509,6 @@ type(
   unit
 )
 "dict.ml" 266 8030 8034 "dict.ml" 266 8030 8047
-call(
-  stack
-)
 type(
   unit
 )
@@ -3680,9 +3524,6 @@ type(
   unit
 )
 "dict.ml" 267 8050 8054 "dict.ml" 267 8050 8067
-call(
-  stack
-)
 type(
   unit
 )
@@ -3698,9 +3539,6 @@ type(
   unit
 )
 "dict.ml" 268 8070 8074 "dict.ml" 268 8070 8087
-call(
-  stack
-)
 type(
   unit
 )
@@ -3716,9 +3554,6 @@ type(
   unit
 )
 "dict.ml" 269 8090 8094 "dict.ml" 269 8090 8107
-call(
-  stack
-)
 type(
   unit
 )
@@ -3734,9 +3569,6 @@ type(
   unit
 )
 "dict.ml" 270 8110 8114 "dict.ml" 270 8110 8125
-call(
-  stack
-)
 type(
   unit
 )
@@ -3772,29 +3604,1480 @@ type(
 type(
   unit -> unit
 )
-"dict.ml" 804 29261 29288 "dict.ml" 804 29261 29319
-call(
-  stack
-)
-"dict.ml" 805 29323 29323 "dict.ml" 805 29323 29350
+"dict.ml" 355 11039 11045 "dict.ml" 355 11039 11050
 type(
-  unit -> unit
+  dict
 )
 ident(
-  int_ref IntStringListDict.run_tests "dict.ml" 56 1920 1922 "dict.ml" 56 1920 1950
+  def empty "dict.ml" 359 11153 11155 "dict.ml" 870 32298 32301
 )
-"dict.ml" 805 29323 29350 "dict.ml" 805 29323 29352
+"dict.ml" 355 11039 11060 "dict.ml" 355 11039 11064
 type(
-  unit
-)
-"dict.ml" 805 29323 29323 "dict.ml" 805 29323 29352
-call(
-  stack
+  dict
 )
 type(
-  unit
+  dict
 )
-"dict.ml" 827 30109 30111 "dict.ml" 827 30109 30127
-call(
-  tail
+"dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  def fold "dict.ml" 359 11153 11155 "dict.ml" 870 32298 32301
+)
+"dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  def f "dict.ml" 359 11153 11198 "dict.ml" 364 11383 11450
+)
+"dict.ml" 359 11153 11199 "dict.ml" 359 11153 11200
+type(
+  dict
+)
+ident(
+  def u "dict.ml" 359 11153 11206 "dict.ml" 364 11383 11450
+)
+"dict.ml" 359 11153 11207 "dict.ml" 359 11153 11208
+type(
+  dict
+)
+ident(
+  def d "dict.ml" 359 11153 11216 "dict.ml" 364 11383 11450
+)
+"dict.ml" 360 11223 11233 "dict.ml" 360 11223 11234
+type(
+  dict
+)
+ident(
+  int_ref d "dict.ml" 359 11153 11207 "dict.ml" 359 11153 11208
+)
+"dict.ml" 361 11240 11246 "dict.ml" 361 11240 11250
+type(
+  dict
+)
+"dict.ml" 361 11240 11254 "dict.ml" 361 11240 11255
+type(
+  dict
+)
+ident(
+  int_ref u "dict.ml" 359 11153 11199 "dict.ml" 359 11153 11200
+)
+"dict.ml" 362 11256 11267 "dict.ml" 362 11256 11271
+type(
+  dict
+)
+ident(
+  def left "dict.ml" 362 11256 11291 "dict.ml" 362 11256 11327
+)
+"dict.ml" 362 11256 11274 "dict.ml" 362 11256 11275
+type(
+  key
+)
+ident(
+  def k "dict.ml" 362 11256 11291 "dict.ml" 362 11256 11327
+)
+"dict.ml" 362 11256 11277 "dict.ml" 362 11256 11278
+type(
+  value
+)
+ident(
+  def v "dict.ml" 362 11256 11291 "dict.ml" 362 11256 11327
+)
+"dict.ml" 362 11256 11274 "dict.ml" 362 11256 11278
+type(
+  pair
+)
+"dict.ml" 362 11256 11281 "dict.ml" 362 11256 11286
+type(
+  dict
+)
+ident(
+  def right "dict.ml" 362 11256 11291 "dict.ml" 362 11256 11327
+)
+"dict.ml" 362 11256 11262 "dict.ml" 362 11256 11287
+type(
+  dict
+)
+"dict.ml" 362 11256 11291 "dict.ml" 362 11256 11295
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  int_ref fold "dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+)
+"dict.ml" 362 11256 11296 "dict.ml" 362 11256 11297
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 362 11256 11298 "dict.ml" 362 11256 11302
+type(
+  dict
+)
+ident(
+  int_ref left "dict.ml" 362 11256 11267 "dict.ml" 362 11256 11271
+)
+"dict.ml" 362 11256 11304 "dict.ml" 362 11256 11308
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  int_ref fold "dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+)
+"dict.ml" 362 11256 11309 "dict.ml" 362 11256 11310
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 362 11256 11311 "dict.ml" 362 11256 11316
+type(
+  dict
+)
+ident(
+  int_ref right "dict.ml" 362 11256 11281 "dict.ml" 362 11256 11286
+)
+"dict.ml" 362 11256 11318 "dict.ml" 362 11256 11319
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 362 11256 11320 "dict.ml" 362 11256 11321
+type(
+  key
+)
+ident(
+  int_ref k "dict.ml" 362 11256 11274 "dict.ml" 362 11256 11275
+)
+"dict.ml" 362 11256 11322 "dict.ml" 362 11256 11323
+type(
+  value
+)
+ident(
+  int_ref v "dict.ml" 362 11256 11277 "dict.ml" 362 11256 11278
+)
+"dict.ml" 362 11256 11324 "dict.ml" 362 11256 11325
+type(
+  dict
+)
+ident(
+  int_ref u "dict.ml" 359 11153 11199 "dict.ml" 359 11153 11200
+)
+"dict.ml" 362 11256 11318 "dict.ml" 362 11256 11325
+type(
+  dict
+)
+"dict.ml" 362 11256 11304 "dict.ml" 362 11256 11326
+type(
+  dict
+)
+"dict.ml" 362 11256 11291 "dict.ml" 362 11256 11327
+type(
+  dict
+)
+"dict.ml" 363 11328 11341 "dict.ml" 363 11328 11345
+type(
+  dict
+)
+ident(
+  def left "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11348 "dict.ml" 363 11328 11350
+type(
+  key
+)
+ident(
+  def k1 "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11352 "dict.ml" 363 11328 11354
+type(
+  value
+)
+ident(
+  def v1 "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11348 "dict.ml" 363 11328 11354
+type(
+  pair
+)
+"dict.ml" 363 11328 11357 "dict.ml" 363 11328 11360
+type(
+  dict
+)
+ident(
+  def mid "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11363 "dict.ml" 363 11328 11365
+type(
+  key
+)
+ident(
+  def k2 "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11367 "dict.ml" 363 11328 11369
+type(
+  value
+)
+ident(
+  def v2 "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11363 "dict.ml" 363 11328 11369
+type(
+  pair
+)
+"dict.ml" 363 11328 11372 "dict.ml" 363 11328 11377
+type(
+  dict
+)
+ident(
+  def right "dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+)
+"dict.ml" 363 11328 11334 "dict.ml" 363 11328 11378
+type(
+  dict
+)
+"dict.ml" 364 11383 11389 "dict.ml" 364 11383 11393
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  int_ref fold "dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+)
+"dict.ml" 364 11383 11394 "dict.ml" 364 11383 11395
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 364 11383 11396 "dict.ml" 364 11383 11400
+type(
+  dict
+)
+ident(
+  int_ref left "dict.ml" 363 11328 11341 "dict.ml" 363 11328 11345
+)
+"dict.ml" 364 11383 11402 "dict.ml" 364 11383 11406
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  int_ref fold "dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+)
+"dict.ml" 364 11383 11407 "dict.ml" 364 11383 11408
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 364 11383 11409 "dict.ml" 364 11383 11412
+type(
+  dict
+)
+ident(
+  int_ref mid "dict.ml" 363 11328 11357 "dict.ml" 363 11328 11360
+)
+"dict.ml" 364 11383 11414 "dict.ml" 364 11383 11415
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 364 11383 11416 "dict.ml" 364 11383 11418
+type(
+  key
+)
+ident(
+  int_ref k1 "dict.ml" 363 11328 11348 "dict.ml" 363 11328 11350
+)
+"dict.ml" 364 11383 11419 "dict.ml" 364 11383 11421
+type(
+  value
+)
+ident(
+  int_ref v1 "dict.ml" 363 11328 11352 "dict.ml" 363 11328 11354
+)
+"dict.ml" 364 11383 11423 "dict.ml" 364 11383 11427
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+ident(
+  int_ref fold "dict.ml" 359 11153 11163 "dict.ml" 359 11153 11167
+)
+"dict.ml" 364 11383 11428 "dict.ml" 364 11383 11429
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 364 11383 11430 "dict.ml" 364 11383 11435
+type(
+  dict
+)
+ident(
+  int_ref right "dict.ml" 363 11328 11372 "dict.ml" 363 11328 11377
+)
+"dict.ml" 364 11383 11437 "dict.ml" 364 11383 11438
+type(
+  key -> value -> dict -> dict
+)
+ident(
+  int_ref f "dict.ml" 359 11153 11169 "dict.ml" 359 11153 11170
+)
+"dict.ml" 364 11383 11439 "dict.ml" 364 11383 11441
+type(
+  key
+)
+ident(
+  int_ref k2 "dict.ml" 363 11328 11363 "dict.ml" 363 11328 11365
+)
+"dict.ml" 364 11383 11442 "dict.ml" 364 11383 11444
+type(
+  value
+)
+ident(
+  int_ref v2 "dict.ml" 363 11328 11367 "dict.ml" 363 11328 11369
+)
+"dict.ml" 364 11383 11445 "dict.ml" 364 11383 11446
+type(
+  dict
+)
+ident(
+  int_ref u "dict.ml" 359 11153 11199 "dict.ml" 359 11153 11200
+)
+"dict.ml" 364 11383 11437 "dict.ml" 364 11383 11446
+type(
+  dict
+)
+"dict.ml" 364 11383 11423 "dict.ml" 364 11383 11447
+type(
+  dict
+)
+"dict.ml" 364 11383 11414 "dict.ml" 364 11383 11448
+type(
+  dict
+)
+"dict.ml" 364 11383 11402 "dict.ml" 364 11383 11449
+type(
+  dict
+)
+"dict.ml" 364 11383 11389 "dict.ml" 364 11383 11450
+type(
+  dict
+)
+"dict.ml" 360 11223 11227 "dict.ml" 364 11383 11450
+type(
+  dict
+)
+type(
+  dict
+)
+"dict.ml" 359 11153 11206 "dict.ml" 364 11383 11450
+type(
+  dict -> dict
+)
+"dict.ml" 359 11153 11198 "dict.ml" 364 11383 11450
+type(
+  dict -> dict -> dict
+)
+"dict.ml" 359 11153 11168 "dict.ml" 364 11383 11450
+type(
+  (key -> value -> dict -> dict) -> dict -> dict -> dict
+)
+"dict.ml" 368 11507 11513 "dict.ml" 368 11507 11526
+type(
+  key -> string
+)
+ident(
+  def string_of_key "dict.ml" 369 11545 11547 "dict.ml" 870 32298 32301
+)
+"dict.ml" 368 11507 11529 "dict.ml" 368 11507 11544
+type(
+  key -> string
+)
+ident(
+  int_ref D.string_of_key "dict.ml" 67 2103 2105 "dict.ml" 67 2103 2138
+)
+"dict.ml" 369 11545 11551 "dict.ml" 369 11545 11566
+type(
+  value -> string
+)
+ident(
+  def string_of_value "dict.ml" 370 11587 11589 "dict.ml" 870 32298 32301
+)
+"dict.ml" 369 11545 11569 "dict.ml" 369 11545 11586
+type(
+  value -> string
+)
+ident(
+  int_ref D.string_of_value "dict.ml" 68 2139 2141 "dict.ml" 68 2139 2178
+)
+"dict.ml" 370 11587 11593 "dict.ml" 370 11587 11607
+type(
+  dict -> string
+)
+ident(
+  def string_of_dict "dict.ml" 386 12179 12181 "dict.ml" 870 32298 32301
+)
+"dict.ml" 370 11587 11609 "dict.ml" 370 11587 11610
+type(
+  dict
+)
+ident(
+  def d "dict.ml" 370 11587 11618 "dict.ml" 370 11587 11639
+)
+"dict.ml" 370 11587 11629 "dict.ml" 370 11587 11634
+type(
+  exn -> string
+)
+ident(
+  ext_ref Pervasives.raise
+)
+"dict.ml" 370 11587 11635 "dict.ml" 370 11587 11639
+type(
+  exn
+)
+"dict.ml" 370 11587 11629 "dict.ml" 370 11587 11639
+type(
+  string
+)
+type(
+  string
+)
+"dict.ml" 370 11587 11608 "dict.ml" 370 11587 11639
+type(
+  dict -> string
+)
+"dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+type(
+  dict -> string
+)
+ident(
+  def string_of_tree "dict.ml" 386 12179 12181 "dict.ml" 870 32298 32301
+)
+"dict.ml" 386 12179 12205 "dict.ml" 386 12179 12206
+type(
+  dict
+)
+ident(
+  def d "dict.ml" 386 12179 12214 "dict.ml" 396 12671 12739
+)
+"dict.ml" 387 12225 12235 "dict.ml" 387 12225 12236
+type(
+  dict
+)
+ident(
+  int_ref d "dict.ml" 386 12179 12205 "dict.ml" 386 12179 12206
+)
+"dict.ml" 388 12242 12250 "dict.ml" 388 12242 12254
+type(
+  dict
+)
+"dict.ml" 388 12242 12258 "dict.ml" 388 12242 12264
+type(
+  string
+)
+"dict.ml" 389 12265 12277 "dict.ml" 389 12265 12281
+type(
+  dict
+)
+ident(
+  def left "dict.ml" 389 12265 12298 "dict.ml" 391 12399 12437
+)
+"dict.ml" 389 12265 12283 "dict.ml" 389 12265 12284
+type(
+  key
+)
+ident(
+  def k "dict.ml" 389 12265 12298 "dict.ml" 391 12399 12437
+)
+"dict.ml" 389 12265 12285 "dict.ml" 389 12265 12286
+type(
+  value
+)
+ident(
+  def v "dict.ml" 389 12265 12298 "dict.ml" 391 12399 12437
+)
+"dict.ml" 389 12265 12283 "dict.ml" 389 12265 12286
+type(
+  pair
+)
+"dict.ml" 389 12265 12288 "dict.ml" 389 12265 12293
+type(
+  dict
+)
+ident(
+  def right "dict.ml" 389 12265 12298 "dict.ml" 391 12399 12437
+)
+"dict.ml" 389 12265 12273 "dict.ml" 389 12265 12294
+type(
+  dict
+)
+"dict.ml" 389 12265 12298 "dict.ml" 389 12265 12304
+type(
+  string
+)
+"dict.ml" 389 12265 12305 "dict.ml" 389 12265 12306
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 389 12265 12308 "dict.ml" 389 12265 12322
+type(
+  dict -> string
+)
+ident(
+  int_ref string_of_tree "dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+)
+"dict.ml" 389 12265 12323 "dict.ml" 389 12265 12327
+type(
+  dict
+)
+ident(
+  int_ref left "dict.ml" 389 12265 12277 "dict.ml" 389 12265 12281
+)
+"dict.ml" 389 12265 12308 "dict.ml" 389 12265 12327
+type(
+  string
+)
+"dict.ml" 390 12329 12337 "dict.ml" 390 12329 12338
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 390 12329 12339 "dict.ml" 390 12329 12343
+type(
+  string
+)
+"dict.ml" 390 12329 12344 "dict.ml" 390 12329 12345
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 390 12329 12347 "dict.ml" 390 12329 12360
+type(
+  key -> string
+)
+ident(
+  int_ref string_of_key "dict.ml" 368 11507 11513 "dict.ml" 368 11507 11526
+)
+"dict.ml" 390 12329 12361 "dict.ml" 390 12329 12362
+type(
+  key
+)
+ident(
+  int_ref k "dict.ml" 389 12265 12283 "dict.ml" 389 12265 12284
+)
+"dict.ml" 390 12329 12347 "dict.ml" 390 12329 12362
+type(
+  string
+)
+"dict.ml" 390 12329 12364 "dict.ml" 390 12329 12365
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 390 12329 12366 "dict.ml" 390 12329 12369
+type(
+  string
+)
+"dict.ml" 390 12329 12370 "dict.ml" 390 12329 12371
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 390 12329 12373 "dict.ml" 390 12329 12388
+type(
+  value -> string
+)
+ident(
+  int_ref string_of_value "dict.ml" 369 11545 11551 "dict.ml" 369 11545 11566
+)
+"dict.ml" 390 12329 12389 "dict.ml" 390 12329 12390
+type(
+  value
+)
+ident(
+  int_ref v "dict.ml" 389 12265 12285 "dict.ml" 389 12265 12286
+)
+"dict.ml" 390 12329 12373 "dict.ml" 390 12329 12390
+type(
+  string
+)
+"dict.ml" 390 12329 12392 "dict.ml" 390 12329 12393
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 390 12329 12394 "dict.ml" 390 12329 12398
+type(
+  string
+)
+"dict.ml" 391 12399 12407 "dict.ml" 391 12399 12408
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 391 12399 12410 "dict.ml" 391 12399 12424
+type(
+  dict -> string
+)
+ident(
+  int_ref string_of_tree "dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+)
+"dict.ml" 391 12399 12425 "dict.ml" 391 12399 12430
+type(
+  dict
+)
+ident(
+  int_ref right "dict.ml" 389 12265 12288 "dict.ml" 389 12265 12293
+)
+"dict.ml" 391 12399 12410 "dict.ml" 391 12399 12430
+type(
+  string
+)
+"dict.ml" 391 12399 12432 "dict.ml" 391 12399 12433
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 391 12399 12434 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 391 12399 12409 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 390 12329 12394 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 390 12329 12372 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 390 12329 12366 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 390 12329 12346 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 390 12329 12339 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 389 12265 12307 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 389 12265 12298 "dict.ml" 391 12399 12437
+type(
+  string
+)
+"dict.ml" 392 12438 12452 "dict.ml" 392 12438 12456
+type(
+  dict
+)
+ident(
+  def left "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12458 "dict.ml" 392 12438 12460
+type(
+  key
+)
+ident(
+  def k1 "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12461 "dict.ml" 392 12438 12463
+type(
+  value
+)
+ident(
+  def v1 "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12458 "dict.ml" 392 12438 12463
+type(
+  pair
+)
+"dict.ml" 392 12438 12465 "dict.ml" 392 12438 12471
+type(
+  dict
+)
+ident(
+  def middle "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12473 "dict.ml" 392 12438 12475
+type(
+  key
+)
+ident(
+  def k2 "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12476 "dict.ml" 392 12438 12478
+type(
+  value
+)
+ident(
+  def v2 "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12473 "dict.ml" 392 12438 12478
+type(
+  pair
+)
+"dict.ml" 392 12438 12480 "dict.ml" 392 12438 12485
+type(
+  dict
+)
+ident(
+  def right "dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+)
+"dict.ml" 392 12438 12446 "dict.ml" 392 12438 12486
+type(
+  dict
+)
+"dict.ml" 393 12490 12498 "dict.ml" 393 12490 12506
+type(
+  string
+)
+"dict.ml" 393 12490 12507 "dict.ml" 393 12490 12508
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 393 12490 12510 "dict.ml" 393 12490 12524
+type(
+  dict -> string
+)
+ident(
+  int_ref string_of_tree "dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+)
+"dict.ml" 393 12490 12525 "dict.ml" 393 12490 12529
+type(
+  dict
+)
+ident(
+  int_ref left "dict.ml" 392 12438 12452 "dict.ml" 392 12438 12456
+)
+"dict.ml" 393 12490 12510 "dict.ml" 393 12490 12529
+type(
+  string
+)
+"dict.ml" 394 12531 12539 "dict.ml" 394 12531 12540
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 394 12531 12541 "dict.ml" 394 12531 12545
+type(
+  string
+)
+"dict.ml" 394 12531 12546 "dict.ml" 394 12531 12547
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 394 12531 12549 "dict.ml" 394 12531 12562
+type(
+  key -> string
+)
+ident(
+  int_ref string_of_key "dict.ml" 368 11507 11513 "dict.ml" 368 11507 11526
+)
+"dict.ml" 394 12531 12563 "dict.ml" 394 12531 12565
+type(
+  key
+)
+ident(
+  int_ref k1 "dict.ml" 392 12438 12458 "dict.ml" 392 12438 12460
+)
+"dict.ml" 394 12531 12549 "dict.ml" 394 12531 12565
+type(
+  string
+)
+"dict.ml" 394 12531 12567 "dict.ml" 394 12531 12568
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 394 12531 12569 "dict.ml" 394 12531 12572
+type(
+  string
+)
+"dict.ml" 394 12531 12573 "dict.ml" 394 12531 12574
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 394 12531 12576 "dict.ml" 394 12531 12591
+type(
+  value -> string
+)
+ident(
+  int_ref string_of_value "dict.ml" 369 11545 11551 "dict.ml" 369 11545 11566
+)
+"dict.ml" 394 12531 12592 "dict.ml" 394 12531 12594
+type(
+  value
+)
+ident(
+  int_ref v1 "dict.ml" 392 12438 12461 "dict.ml" 392 12438 12463
+)
+"dict.ml" 394 12531 12576 "dict.ml" 394 12531 12594
+type(
+  string
+)
+"dict.ml" 394 12531 12596 "dict.ml" 394 12531 12597
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 394 12531 12598 "dict.ml" 394 12531 12602
+type(
+  string
+)
+"dict.ml" 395 12603 12611 "dict.ml" 395 12603 12612
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 395 12603 12614 "dict.ml" 395 12603 12628
+type(
+  dict -> string
+)
+ident(
+  int_ref string_of_tree "dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+)
+"dict.ml" 395 12603 12629 "dict.ml" 395 12603 12635
+type(
+  dict
+)
+ident(
+  int_ref middle "dict.ml" 392 12438 12465 "dict.ml" 392 12438 12471
+)
+"dict.ml" 395 12603 12614 "dict.ml" 395 12603 12635
+type(
+  string
+)
+"dict.ml" 395 12603 12637 "dict.ml" 395 12603 12638
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 395 12603 12639 "dict.ml" 395 12603 12643
+type(
+  string
+)
+"dict.ml" 395 12603 12644 "dict.ml" 395 12603 12645
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 395 12603 12647 "dict.ml" 395 12603 12660
+type(
+  key -> string
+)
+ident(
+  int_ref string_of_key "dict.ml" 368 11507 11513 "dict.ml" 368 11507 11526
+)
+"dict.ml" 395 12603 12661 "dict.ml" 395 12603 12663
+type(
+  key
+)
+ident(
+  int_ref k2 "dict.ml" 392 12438 12473 "dict.ml" 392 12438 12475
+)
+"dict.ml" 395 12603 12647 "dict.ml" 395 12603 12663
+type(
+  string
+)
+"dict.ml" 395 12603 12665 "dict.ml" 395 12603 12666
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 395 12603 12667 "dict.ml" 395 12603 12670
+type(
+  string
+)
+"dict.ml" 396 12671 12679 "dict.ml" 396 12671 12680
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 396 12671 12682 "dict.ml" 396 12671 12697
+type(
+  value -> string
+)
+ident(
+  int_ref string_of_value "dict.ml" 369 11545 11551 "dict.ml" 369 11545 11566
+)
+"dict.ml" 396 12671 12698 "dict.ml" 396 12671 12700
+type(
+  value
+)
+ident(
+  int_ref v2 "dict.ml" 392 12438 12476 "dict.ml" 392 12438 12478
+)
+"dict.ml" 396 12671 12682 "dict.ml" 396 12671 12700
+type(
+  string
+)
+"dict.ml" 396 12671 12702 "dict.ml" 396 12671 12703
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 396 12671 12704 "dict.ml" 396 12671 12708
+type(
+  string
+)
+"dict.ml" 396 12671 12709 "dict.ml" 396 12671 12710
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 396 12671 12712 "dict.ml" 396 12671 12726
+type(
+  dict -> string
+)
+ident(
+  int_ref string_of_tree "dict.ml" 386 12179 12189 "dict.ml" 386 12179 12203
+)
+"dict.ml" 396 12671 12727 "dict.ml" 396 12671 12732
+type(
+  dict
+)
+ident(
+  int_ref right "dict.ml" 392 12438 12480 "dict.ml" 392 12438 12485
+)
+"dict.ml" 396 12671 12712 "dict.ml" 396 12671 12732
+type(
+  string
+)
+"dict.ml" 396 12671 12734 "dict.ml" 396 12671 12735
+type(
+  string -> string -> string
+)
+ident(
+  ext_ref Pervasives.( ^ )
+)
+"dict.ml" 396 12671 12736 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 396 12671 12711 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 396 12671 12704 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 396 12671 12681 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 395 12603 12667 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 395 12603 12646 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 395 12603 12639 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 395 12603 12613 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 394 12531 12598 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 394 12531 12575 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 394 12531 12569 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 394 12531 12548 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 394 12531 12541 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 393 12490 12509 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 393 12490 12498 "dict.ml" 396 12671 12739
+type(
+  string
+)
+"dict.ml" 387 12225 12229 "dict.ml" 396 12671 12739
+type(
+  string
+)
+type(
+  string
+)
+"dict.ml" 386 12179 12204 "dict.ml" 396 12671 12739
+type(
+  dict -> string
+)
+"dict.ml" 402 13023 13029 "dict.ml" 402 13023 13046
+type(
+  pair -> dict -> dict -> pair -> dict -> kicked
+)
+ident(
+  def insert_upward_two "dict.ml" 421 14004 14006 "dict.ml" 870 32298 32301
+)
+"dict.ml" 402 13023 13048 "dict.ml" 402 13023 13049
+type(
+  pair
+)
+ident(
+  def w "dict.ml" 402 13023 13057 "dict.ml" 407 13261 13315
+)
+"dict.ml" 402 13023 13058 "dict.ml" 402 13023 13064
+type(
+  dict
+)
+ident(
+  def w_left "dict.ml" 402 13023 13072 "dict.ml" 407 13261 13315
+)
+"dict.ml" 402 13023 13073 "dict.ml" 402 13023 13080
+type(
+  dict
+)
+ident(
+  def w_right "dict.ml" 403 13088 13094 "dict.ml" 407 13261 13315
+)
+"dict.ml" 403 13088 13095 "dict.ml" 403 13088 13096
+type(
+  pair
+)
+ident(
+  def x "dict.ml" 403 13088 13104 "dict.ml" 407 13261 13315
+)
+"dict.ml" 403 13088 13105 "dict.ml" 403 13088 13112
+type(
+  dict
+)
+ident(
+  def x_other "dict.ml" 403 13088 13120 "dict.ml" 407 13261 13315
+)
+"dict.ml" 404 13131 13140 "dict.ml" 404 13131 13142
+type(
+  key
+)
+ident(
+  def wk "dict.ml" 405 13154 13158 "dict.ml" 407 13261 13315
+)
+"dict.ml" 404 13131 13144 "dict.ml" 404 13131 13145
+type(
+  value
+)
+"dict.ml" 404 13131 13140 "dict.ml" 404 13131 13145
+type(
+  pair
+)
+"dict.ml" 404 13131 13149 "dict.ml" 404 13131 13150
+type(
+  pair
+)
+ident(
+  int_ref w "dict.ml" 402 13023 13048 "dict.ml" 402 13023 13049
+)
+"dict.ml" 405 13154 13163 "dict.ml" 405 13154 13165
+type(
+  key
+)
+ident(
+  def xk "dict.ml" 406 13177 13181 "dict.ml" 407 13261 13315
+)
+"dict.ml" 405 13154 13167 "dict.ml" 405 13154 13168
+type(
+  value
+)
+"dict.ml" 405 13154 13163 "dict.ml" 405 13154 13168
+type(
+  pair
+)
+"dict.ml" 405 13154 13172 "dict.ml" 405 13154 13173
+type(
+  pair
+)
+ident(
+  int_ref x "dict.ml" 403 13088 13095 "dict.ml" 403 13088 13096
+)
+"dict.ml" 406 13177 13184 "dict.ml" 406 13177 13193
+type(
+  key -> key -> Ordering.t
+)
+ident(
+  int_ref D.compare "dict.ml" 66 2062 2064 "dict.ml" 66 2062 2102
+)
+"dict.ml" 406 13177 13194 "dict.ml" 406 13177 13196
+type(
+  key
+)
+ident(
+  int_ref wk "dict.ml" 404 13131 13140 "dict.ml" 404 13131 13142
+)
+"dict.ml" 406 13177 13197 "dict.ml" 406 13177 13199
+type(
+  key
+)
+ident(
+  int_ref xk "dict.ml" 405 13154 13163 "dict.ml" 405 13154 13165
+)
+"dict.ml" 406 13177 13184 "dict.ml" 406 13177 13199
+type(
+  Ordering.t
+)
+"dict.ml" 406 13177 13200 "dict.ml" 406 13177 13201
+type(
+  Ordering.t -> Ordering.t -> bool
+)
+ident(
+  ext_ref Pervasives.( = )
+)
+"dict.ml" 406 13177 13202 "dict.ml" 406 13177 13209
+type(
+  Ordering.t
+)
+"dict.ml" 406 13177 13184 "dict.ml" 406 13177 13209
+type(
+  bool
+)
+"dict.ml" 406 13177 13228 "dict.ml" 406 13177 13235
+type(
+  dict
+)
+ident(
+  int_ref x_other "dict.ml" 403 13088 13105 "dict.ml" 403 13088 13112
+)
+"dict.ml" 406 13177 13237 "dict.ml" 406 13177 13238
+type(
+  pair
+)
+ident(
+  int_ref x "dict.ml" 403 13088 13095 "dict.ml" 403 13088 13096
+)
+"dict.ml" 406 13177 13240 "dict.ml" 406 13177 13246
+type(
+  dict
+)
+ident(
+  int_ref w_left "dict.ml" 402 13023 13058 "dict.ml" 402 13023 13064
+)
+"dict.ml" 406 13177 13248 "dict.ml" 406 13177 13249
+type(
+  pair
+)
+ident(
+  int_ref w "dict.ml" 402 13023 13048 "dict.ml" 402 13023 13049
+)
+"dict.ml" 406 13177 13251 "dict.ml" 406 13177 13258
+type(
+  dict
+)
+ident(
+  int_ref w_right "dict.ml" 402 13023 13073 "dict.ml" 402 13023 13080
+)
+"dict.ml" 406 13177 13221 "dict.ml" 406 13177 13259
+type(
+  dict
+)
+"dict.ml" 406 13177 13215 "dict.ml" 406 13177 13260
+type(
+  kicked
+)
+"dict.ml" 407 13261 13283 "dict.ml" 407 13261 13289
+type(
+  dict
+)
+ident(
+  int_ref w_left "dict.ml" 402 13023 13058 "dict.ml" 402 13023 13064
+)
+"dict.ml" 407 13261 13291 "dict.ml" 407 13261 13292
+type(
+  pair
+)
+ident(
+  int_ref w "dict.ml" 402 13023 13048 "dict.ml" 402 13023 13049
+)
+"dict.ml" 407 13261 13294 "dict.ml" 407 13261 13301
+type(
+  dict
+)
+ident(
+  int_ref w_right "dict.ml" 402 13023 13073 "dict.ml" 402 13023 13080
+)
+"dict.ml" 407 13261 13303 "dict.ml" 407 13261 13304
+type(
+  pair
+)
+ident(
+  int_ref x "dict.ml" 403 13088 13095 "dict.ml" 403 13088 13096
+)
+"dict.ml" 407 13261 13306 "dict.ml" 407 13261 13313
+type(
+  dict
+)
+ident(
+  int_ref x_other "dict.ml" 403 13088 13105 "dict.ml" 403 13088 13112
+)
+"dict.ml" 407 13261 13276 "dict.ml" 407 13261 13314
+type(
+  dict
+)
+"dict.ml" 407 13261 13270 "dict.ml" 407 13261 13315
+type(
+  kicked
+)
+"dict.ml" 406 13177 13181 "dict.ml" 407 13261 13315
+type(
+  kicked
+)
+"dict.ml" 405 13154 13158 "dict.ml" 407 13261 13315
+type(
+  kicked
+)
+"dict.ml" 404 13131 13135 "dict.ml" 407 13261 13315
+type(
+  kicked
+)
+type(
+  kicked
+)
+"dict.ml" 403 13088 13104 "dict.ml" 407 13261 13315
+type(
+  dict -> kicked
+)
+"dict.ml" 403 13088 13094 "dict.ml" 407 13261 13315
+type(
+  pair -> dict -> kicked
+)
+"dict.ml" 402 13023 13072 "dict.ml" 407 13261 13315
+type(
+  dict -> pair -> dict -> kicked
+)
+"dict.ml" 402 13023 13057 "dict.ml" 407 13261 13315
+type(
+  dict -> dict -> pair -> dict -> kicked
+)
+"dict.ml" 402 13023 13047 "dict.ml" 407 13261 13315
+type(
+  pair -> dict -> dict -> pair -> dict -> kicked
+)
+"dict.ml" 421 14004 14010 "dict.ml" 421 14004 14029
+type(
+  pair -> dict -> dict -> pair -> pair -> dict -> dict -> '_a
+)
+ident(
+  def insert_upward_three "dict.ml" 474 16454 16456 "dict.ml" 870 32298 32301
+)
+"dict.ml" 421 14004 14031 "dict.ml" 421 14004 14032
+type(
+  pair
+)
+ident(
+  def w "dict.ml" 421 14004 14040 "dict.ml" 440 14827 14862
+)
+"dict.ml" 421 14004 14041 "dict.ml" 421 14004 14047
+type(
+  dict
+)
+ident(
+  def w_left "dict.ml" 421 14004 14055 "dict.ml" 440 14827 14862
+)
+"dict.ml" 421 14004 14056 "dict.ml" 421 14004 14063
+type(
+  dict
+)
+ident(
+  def w_right "dict.ml" 422 14071 14077 "dict.ml" 440 14827 14862
+)
+"dict.ml" 422 14071 14078 "dict.ml" 422 14071 14079
+type(
+  pair
+)
+ident(
+  def x "dict.ml" 422 14071 14087 "dict.ml" 440 14827 14862
+)
+"dict.ml" 422 14071 14088 "dict.ml" 422 14071 14089
+type(
+  pair
+)
+ident(
+  def y "dict.ml" 422 14071 14097 "dict.ml" 440 14827 14862
+)
+"dict.ml" 422 14071 14098 "dict.ml" 422 14071 14108
+type(
+  dict
+)
+ident(
+  def other_left "dict.ml" 422 14071 14116 "dict.ml" 440 14827 14862
+)
+"dict.ml" 422 14071 14117 "dict.ml" 422 14071 14128
+type(
+  dict
+)
+ident(
+  def other_right "dict.ml" 422 14071 14136 "dict.ml" 440 14827 14862
+)
+"dict.ml" 423 14147 14156 "dict.ml" 423 14147 14158
+type(
+  key
+)
+ident(
+  def wk "dict.ml" 424 14170 14174 "dict.ml" 440 14827 14862
+)
+"dict.ml" 423 14147 14160 "dict.ml" 423 14147 14161
+type(
+  value
+)
+"dict.ml" 423 14147 14156 "dict.ml" 423 14147 14161
+type(
+  pair
+)
+"dict.ml" 423 14147 14165 "dict.ml" 423 14147 14166
+type(
+  pair
+)
+ident(
+  int_ref w "dict.ml" 421 14004 14031 "dict.ml" 421 14004 14032
+)
+"dict.ml" 424 14170 14179 "dict.ml" 424 14170 14181
+type(
+  key
+)
+ident(
+  def yk "dict.ml" 427 14317 14321 "dict.ml" 440 14827 14862
+)
+"dict.ml" 424 14170 14183 "dict.ml" 424 14170 14184
+type(
+  value
+)
+"dict.ml" 424 14170 14179 "dict.ml" 424 14170 14184
+type(
+  pair
+)
+"dict.ml" 424 14170 14188 "dict.ml" 424 14170 14189
+type(
+  pair
+)
+ident(
+  int_ref y "dict.ml" 422 14071 14088 "dict.ml" 422 14071 14089
+)
+"dict.ml" 427 14317 14324 "dict.ml" 427 14317 14333
+type(
+  key -> key -> Ordering.t
+)
+ident(
+  int_ref D.compare "dict.ml" 66 2062 2064 "dict.ml" 66 2062 2102
+)
+"dict.ml" 427 14317 14334 "dict.ml" 427 14317 14336
+type(
+  key
+)
+ident(
+  int_ref wk "dict.ml" 423 14147 14156 "dict.ml" 423 14147 14158
+)
+"dict.ml" 427 14317 14337 "dict.ml" 427 14317 14339
+type(
+  key
+)
+ident(
+  int_ref yk "dict.ml" 424 14170 14179 "dict.ml" 424 14170 14181
+)
+"dict.ml" 427 14317 14324 "dict.ml" 427 14317 14339
+type(
+  Ordering.t
+)
+"dict.ml" 427 14317 14340 "dict.ml" 427 14317 14341
+type(
+  Ordering.t -> Ordering.t -> bool
+)
+ident(
+  ext_ref Pervasives.( = )
+)
+"dict.ml" 427 14317 14342 "dict.ml" 427 14317 14349
+type(
+  Ordering.t
+)
+"dict.ml" 427 14317 14324 "dict.ml" 427 14317 14349
+type(
+  bool
+)
+"dict.ml" 428 14355 14365 "dict.ml" 428 14355 14369
+type(
+  '_b
+)
+ident(
+  def left "dict.ml" 429 14410 14416 "dict.ml" 430 14458 14491
 )
