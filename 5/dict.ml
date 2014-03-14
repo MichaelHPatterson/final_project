@@ -673,11 +673,11 @@ struct
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
-    List.fold_left lst ~f:(fun r (k,v) -> print_endline(string_of_tree(insert r k v)); insert r k v) ~init:d
+    List.fold_left lst ~f:(fun r (k,v) -> insert r k v) ~init:d
 
   (* adds a list of (key,value) pairs in right-to-left order *)
   let insert_list_reversed (d: dict) (lst: (key * value) list) : dict =
-    List.fold_right lst ~f:(fun (k,v) r -> print_endline(string_of_tree(insert r k v)); insert r k v) ~init:d
+    List.fold_right lst ~f:(fun (k,v) r -> insert r k v) ~init:d
 
   (* generates a (key,value) list with n distinct keys in increasing order *)
   let generate_pair_list (size: int) : (key * value) list =
@@ -737,29 +737,29 @@ struct
     assert(not (balanced d7)) ;
     ()
 
-  (* Tests insert and member concurrently by generating 300 pairs, adding them to a
-   * dictionary, checking that the tree is balanced, and using the member
-   * function to make sure that each added element is in the dictionary. *)
-  let test_insert_member () =
-    let pairs1 = generate_pair_list 100 in
-    let pairs2 = generate_pair_list 100 in
-    let pairs3 = generate_random_list 100 in
-    (* Check insertion in order, in reverse order, and in random order *)
-    let d = insert_list empty pairs1 in
-    let d = insert_list_reversed d pairs2 in
-    let d = insert_list d pairs3 in
-    (*let d = insert_list (insert_list_reversed (insert_list empty pairs1) pairs2) pairs3) in*) (* FIX THIS LIIIIIIIIIINE *)
-    assert(balanced d);
-    let rec check (pairs : pair list) : unit =
+  (* Tests insert, member, and lookup by generating 2 lists of 100 pairs,
+   * creating 3 trees with them (by adding elements in increasing, decreasing,
+   * and random order); checking that eachh tree is balanced, calling the
+   * member function to make sure that each dictionary contains the correct
+   * elements, and calling lookup to check that each key matches its value. *)
+  let test_insert_member_lookup () =
+    let pairs1 = generate_pair_list 100 in 
+    let d1 = insert_list empty pairs1 in
+    let d2 = insert_list_reversed empty pairs1 in
+    let pairs2 = generate_random_list 100 in
+    let d3 = insert_list empty pairs2 in
+    assert(balanced d1 && balanced d2 && balanced d3);
+    let rec check (pairs : pair list) (d : dict) : unit =
       match pairs with
       | [] -> ()
-      | (k,_) :: pairs' ->
+      | (k,v) :: pairs' ->
         assert(member d k);
-        check pairs'
+        assert(lookup d k = Some v);
+        check pairs' d
     in
-    check pairs1;
-    check pairs2;
-    check pairs3;
+    check pairs1 d1;
+    check pairs1 d2;
+    check pairs2 d3;
     ()
 
   let test_remove_simple () =
@@ -794,13 +794,11 @@ struct
   let test_remove_in_order () =
     let pairs1 = generate_pair_list 12 in
     let d1 = insert_list empty pairs1 in
-    print_endline (string_of_tree d1);
     assert(balanced d1);
     List.iter
       pairs1
       ~f:(fun (k,_) ->
         let r = remove d1 k in
-        print_endline (string_of_tree r);
         let _ = List.iter
           pairs1
           ~f:(fun (k2,v2) ->
@@ -837,9 +835,20 @@ struct
     assert(balanced r5);
     ()
 
+  let test_fold () =
+    let _ = Random.self_init () in
+    let size = Random.int 10000 in
+    let pairs = generate_random_list size in
+    let d = insert_list empty pairs in
+    print_endline (string_of_tree d);
+    let length (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d in
+    assert(length d = size);
+    
+
   let run_tests () =
     test_balance();
-    test_insert_member();
+    test_insert_member_lookup();
+    test_fold();
     test_remove_simple();
     test_remove_nothing();
     test_remove_from_nothing();
@@ -879,8 +888,5 @@ IntStringBTDict.run_tests();;
 (******************************************************************)
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
-  (* Change this line to the BTDict implementation when you are
-   * done implementing your 2-3 trees. *)
-  AssocListDict(D)
-  (* BTDict(D) *)
+  BTDict(D)
 
