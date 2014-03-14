@@ -234,7 +234,6 @@ struct
   module D = Dict.Make(
     struct
       type key = C.t
-      (* () doesn't work for some reason *)
       type value = unit
       let compare = C.compare
       let string_of_key = C.string_of_t
@@ -269,14 +268,6 @@ struct
 
   let singleton x = insert x empty
 
-  (* backup fold in case something goes horribly wrong *)
-  (*
-  let rec fold f init d =
-      match choose d with
-      | None -> init
-      | Some (k, d) -> f k (fold f init d)
-   *)
-
   (* based off the fold in AssocListDict, found in dict.ml *)
   let fold f init d = D.fold (fun k () acc -> f k acc) init d
     
@@ -307,15 +298,12 @@ struct
   (* write tests. However, you must write a lot more              *)
   (* comprehensive tests to test ALL your functions.              *)
   (****************************************************************)
-  
-  (* simple substitute for calling keygen function *)
-  (* let key_generator = (C.gen_random ()) *)
-
 
   let test_is_empty () = 
       assert (is_empty empty);
       assert (not (is_empty (singleton (C.gen_random ()))));
-      assert (not (is_empty (insert (C.gen_random ()) (insert (C.gen_random ()) empty))));
+      assert (not (is_empty (insert (C.gen_random ()) (insert 
+        (C.gen_random ()) empty))));
       ()
 
 
@@ -566,10 +554,9 @@ IntListSet.run_tests();;
  *
  * Uncomment out the lines below when you are ready to test your
  * 2-3 dict set implementation *)
-(*
+
 module IntDictSet = DictSet(IntComparable) ;;
 IntDictSet.run_tests();;
-*)
 
 
 (******************************************************************)
