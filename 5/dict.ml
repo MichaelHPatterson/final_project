@@ -195,12 +195,6 @@ struct
       "; value: (" ^ D.string_of_value v ^ ")") in
     List.fold_left ~f:f ~init:"" d
 
-  (****************************************************************)
-  (* Tests for our AssocListDict functor                          *)
-  (* These are just examples of tests, your tests should be a lot *)
-  (* more thorough than these.                                    *)
-  (****************************************************************)
-
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
     List.fold_left lst ~f:(fun r (k,v) -> insert r k v) ~init:d
@@ -225,11 +219,17 @@ struct
     else
       (D.gen_key_random(), D.gen_value()) :: (generate_random_list (size - 1))
 
-  let test_insert () =
-    let pairs1 = generate_pair_list 26 in
+  (* Tests insert, lookup, and member by adding 200 elements to each of 2 dicts
+   * and recursively checking that "member" returns true for each key, and that
+   * "lookup" returns the correct value. Adapted from distribution code. *)
+  let test_insert_lookup_member () =
+    let pairs1 = generate_pair_list 200 in
     let d1 = insert_list empty pairs1 in
-    List.iter pairs1 ~f:(fun (k,v) -> assert(lookup d1 k = Some v)) ;
-    ()
+    let f d = fun (k,v) -> assert(member d k && lookup d k = Some v) in
+    List.iter pairs1 ~f:(f d1);
+    (* Tests insertion in the reverse order. *)
+    let d2 = insert_list_reversed empty pairs1 in
+    List.iter pairs1 ~f:(f d2)
 
   let test_remove () =
     let pairs1 = generate_pair_list 26 in
@@ -247,24 +247,35 @@ struct
       );
     ()
 
-  let test_lookup () =
-    ()
-
+  (* Tests the choose function by making sure that (1) choosing 200 elements
+   * from a 200-element dict yields an empty dict, and (2) every element that
+   * is chosen is inside the original dict, but not inside the new dict that
+   * choose returns. *)
   let test_choose () =
-    ()
+    let rec test_choose_rec (d : dict) (num : int) : bool =
+      match choose d with
+      | None -> num = 0
+      | Some (k, v, d') ->
+        lookup d k = Some v && lookup d' k = None
+                            && test_choose_rec d' (num - 1)
+    in
+    let size = 200 in
+    let pairs = generate_pair_list size in
+    let d = insert_list empty pairs in
+    assert(test_choose_rec d size)
 
-  let test_member () =
-    ()
-
+  (* Tests fold using a lookup-based function. This test is fairly
+   * comprehensive because it runs lookup on every element (using fold)
+   * to ensure that fold is working properly. *)
   let test_fold () =
-    ()
+    let pairs2 = generate_pair_list size in
+    let d2 = insert_list empty pairs2 in
+    assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2)
 
   let run_tests () =
-    test_insert() ;
+    test_insert_lookup_member() ;
     test_remove() ;
-    test_lookup() ;
     test_choose() ;
-    test_member() ;
     test_fold() ;
     ()
 
@@ -272,11 +283,7 @@ end
 
 
 
-(******************************************************************)
-(* BTDict: a functor that implements our DICT signature           *)
-(* using a balanced tree (2-3 trees)                              *)
-(******************************************************************)
-
+(* BTDict: a functor that implements the DICT signature using a 2-3 tree. *)
 module BTDict(D:DICT_ARG) : (DICT with type key = D.key
 with type value = D.value) =
 struct
@@ -340,7 +347,6 @@ struct
       "; value: (" ^ string_of_value v ^ ")") in
     fold f "" d
 
-
   (* Debugging function that prints out the structure of the tree in text
    * format. *)
   let rec string_of_tree (d: dict) : string =
@@ -387,34 +393,6 @@ struct
         let left = Two (w_left, w, w_right) in
         let right = Two (other_left, y, other_right) in
         Up (left, x, right)
-
-  (* Downward phase for inserting (k,v) into our dictionary d.
-   * The downward phase returns a "kicked" up configuration, where
-   *
-   * type kicked =
-   *      | Up of dict * pair * dict
-   *      | Done of dict
-   *
-   * A kicked up configuration can only be a Two node, hence the Up
-   * constructor takes the same parameters as the Two constructor. We return
-   * Up(left,(k,v),right) if the Two-node represented by this Up needs to
-   * be further kicked up in the upward phase (this is represented by an up
-   * arrow on the 2-3 Tree handout). We return Done(d) if we have finished
-   * our upward phase on the tree represented by d.
-   *
-   * The functions insert_downward, insert_downward_two, and
-   * insert_downward_three are __mutually recursive__, hence the
-   * "let rec" and the "and" keywords. Here, we use three mutually recursive
-   * functions to simplify our code into smaller pieces.
-   *
-   * Two functions f and g are __mutually recursive__ if in f's definition,
-   * f calls g, and in g's definition, g calls f. This definition of
-   * mutually recursive definitions can be extended to more than two functions,
-   * as follows:
-   *
-   * Functions f1, f2, f3, ..., fn are mutually recursive if for each of
-   * these functions f, all of the other f_i's can be called on some execution
-   * of f. *)
 
   (* Handles the downward phase of inserting (k,v) into the dictionary. Calls
    * insert_downward_two or insert_downward_three as necessary. *)
@@ -739,7 +717,7 @@ struct
 
   (* Tests insert, member, and lookup by generating 2 lists of 100 pairs,
    * creating 3 trees with them (by adding elements in increasing, decreasing,
-   * and random order); checking that eachh tree is balanced, calling the
+   * and random order); checking that each tree is balanced, calling the
    * member function to make sure that each dictionary contains the correct
    * elements, and calling lookup to check that each key matches its value. *)
   let test_insert_member_lookup () =
@@ -759,7 +737,8 @@ struct
     in
     check pairs1 d1;
     check pairs1 d2;
-    check pairs2 d3;
+    (* Does not call the comprehensive "check" function on d3, because d3 could
+     * have repeated keys, which would make lookup very difficult to test. *)
     ()
 
   let test_remove_simple () =
@@ -835,15 +814,37 @@ struct
     assert(balanced r5);
     ()
 
+  (* Tests fold using a size function and a lookup-based function. *)
   let test_fold () =
+    (* Tests fold by implementing a size function for trees. *)
     let _ = Random.self_init () in
-    let size = Random.int 10000 in
-    let pairs = generate_random_list size in
+    let size = Random.int 1000 in
+    let pairs1 = generate_random_list size in
+    let d1 = insert_list empty pairs1 in
+    print_endline (string_of_tree d1);
+    let size' (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d1 in
+    assert(size' d1 = size);
+    (* Tests fold by implementing a comprehensive lookup function for trees. *)
+    let pairs2 = generate_pair_list size in
+    let d2 = insert_list empty pairs2 in
+    assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2)
+
+  (* Tests the choose function by making sure that (1) choosing 200 elements
+   * from a 200-element tree yields an empty tree, and (2) every element that
+   * is chosen is inside the original tree, but not inside the new tree that
+   * choose returns. *)
+  let test_choose () =
+    let rec test_choose_rec (d : dict) (num : int) : bool =
+      match choose d with
+      | None -> num = 0
+      | Some (k, v, d') ->
+        lookup d k = Some v && lookup d' k = None
+                            && test_choose_rec d' (num - 1)
+    in
+    let size = 200 in
+    let pairs = generate_pair_list size in
     let d = insert_list empty pairs in
-    print_endline (string_of_tree d);
-    let length (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d in
-    assert(length d = size);
-    
+    assert(test_choose_rec d size)
 
   let run_tests () =
     test_balance();
@@ -855,6 +856,7 @@ struct
     test_remove_in_order();
     test_remove_reverse_order();
     test_remove_random_order();
+    test_choose();
     ()
 
 end
@@ -869,14 +871,12 @@ end
 (* Create a dictionary mapping ints to strings using our
  * AssocListDict functor and run the tests *)
 module IntStringListDict = AssocListDict(IntStringDictArg) ;;
+(* Run tests *)
 IntStringListDict.run_tests();;
 
-(* Create a dictionary mapping ints to strings using our
- * BTDict functor and run the tests.
- *
- * Uncomment out the lines below when you are ready to test your
- * 2-3 tree implementation. *)
+(* A specific instance of a 2-3 tree dictionary, for testing *)
 module IntStringBTDict = BTDict(IntStringDictArg);;
+(* Run tests *)
 IntStringBTDict.run_tests();;
 
 
@@ -889,4 +889,3 @@ IntStringBTDict.run_tests();;
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
   BTDict(D)
-
