@@ -356,18 +356,12 @@ struct
 
   (* TODO:
    * Implement fold. Read the specification in the DICT signature above. *)
-  let fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
-    let rec fold_h (f: key -> value -> 'a -> 'a) (dict1 : dict) (u: 'a) : 'a =
-      match dict1 with
-      | Leaf -> u
-      | Two (left, (k, v), right) -> fold_h f left (fold_h f right (f k v u)) 
-      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
-	 fold_h f left (fold_h f mid (f k1 v1 (fold_h f right (f k2 v2 u)))) in
-      match d with
-      | Leaf -> failwith "empty dict"
-      | Two (left, (k, v), right) -> fold_h f left (fold_h f right (f k v u))
-      | Three (left, (k1, v1), mid, (k2, v2), right) -> 
-	 fold_h f left (fold_h f mid (f k1 v1 (fold_h f right (f k2 v2 u))))
+  let rec fold (f: key -> value -> 'a -> 'a) (u: 'a) (d: dict) : 'a =
+    match d with
+    | Leaf -> u
+    | Two (left, (k, v), right) -> fold f left (fold f right (f k v u))
+    | Three (left, (k1, v1), mid, (k2, v2), right) -> 
+      fold f left (fold f mid (f k1 v1 (fold f right (f k2 v2 u))))
 
   (* TODO:
    * Implement these to-string functions *)
@@ -407,7 +401,10 @@ struct
    * result of performing the upward phase on w. *)
   let insert_upward_two (w: pair) (w_left: dict) (w_right: dict)
       (x: pair) (x_other: dict) : kicked =
-    raise TODO
+    let (wk, _) = w in
+    let (xk, _) = x in
+    if D.compare wk xk = Greater then Done (Three (x_other, x, w_left, w, w_right))
+    else Done (Three (w_left, w, w_right, x, x_other))
 
   (* Upward phase for w where its parent is a Three node whose (key,value) is x.
    * One of x's children is w, and of the two remaining children,
@@ -423,7 +420,24 @@ struct
    * new tree as a result of performing the upward phase on w. *)
   let insert_upward_three (w: pair) (w_left: dict) (w_right: dict)
       (x: pair) (y: pair) (other_left: dict) (other_right: dict) : kicked =
-    raise TODO
+    let (wk, _) = w in
+    let (yk, _) = y in
+    (* Using two if/then/elses instead of a combined match avoids making an
+     * unnecessary comparison in some cases. *)
+    if D.compare wk yk = Greater then
+      let left = Three (other_left, x, other_right) in
+      let right = Three (w_left, w, w_right) in
+      Up (Three (left, y, right))
+    else
+      let (xk, _) = x in
+      if D.compare wk xk = Greater then
+        let left = Three (other_left, x, w_left) in
+        let right = Three (other_right, y, w_right) in
+        Up (Three (left, w, right))
+      else
+        let left = Three (w_left, w, w_right) in
+        let right = Three (other_left, y, other_right) in
+        Up (Three (left, x, right))
 
   (* Downward phase for inserting (k,v) into our dictionary d.
    * The downward phase returns a "kicked" up configuration, where
@@ -459,23 +473,45 @@ struct
    * with the appropriate arguments. *)
   let rec insert_downward (d: dict) (k: key) (v: value) : kicked =
     match d with
-      | Leaf -> raise TODO (* base case! see handout *)
-      | Two(left,n,right) -> raise TODO (* mutual recursion *)
-      | Three(left,n1,middle,n2,right) -> raise TODO (* mutual recursion *)
+    | Leaf -> Up (Leaf, (k, v), Leaf)
+    | Two(left,n,right) -> insert_downward_two (k,v) n left right
+    | Three(left,n1,middle,n2,right) ->
+      insert_downward_three (k,v) n1 n2 left middle right
 
   (* Downward phase on a Two node. (k,v) is the (key,value) we are inserting,
    * (k1,v1) is the (key,value) of the current Two node, and left and right
    * are the two subtrees of the current Two node. *)
   and insert_downward_two ((k,v): pair) ((k1,v1): pair)
       (left: dict) (right: dict) : kicked =
-    raise TODO
+    let (dict_insert, dict_other, inserted_side) =
+      if D.compare k k1 = Greater then (right, left, "r")
+      else (left, right, "l")
+    in
+    match insert_downward dict_insert k v with
+    | Done d ->
+      if inserted_side = "r" then Done (Two (dict_other, (k1,v1), d))
+      else Done (Two (d, (k1,v1), dict_other))
+    | Up (w_left, w, w_right) ->
+      insert_upward_two w w_left w_right (k1,v1) dict_other
+        
 
   (* Downward phase on a Three node. (k,v) is the (key,value) we are inserting,
    * (k1,v1) and (k2,v2) are the two (key,value) pairs in our Three node, and
    * left, middle, and right are the three subtrees of our current Three node *)
   and insert_downward_three ((k,v): pair) ((k1,v1): pair) ((k2,v2): pair)
       (left: dict) (middle: dict) (right: dict) : kicked =
-    raise TODO
+    let (dict_insert, other_left, other_right, inserted_side) =
+      if D.compare k k2 = Greater then (right, left, middle, "r")
+      else if D.compare k k1 = Greater then (middle, left, right, "m")
+      else (left, middle, right, "l")
+    in
+    match insert_downward dict_insert k v with
+    | Done d ->
+      if inserted_side = "r" then Done(Three(left,(k1,v1),middle,(k2,v2),d))
+      else if inserted_side = "m" then Done(Three(left,(k1,v1),d,(k2,v2),right))
+      else Done(Three(d,(k1,v1),middle,(k2,v2),right))
+    | Up (wl, w, wr) ->
+      insert_upward_three w wl wr (k1,v1) (k2,v2) other_left other_right
 
   (* We insert (k,v) into our dict using insert_downward, which gives us
    * "kicked" up configuration. We return the tree contained in the "kicked"
@@ -630,13 +666,32 @@ struct
    * Write a lookup function that returns the value of the given key
    * in our dictionary and returns it as an option, or return None
    * if the key is not in our dictionary. *)
+  (* NOTE: Can this be written with the fold function somehow? *)
   let rec lookup (d: dict) (k: key) : value option =
-    raise TODO
+    match d with
+    | Leaf -> None
+    | Two (d1, (k', v'), d2) ->
+      (match D.compare k k' with
+      | Equal -> Some v'
+      | Less -> lookup d1 k
+      | Greater -> lookup d2 k)
+    | Three (d1, (k1, v1), d2, (k2, v2), d3) ->
+      (match D.compare k k1 with
+      | Equal -> Some v1
+      | Less -> lookup d1 k
+      | Greater ->
+        (match D.compare k k2 with
+        | Equal -> Some v2
+	| Less -> lookup d2 k
+	| Greater -> lookup d3 k))
 
   (* TODO:
    * Write a function to test if a given key is in our dictionary *)
+  (* NOTE: Would it be better to write this by calling the lookup function and seeing if it returns "Some _"? *)
   let member (d: dict) (k: key) : bool =
-    raise TODO
+    let check (k' : key) (_ : value) (curr : bool) : bool =
+      curr || (D.compare k k' = Equal) in
+    fold check false d
 
   (* TODO:
    * Write a function that removes any (key,value) pair from our
@@ -659,19 +714,16 @@ struct
   let rec balanced (d: dict) : bool =
     let rec b_count (dict1: dict) : int option =
       match dict1 with
-      | Leaf -> Some 1
+      | Leaf -> Some 0
       | Two (left, _, right) -> (
 	match (b_count left, b_count right) with
-	| (None, _) -> None
-	| (_, None) -> None
-	| (Some x, Some y) -> if x = y then Some ((x + y) / 2) else None)
+	| (None, _) | (_, None) -> None
+	| (Some x, Some y) -> if x = y then Some (x + 1) else None)
       | Three (left, _, mid, _, right) -> (
 	match (b_count left, b_count mid, b_count right) with
-	| (None, _, _) -> None
-	| (_, None, _) -> None
-	| (_, _, None) -> None
+	| (None, _, _) | (_, None, _) | (_, _, None) -> None
 	| (Some x, Some y, Some z) -> 
-          if (x = y && y = z) then Some ((x + y + z) / 3) else None) in
+          if (x = y && y = z) then Some (x + 1) else None) in
     not (b_count d = None)
 
 
