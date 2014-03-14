@@ -835,42 +835,6 @@ struct
     assert(balanced r5);
     ()
 
-  (* Removes a string from a stringlist. If the string is not found, then 
-   * return the regular list *)
-  let rec str_remove (elmt : string) (lst : string list) 
-		     (acc: string list) : string list =
-    match lst with
-    | [] -> acc
-    | x :: xs -> 
-       if (String.equal x elmt) then acc @ xs
-       else str_remove elmt xs ([x] @ acc)
-
-  (* Searches a string list for a sepcific string *)
-  let search_str_list (elmt : string) (lst : string list) : bool =
-    List.fold_right lst ~f: (fun a acc -> (String.equal a elmt) || acc)
-		    ~init: false
- 
-  (* Checks if two string lists are identical *)
-  let rec stringlist_checker list1 list2 =
-    match (List.is_empty list1, List.is_empty list2) with
-      | (true, true) -> true
-      | (false, true) -> false
-      | (true, false) -> false
-      | (false, false) -> (
-	match list1 with
-	| [] -> failwith "empty list"
-	| x :: xs -> 
-	   if search_str_list x list2
-	   then stringlist_checker xs (str_remove x list2 [])
-	   else false)
-
-  (* generates a list of elts of size n all greater than each other, with
-   * the first value being elt_init *)
-  let rec greater_list (n : int) (pair_init : pair) : pair list =
-    if n = 0 then [] else 
-      let new_key = (D.gen_key_gt (fst pair_init) (), D.gen_value ()) in
-      new_key :: (greater_list (n - 1) new_key) 
-
   let test_fold () =
     let _ = Random.self_init () in
     let size = Random.int 10000 in
@@ -879,16 +843,6 @@ struct
     print_endline (string_of_tree d);
     let length (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d in
     assert(length d = size);
-    let a_pair = D.gen_pair () in
-    let pair_list = greater_list 100 a_pair in
-    let dict1 = insert_list empty pair_list in
-    let stringify lst = List.map lst ~f:(
-      fun p -> 
-      match p with
-      | (k, v) -> (D.string_of_key k, D.string_of_value v)) in
-    let fold_fun = (fun (k,v) acc -> (D.string_of_key k, D.string_of_value v)
-				     :: acc) in
-    assert (stringlist_checker (stringify pair_list) (fold fold_fun [] dict1));
     ()
 
   let run_tests () =
