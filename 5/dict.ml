@@ -1,3 +1,9 @@
+(* PS5
+ * CS51 Spring 2014
+ * Authors: Madhu Vijay & Michael Patterson
+ * Part 3: Dictionaries as Balanced Trees
+ *)
+
 open Core.Std
 
 (* Interfaces and implementations of dictionaries.  A dictionary
@@ -213,11 +219,15 @@ struct
     in
     helper size (D.gen_key ())
 
+  (* I have commented this out because it is not used in my tests. The compiler
+   * was throwing warnings. *)
   (* generates a (key,value) list with keys in random order *)
+  (*
   let rec generate_random_list (size: int) : (key * value) list =
     if size <= 0 then []
     else
       (D.gen_key_random(), D.gen_value()) :: (generate_random_list (size - 1))
+   *)
 
   (* Tests insert, lookup, and member by adding 200 elements to each of 2 dicts
    * and recursively checking that "member" returns true for each key, and that
@@ -268,7 +278,7 @@ struct
    * comprehensive because it runs lookup on every element (using fold)
    * to ensure that fold is working properly. *)
   let test_fold () =
-    let pairs2 = generate_pair_list size in
+    let pairs2 = generate_pair_list 500 in
     let d2 = insert_list empty pairs2 in
     assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2)
 
@@ -433,7 +443,8 @@ struct
     match insert_downward dict_insert k v with
     | Done d ->
       if inserted_side = "r" then Done(Three(left,(k1,v1),middle,(k2,v2),d))
-      else if inserted_side = "m" then Done(Three(left,(k1,v1),d,(k2,v2),right))
+      else if inserted_side = "m" then
+        Done(Three(left,(k1,v1),d,(k2,v2),right))
       else Done(Three(d,(k1,v1),middle,(k2,v2),right))
     | Up (wl, w, wr) ->
       insert_upward_three w wl wr (k1,v1) (k2,v2) other_left other_right
@@ -457,7 +468,8 @@ struct
       | Left2,x,l,Two(m,y,r)
       | Right2,y,Two(l,x,m),r -> Hole(rem,Three(l,x,m,y,r))
       | Left2,x,a,Three(b,y,c,z,d)
-      | Right2,z,Three(a,x,b,y,c),d -> Absorbed(rem,Two(Two(a,x,b),y,Two(c,z,d))) (* CHECK THISSSSSSSSSSSSSSSSSSSSS *)
+      | Right2,z,Three(a,x,b,y,c),d ->
+        Absorbed(rem,Two(Two(a,x,b),y,Two(c,z,d)))
       | Left2,_,_,_ | Right2,_,_,_ -> Absorbed(rem,Two(Leaf,n,Leaf))
 
   (* Upward phase for removal where the parent of the hole is a Three node.
@@ -741,20 +753,6 @@ struct
      * have repeated keys, which would make lookup very difficult to test. *)
     ()
 
-  let test_remove_simple () =
-    let pairs = generate_pair_list 13 in
-    let d = insert_list_reversed empty pairs in
-    let rec traverse (pairs : pair list) (d : dict) : unit =
-      match pairs with
-      | [] -> ()
-      | (k,_) :: pairs' ->
-        let d = remove d k in
-        assert(not (member d k));
-        assert(balanced d);
-        traverse pairs' d
-    in
-    traverse pairs d
-
   let test_remove_nothing () =
     let pairs1 = generate_pair_list 26 in
     let d1 = insert_list empty pairs1 in
@@ -821,8 +819,7 @@ struct
     let size = Random.int 1000 in
     let pairs1 = generate_random_list size in
     let d1 = insert_list empty pairs1 in
-    print_endline (string_of_tree d1);
-    let size' (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d1 in
+    let size' (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d in
     assert(size' d1 = size);
     (* Tests fold by implementing a comprehensive lookup function for trees. *)
     let pairs2 = generate_pair_list size in
@@ -850,7 +847,6 @@ struct
     test_balance();
     test_insert_member_lookup();
     test_fold();
-    test_remove_simple();
     test_remove_nothing();
     test_remove_from_nothing();
     test_remove_in_order();
