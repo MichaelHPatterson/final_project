@@ -6,13 +6,9 @@
 
 open Core.Std
 
-(* Interfaces and implementations of dictionaries.  A dictionary
- * is used to associate a value with a key.  In our case, we will
- * be using a dictionary to build an index for the web, associating
- * a set of URLs with each word that we find as we crawl the web.
- *)
 exception TODO
 
+(* Interfaces for a dictionary, which associates values with keys. *)
 module type DICT =
 sig
   type key
@@ -358,7 +354,8 @@ struct
     fold f "" d
 
   (* Debugging function that prints out the structure of the tree in text
-   * format. *)
+   * format. Commented out to prevent compiler warnings. *)
+  (*
   let rec string_of_tree (d: dict) : string =
     match d with
       | Leaf -> "Leaf"
@@ -370,6 +367,7 @@ struct
         ^ ",(" ^ (string_of_key k1) ^ "," ^ (string_of_value v1) ^ "),"
         ^ (string_of_tree middle) ^ ",(" ^ (string_of_key k2) ^ ","
         ^ (string_of_value v2) ^ ")," ^ (string_of_tree right) ^ ")"
+   *)
 
   (* Handles the upward phase for w when the parent is a Two node with
    * key-value pair x and other child x_other. *)
@@ -409,9 +407,20 @@ struct
   let rec insert_downward (d: dict) (k: key) (v: value) : kicked =
     match d with
     | Leaf -> Up (Leaf, (k, v), Leaf)
+    | Two(left,(k1,v1),right) ->
+        if D.compare k k1 = Equal then Done(Two(left,(k1,v),right))
+        else insert_downward_two (k,v) (k1,v1) left right
+    | Three(left,(k1,v1),middle,(k2,v2),right) ->
+        if D.compare k k1 = Equal then
+          Done(Three(left,(k1,v),middle,(k2,v2),right))
+        else if D.compare k k2 = Equal then
+          Done(Three(left,(k1,v1),middle,(k2,v),right))
+        else insert_downward_three (k,v) (k1,v1) (k2,v2) left middle right
+    (*match d with
+    | Leaf -> Up(Leaf,(k,v),Leaf)
     | Two(left,n,right) -> insert_downward_two (k,v) n left right
     | Three(left,n1,middle,n2,right) ->
-      insert_downward_three (k,v) n1 n2 left middle right
+      insert_downward_three (k,v) n1 n2 left middle right****************************************************************************)
 
   (* Handles the downward phase on a Two node, to insert (k, v) into a
    * dictionary Two(left, (k1,v1), right). Calls insert_downward and
@@ -424,8 +433,8 @@ struct
     in
     match insert_downward dict_insert k v with
     | Done d ->
-      if inserted_side = "r" then Done (Two (dict_other, (k1,v1), d))
-      else Done (Two (d, (k1,v1), dict_other))
+      if inserted_side = "r" then Done(Two(dict_other,(k1,v1),d))
+      else Done(Two(d,(k1,v1),dict_other))
     | Up (w_left, w, w_right) ->
       insert_upward_two w w_left w_right (k1,v1) dict_other
 
@@ -739,18 +748,29 @@ struct
     let pairs2 = generate_random_list 100 in
     let d3 = insert_list empty pairs2 in
     assert(balanced d1 && balanced d2 && balanced d3);
-    let rec check (pairs : pair list) (d : dict) : unit =
+    (* Helper function that tests member and lookup given pair list pairs and
+     * corresponding dictionary d. Only for use if pairs does not contain
+     * duplicate keys. *)
+    let rec check_strong (pairs : pair list) (d : dict) : unit =
       match pairs with
       | [] -> ()
       | (k,v) :: pairs' ->
         assert(member d k);
         assert(lookup d k = Some v);
-        check pairs' d
+        check_strong pairs' d
     in
-    check pairs1 d1;
-    check pairs1 d2;
-    (* Does not call the comprehensive "check" function on d3, because d3 could
-     * have repeated keys, which would make lookup very difficult to test. *)
+    check_strong pairs1 d1;
+    check_strong pairs1 d2;
+    (* Weaker helper function that only tests member, not lookup. For use with
+     * pair lists that might contain duplicate keys. *)
+    let rec check_weak (pairs : pair list) (d : dict) : unit =
+      match pairs with
+      | [] -> ()
+      | (k,_) :: pairs' ->
+        assert(member d k);
+        check_weak pairs' d
+    in
+    check_weak pairs2 d3;
     ()
 
   let test_remove_nothing () =
@@ -817,7 +837,7 @@ struct
     (* Tests fold by implementing a size function for trees. *)
     let _ = Random.self_init () in
     let size = Random.int 1000 in
-    let pairs1 = generate_random_list size in
+    let pairs1 = generate_pair_list size in
     let d1 = insert_list empty pairs1 in
     let size' (d : dict) : int = fold (fun _ _ n -> n + 1) 0 d in
     assert(size' d1 = size);
