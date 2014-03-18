@@ -164,7 +164,7 @@ let eighth pt = Note(pt,0.125,60);;
 (* Start off with some scales. We've done these for you.*)
 
 (*
-let scale1 = list_to_stream (List.map quarter [(C,3);(D,3);(E,3);(F,3);(G,3);
+let scale1 = list_to_stream (List.map ~f:quarter [(C,3);(D,3);(E,3);(F,3);(G,3);
                                             (A,3);(B,3);(C,4)]);;
 
 let scale2 = transpose scale1 7;;
@@ -178,7 +178,7 @@ output_midi "scale.mid" 32 scales;;
 (* Then with just three lists ... *)
 
 (*
-let bass = list_to_stream (List.map quarter [(D,3);(A,2);(B,2);(Gb,2);(G,2);
+let bass = list_to_stream (List.map ~f:quarter [(D,3);(A,2);(B,2);(Gb,2);(G,2);
                                              (D,2);(G,2);(A,2)]);;
 
 let slow = [(Gb,4);(E,4);(D,4);(Db,4);(B,3);(A,3);(B,3);(Db,4);(D,4);
@@ -186,7 +186,7 @@ let slow = [(Gb,4);(E,4);(D,4);(Db,4);(B,3);(A,3);(B,3);(Db,4);(D,4);
 let fast = [(D,3);(Gb,3);(A,3);(G,3);(Gb,3);(D,3);(Gb,3);(E,3);(D,3);(B,2);
             (D,3);(A,3);(G,3);(B,3);(A,3);(G,3)];;
 
-let melody = list_to_stream ((List.map quarter slow)@(List.map eighth fast));;
+let melody = list_to_stream ((List.map ~f:quarter slow)@(List.map ~f:eighth fast));;
 *)
 
 (* ...and the functions we defined, produce (a small part of) a great piece of
