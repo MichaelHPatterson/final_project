@@ -186,7 +186,8 @@ let slow = [(Gb,4);(E,4);(D,4);(Db,4);(B,3);(A,3);(B,3);(Db,4);(D,4);
 let fast = [(D,3);(Gb,3);(A,3);(G,3);(Gb,3);(D,3);(Gb,3);(E,3);(D,3);(B,2);
             (D,3);(A,3);(G,3);(B,3);(A,3);(G,3)];;
 
-let melody = list_to_stream ((List.map ~f:quarter slow)@(List.map ~f:eighth fast));;
+let melody = list_to_stream ((List.map ~f:quarter slow) @
+                (List.map ~f:eighth fast));;
 *)
 
 (* ...and the functions we defined, produce (a small part of) a great piece of
