@@ -1,7 +1,8 @@
 (* PS5
  * CS51 Spring 2014
  * Authors: Madhu Vijay & Michael Patterson
- * Part 3: Dictionaries as Balanced Trees
+ * Part 3: Dictionaries as Balanced Trees -- Implements a dictionary using
+ *         lists, and a dictionary using 2-3 trees.
  *)
 
 open Core.Std
@@ -18,16 +19,7 @@ sig
   (* An empty dictionary *)
   val empty : dict
 
-  (* Reduce the dictionary using the provided function f and base case u.
-   * Our reducing function f must have the type:
-   *      key -> value -> 'a -> 'a
-   * and our base case u has type 'a.
-   *
-   * If our dictionary is the (key,value) pairs (in any order)
-   *      (k1,v1), (k2,v2), (k3,v3), ... (kn,vn)
-   * then fold should return:
-   *      f k1 v1 (f k2 v2 (f k3 v3 (f ... (f kn vn u))))
-   *)
+  (* Reduce the dictionary using the provided function f and base case u. *)
   val fold : (key -> value -> 'a -> 'a) -> 'a -> dict -> 'a
 
   (* Returns as an option the value associated with the provided key. If
@@ -69,7 +61,7 @@ sig
   val string_of_key : key -> string
   val string_of_value : value -> string
 
-  (* Use these functions for testing. See TESTING EXPLANATION. *)
+  (* Functions used for testing. *)
 
   (* Generate a key. The same key is always returned *)
   val gen_key : unit -> key
@@ -96,8 +88,7 @@ end
 
 
 
-(* An example implementation of our DICT_ARG signature. Use this struct
- * for testing. *)
+(* An example implementation of our DICT_ARG signature. Used for testing. *)
 module IntStringDictArg : DICT_ARG =
 struct
   type key = int
@@ -225,6 +216,10 @@ struct
       (D.gen_key_random(), D.gen_value()) :: (generate_random_list (size - 1))
    *)
 
+
+  (* Note: Many of the following tests were adapted directly from the tests
+   * written for BTDict below. *)
+
   (* Tests insert, lookup, and member by adding 200 elements to each of 2 dicts
    * and recursively checking that "member" returns true for each key, and that
    * "lookup" returns the correct value. Adapted from distribution code. *)
@@ -256,7 +251,7 @@ struct
   (* Tests the choose function by making sure that (1) choosing 200 elements
    * from a 200-element dict yields an empty dict, and (2) every element that
    * is chosen is inside the original dict, but not inside the new dict that
-   * choose returns. *)
+   * is returned by choose. *)
   let test_choose () =
     let rec test_choose_rec (d : dict) (num : int) : bool =
       match choose d with
@@ -278,6 +273,7 @@ struct
     let d2 = insert_list empty pairs2 in
     assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2)
 
+  (* Runs all the tests from above *)
   let run_tests () =
     test_insert_lookup_member() ;
     test_remove() ;
@@ -289,7 +285,7 @@ end
 
 
 
-(* BTDict: a functor that implements the DICT signature using a 2-3 tree. *)
+(* A functor that implements the DICT signature using a 2-3 tree. *)
 module BTDict(D:DICT_ARG) : (DICT with type key = D.key
 with type value = D.value) =
 struct
@@ -380,7 +376,8 @@ struct
     else Done (Three (w_left, w, w_right, x, x_other))
 
   (* Handles the upward phase for w when the parent is a Three node with
-   * key-value pairs x and y and other children other_left and other_right. *)
+   * key-value pairs x and y and other children other_left and other_right,
+   * in that order. *)
   let insert_upward_three (w: pair) (w_left: dict) (w_right: dict)
       (x: pair) (y: pair) (other_left: dict) (other_right: dict) : kicked =
     let (wk, _) = w in
@@ -403,24 +400,20 @@ struct
         Up (left, x, right)
 
   (* Handles the downward phase of inserting (k,v) into the dictionary. Calls
-   * insert_downward_two or insert_downward_three as necessary. *)
+   * insert_downward_two or insert_downward_three as necessary. Modifies
+   * value in the case of a duplicate. *)
   let rec insert_downward (d: dict) (k: key) (v: value) : kicked =
     match d with
     | Leaf -> Up (Leaf, (k, v), Leaf)
     | Two(left,(k1,v1),right) ->
-        if D.compare k k1 = Equal then Done(Two(left,(k1,v),right))
+      if D.compare k k1 = Equal then Done(Two(left,(k1,v),right))
         else insert_downward_two (k,v) (k1,v1) left right
     | Three(left,(k1,v1),middle,(k2,v2),right) ->
-        if D.compare k k1 = Equal then
-          Done(Three(left,(k1,v),middle,(k2,v2),right))
-        else if D.compare k k2 = Equal then
-          Done(Three(left,(k1,v1),middle,(k2,v),right))
-        else insert_downward_three (k,v) (k1,v1) (k2,v2) left middle right
-    (*match d with
-    | Leaf -> Up(Leaf,(k,v),Leaf)
-    | Two(left,n,right) -> insert_downward_two (k,v) n left right
-    | Three(left,n1,middle,n2,right) ->
-      insert_downward_three (k,v) n1 n2 left middle right****************************************************************************)
+      if D.compare k k1 = Equal then
+        Done(Three(left,(k1,v),middle,(k2,v2),right))
+      else if D.compare k k2 = Equal then
+        Done(Three(left,(k1,v1),middle,(k2,v),right))
+      else insert_downward_three (k,v) (k1,v1) (k2,v2) left middle right
 
   (* Handles the downward phase on a Two node, to insert (k, v) into a
    * dictionary Two(left, (k1,v1), right). Calls insert_downward and
@@ -440,7 +433,7 @@ struct
 
 
   (* Handles the downward phase on a Three node, to insert (k, v) into a
-   * dictionary Three(left, (k1,v1), middle, (k2,v2), right). Calls
+   * dictionary Three(left,(k1,v1),middle,(k2,v2), right). Calls
    * insert_downward and insert_upward_three when needed. *)
   and insert_downward_three ((k,v): pair) ((k1,v1): pair) ((k2,v2): pair)
       (left: dict) (middle: dict) (right: dict) : kicked =
@@ -463,14 +456,13 @@ struct
    * configuration. *)
   let insert (d: dict) (k: key) (v: value) : dict =
     match insert_downward d k v with
-      | Up(l,(k1,v1),r) -> Two(l,(k1,v1),r)
-      | Done x -> x
+    | Up(l,(k1,v1),r) -> Two(l,(k1,v1),r)
+    | Done x -> x
 
-  (* Upward phase for removal where the parent of the hole is a Two node.
-   * See cases (1-2) on the handout. n is the (key,value) pair contained in
-   * the parent node; left and right are the subtrees of the parent node (our
-   * hole is one of these subtrees); and dir indicates which subtree was
-   * contained by the hole. *)
+  (* Upward phase for removal where the parent of the hole is a Two node. n is
+   * the parent's (key,value) pair; left and right are subtrees of the parent
+   * node (the hole is one of these subtrees); and dir indicates which
+   * subtree was contained by the hole. *)
   let remove_upward_two (n: pair) (rem: pair option)
       (left: dict) (right: dict) (dir: direction2) : hole =
     match dir,n,left,right with
@@ -481,11 +473,10 @@ struct
         Absorbed(rem,Two(Two(a,x,b),y,Two(c,z,d)))
       | Left2,_,_,_ | Right2,_,_,_ -> Absorbed(rem,Two(Leaf,n,Leaf))
 
-  (* Upward phase for removal where the parent of the hole is a Three node.
-   * See cases (3-4) on the handout. n1 and n2 are the (key,value) pairs
-   * contained in the parent node; left, middle, and right are the subtrees
-   * of the parent node (our hole is one of these subtrees); and dir indicates
-   * which subtree was the tree contained by the hole. *)
+  (* Upward phase for removal where the parent of the hole is a Three node. n1
+   * and n2 are the parent's (key,value) pairs; left, middle, and right are the
+   * subtrees of the parent (the hole is one of these subtrees); and dir
+   * indicates which subtree was the tree contained by the hole. *)
   let remove_upward_three (n1: pair) (n2: pair) (rem: pair option)
       (left: dict) (middle: dict) (right: dict) (dir: direction3) : hole =
     match dir,n1,n2,left,middle,right with
@@ -633,9 +624,9 @@ struct
   (* Returns true if the key k is in the dictionary d. *)
   let member (d: dict) (k: key) : bool = not (lookup d k = None)
   
-  (* Chooses a pair from the top of the dictionary, and returns the pair's
-   * key and value and the rest of the dictionary as an option; or returns
-   * None if the dictionary is empty. *)
+  (* Chooses a pair from the top of the dictionary, and returns the pair's key
+   * and value and the rest of the dictionary, as an option; or returns None
+   * if the dictionary is empty. *)
   let choose (d: dict) : (key * value * dict) option =
     match d with
     | Leaf -> None
@@ -643,10 +634,9 @@ struct
 
   (* How are you testing that you tree is balanced?
    * ANSWER:
-   *    Checks whether a tree is balanced, by counting the height of the tree
-   *    along each branch, and making sure all of the numbers match up. Uses
-   *    a recursive helper function that returns None if any disparity is
-   *    found.
+   *    Counts the height of the tree along each branch, and makes sure that
+   *    all of the numbers match up. Uses a recursive helper function that
+   *    returns None if any disparity is found.
    *)
   let balanced (d: dict) : bool =
     let rec b_count (dict1: dict) : int option =
@@ -664,11 +654,7 @@ struct
     not (b_count d = None)
 
 
-  (********************************************************************)
-  (*       TESTS                                                      *)
-  (* You must write more comprehensive tests, using our remove tests  *)
-  (* below as an example                                              *)
-  (********************************************************************)
+  (* The following functions are used in the testing functions. *)
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
@@ -694,7 +680,7 @@ struct
     else
       (D.gen_key_random(), D.gen_value()) :: (generate_random_list (size - 1))
 
-
+  (* Test function for balance (from the distribution code). *)
   let test_balance () =
     let d1 = Leaf in
     assert(balanced d1) ;
@@ -740,7 +726,8 @@ struct
    * creating 3 trees with them (by adding elements in increasing, decreasing,
    * and random order); checking that each tree is balanced, calling the
    * member function to make sure that each dictionary contains the correct
-   * elements, and calling lookup to check that each key matches its value. *)
+   * elements, and calling lookup (where possible) to check that each key
+   * matches its value. *)
   let test_insert_member_lookup () =
     let pairs1 = generate_pair_list 100 in 
     let d1 = insert_list empty pairs1 in
@@ -749,8 +736,8 @@ struct
     let d3 = insert_list empty pairs2 in
     assert(balanced d1 && balanced d2 && balanced d3);
     (* Helper function that tests member and lookup given pair list pairs and
-     * corresponding dictionary d. Only for use if pairs does not contain
-     * duplicate keys. *)
+     * corresponding dictionary d. Should only be used if the pair list does
+     * not contain duplicate keys. *)
     let rec check_strong (pairs : pair list) (d : dict) : unit =
       match pairs with
       | [] -> ()
@@ -772,6 +759,8 @@ struct
     in
     check_weak pairs2 d3;
     ()
+
+  (* Test functions for remove, from the code provided. *)
 
   let test_remove_nothing () =
     let pairs1 = generate_pair_list 26 in
@@ -832,10 +821,10 @@ struct
     assert(balanced r5);
     ()
 
-  (* Tests fold using a size function and a lookup-based function. *)
+  (* Tests fold by constructing a size function and a lookup-based function. *)
   let test_fold () =
-    (* Tests fold by implementing a size function for trees. *)
     let _ = Random.self_init () in
+    (* Tests fold by implementing a size function for trees. *)
     let size = Random.int 1000 in
     let pairs1 = generate_pair_list size in
     let d1 = insert_list empty pairs1 in
@@ -844,7 +833,8 @@ struct
     (* Tests fold by implementing a comprehensive lookup function for trees. *)
     let pairs2 = generate_pair_list size in
     let d2 = insert_list empty pairs2 in
-    assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2)
+    assert(fold (fun k v b -> lookup d2 k = Some v && b) true d2);
+    ()
 
   (* Tests the choose function by making sure that (1) choosing 200 elements
    * from a 200-element tree yields an empty tree, and (2) every element that
@@ -863,15 +853,16 @@ struct
     let d = insert_list empty pairs in
     assert(test_choose_rec d size)
 
+  (* Runs all of the tests from above. *)
   let run_tests () =
     test_balance();
     test_insert_member_lookup();
-    test_fold();
     test_remove_nothing();
     test_remove_from_nothing();
     test_remove_in_order();
     test_remove_reverse_order();
     test_remove_random_order();
+    test_fold();
     test_choose();
     ()
 
@@ -879,29 +870,23 @@ end
 
 
 
-
-(******************************************************************)
-(* Run our tests.                                                 *)
-(******************************************************************)
+(* Run the tests. *)
 
 (* Create a dictionary mapping ints to strings using our
  * AssocListDict functor and run the tests *)
 module IntStringListDict = AssocListDict(IntStringDictArg) ;;
-(* Run tests *)
+(* Run tests for AssocListDict *)
 IntStringListDict.run_tests();;
 
 (* A specific instance of a 2-3 tree dictionary, for testing *)
 module IntStringBTDict = BTDict(IntStringDictArg);;
-(* Run tests *)
+(* Run tests for BTDict *)
 IntStringBTDict.run_tests();;
 
 
 
 
-(******************************************************************)
-(* Make: a functor that creates a DICT by calling our             *)
-(* AssocListDict or BTDict functors                               *)
-(******************************************************************)
+(* A functor that creates a DICT by calling the BTDict functor. *)
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
   BTDict(D)

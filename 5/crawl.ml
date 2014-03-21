@@ -1,7 +1,7 @@
 (* PS5
  * CS51 Spring 2014
  * Authors: Madhu Vijay & Michael Patterson
- * Part 1: Crawler
+ * Part 1: Crawler -- Implements a crawler
  *)
 
 open Core.Std
@@ -63,22 +63,14 @@ let print s =
 (*    PART 1: CRAWLER                                                  *)
 (***********************************************************************)
 
-(* TODO: Build an index as follows:
- *
- * Remove a link from the frontier (the set of links that have yet to
- * be visited), visit this link, add its outgoing links to the
- * frontier, and update the index so that all words on this page are
- * mapped to linksets containing this url.
- *
- * Keep crawling until we've
- * reached the maximum number of links (n) or the frontier is empty. *)
+(* Builds an index by removing a link from the frontier, visiting the link,
+ * adding its outgoing links to the frontier, and updatingn the index so all
+ * words on the page are mapped to linksets containing the url. Keeps
+ * crawling until the frontier is empty, or we've reached the maximum number of
+ * of links n. *)
 let rec crawl (n:int) (frontier: LinkSet.set)
     (visited : LinkSet.set) (d:WordDict.dict) : WordDict.dict =
   
-  (*
-  Printf.printf "Number of pages left: %i \n" n;
-  Printf.printf "My frontier: %s \n" (LinkSet.string_of_set frontier);
-  Printf.printf "My dictionary: %s \n" (WordDict.string_of_dict d); *)
   if n = 0 then d else (
   if LinkSet.is_empty(frontier) then d else (
   let add_to_dict my_dict word_list page_url =
@@ -103,10 +95,8 @@ let rec crawl (n:int) (frontier: LinkSet.set)
   find_pages frontier))
 ;;
 
+(* Calls the crawl function above to crawl with the appropriate parameters *)
 let crawler () =
   crawl num_pages_to_search (LinkSet.singleton initial_link) LinkSet.empty
     WordDict.empty
 ;;
-
-(* Debugging note: if you set debug=true in moogle.ml, it will print out your
- * index after crawling. *)
