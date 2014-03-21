@@ -1,20 +1,20 @@
 (* PS5
  * CS51 Spring 2014
  * Authors: Madhu Vijay & Michael Patterson
- * Part 2: Sets as Dictionaries
+ * Part 2: Sets as Dictionaries -- Contains definitions for sets.
  *)
 
 open Core.Std
-
-(* Definitions for sets. *)
 
 exception TODO
 
 (* An interface for set modules *)
 module type SET =
 sig
-  type elt  (* type of elements in the set *)
-  type set  (* abstract type for the set *)
+  (* type of elements in the set *)
+  type elt
+  (* type for the set *)
+  type set
 
   val empty : set
 
@@ -28,16 +28,15 @@ sig
   val union : set -> set -> set
   val intersect : set -> set -> set
 
-  (* remove an element from the set -- if the
-   * element isn't present, does nothing. *)
+  (* remove an element from the set; does nothing if the element isn't
+   * in the set. *)
   val remove : elt -> set -> set
 
   (* returns true iff the element is in the set *)
   val member : set -> elt -> bool
 
-  (* chooses some member from the set, removes it
-   * and returns that element plus the new set.
-   * If the set is empty, returns None. *)
+  (* chooses some member from the set, removes it and returns that element plus
+   * the new set. If the set is empty, returns None. *)
   val choose : set -> (elt * set) option
 
   (* fold a function across the elements of the set
@@ -48,24 +47,21 @@ sig
   val string_of_set : set -> string
   val string_of_elt : elt -> string
 
-  (* runs our tests. See TESTING EXPLANATION *)
+  (* runs our tests *)
   val run_tests : unit -> unit
 end
 
 
 
-(* parameter to Set modules -- we must pass in some
- * type for the elements of a set, a comparison
- * function, and a way to stringify it.
- *)
+(* parameter to Set modules -- we must pass in some type for the elements of a
+ * set, a comparison function, and a way to convert it to a string. *)
 module type COMPARABLE =
 sig
   type t
   val compare : t -> t -> Ordering.t
   val string_of_t : t -> string
 
-  (* The functions below are used for testing. See TESTING
-   * EXPLANATION *)
+  (* The functions below are used for testing. *)
 
   (* Generate a value of type t. The same t is always returned *)
   val gen : unit -> t
@@ -86,8 +82,7 @@ end
 
 
 
-(* An example implementation of our COMPARABLE signature. Use this
- * struct for testing. *)
+(* An example implementation of our COMPARABLE signature. Used for testing. *)
 module IntComparable : COMPARABLE =
 struct
   open Order
@@ -167,11 +162,7 @@ struct
     "set([" ^ (List.fold_left s ~f:f ~init:"") ^ "])"
 
 
-  (****************************************************************)
-  (* Tests for our ListSet functor                                *)
-  (* These are just examples of tests, your tests should be a lot *)
-  (* more thorough than these.                                    *)
-  (****************************************************************)
+  (* Tests for the ListSet functor. *)
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: set) (lst: elt list) : set =
@@ -204,13 +195,18 @@ struct
       | (Some (x, xs), _)  -> 
           if member good_set x then set_compare xs (remove x good_set)
 	  else false
-  
+
+  (* Tests insert by adding 100 elements to a list and making sure each one
+   * is inside the resulting list. *)  
   let test_insert () =
     let elts = generate_random_list 100 in
     let s1 = insert_list empty elts in
     List.iter elts ~f:(fun k -> assert(member s1 k)) ;
     ()
 
+  (* Tests remove by generating a adding 100 elements, using fold_right to
+   * remove them, and checking that each removed element is no longer a
+   * member of the set. *)
   let test_remove () =
     let elts = generate_random_list 100 in
     let s1 = insert_list empty elts in
@@ -218,6 +214,8 @@ struct
     List.iter elts ~f:(fun k -> assert(not (member s2 k))) ;
     ()
 
+  (* Tests union by creating two partially overlapping sets set1 and set2, and
+   * making sure that the union matches what we expect. *)
   let test_union () = 
     let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
@@ -229,6 +227,8 @@ struct
     assert (set_compare (union set1 set2) union_set);
     ()
 
+  (* Tests intersect by creating two partially overlapping sets set1 and set2,
+   * and making sure the intersection matches what we expect. *)
   let test_intersect () =
     let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
@@ -240,6 +240,8 @@ struct
     assert (set_compare (intersect set1 set2) intersection_set);
     ()
 
+  (* Tests the member function by inserting elements into an empty set and
+   * making sure the elements we insert are members of the resulting set. *)
   let test_member () =
     let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
@@ -268,18 +270,21 @@ struct
   
   (* checks if two lists are identical *)
   let rec lists_checker (list1 : elt list) (list2 : elt list) : bool =
-      match (List.is_empty list1, List.is_empty list2) with
-      | (true, true) -> true
-      | (false, true) -> false
-      | (true, false) -> false
-      | (false, false) -> (
-	match list1 with
-	| [] -> failwith "empty list"
-	| x :: xs -> 
-	   if search_in_list x list2 
-	   then lists_checker xs (list_remove x list2 [])
-	   else false)
- 
+    let empty1 = List.is_empty list1 in
+    let empty2 = List.is_empty list2 in
+    match (empty1, empty2) with
+    | (true, _) -> empty2
+    | (false, true) -> false
+    | (false, false) -> (
+      match list1 with
+      | [] ->
+        (* This outcome can't possibly occur *)
+        failwith "empty list"
+      | x :: xs -> 
+        search_in_list x list2 && lists_checker xs (list_remove x list2 []))
+
+  (* Tests choose by making sure that repeatedly choosing from a set yields
+   * what we expect. *)
   let test_choose () =
     let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
@@ -301,25 +306,27 @@ struct
        if (String.equal x elmt) then acc @ xs
        else str_remove elmt xs ([x] @ acc)
 
-  (* Searches a string list for a sepcific string *)
+  (* Searches a string list for a specific string *)
   let search_str_list (elmt : string) (lst : string list) : bool =
     List.fold_right lst ~f: (fun a acc -> (String.equal a elmt) || acc)
 		    ~init: false
  
   (* Checks if two string lists are identical *)
   let rec stringlist_checker list1 list2 =
-    match (List.is_empty list1, List.is_empty list2) with
-      | (true, true) -> true
+    let empty1 = List.is_empty list1 in
+    let empty2 = List.is_empty list2 in
+    match (empty1, empty2) with
+      | (true, _) -> empty2
       | (false, true) -> false
-      | (true, false) -> false
       | (false, false) -> (
 	match list1 with
 	| [] -> failwith "empty list"
 	| x :: xs -> 
-	   if search_str_list x list2
-	   then stringlist_checker xs (str_remove x list2 [])
-	   else false)
-  
+	   search_str_list x list2 &&
+           stringlist_checker xs (str_remove x list2 []))
+
+  (* Tests fold by writing a string converter in 2 different ways and making
+   * sure the results match*)
   let test_fold () =
     let a_key = (C.gen_random ()) in
     let a_list = greater_list 100 a_key in
@@ -330,18 +337,21 @@ struct
     assert (stringlist_checker (stringify a_list) (fold fold_function [] set1));
     ()
 
+  (* Simple testing function for is_empty. *)
   let test_is_empty () = 
       assert (is_empty empty);
       assert (not (is_empty (singleton (C.gen_random ()))));
-      assert (not (is_empty (insert (C.gen_random ()) (insert 
-        (C.gen_random ()) empty))));
+      assert (not (is_empty (insert (C.gen_random ())
+                            (insert (C.gen_random ()) empty))));
       ()
 
+  (* Simple testing function for singleton. *)
   let test_singleton () =
     let x = (C.gen_random ()) in
     let s_x = singleton x in
     assert (member s_x x)
 
+  (* Runs all the tests from above. *)
   let run_tests () =
     test_insert () ;
     test_remove () ;
@@ -357,11 +367,7 @@ struct
 end
 
 
-(******************************************************************)
-(* DictSet: a functor that creates a SET by calling our           *)
-(* Dict.Make functor                                              *)
-(******************************************************************)
-
+(* A functor that creates a SET by calling our Dict.Make functor. *)
 module DictSet(C : COMPARABLE) : (SET with type elt = C.t) =
 struct
   module D = Dict.Make(
@@ -389,7 +395,7 @@ struct
 
   let empty = D.empty
   
-  (* Matches tuple with another tuple, removing value (b/c it's unit) *)
+  (* Matches tuple with another tuple, removing value (because it's unit) *)
   let choose d = match D.choose d with
     | None -> None
     | Some (k, _, d) -> Some (k,d)
@@ -397,8 +403,10 @@ struct
   (* takes advantage of fact that choose returns None if dict is empty *)
   let is_empty s = (choose s = None)
 
+  (* Insertion into set *)
   let insert x s = D.insert s x ()
 
+  (* Creates a single-element set *)
   let singleton x = insert x empty
 
   (* based off the fold in AssocListDict, found in dict.ml *)
@@ -407,8 +415,10 @@ struct
   (* based off the union given in ListSet *)
   let union xs ys = fold insert ys xs
 
+  (* Checks that k is a member of d *)
   let member d k = D.member d k
 
+  (* Computes the set intersection of xs and ys *)
   let intersect xs ys = 
     let rec intersect_helper xs ys =
       match choose xs with
@@ -417,21 +427,19 @@ struct
 			  else intersect_helper d ys in
     if (is_empty xs || is_empty ys) then empty else intersect_helper xs ys
 
+  (* Removes k from d *)
   let remove k d = D.remove d k
 
   (* implement the rest of the functions in the signature! *)
 
+  (* Convert elts or sets into strings *)
   let string_of_elt = D.string_of_key
   let string_of_set s = D.string_of_dict s
 
 					 
-  (****************************************************************)
-  (* Tests for our DictSet functor                                *)
-  (* Use the tests from the ListSet functor to see how you should *)
-  (* write tests. However, you must write a lot more              *)
-  (* comprehensive tests to test ALL your functions.              *)
-  (****************************************************************)
+  (* Tests for our DictSet functor. *)
 
+  (* Simple tests for is_empty. *)
   let test_is_empty () = 
       assert (is_empty empty);
       assert (not (is_empty (singleton (C.gen_random ()))));
@@ -439,7 +447,7 @@ struct
         (C.gen_random ()) empty))));
       ()
 
-
+  (* Simple tests for singleton. *)
   let test_singleton () =
     let x = (C.gen_random ()) in
     let s_x = singleton x in
@@ -450,7 +458,7 @@ struct
       if size <= 0 then []
       else (C.gen_random () :: (generate_list (size - 1)))
 
-  
+  (* Tests insert. See descriptions inside *)
   let test_insert () =
     let elts = generate_list 100 in
 
@@ -532,7 +540,6 @@ struct
           if member good_set x then set_compare xs (remove x good_set)
 	  else false
 
-
   (* tests if the set representing the union of two sets is identical to the
    * union put together manually *)
   let test_union () = 
@@ -590,17 +597,16 @@ struct
   
   (* checks if two lists are identical *)
   let rec lists_checker (list1 : elt list) (list2 : elt list) : bool =
-      match (List.is_empty list1, List.is_empty list2) with
-      | (true, true) -> true
-      | (false, true) -> false
-      | (true, false) -> false
-      | (false, false) -> (
-	match list1 with
-	| [] -> failwith "empty list"
-	| x :: xs -> 
-	   if search_in_list x list2 
-	   then lists_checker xs (list_remove x list2 [])
-	   else false)
+    let empty1 = List.is_empty list1 in
+    let empty2 = List.is_empty list2 in
+    match (empty1, empty2) with
+    | (true, _) -> empty2
+    | (false, true) -> false
+    | (false, false) -> (
+      match list1 with
+      | [] -> failwith "empty list"
+      | x :: xs -> 
+	 search_in_list x list2 && lists_checker xs (list_remove x list2 []))
 
   (* inserts a list of elts into a set, then uses choose to reassemble the list.
    * Checks if the two lists are identical. *)	 
@@ -641,9 +647,8 @@ struct
 	match list1 with
 	| [] -> failwith "empty list"
 	| x :: xs -> 
-	   if search_str_list x list2
-	   then stringlist_checker xs (str_remove x list2 [])
-	   else false)
+	   search_str_list x list2 &&
+           stringlist_checker xs (str_remove x list2 []))
 
   (* Tests the fold function by comparing the results of converting a list of 
    * elts into a list of strings with List.map and the results of converting a 
@@ -679,26 +684,16 @@ end
 (* Run our tests.                                                 *)
 (******************************************************************)
 
-(* Create a set of ints using our ListSet functor. *)
+(* Create a set of ints using our ListSet functor, and run tests. *)
 module IntListSet = ListSet(IntComparable) ;;
 IntListSet.run_tests();;
 
-(* Create a set of ints using our DictSet functor
- *
- * Uncomment out the lines below when you are ready to test your
- * 2-3 dict set implementation *)
-
+(* Create a set of ints using our DictSet functor, and runs tests. *)
 module IntDictSet = DictSet(IntComparable) ;;
 IntDictSet.run_tests();;
 
 
-(******************************************************************)
-(* Make: a functor that creates a SET by calling our              *)
-(* ListSet or DictSet functors                                    *)
-(******************************************************************)
+(* A functor that creates a SET by calling the DictSet functor. *)
 module Make(C : COMPARABLE) : (SET with type elt = C.t) =
-  (* Change this line to use our dictionary implementation when your are
-   * finished. *)
-  (* ListSet (C) *)
    DictSet (C)
 
