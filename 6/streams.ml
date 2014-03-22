@@ -11,20 +11,17 @@ and 'a tr = Stem of 'a * 'a tree * 'a tree ;;
 (* Write a function headt which takes an 'a treestream and returns the value
  * at the root of the tree *)
 
-let headt (t: 'a tree) : 'a =
-  failwith "Unimplemented"
+let headt (t: 'a tree) : 'a = let Stem (x, _, _) = t () in x
 ;;
 
 (*>* Problem 2.1.b *>*)
 (* Write functions ltail and rtail which take a treestream and return its
  * left and right subtrees respectively *)
 
-let ltail (t: 'a tree) : 'a tree =
-  failwith "Unimplemented"
+let ltail (t: 'a tree) : 'a tree = let Stem (_, y, _) = t () in y
 ;;
 
-let rtail (t: 'a tree) : 'a tree =
-  failwith "Unimplemented"
+let rtail (t: 'a tree) : 'a tree = let Stem (_, _, z) = t () in z
 ;;
 
 (*>* Problem 2.1.c *>*)
@@ -32,7 +29,7 @@ let rtail (t: 'a tree) : 'a tree =
  * over the given treestream *)
 
 let rec mapt (f: 'a -> 'b) (t: 'a tree) : 'b tree =
-  failwith "Unimplemented"
+  fun () -> Stem (f (headt t), mapt f (ltail t), mapt f (rtail t))
 ;;
 
 (*>* Problem 2.1.d *>*)
@@ -42,14 +39,14 @@ let rec mapt (f: 'a -> 'b) (t: 'a tree) : 'b tree =
  * the corresponding value in "zipt f t1 t2" should be "f x1 x2" *)
 
 let rec zipt (f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
-  failwith "Unimplemented"
+  fun () -> Stem (f (headt t1) (headt t2), zipt f (ltail t1) (ltail t2),
+	     zipt f (rtail t1) (rtail t2))
 ;;
 
 (* Define a treestream of all ones *)
 
 (*>* Problem 2.1.e *>*)
-let rec onest () =
-  failwith "Unimplemented"
+let rec onest () = Stem (1, (fun () -> onest ()), (fun () -> onest ()))
 ;;
 
 (* Define a treestream in which each positive natural number appears
@@ -67,8 +64,13 @@ let rec onest () =
  *)
 
 (*>* Problem 2.1.f *>*)
-let rec treenats () =
-  failwith "Unimplemented"
+
+(* I removed the rec flag. According to Piazza this is ok and I couldn't think
+ * of a way to do it recursively without a helper and with () as only arg *)
+let treenats () =
+  let rec nathelp (n : int) : int tr =
+    Stem (n, (fun () -> nathelp (n * 2)), (fun () -> nathelp ((n * 2) + 1))) in
+  nathelp 1
 ;;
 
 (***************** Using the Lazy module ******************)
