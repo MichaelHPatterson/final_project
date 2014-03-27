@@ -89,7 +89,7 @@ open Lazy
 
 type 'a stream = Cons of 'a * 'a stream Lazy.t
 
-let rec ones = Cons(1, lazy(ones));;
+let rec ones = Cons(1, lazy ones);;
 
 (*>* Problem 2.2.a *>*)
 (* Implement the head function *)
@@ -132,7 +132,10 @@ let rec nth (n:int) (s:'a stream) : 'a =
  * function. NOTE: This is not a simple merge function. You must
  * REMOVE DUPLICATES *)
 
+(* if head A < head B, then head A is next elt in stream, or vice 
+ * versa. if =, then only one is needed, and B is picked arbitrarily. *)
 let rec merge (s1:int stream) (s2:int stream) : int stream =
+
   (* advances the stream to the next value that <> current value being added.
    * in cases w/streams of infinite equivalence, this will infinitely loop. *)
   let rec next (n:int) (stream:int stream) : int stream =
@@ -140,7 +143,7 @@ let rec merge (s1:int stream) (s2:int stream) : int stream =
   
   if head s1 < head s2 then 
     let add = head s1 in
-    Cons (add, lazy (merge (next add (tail s1)) (next add (tail s2))))
+    Cons (add, lazy (merge (next add (tail s1)) (next add s2)))
   else
       let add = head s2 in
       Cons (add, lazy (merge (next add s1) (next add (tail s2))))
