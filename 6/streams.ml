@@ -104,9 +104,9 @@ let tail (s:'a stream) : 'a stream =
 (*>* Problem 2.2.b *>*)
 (* Implement map *)
 
-let rec map (f:'a -> 'b) (s:'a stream) : 'b stream =
+let rec map ~(f:'a -> 'b) (s:'a stream) : 'b stream =
   let Cons (x, y) = s in
-  Cons (f x, lazy (map f (Lazy.force y)))
+  Cons (f x, lazy (map ~f: f (Lazy.force y)))
 ;;
 
 (*>* Problem 2.2.c *>*)
@@ -155,7 +155,7 @@ let rec merge (s1:int stream) (s2:int stream) : int stream =
 (* Write a function "scale", which takes an integer "n" and an int
  * stream "s", and multiplies each element of "s" by "n". *)
 
-let scale n = map (fun x -> n * x) ;;
+let scale n = map ~f: (fun x -> n * x) ;;
 
 (*>* Problem 2.2.h *>*)
 (* Suppose we wish to create a stream of the positive integers "n" in

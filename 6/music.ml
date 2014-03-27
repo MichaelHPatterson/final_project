@@ -144,7 +144,19 @@ let time_of_event (e : event) : float =
 (* Write a function pair that merges two event streams. Events that happen
  * earlier in time should appear earlier in the merged stream. *)
 let rec pair (a : event stream) (b : event stream) : event stream =
-  failwith "Unimplemented"
+  (* modifies the head of the stream by subtracting time of given event from
+   * its time *)
+  let head_mod (evt : event) (str1 : event stream) : event stream =
+    match head str1 with
+    | Tone (dur, p, vol) -> 
+       fun () -> Cons (Tone (dur -. (time_of_event evt), p, vol), (tail str1))
+    | Stop (dur, p) -> 
+       fun () -> Cons (Stop (dur -. (time_of_event evt), p), (tail str1)) in
+
+  if ((time_of_event (head a)) < (time_of_event (head b))) then
+    (fun () -> Cons ((head a), pair (tail a) (head_mod (head a) b)))
+  else (fun () -> Cons ((head b), pair (head_mod (head b) a) (tail b)))
+  
 
 (*>* Problem 3.3 *>*)
 (* Write a function transpose that takes an event stream and moves each pitch
