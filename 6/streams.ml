@@ -28,8 +28,8 @@ let rtail (t: 'a tree) : 'a tree = let Stem (_, _, z) = t () in z
 (* Write a function mapt which takes takes a function f and maps it
  * over the given treestream *)
 
-let rec mapt ~(f: 'a -> 'b) (t: 'a tree) : 'b tree =
-  fun () -> Stem (f (headt t), mapt ~f:f (ltail t), mapt ~f:f (rtail t))
+let rec mapt (f: 'a -> 'b) (t: 'a tree) : 'b tree =
+  fun () -> Stem (f (headt t), mapt f (ltail t), mapt f (rtail t))
 ;;
 
 (*>* Problem 2.1.d *>*)
@@ -38,9 +38,9 @@ let rec mapt ~(f: 'a -> 'b) (t: 'a tree) : 'b tree =
  * values at corresponding locations in t1 and t2 respectively, then
  * the corresponding value in "zipt f t1 t2" should be "f x1 x2" *)
 
-let rec zipt ~(f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
-  fun () -> Stem (f (headt t1) (headt t2), zipt ~f:f (ltail t1) (ltail t2),
-	     zipt ~f:f (rtail t1) (rtail t2))
+let rec zipt (f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
+  fun () -> Stem (f (headt t1) (headt t2), zipt f (ltail t1) (ltail t2),
+	     zipt f (rtail t1) (rtail t2))
 ;;
 
 (* Define a treestream of all ones *)
@@ -104,9 +104,9 @@ let tail (s:'a stream) : 'a stream =
 (*>* Problem 2.2.b *>*)
 (* Implement map *)
 
-let rec map ~(f:'a -> 'b) (s:'a stream) : 'b stream =
+let rec map (f:'a -> 'b) (s:'a stream) : 'b stream =
   let Cons (x, y) = s in
-  Cons (f x, lazy (map ~f: f (Lazy.force y)))
+  Cons (f x, lazy (map f (Lazy.force y)))
 ;;
 
 (*>* Problem 2.2.c *>*)
@@ -155,7 +155,7 @@ let rec merge (s1:int stream) (s2:int stream) : int stream =
 (* Write a function "scale", which takes an integer "n" and an int
  * stream "s", and multiplies each element of "s" by "n". *)
 
-let scale n = map ~f: (fun x -> n * x) ;;
+let scale n = map (fun x -> n * x) ;;
 
 (*>* Problem 2.2.h *>*)
 (* Suppose we wish to create a stream of the positive integers "n" in
@@ -179,7 +179,7 @@ let scale n = map ~f: (fun x -> n * x) ;;
    give a simple definition for "selectivestream". This can be done quite
    elegantly. *)
 
-let rec selectivestream = failwith "Unimplemented" ;;
+let selectivestream = failwith "Unimplemented" ;;
 
 (*>* Problem 2.3 *>*)
 (* Please give us an honest estimate of how long this part took
