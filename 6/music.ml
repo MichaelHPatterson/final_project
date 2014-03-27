@@ -161,7 +161,7 @@ let time_of_event (e : event) : float =
 (* Merges two event streams. Events that happen earlier in time appear earlier
  * in the merged stream. *)
 let rec pair (a : event stream) (b : event stream) : event stream =
-  (* modifies head of given stream 'str1' by subtracting, from its own duration,
+  (* Helper function that takes an event stream and modifies head of given stream 'str1' by subtracting, from its own duration,
    * the time of given event 'evt'. Returns stream w/ modified head. *)
   let head_mod (evt : event) = shift_start (-. time_of_event evt)
     (* fun () -> Cons (shift (-. time_of_event evt) (head str1), tail str1) *************************************************************************)
