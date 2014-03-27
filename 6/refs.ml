@@ -29,15 +29,15 @@ let has_cycle (lst : 'a mlist) : bool =
     match rest with
     | Nil -> false
     | Cons(_, rest') ->
-      let f = fun b mlst -> b || phys_equal !rest' mlst in
+      let f = fun b mlst -> b || (phys_equal !rest' mlst) in
       let curr = rest :: curr in
-      List.fold_left ~f:f ~init:false curr || check curr !rest'
+      (List.fold_left ~f:f ~init:false curr) || (check curr !rest')
   in
   check [] lst
 
 (*>* Problem 1.2 *>*)
-(* Destructively flattens a mutable list (i.e. removes its cycles, if it
- * has any. *)
+(* Destructively flattens a mutable list (i.e. removes its cycle, if it
+ * has any). *)
 let flatten (lst : 'a mlist) : unit =
   let rec flatten_rec (curr : 'a mlist list) (rest : 'a mlist) : unit =
     match rest with
@@ -45,7 +45,7 @@ let flatten (lst : 'a mlist) : unit =
     | Cons(_, rest') ->
       (* Calling has_cycle here would look shorter but be less efficient 
        * because some operations would be repeated. *)
-      let f = fun b x -> b || phys_equal !rest' x in
+      let f = fun b x -> b || (phys_equal !rest' x) in
       let curr = rest :: curr in
       if List.fold_left ~f:f ~init:false curr then
         let _ = rest' := Nil in ()
@@ -64,7 +64,7 @@ let mlength (lst : 'a mlist) : int =
     | Nil -> 0
     | Cons(_, rest') ->
       (* Calling flatten here would be efficient but destructive. *)
-      let f = fun b x -> b || phys_equal !rest' x in
+      let f = fun b x -> b || (phys_equal !rest' x) in
       let curr = rest :: curr in
       (* If cycle found, then terminate and return 1 (i.e. count current
        * node but no more), else recur *)

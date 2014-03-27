@@ -78,7 +78,7 @@ open Lazy
 
 type 'a stream = Cons of 'a * 'a stream Lazy.t
 
-let rec ones = Cons(1, lazy(ones));;
+let rec ones = Cons(1, lazy ones);;
 
 
 (*>* Problem 2.2.a *>*)
@@ -120,15 +120,16 @@ let rec nth (n:int) (s:'a stream) : 'a =
 (*>* Problem 2.2.e *>*)
 
 (* Takes two int streams (s1 and s2) sorted in ascending order, and merges
- * them into a single sorted stream s, while removing duplicates. *)
-let rec merge (s1:int stream) (s2:int stream) : int stream =
+ * them into a single sorted stream s, while removing duplicates. if heads are
+ * equal, then head s2 is arbitrarily picked. *)
+let rec merge (s1:int stream) (s2:int stream) : int stream 
   (* advances the stream to the next value that is <> current value being added.
-   * in cases w/streams of infinite equivalence, this could infinitely loop. *)
+   * in cases w/constant streams (e.g. ones) could infinitely loop. *)
   let rec next (n:int) (stream:int stream) : int stream =
     if head stream = n then next n (tail stream) else stream in
   if head s1 < head s2 then 
     let add = head s1 in
-    Cons (add, lazy (merge (next add (tail s1)) (next add (tail s2))))
+    Cons (add, lazy (merge (next add (tail s1)) (next add s2)))
   else
     let add = head s2 in
     Cons (add, lazy (merge (next add s1) (next add (tail s2))))
