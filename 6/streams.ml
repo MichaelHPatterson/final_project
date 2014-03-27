@@ -46,6 +46,7 @@ let rec zipt (f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
 (* Define a treestream of all ones *)
 
 (*>* Problem 2.1.e *>*)
+(* recursively calls a treestream with head 1 *)
 let rec onest () = Stem (1, (fun () -> onest ()), (fun () -> onest ()))
 ;;
 
@@ -65,8 +66,8 @@ let rec onest () = Stem (1, (fun () -> onest ()), (fun () -> onest ()))
 
 (*>* Problem 2.1.f *>*)
 
-(* I removed the rec flag. According to Piazza this is ok and I couldn't think
- * of a way to do it recursively without a helper and with () as only arg *)
+(* Uses helper function that returns tr with head n, head of left tree = n * 2,
+ * and head of right tree = (n * 2) + 1 *)
 let treenats () =
   let rec nathelp (n : int) : int tr =
     Stem (n, (fun () -> nathelp (n * 2)), (fun () -> nathelp ((n * 2) + 1))) in
@@ -96,7 +97,7 @@ let rec ones = Cons(1, lazy(ones));;
 let head (s:'a stream) : 'a = let Cons (x, _) = s in x
 ;;
 
-(* not required, but used for testing purposes and coding below *)
+(* NOT required, but used for testing purposes and code below *)
 let tail (s:'a stream) : 'a stream =
   let Cons(_, x) = s in Lazy.force x
 
@@ -132,14 +133,17 @@ let rec nth (n:int) (s:'a stream) : 'a =
  * REMOVE DUPLICATES *)
 
 let rec merge (s1:int stream) (s2:int stream) : int stream =
-  let rec find_next (n:int) (stream:int stream) : int stream =
-    if head stream = n then find_next n (tail stream) else stream in
-    
-  if head s1 < head s2 then Cons (head s1, lazy (merge (tail s1) s2))
+  (* advances the stream to the next value that <> current value being added.
+   * in cases w/streams of infinite equivalence, this will infinitely loop. *)
+  let rec next (n:int) (stream:int stream) : int stream =
+    if head stream = n then next n (tail stream) else stream in
+  
+  if head s1 < head s2 then 
+    let add = head s1 in
+    Cons (add, lazy (merge (next add (tail s1)) (next add (tail s2))))
   else
-    (if head s1 > head s2 then Cons (head s2, lazy (merge s1 (tail s2)))
-     else Cons (head s1, lazy (merge (find_next (head s1) (tail s1))
-				     (find_next (head s1) (tail s2)))))
+      let add = head s2 in
+      Cons (add, lazy (merge (next add s1) (next add (tail s2))))
 ;;
 
 (*>* Problem 2.2.f *>*)
@@ -147,9 +151,13 @@ let rec merge (s1:int stream) (s2:int stream) : int stream =
  * if we were to run "merge ones ones"? Answer within the comment. *)
 
 (*
- *  Answer: We could end up with a very finite, limited stream; in the case of
- *  merging two 'ones' streams, we would have a singleton stream made up of 1.
- *)
+ *  Answer: Because we are trying to prevent duplicates, we could end up in an
+ *  infinite loop searching for the next element of a stream that is not a
+ *  duplicate. In the case of "merge ones ones", we could find the first 1 of
+ *  one stream and then potentially enter an infinite loop looking for the next 
+ *  elt of either stream that is not 1. More specifically, we can find the head
+ *  of "merge ones ones" (which is 1), but if we try to find the head of the 
+ *  tail, we enter an infinite loop. *)
 
 (*>* Problem 2.2.g *>*)
 (* Write a function "scale", which takes an integer "n" and an int

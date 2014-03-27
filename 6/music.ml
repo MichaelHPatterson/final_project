@@ -124,9 +124,9 @@ let shift_start (by : float) (str : event stream) =
  * list but keep the original list around as lst. Both need to be recursive,
  * since you will call both the inner and outer functions at some point. *)
 
-(* Minor change in declaration of helper function -- I've added the float.
- * This allows us to pass time around from the previous event *)
 let rec list_to_stream (lst : obj list) : event stream =
+  (* float 'time' is used to pass duration from previous object for use in next
+   * event. when time is 0.0, event is simulataneous to last event *)
   let rec list_to_stream_rec (time : float) (nlst : obj list) : event stream =
     match nlst with
     | [] -> list_to_stream lst
@@ -146,15 +146,15 @@ let time_of_event (e : event) : float =
 (* Write a function pair that merges two event streams. Events that happen
  * earlier in time should appear earlier in the merged stream. *)
 let rec pair (a : event stream) (b : event stream) : event stream =
-  (* modifies the head of the stream by subtracting time of given event from
-   * its time *)
-  let head_mod (evt : event) (str1 : event stream) : event stream =
-    match head str1 with
-    | Tone (dur, p, vol) -> 
-       fun () -> Cons (Tone (dur -. (time_of_event evt), p, vol), (tail str1))
-    | Stop (dur, p) -> 
-       fun () -> Cons (Stop (dur -. (time_of_event evt), p), (tail str1)) in
 
+  (* modifies head of given stream 'str1' by subtracting, from its own duration,
+   * the time of given event 'evt'. Returns stream w/ modified head. *)
+  let head_mod (evt : event) (str1 : event stream) : event stream =
+    fun () -> Cons (shift (0.0 -. (time_of_event evt)) (head str1), tail str1)
+  in
+
+  (* if time head A < time head B, then head A is next elt in stream, or vice 
+   * versa. if =, then events are simulataneous, and B is picked arbitrarily. *)
   if ((time_of_event (head a)) < (time_of_event (head b))) then
     (fun () -> Cons ((head a), pair (tail a) (head_mod (head a) b)))
   else (fun () -> Cons ((head b), pair (head_mod (head b) a) (tail b)))
@@ -260,6 +260,7 @@ let part4 = list_to_stream [Rest(0.25); Note((G,3),0.25,60);
                             Note((B,2),0.125,60); Note((A,2),0.25,60);
                             Note((E,3),0.375,60); Note((D,3),0.125,60)];;
 
+output_midi "test.mid" 176 (pair part1 (pair part2 (pair part3 part4)));;
 (*>* Problem 3.5 *>*)
 (* Please give us an honest estimate of how long this part took
  * you to complete.  We care about your responses and will use
