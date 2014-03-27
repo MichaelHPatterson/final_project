@@ -122,7 +122,7 @@ let rec nth (n:int) (s:'a stream) : 'a =
 (* Takes two int streams (s1 and s2) sorted in ascending order, and merges
  * them into a single sorted stream s, while removing duplicates. if heads are
  * equal, then head s2 is arbitrarily picked. *)
-let rec merge (s1:int stream) (s2:int stream) : int stream 
+let rec merge (s1:int stream) (s2:int stream) : int stream =
   (* advances the stream to the next value that is <> current value being added.
    * in cases w/constant streams (e.g. ones) could infinitely loop. *)
   let rec next (n:int) (stream:int stream) : int stream =
