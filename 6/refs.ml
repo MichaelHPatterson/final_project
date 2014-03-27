@@ -21,7 +21,7 @@ let has_cycle (lst : 'a mlist) : bool =
     match rest with
     | Nil -> false
     | Cons(_, rest') ->
-      let f = fun b mlst -> b || phys_equal (!rest') mlst in
+      let f = (fun b mlst -> b || phys_equal (!rest') mlst) in
       (* This if-then-else is used instead of a simple "or" (i.e. ||), to
        * prevent an infinite loop that would arise for a cyclical list. *)
       if List.fold_left ~f:f ~init:false curr then true

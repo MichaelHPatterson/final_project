@@ -121,10 +121,18 @@ let shift_start (by : float) (str : event stream) =
  * Hint: Use a recursive helper function as defined, which will change the
  * list but keep the original list around as lst. Both need to be recursive,
  * since you will call both the inner and outer functions at some point. *)
+
+(* Minor change in declaration of helper function -- I've added the float.
+ * This allows us to pass time around from the previous event *)
 let rec list_to_stream (lst : obj list) : event stream =
-  let rec list_to_stream_rec nlst =
-    failwith "Unimplemented"
-  in list_to_stream_rec lst
+  let rec list_to_stream_rec (time : float) (nlst : obj list) : event stream =
+    match nlst with
+    | [] -> list_to_stream lst
+    | Note (p, dur, vol) :: rem ->
+       fun () -> Cons (Tone (time, p, vol), fun () -> Cons (Stop (dur, p), 
+         list_to_stream_rec 0.0 rem))
+    | Rest dur' :: rem -> list_to_stream_rec (time +. dur') rem in 
+  list_to_stream_rec 0.0 lst
 
 (* You might find this small helper function, well... helpful. *)
 let time_of_event (e : event) : float =

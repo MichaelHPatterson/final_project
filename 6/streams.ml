@@ -28,8 +28,8 @@ let rtail (t: 'a tree) : 'a tree = let Stem (_, _, z) = t () in z
 (* Write a function mapt which takes takes a function f and maps it
  * over the given treestream *)
 
-let rec mapt (f: 'a -> 'b) (t: 'a tree) : 'b tree =
-  fun () -> Stem (f (headt t), mapt f (ltail t), mapt f (rtail t))
+let rec mapt ~(f: 'a -> 'b) (t: 'a tree) : 'b tree =
+  fun () -> Stem (f (headt t), mapt ~f:f (ltail t), mapt ~f:f (rtail t))
 ;;
 
 (*>* Problem 2.1.d *>*)
@@ -38,9 +38,9 @@ let rec mapt (f: 'a -> 'b) (t: 'a tree) : 'b tree =
  * values at corresponding locations in t1 and t2 respectively, then
  * the corresponding value in "zipt f t1 t2" should be "f x1 x2" *)
 
-let rec zipt (f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
-  fun () -> Stem (f (headt t1) (headt t2), zipt f (ltail t1) (ltail t2),
-	     zipt f (rtail t1) (rtail t2))
+let rec zipt ~(f: 'a -> 'b -> 'c) (t1: 'a tree) (t2: 'b tree) : 'c tree =
+  fun () -> Stem (f (headt t1) (headt t2), zipt ~f:f (ltail t1) (ltail t2),
+	     zipt ~f:f (rtail t1) (rtail t2))
 ;;
 
 (* Define a treestream of all ones *)
@@ -73,6 +73,7 @@ let treenats () =
   nathelp 1
 ;;
 
+
 (***************** Using the Lazy module ******************)
 (* Here we provide an alternate implementation of streams using
  * OCaml's lazy module. We recommend that you explore the
@@ -92,21 +93,26 @@ let rec ones = Cons(1, lazy(ones));;
 (*>* Problem 2.2.a *>*)
 (* Implement the head function *)
 
-let head (s:'a stream) : 'a =
-  failwith "Unimplemented"
+let head (s:'a stream) : 'a = let Cons (x, _) = s in x
 ;;
+
+(* not required, but used for testing purposes and coding below *)
+let tail (s:'a stream) : 'a stream =
+  let Cons(_, x) = s in Lazy.force x
+
 
 (*>* Problem 2.2.b *>*)
 (* Implement map *)
 
 let rec map (f:'a -> 'b) (s:'a stream) : 'b stream =
-  failwith "Unimplemented"
+  let Cons (x, y) = s in
+  Cons (f x, lazy (map f (Lazy.force y)))
 ;;
 
 (*>* Problem 2.2.c *>*)
 (* Define nats *)
 
-let rec nats = failwith "Unimplemented" ;;
+let rec nats = Cons (1, lazy (map ((+) 1) nats)) ;;
 
 (*>* Problem 2.2.d *>*)
 (* Write a function nth, which returns the nth element of a
@@ -114,7 +120,8 @@ let rec nats = failwith "Unimplemented" ;;
  * words, "nth 0 s" should be equivalent to "head s". *)
 
 let rec nth (n:int) (s:'a stream) : 'a =
-  failwith "Unimplemented"
+  if n <= 0 then head s
+  else nth (n - 1) (tail s)
 ;;
 
 (*>* Problem 2.2.e *>*)
@@ -124,8 +131,15 @@ let rec nth (n:int) (s:'a stream) : 'a =
  * function. NOTE: This is not a simple merge function. You must
  * REMOVE DUPLICATES *)
 
-let merge (s1:int stream) (s2:int stream) : int stream =
-  failwith "Unimplemented"
+let rec merge (s1:int stream) (s2:int stream) : int stream =
+  let rec find_next (n:int) (stream:int stream) : int stream =
+    if head stream = n then find_next n (tail stream) else stream in
+    
+  if head s1 < head s2 then Cons (head s1, lazy (merge (tail s1) s2))
+  else
+    (if head s1 > head s2 then Cons (head s2, lazy (merge s1 (tail s2)))
+     else Cons (head s1, lazy (merge (find_next (head s1) (tail s1))
+				     (find_next (head s1) (tail s2)))))
 ;;
 
 (*>* Problem 2.2.f *>*)
@@ -133,14 +147,15 @@ let merge (s1:int stream) (s2:int stream) : int stream =
  * if we were to run "merge ones ones"? Answer within the comment. *)
 
 (*
- *  Answer:
+ *  Answer: We could end up with a very finite, limited stream; in the case of
+ *  merging two 'ones' streams, we would have a singleton stream made up of 1.
  *)
 
 (*>* Problem 2.2.g *>*)
 (* Write a function "scale", which takes an integer "n" and an int
  * stream "s", and multiplies each element of "s" by "n". *)
 
-let scale n = failwith "Unimplemented" ;;
+let scale n = map (fun x -> n * x) ;;
 
 (*>* Problem 2.2.h *>*)
 (* Suppose we wish to create a stream of the positive integers "n" in
