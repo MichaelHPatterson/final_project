@@ -3,6 +3,8 @@ open Core.Std
 exception InvalidHex
 exception InvalidPitch
 
+(* Some comment *)
+
 (***** Type definitions *****)
 type p = A | Bb | B | C | Db | D | Eb | E | F | Gb | G | Ab
 type pitch = p * int
@@ -193,7 +195,7 @@ let eighth pt = Note(pt,0.125,60);;
  * the functions above. *)
 (* Start off with some scales. We've done these for you.*)
 
-(*
+
 let scale1 = list_to_stream (List.map ~f:quarter [(C,3);(D,3);(E,3);(F,3);(G,3);
                                             (A,3);(B,3);(C,4)]);;
 
@@ -202,12 +204,12 @@ let scale2 = transpose scale1 7;;
 let scales = pair scale1 scale2;;
 
 output_midi "scale.mid" 32 scales;;
-*)
+
 
 (*>* Problem 3.4 *>*)
 (* Then with just three lists ... *)
 
-(*
+
 let bass = list_to_stream (List.map ~f:quarter [(D,3);(A,2);(B,2);(Gb,2);(G,2);
                                              (D,2);(G,2);(A,2)]);;
 
@@ -218,7 +220,7 @@ let fast = [(D,3);(Gb,3);(A,3);(G,3);(Gb,3);(D,3);(Gb,3);(E,3);(D,3);(B,2);
 
 let melody = list_to_stream ((List.map ~f:quarter slow) @
                 (List.map ~f:eighth fast));;
-*)
+
 
 (* ...and the functions we defined, produce (a small part of) a great piece of
  * music. The piece should be four streams merged: one should be the bass
@@ -229,12 +231,12 @@ let melody = list_to_stream ((List.map ~f:quarter slow) @
  * bass and melody. Uncomment the definitions above and the lines below when
  * you're done. Run the program to hear the beautiful music. *)
 
-(* let canon =
+let canon =
   (* Small helper that shifts the melody stream by "by" measures. *)
   let shift_melody (by : float) = shift_start by melody in
-  pair (pair (pair bass (shift_melody 2.)) shift_melody 4.) shift_melody 6.)
-
-output_midi "canon.mid" 176 canon;; *)
+  pair (pair (pair bass (shift_melody 2.)) (shift_melody 4.)) (shift_melody 6.)
+;;
+output_midi "canon.mid" 176 canon;;
 
 (* Some other musical parts for you to play with. *)
 
