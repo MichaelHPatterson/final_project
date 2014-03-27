@@ -135,6 +135,7 @@ let shift_start (by : float) (str : event stream) =
   let Cons (e, t) = str () in
     fun () -> Cons(shift by e, t)
 
+
 (*>* Problem 3.1 *>*)
 
 (* Builds a music stream from a finite list of musical objects. The resulting
@@ -157,16 +158,16 @@ let time_of_event (e : event) : float =
     | Tone (time, _, _) -> time
     | Stop (time, _) -> time
 
+
 (*>* Problem 3.2 *>*)
+
 (* Merges two event streams. Events that happen earlier in time appear earlier
  * in the merged stream. *)
 let rec pair (a : event stream) (b : event stream) : event stream =
-  (* Helper function that takes an event stream and modifies head of given stream 'str1' by subtracting, from its own duration,
-   * the time of given event 'evt'. Returns stream w/ modified head. *)
-  let head_mod (evt : event) = shift_start (-. time_of_event evt)
-    (* fun () -> Cons (shift (-. time_of_event evt) (head str1), tail str1) *************************************************************************)
-  in
-  (* if time head A < time head B, then head A is next elt in stream, or vice 
+  (* Helper function that modifies an event stream's head by shifting it
+   * backward by "time_of_event evt". Returns stream with modified head. *)
+  let head_mod (evt : event) = shift_start (-. time_of_event evt) in
+  (* if time head A < time head B, then head A is next elt in stream, and vice 
    * versa. if =, then events are simultaneous, and B is picked arbitrarily. *)
   if time_of_event (head a) < time_of_event (head b) then
     (fun () -> Cons (head a, pair (tail a) (head_mod (head a) b)))
@@ -192,7 +193,6 @@ let rec transpose (str : event stream) (half_steps : int) : event stream =
     let p' = transpose_pitch p half_steps in
     fun () -> Cons (Tone (time, p', vol), transpose (tail str) half_steps)
   | Stop (time, p) -> 
-    (* The octave does not matter, so I arbitrarily input the octave 1 *)
     let p' = transpose_pitch p half_steps in
     fun () -> Cons (Stop (time, p'), transpose (tail str) half_steps)
     
@@ -203,7 +203,7 @@ let quarter pt = Note(pt,0.25,60);;
 let eighth pt = Note(pt,0.125,60);;
 
 
-(* Creates somem scales and outputs them in scale.mid, for convenience. *)
+(* Creates some scales and outputs them in scale.mid, for testing. *)
 let scale1 = list_to_stream (List.map ~f:quarter [(C,3);(D,3);(E,3);(F,3);(G,3);
                                             (A,3);(B,3);(C,4)]);;
 
@@ -231,17 +231,8 @@ let melody = list_to_stream ((List.map ~f:quarter slow) @
                 (List.map ~f:eighth fast));;
 
 
-(* ...and the functions we defined, produce (a small part of) a great piece of
- * music. The piece should be four streams merged: one should be the bass
- * playing continuously from the beginning. The other three should be the
- * melody, starting 2, 4 and 6 measures from the beginning, respectively. *)
-
-(* Define a stream for this piece here using the above component streams
- * bass and melody. Uncomment the definitions above and the lines below when
- * you're done. Run the program to hear the beautiful music. *)
-
 (* Defines a stream for Pachelbel's canon using the bass and melody streams
- * and the appropriate time offsets. *)
+ * and the appropriate time offsets (2, 4, and 6) for melody. *)
 let canon =
   (* Small helper that shifts the melody stream by "by" measures. *)
   let shift_melody (by : float) = shift_start by melody in
@@ -250,6 +241,8 @@ let canon =
 
 output_midi "canon.mid" 176 canon;;
 
+
+(* Some other music event streams from distribution code, for testing. *)
 
 let part1 = list_to_stream [Rest 0.5; Note((D,4),0.75,60); Note((E,4),0.375,60);
                             Note((D,4),0.125,60); Note((B,3),0.25,60);
@@ -279,4 +272,4 @@ output_midi "test.mid" 176 (pair part1 (pair part2 (pair part3 part4)));;
 (* Please give us an honest estimate of how long this part took
  * you to complete.  We care about your responses and will use
  * them to help guide us in creating future assignments. *)
-let minutes_spent : int = -1
+let minutes_spent : int = 150
