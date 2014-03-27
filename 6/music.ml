@@ -1,3 +1,15 @@
+(* Partner 1's name: Madhusudan ("Madhu") Vijay
+ * Partner 1's code.seas account: mvijay
+ *
+ * Partner 2's name: Michael Patterson
+ * Partner 2's code.seas account: michaelpatterson
+ *
+ * CS51, Problem Set 6
+ * March 28, 2014
+ *
+ * Part 3: using streams to represent music
+ *)
+
 open Core.Std
 
 exception InvalidHex
@@ -159,11 +171,9 @@ let rec pair (a : event stream) (b : event stream) : event stream =
   
 
 (*>* Problem 3.3 *>*)
-(* Write a function transpose that takes an event stream and moves each pitch
- * up by half_steps pitches. Note that half_steps can be negative, but
- * this case is particularly difficult to reason about so we've implemented
- * it for you. *)
 
+(* Function from the distribution code -- moves the pitch (p, oct) up by
+ * half_steps pitches. *)
 let transpose_pitch (p, oct) half_steps =
   let newp = (p_to_int p) + half_steps in
     if newp < 0 then
@@ -189,11 +199,8 @@ let quarter pt = Note(pt,0.25,60);;
 
 let eighth pt = Note(pt,0.125,60);;
 
-(* Now look what we can do. Uncomment these lines when you're done implementing
- * the functions above. *)
-(* Start off with some scales. We've done these for you.*)
 
-
+(* Creates somem scales and outputs them in scale.mid, for convenience. *)
 let scale1 = list_to_stream (List.map ~f:quarter [(C,3);(D,3);(E,3);(F,3);(G,3);
                                             (A,3);(B,3);(C,4)]);;
 
@@ -205,8 +212,9 @@ output_midi "scale.mid" 32 scales;;
 
 
 (*>* Problem 3.4 *>*)
-(* Then with just three lists ... *)
 
+(* Creates the "bass" and "melody" streams, which are used to construct
+ * Pachelbel's canon. *)
 
 let bass = list_to_stream (List.map ~f:quarter [(D,3);(A,2);(B,2);(Gb,2);(G,2);
                                              (D,2);(G,2);(A,2)]);;
@@ -229,14 +237,16 @@ let melody = list_to_stream ((List.map ~f:quarter slow) @
  * bass and melody. Uncomment the definitions above and the lines below when
  * you're done. Run the program to hear the beautiful music. *)
 
+(* Defines a stream for Pachelbel's canon using the bass and melody streams
+ * and the appropriate time offsets. *)
 let canon =
   (* Small helper that shifts the melody stream by "by" measures. *)
   let shift_melody (by : float) = shift_start by melody in
   pair (pair (pair bass (shift_melody 2.)) (shift_melody 4.)) (shift_melody 6.)
 ;;
+
 output_midi "canon.mid" 176 canon;;
 
-(* Some other musical parts for you to play with. *)
 
 let part1 = list_to_stream [Rest 0.5; Note((D,4),0.75,60); Note((E,4),0.375,60);
                             Note((D,4),0.125,60); Note((B,3),0.25,60);
@@ -258,6 +268,8 @@ let part4 = list_to_stream [Rest(0.25); Note((G,3),0.25,60);
                             Note((B,2),0.125,60); Note((A,2),0.25,60);
                             Note((E,3),0.375,60); Note((D,3),0.125,60)];;
 
+(* Combines part1 through part4 above into a single stream, and outputs the
+ * result in the file test.mid. *)
 output_midi "test.mid" 176 (pair part1 (pair part2 (pair part3 part4)));;
 
 (*>* Problem 3.5 *>*)

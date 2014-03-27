@@ -6,7 +6,10 @@
  * Partner 2's name: Michael Patterson
  * Partner 2's code.seas account: michaelpatterson
  *
- * Problem set 6, part 1: functions related to mutable lists
+ * CS51, Problem Set 6
+ * March 28, 2014
+ *
+ * Part 1: functions related to mutable lists
  *)
 
 open Core.Std
