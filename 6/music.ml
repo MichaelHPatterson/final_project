@@ -23,27 +23,33 @@ type event = Tone of float * pitch * int | Stop of float * pitch
 
 type obj = Note of pitch * float * int | Rest of float
 
+(* Converts a p to the corresponding integer *)
 let p_to_int p =
   match p with | C -> 0 | Db -> 1 | D -> 2 | Eb -> 3 | E -> 4 | F -> 5
     | Gb -> 6 | G -> 7 | Ab -> 8 | A -> 9 | Bb -> 10 | B -> 11
 
+(* Converts an integer to a p *)
 let int_to_p n =
   if (n < 0) || (n > 11) then raise InvalidPitch else
     let pitches = [C;Db;D;Eb;E;F;Gb;G;Ab;A;Bb;B] in
   List.nth_exn pitches n
 
 (***** Streams Code *****)
+(* Type definition for a stream *)
 type 'a stream = unit -> 'a str
 and 'a str = Cons of 'a * 'a stream ;;
 
+(* Returns the head of s *)
 let head (s: 'a stream) : 'a =
   let Cons(v, _) = s () in v
 ;;
 
+(* Returns the tail of s *)
 let tail (s: 'a stream) : 'a stream =
   let Cons(_, s') = s () in s'
 ;;
 
+(* Maps a function f over the stream s *)
 let rec map (f: 'a -> 'b) (s: 'a stream) : 'b stream =
   fun () -> Cons(f (head s), map f (tail s))
 ;;
@@ -118,56 +124,53 @@ let output_midi filename n str =
   Out_channel.close outchan
 
 (******* Music code ********)
+(* Shifts the time of an event by "by". *)
 let shift (by : float) (e : event) =
   match e with
     | Tone (time, pit, vol) -> Tone (time +. by, pit, vol)
     | Stop (time, pit) -> Stop (time +. by, pit)
 
+(* Shifts the start of an event stream by "by". *)
 let shift_start (by : float) (str : event stream) =
   let Cons (e, t) = str () in
     fun () -> Cons(shift by e, t)
 
 (*>* Problem 3.1 *>*)
-(* Write a function list_to_stream that builds a music stream from a finite
- * list of musical objects. The stream should repeat this music forever.
- * Hint: Use a recursive helper function as defined, which will change the
- * list but keep the original list around as lst. Both need to be recursive,
- * since you will call both the inner and outer functions at some point. *)
 
+(* Builds a music stream from a finite list of musical objects. The resulting
+ * stream repeats the music forever. Uses a recursive helper function. *)
 let rec list_to_stream (lst : obj list) : event stream =
-  (* float 'time' is used to pass duration from previous object for use in next
-   * event. when time is 0.0, event is simulataneous to last event *)
+  (* float 'time' is used to pass duration of previous object, for use in next
+   * event. when time is 0.0, event is simultaneous to last event *)
   let rec list_to_stream_rec (time : float) (nlst : obj list) : event stream =
     match nlst with
     | [] -> list_to_stream lst
     | Note (p, dur, vol) :: rem ->
-       fun () -> Cons (Tone (time, p, vol), fun () -> Cons (Stop (dur, p), 
-         list_to_stream_rec 0.0 rem))
+      fun () -> Cons (Tone (time, p, vol), fun () -> Cons (Stop (dur, p), 
+                      list_to_stream_rec 0.0 rem))
     | Rest dur' :: rem -> list_to_stream_rec (time +. dur') rem in 
   list_to_stream_rec 0.0 lst
 
-(* You might find this small helper function, well... helpful. *)
+(* Helper function that returns the time of an event. *)
 let time_of_event (e : event) : float =
   match e with
     | Tone (time, _, _) -> time
     | Stop (time, _) -> time
 
 (*>* Problem 3.2 *>*)
-(* Write a function pair that merges two event streams. Events that happen
- * earlier in time should appear earlier in the merged stream. *)
+(* Merges two event streams. Events that happen earlier in time appear earlier
+ * in the merged stream. *)
 let rec pair (a : event stream) (b : event stream) : event stream =
-
   (* modifies head of given stream 'str1' by subtracting, from its own duration,
    * the time of given event 'evt'. Returns stream w/ modified head. *)
-  let head_mod (evt : event) (str1 : event stream) : event stream =
-    fun () -> Cons (shift (0.0 -. (time_of_event evt)) (head str1), tail str1)
+  let head_mod (evt : event) = shift_start (-. time_of_event evt)
+    (* fun () -> Cons (shift (-. time_of_event evt) (head str1), tail str1) *************************************************************************)
   in
-
   (* if time head A < time head B, then head A is next elt in stream, or vice 
-   * versa. if =, then events are simulataneous, and B is picked arbitrarily. *)
-  if ((time_of_event (head a)) < (time_of_event (head b))) then
-    (fun () -> Cons ((head a), pair (tail a) (head_mod (head a) b)))
-  else (fun () -> Cons ((head b), pair (head_mod (head b) a) (tail b)))
+   * versa. if =, then events are simultaneous, and B is picked arbitrarily. *)
+  if time_of_event (head a) < time_of_event (head b) then
+    (fun () -> Cons (head a, pair (tail a) (head_mod (head a) b)))
+  else (fun () -> Cons (head b, pair (head_mod (head b) a) (tail b)))
   
 
 (*>* Problem 3.3 *>*)
