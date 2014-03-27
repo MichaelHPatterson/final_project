@@ -3,8 +3,6 @@ open Core.Std
 exception InvalidHex
 exception InvalidPitch
 
-(* Some comment *)
-
 (***** Type definitions *****)
 type p = A | Bb | B | C | Db | D | Eb | E | F | Gb | G | Ab
 type pitch = p * int
@@ -261,6 +259,7 @@ let part4 = list_to_stream [Rest(0.25); Note((G,3),0.25,60);
                             Note((E,3),0.375,60); Note((D,3),0.125,60)];;
 
 output_midi "test.mid" 176 (pair part1 (pair part2 (pair part3 part4)));;
+
 (*>* Problem 3.5 *>*)
 (* Please give us an honest estimate of how long this part took
  * you to complete.  We care about your responses and will use
