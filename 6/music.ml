@@ -171,8 +171,18 @@ let transpose_pitch (p, oct) half_steps =
       else (int_to_p ((newp mod 12) + 12), oct - 1 + (newp / 12))
     else (int_to_p (newp mod 12), oct + (newp / 12))
 
-let transpose (str : event stream) (half_steps : int) : event stream =
-    failwith "Unimplemented"
+(* Takes an event stream and moves each pitch up by half_steps pitches, with
+ * the help of the transpose_pitch function. *)
+let rec transpose (str : event stream) (half_steps : int) : event stream =
+  match head str with
+  | Tone (time, p, vol) ->
+    let p' = transpose_pitch p half_steps in
+    fun () -> Cons (Tone (time, p', vol), transpose (tail str) half_steps)
+  | Stop (time, p) -> 
+    (* The octave does not matter, so I arbitrarily input the octave 1 *)
+    let p' = transpose_pitch p half_steps in
+    fun () -> Cons (Stop (time, p'), transpose (tail str) half_steps)
+    
 
 (* Some functions for convenience. *)
 let quarter pt = Note(pt,0.25,60);;
@@ -219,7 +229,10 @@ let melody = list_to_stream ((List.map ~f:quarter slow) @
  * bass and melody. Uncomment the definitions above and the lines below when
  * you're done. Run the program to hear the beautiful music. *)
 
-(* let canon = failwith "Unimplemented";;
+(* let canon =
+  (* Small helper that shifts the melody stream by "by" measures. *)
+  let shift_melody (by : float) = shift_start by melody in
+  pair (pair (pair bass (shift_melody 2.)) shift_melody 4.) shift_melody 6.)
 
 output_midi "canon.mid" 176 canon;; *)
 
