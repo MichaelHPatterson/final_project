@@ -74,7 +74,7 @@ let mlength (lst : 'a mlist) : int =
   mlength_rec [] lst  
 ;;
 
-(* Set of functions for testing *)
+(* Set of lists for testing *)
 
 (* Non-cyclical mutable list for testing, from the distribution code. *)
 let list1a = Cons(2, ref Nil)

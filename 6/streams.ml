@@ -144,7 +144,7 @@ let rec merge (s1:int stream) (s2:int stream) : int stream =
  *  Answer: Because we are trying to prevent duplicates, we could end up in an
  *  infinite loop searching for the next element of a stream that is not a
  *  duplicate. In the case of "merge ones ones", we could find the first 1 of
- *  one stream and then potentially enter an infinite loop looking for the next 
+ *  one stream and then potentially enter an infinite loop looking for the next
  *  elt of either stream that is not 1. More specifically, we can find the head
  *  of "merge ones ones" (which is 1), but if we try to find the head of the 
  *  tail, we enter an infinite loop by trying to force finding  the next non-1
@@ -161,7 +161,7 @@ let scale n = map (fun x -> n * x) ;;
 (*>* Problem 2.2.h *>*)
 
 (* We didn't implement this *)
-let selectivestream = failwith "Unimplemented" ;;
+(* let selectivestream = failwith "Unimplemented" ;; *)
 
 
 (*>* Problem 2.3 *>*)
