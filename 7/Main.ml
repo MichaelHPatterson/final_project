@@ -47,7 +47,11 @@ let part1_initializer () : unit =
 
 (* DO NOT TOUCH ANYTHING BELOW THIS POINT UNTIL THE PARTS ARE RELEASED *)
 
-let part2_initializer () : unit = ()
+let part2_initializer () : unit =
+  ignore (gen_city ());
+  ignore (new Human.human (World.size/2+1,World.size/2));
+  ignore (gen_dragon ());
+  ignore (gen_white_walker ())
 
 let part3_initializer () : unit = ()
 
