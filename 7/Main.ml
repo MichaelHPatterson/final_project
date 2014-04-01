@@ -69,7 +69,10 @@ let part3_initializer () : unit =
   ignore(gen_dragon ());
   ignore(gen_white_walker ())
 
-let part4_initializer () : unit = ()
+let part4_initializer () : unit =
+  ignore (gen_city ());
+  ignore (gen_ponds ());
+  ignore (gen_towns ())
 
 let final_initializer () : unit = ()
 

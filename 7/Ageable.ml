@@ -7,7 +7,7 @@ class type ageable_t =
 object
   inherit Movable.movable_t
 
-  (** Draw the just the picture portion of this object. After drawing this
+  (** Draw just the picture portion of this object. After drawing this
       picture, the life bar for the object will be drawn on top. *)
   method draw_picture : unit
 
