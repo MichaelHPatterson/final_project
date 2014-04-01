@@ -53,7 +53,21 @@ let part2_initializer () : unit =
   ignore (gen_dragon ());
   ignore (gen_white_walker ())
 
-let part3_initializer () : unit = ()
+let part3_initializer () : unit =
+  ignore (gen_city ());
+  ignore (gen_dany ());
+  ignore (gen_wall ());
+  ignore (gen_ponds ());
+  ignore (gen_towns ());
+
+  let count = ref 20 in
+  while !count > 0 do
+    ignore (new Human.human (World.size/2+1,World.size/2));
+    count := !count - 1
+  done;
+
+  ignore(gen_dragon ());
+  ignore(gen_white_walker ())
 
 let part4_initializer () : unit = ()
 

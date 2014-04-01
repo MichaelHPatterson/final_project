@@ -7,9 +7,9 @@ open WorldObjectI
 let walker_inverse_speed = Some 1
 
 (* ### Part 6 Custom Events ### *)
-let max_consumed_objects = 100
+let max_destroyed_objects = 100
 
-(** White Walkers will roam the world until it has consumed a satisfactory
+(** A White Walker will roam the world until it has destroyed a satisfactory
     number of towns *)
 class white_walker p : world_object_i =
 object (self)

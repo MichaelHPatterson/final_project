@@ -23,17 +23,17 @@ object
    * squares which contain obstacles *)
   method is_obstacle : bool
 
-  (** If this object smells like pollen. *)
+  (** If this object smells like gold. *)
   method smells_like_gold : int option
 
-  (** Forfeit pollen to another object. If successful, return a pollen
-      identifier.  If an object doesn't smell like pollen then it should never
-      respond successfully to extract_pollen. Likewise, if extract_pollen has
-      the potential to return a pollen identifier then it should smell like
-      pollen. *)
+  (** Forfeit gold to another object. If successful, return a gold
+      identifier.  If an object doesn't smell like gold then it should never
+      respond successfully to extract_gold. Likewise, if extract_gold has
+      the potential to return a gold identifier then it should smell like
+      gold. *)
   method forfeit_gold : int option
 
-  (** Receive pollen from another object. Return a list of remaining pollen that
+  (** Receive gold from another object. Return a list of remaining gold that
       the sender may retain. *)
   method receive_gold : int list -> int list
 

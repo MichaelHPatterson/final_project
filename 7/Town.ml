@@ -11,7 +11,7 @@ let get_next_gold_id () =
 (* ### Part 3 Actions ### *)
 let max_gold = 5
 let produce_gold_probability = 50
-let bloom_probability = 4000
+let expand_probability = 4000
 let forfeit_gold_probability = 3
 
 (* ### Part 4 Aging ### *)

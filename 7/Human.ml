@@ -18,7 +18,7 @@ let max_sensing_range = 5
 
 (** Humans travel the world searching for towns to trade for gold.
     They are able to sense towns within close range, and they will return
-    to King's Landing once they have traded with enough twons. *)
+    to King's Landing once they have traded with enough towns. *)
 class human p : world_object_i =
 object(self)
   inherit world_object p
