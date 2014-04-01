@@ -72,11 +72,24 @@ let read_event () =
   end ;
   Event51.fire_event clock ()
 
-(** Our basic event loop consists of polling for the various events,
-    firing those events (which typically re-draws some graphical elements)
-    and then invokes Graphics.synchronize to flip the drawing buffer and
-    display the new frame. *)
-let rec event_loop () = read_event () ; Graphics.synchronize () ; event_loop ()
+(* Helper for restarting interrupted system calls (OY) *)
+let rec restart f arg =
+  try f arg
+  with Unix.Unix_error (Unix.EINTR, _, _) -> restart f arg
+
+(* The approximate frame rate (will actually be lower if we take non-trivial
+   time to handle events) *)
+let frame_rate = 30.0
+
+(* Our basic event loop just calls read_event, which fires the appropriate
+   events, then synchronizes the shadow graphics buffer with the screen,
+   and then loops again. *)
+let rec event_loop () =
+  read_event ();
+  Graphics.synchronize ();
+  restart Thread.delay (1.0 /. frame_rate);
+  event_loop ()
+
 
 (** The command "run_ui x y init" starts up the graphical environment with a
     window size of x by y pixels, sets up the basic events such as the
