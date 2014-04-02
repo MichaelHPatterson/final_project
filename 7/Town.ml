@@ -60,10 +60,4 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
 
-  (***************************)
-  (***** Ageable Methods *****)
-  (***************************)
-
-  (* ### TODO: Part 4 Aging ### *)
-
 end
