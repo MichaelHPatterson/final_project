@@ -9,7 +9,7 @@ ps6: $(FILES)
 	corebuild music.native
 
 check: $(FILES)
-	chmod u+x ./check_width
+	chmod u+x ../check_width
 	../check_width refs.ml
 	../check_width streams.ml
 	../check_width music.ml
