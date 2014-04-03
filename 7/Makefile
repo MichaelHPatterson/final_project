@@ -1,5 +1,6 @@
 SOURCES = \
 Ageable.ml \
+Baratheon.ml \
 CarbonBased.ml \
 Dany.ml \
 Direction.ml \
@@ -27,6 +28,7 @@ all: $(SOURCES)
 check: $(SOURCES)
 	@chmod u+x ../check_width
 	@../check_width Ageable.ml; \
+        ../check_width Baratheon.ml; \
 	../check_width CarbonBased.ml; \
 	../check_width Dany.ml; \
 	../check_width Direction.ml; \
