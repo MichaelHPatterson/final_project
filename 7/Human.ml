@@ -60,13 +60,12 @@ object(self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "human"
 
-  method! draw_z_axis = raise TODO
-*)
+  method! draw = self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black ""
+
+  method! draw_z_axis = 2
 
   (* ### TODO: Part 3 Actions ### *)
 

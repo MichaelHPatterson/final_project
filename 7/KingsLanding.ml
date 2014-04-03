@@ -52,13 +52,12 @@ object (self)
   (****************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "kings_landing"
+
+  method! draw = self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black ""
 
   method! draw_z_axis = raise TODO
-*)
 
   (* ### TODO: Part 3 Actions ### *)
 

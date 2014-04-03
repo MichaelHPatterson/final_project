@@ -12,13 +12,9 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
+  method! get_name = "pond"
 
-  method! draw = raise TODO
+  method! draw = self#draw_circle Graphics.blue Graphics.black ""
 
-  method! draw_z_axis = raise TODO
-
-  method! is_obstacle = raise TODO
-*)
+  method! is_obstacle = true
 end

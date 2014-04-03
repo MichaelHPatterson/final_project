@@ -35,13 +35,12 @@ object (self)
   (********************************)
 
   (* ### TODO Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "wall"
+
+  method! draw = self#draw_circle (Graphics.rgb 70 100 130) Graphics.white "W"
 
   method! draw_z_axis = raise TODO
-*)
 
 end
 

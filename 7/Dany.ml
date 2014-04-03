@@ -35,13 +35,10 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "dany"
 
-  method! draw_z_axis = raise TODO
-*)
+  method! draw = self#draw_circle Graphics.black (Graphics.rgb 0x80 0x00 0x80) "D"
 
   (* ### TODO: Part 6 Custom Events *)
 

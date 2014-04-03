@@ -46,13 +46,10 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "town"
 
-  method! draw_z_axis = raise TODO
-*)
+  method! draw = self#draw_circle (Graphics.rgb 0x96 0x4B 0x00) Graphics.black ""
 
   (* ### TODO: Part 4 Aging ### *)
 

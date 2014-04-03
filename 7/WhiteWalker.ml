@@ -40,13 +40,12 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
-(*
-  method! get_name = raise TODO
 
-  method! draw = raise TODO
+  method! get_name = "white_walker"
 
-  method! draw_z_axis = raise TODO
-*)
+  method! draw = self#draw_circle (Graphics.rgb 0x89 0xCF 0xF0) Graphics.black ""
+
+  method! draw_z_axis = 4
 
   (* ### TODO: Part 3 Actions ### *)
 
