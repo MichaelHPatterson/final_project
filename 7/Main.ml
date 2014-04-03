@@ -74,7 +74,12 @@ let part4_initializer () : unit =
   ignore (gen_ponds ());
   ignore (gen_towns ())
 
-let final_initializer () : unit = ()
+let final_initializer () : unit =
+  ignore (gen_city ());
+  ignore (gen_dany ());
+  ignore (gen_wall ());
+  ignore (gen_ponds ());
+  ignore (gen_towns ())
 
 (* Function that is called continuously while the simulation is running. *)
 let event_loop part () : unit =
