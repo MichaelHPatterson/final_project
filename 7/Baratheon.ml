@@ -2,7 +2,7 @@ open Core.Std
 open WorldObject
 open WorldObjectI
 
-(** Bouncy bees will travel in a straight line in a random direction until an
+(** Baratheons will travel in a straight line in a random direction until an
     obstacle or edge of the world is reached, at which point a new random
     direction will be chosen. *)
 class baratheon p city : world_object_i =
@@ -13,19 +13,19 @@ object (self)
   (***** Instance Variables *****)
   (******************************)
 
-  (* ### TODO: Part 5 Smart Bees *)
+  (* ### TODO: Part 5 Smart Humans *)
 
   (********************************)
   (***** WorldObjectI Methods *****)
   (********************************)
 
-  (* ### TODO: Part 5 Smart Bees *)
+  (* ### TODO: Part 5 Smart Humans *)
 
   (***********************)
-  (***** Bee Methods *****)
+  (***** Human Methods *****)
   (***********************)
 
-  (* ### TODO: Part 5 Smart Bees *)
+  (* ### TODO: Part 5 Smart Humans *)
 
 end
 
