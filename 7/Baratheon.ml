@@ -2,9 +2,7 @@ open Core.Std
 open WorldObject
 open WorldObjectI
 
-(** Baratheons will travel in a straight line in a random direction until an
-    obstacle or edge of the world is reached, at which point a new random
-    direction will be chosen. *)
+(* Baratheons should travel in a random direction. *)
 class baratheon p city : world_object_i =
 object (self)
   inherit world_object p as super
