@@ -1,0 +1,211 @@
+"Human.ml" 8 106 110 "Human.ml" 8 106 129
+type(
+  int option
+)
+ident(
+  def human_inverse_speed "Human.ml" 11 169 169 "Human.ml" 1 0 -1
+)
+"Human.ml" 8 106 137 "Human.ml" 8 106 138
+type(
+  int
+)
+"Human.ml" 8 106 132 "Human.ml" 8 106 138
+type(
+  int option
+)
+"Human.ml" 11 169 173 "Human.ml" 11 169 187
+type(
+  int
+)
+ident(
+  def max_gold_types "Human.ml" 14 220 220 "Human.ml" 1 0 -1
+)
+"Human.ml" 11 169 190 "Human.ml" 11 169 191
+type(
+  int
+)
+"Human.ml" 14 220 224 "Human.ml" 14 220 238
+type(
+  int
+)
+ident(
+  def human_lifetime "Human.ml" 17 281 281 "Human.ml" 1 0 -1
+)
+"Human.ml" 14 220 241 "Human.ml" 14 220 245
+type(
+  int
+)
+"Human.ml" 17 281 285 "Human.ml" 17 281 302
+type(
+  int
+)
+ident(
+  def max_sensing_range "Human.ml" 23 747 747 "Human.ml" 1 0 -1
+)
+"Human.ml" 17 281 305 "Human.ml" 17 281 306
+type(
+  int
+)
+"Human.ml" 23 747 759 "Human.ml" 23 747 760
+type(
+  int * int
+)
+"Human.ml" 24 783 790 "Human.ml" 24 783 794
+type(
+  < danger : world_object_i -> unit; die : unit; draw : unit;
+    draw_z_axis : int; forfeit_gold : int option;
+    get_danger_event : world_object_i Event51.event;
+    get_die_event : unit Event51.event; get_name : string;
+    get_pos : int * int; is_obstacle : bool;
+    next_direction : Direction.direction option; receive_damage : unit;
+    receive_gold : int list -> int list; smells_like_gold : int option; .. >
+)
+"Human.ml" 25 796 822 "Human.ml" 25 796 823
+type(
+  int * int
+)
+ident(
+  int_ref p "Human.ml" 23 747 759 "Human.ml" 23 747 760
+)
+"Human.ml" 25 796 824 "Human.ml" 25 796 843
+type(
+  int option
+)
+ident(
+  int_ref human_inverse_speed "Human.ml" 8 106 110 "Human.ml" 8 106 129
+)
+"Human.ml" 65 1704 1725 "Human.ml" 65 1704 1732
+type(
+  string
+)
+type(
+  string
+)
+"Human.ml" 65 1704 1706 "Human.ml" 65 1704 1732
+type(
+  (< danger : world_object_i -> unit; die : unit; draw : unit;
+     draw_z_axis : int; forfeit_gold : int option;
+     get_danger_event : world_object_i Event51.event;
+     get_die_event : unit Event51.event; get_name : string;
+     get_pos : int * int; is_obstacle : bool;
+     next_direction : Direction.direction option; receive_damage : unit;
+     receive_gold : int list -> int list; smells_like_gold : int option; .. >
+   as 'a) ->
+  string
+)
+"Human.ml" 67 1734 1751 "Human.ml" 67 1734 1755
+type(
+  'a
+)
+ident(
+  int_ref self "Human.ml" 24 783 790 "Human.ml" 24 783 794
+)
+"Human.ml" 67 1734 1751 "Human.ml" 67 1734 1767
+call(
+  tail
+)
+type(
+  int -> int -> string -> unit
+)
+"Human.ml" 67 1734 1769 "Human.ml" 67 1734 1781
+type(
+  int -> int -> int -> int
+)
+ident(
+  ext_ref Graphics.rgb
+)
+"Human.ml" 67 1734 1782 "Human.ml" 67 1734 1786
+type(
+  int
+)
+"Human.ml" 67 1734 1787 "Human.ml" 67 1734 1791
+type(
+  int
+)
+"Human.ml" 67 1734 1792 "Human.ml" 67 1734 1796
+type(
+  int
+)
+"Human.ml" 67 1734 1769 "Human.ml" 67 1734 1796
+call(
+  stack
+)
+type(
+  int
+)
+"Human.ml" 67 1734 1798 "Human.ml" 67 1734 1812
+type(
+  int
+)
+ident(
+  ext_ref Graphics.black
+)
+"Human.ml" 67 1734 1813 "Human.ml" 67 1734 1815
+type(
+  string
+)
+"Human.ml" 67 1734 1751 "Human.ml" 67 1734 1815
+type(
+  unit
+)
+type(
+  unit
+)
+"Human.ml" 67 1734 1736 "Human.ml" 67 1734 1815
+type(
+  'a -> unit
+)
+"Human.ml" 69 1817 1841 "Human.ml" 69 1817 1842
+type(
+  int
+)
+type(
+  int
+)
+"Human.ml" 69 1817 1819 "Human.ml" 69 1817 1842
+type(
+  'a -> int
+)
+"Human.ml" 85 2151 2184 "Human.ml" 85 2151 2197
+type(
+  int -> Direction.direction
+)
+ident(
+  ext_ref Direction.ord
+)
+"Human.ml" 85 2151 2199 "Human.ml" 85 2151 2209
+type(
+  int -> int
+)
+ident(
+  ext_ref Core.Std.Random.int
+)
+"Human.ml" 85 2151 2210 "Human.ml" 85 2151 2211
+type(
+  int
+)
+"Human.ml" 85 2151 2199 "Human.ml" 85 2151 2211
+call(
+  stack
+)
+type(
+  int
+)
+"Human.ml" 85 2151 2184 "Human.ml" 85 2151 2212
+call(
+  stack
+)
+type(
+  Direction.direction
+)
+"Human.ml" 85 2151 2178 "Human.ml" 85 2151 2213
+type(
+  Direction.direction option
+)
+type(
+  Direction.direction option
+)
+"Human.ml" 85 2151 2153 "Human.ml" 85 2151 2213
+type(
+  'a -> Direction.direction option
+)

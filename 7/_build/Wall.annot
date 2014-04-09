@@ -1,0 +1,133 @@
+"Wall.ml" 7 98 102 "Wall.ml" 7 98 112
+type(
+  int
+)
+ident(
+  def town_limit "Wall.ml" 11 208 208 "Wall.ml" 1 0 -1
+)
+"Wall.ml" 7 98 115 "Wall.ml" 7 98 118
+type(
+  int
+)
+"Wall.ml" 11 208 219 "Wall.ml" 11 208 220
+type(
+  int * int
+)
+"Wall.ml" 12 240 248 "Wall.ml" 12 240 252
+type(
+  < danger : world_object_i -> unit; die : unit; draw : unit;
+    draw_z_axis : int; forfeit_gold : int option;
+    get_danger_event : world_object_i Event51.Event51.event;
+    get_die_event : unit Event51.Event51.event; get_name : string;
+    get_pos : int * int; is_obstacle : bool; receive_damage : unit;
+    receive_gold : int list -> int list; smells_like_gold : int option; .. >
+)
+"Wall.ml" 13 254 277 "Wall.ml" 13 254 278
+type(
+  int * int
+)
+ident(
+  int_ref p "Wall.ml" 11 208 219 "Wall.ml" 11 208 220
+)
+"Wall.ml" 39 841 862 "Wall.ml" 39 841 868
+type(
+  string
+)
+type(
+  string
+)
+"Wall.ml" 39 841 843 "Wall.ml" 39 841 868
+type(
+  (< danger : world_object_i -> unit; die : unit; draw : unit;
+     draw_z_axis : int; forfeit_gold : int option;
+     get_danger_event : world_object_i Event51.Event51.event;
+     get_die_event : unit Event51.Event51.event; get_name : string;
+     get_pos : int * int; is_obstacle : bool; receive_damage : unit;
+     receive_gold : int list -> int list; smells_like_gold : int option; .. >
+   as 'a) ->
+  string
+)
+"Wall.ml" 41 870 887 "Wall.ml" 41 870 891
+type(
+  'a
+)
+ident(
+  int_ref self "Wall.ml" 12 240 248 "Wall.ml" 12 240 252
+)
+"Wall.ml" 41 870 887 "Wall.ml" 41 870 903
+call(
+  tail
+)
+type(
+  int -> int -> string -> unit
+)
+"Wall.ml" 41 870 905 "Wall.ml" 41 870 917
+type(
+  int -> int -> int -> int
+)
+ident(
+  ext_ref Graphics.rgb
+)
+"Wall.ml" 41 870 918 "Wall.ml" 41 870 920
+type(
+  int
+)
+"Wall.ml" 41 870 921 "Wall.ml" 41 870 924
+type(
+  int
+)
+"Wall.ml" 41 870 925 "Wall.ml" 41 870 928
+type(
+  int
+)
+"Wall.ml" 41 870 905 "Wall.ml" 41 870 928
+call(
+  stack
+)
+type(
+  int
+)
+"Wall.ml" 41 870 930 "Wall.ml" 41 870 944
+type(
+  int
+)
+ident(
+  ext_ref Graphics.white
+)
+"Wall.ml" 41 870 945 "Wall.ml" 41 870 948
+type(
+  string
+)
+"Wall.ml" 41 870 887 "Wall.ml" 41 870 948
+type(
+  unit
+)
+type(
+  unit
+)
+"Wall.ml" 41 870 872 "Wall.ml" 41 870 948
+type(
+  'a -> unit
+)
+"Wall.ml" 43 950 974 "Wall.ml" 43 950 979
+type(
+  exn -> int
+)
+ident(
+  ext_ref Pervasives.raise
+)
+"Wall.ml" 43 950 980 "Wall.ml" 43 950 984
+type(
+  exn
+)
+"Wall.ml" 43 950 974 "Wall.ml" 43 950 984
+type(
+  int
+)
+type(
+  int
+)
+"Wall.ml" 43 950 952 "Wall.ml" 43 950 984
+type(
+  'a -> int
+)

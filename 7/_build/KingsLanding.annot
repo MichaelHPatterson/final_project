@@ -1,0 +1,155 @@
+"KingsLanding.ml" 8 105 109 "KingsLanding.ml" 8 105 122
+type(
+  int
+)
+ident(
+  def starting_gold "KingsLanding.ml" 9 129 129 "KingsLanding.ml" 1 0 -1
+)
+"KingsLanding.ml" 8 105 125 "KingsLanding.ml" 8 105 128
+type(
+  int
+)
+"KingsLanding.ml" 9 129 133 "KingsLanding.ml" 9 129 146
+type(
+  int
+)
+ident(
+  def cost_of_human "KingsLanding.ml" 10 152 152 "KingsLanding.ml" 1 0 -1
+)
+"KingsLanding.ml" 9 129 149 "KingsLanding.ml" 9 129 151
+type(
+  int
+)
+"KingsLanding.ml" 10 152 156 "KingsLanding.ml" 10 152 173
+type(
+  int
+)
+ident(
+  def spawn_probability "KingsLanding.ml" 11 179 179 "KingsLanding.ml" 1 0 -1
+)
+"KingsLanding.ml" 10 152 176 "KingsLanding.ml" 10 152 178
+type(
+  int
+)
+"KingsLanding.ml" 11 179 183 "KingsLanding.ml" 11 179 199
+type(
+  int
+)
+ident(
+  def gold_probability "KingsLanding.ml" 12 205 205 "KingsLanding.ml" 1 0 -1
+)
+"KingsLanding.ml" 11 179 202 "KingsLanding.ml" 11 179 204
+type(
+  int
+)
+"KingsLanding.ml" 12 205 209 "KingsLanding.ml" 12 205 225
+type(
+  int
+)
+ident(
+  def max_gold_deposit "KingsLanding.ml" 18 485 485 "KingsLanding.ml" 1 0 -1
+)
+"KingsLanding.ml" 12 205 228 "KingsLanding.ml" 12 205 229
+type(
+  int
+)
+"KingsLanding.ml" 18 485 505 "KingsLanding.ml" 18 485 506
+type(
+  int * int
+)
+"KingsLanding.ml" 19 526 534 "KingsLanding.ml" 19 526 538
+type(
+  < danger : world_object_i -> unit; die : unit; draw : unit;
+    draw_z_axis : int; forfeit_gold : int option;
+    get_danger_event : world_object_i Event51.event;
+    get_die_event : unit Event51.event; get_name : string;
+    get_pos : int * int; is_obstacle : bool; receive_damage : unit;
+    receive_gold : int list -> int list; smells_like_gold : int option; .. >
+)
+"KingsLanding.ml" 20 540 563 "KingsLanding.ml" 20 540 564
+type(
+  int * int
+)
+ident(
+  int_ref p "KingsLanding.ml" 18 485 505 "KingsLanding.ml" 18 485 506
+)
+"KingsLanding.ml" 56 1311 1332 "KingsLanding.ml" 56 1311 1347
+type(
+  string
+)
+type(
+  string
+)
+"KingsLanding.ml" 56 1311 1313 "KingsLanding.ml" 56 1311 1347
+type(
+  (< danger : world_object_i -> unit; die : unit; draw : unit;
+     draw_z_axis : int; forfeit_gold : int option;
+     get_danger_event : world_object_i Event51.event;
+     get_die_event : unit Event51.event; get_name : string;
+     get_pos : int * int; is_obstacle : bool; receive_damage : unit;
+     receive_gold : int list -> int list; smells_like_gold : int option; .. >
+   as 'a) ->
+  string
+)
+"KingsLanding.ml" 58 1349 1366 "KingsLanding.ml" 58 1349 1370
+type(
+  'a
+)
+ident(
+  int_ref self "KingsLanding.ml" 19 526 534 "KingsLanding.ml" 19 526 538
+)
+"KingsLanding.ml" 58 1349 1366 "KingsLanding.ml" 58 1349 1382
+call(
+  tail
+)
+type(
+  int -> int -> string -> unit
+)
+"KingsLanding.ml" 58 1349 1384 "KingsLanding.ml" 58 1349 1396
+type(
+  int -> int -> int -> int
+)
+ident(
+  ext_ref Graphics.rgb
+)
+"KingsLanding.ml" 58 1349 1397 "KingsLanding.ml" 58 1349 1401
+type(
+  int
+)
+"KingsLanding.ml" 58 1349 1402 "KingsLanding.ml" 58 1349 1406
+type(
+  int
+)
+"KingsLanding.ml" 58 1349 1407 "KingsLanding.ml" 58 1349 1411
+type(
+  int
+)
+"KingsLanding.ml" 58 1349 1384 "KingsLanding.ml" 58 1349 1411
+call(
+  stack
+)
+type(
+  int
+)
+"KingsLanding.ml" 58 1349 1413 "KingsLanding.ml" 58 1349 1427
+type(
+  int
+)
+ident(
+  ext_ref Graphics.black
+)
+"KingsLanding.ml" 58 1349 1428 "KingsLanding.ml" 58 1349 1430
+type(
+  string
+)
+"KingsLanding.ml" 58 1349 1366 "KingsLanding.ml" 58 1349 1430
+type(
+  unit
+)
+type(
+  unit
+)
+"KingsLanding.ml" 58 1349 1351 "KingsLanding.ml" 58 1349 1430
+type(
+  'a -> unit
+)

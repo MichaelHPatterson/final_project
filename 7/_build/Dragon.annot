@@ -1,0 +1,191 @@
+"Dragon.ml" 7 92 96 "Dragon.ml" 7 92 113
+type(
+  int
+)
+ident(
+  def gold_theft_amount "Dragon.ml" 10 149 149 "Dragon.ml" 1 0 -1
+)
+"Dragon.ml" 7 92 116 "Dragon.ml" 7 92 120
+type(
+  int
+)
+"Dragon.ml" 10 149 153 "Dragon.ml" 10 149 173
+type(
+  int
+)
+ident(
+  def dragon_starting_life "Dragon.ml" 13 210 210 "Dragon.ml" 1 0 -1
+)
+"Dragon.ml" 10 149 176 "Dragon.ml" 10 149 178
+type(
+  int
+)
+"Dragon.ml" 13 210 214 "Dragon.ml" 13 210 234
+type(
+  int option
+)
+ident(
+  def dragon_inverse_speed "Dragon.ml" 15 246 246 "Dragon.ml" 1 0 -1
+)
+"Dragon.ml" 13 210 242 "Dragon.ml" 13 210 244
+type(
+  int
+)
+"Dragon.ml" 13 210 237 "Dragon.ml" 13 210 244
+type(
+  int option
+)
+"Dragon.ml" 15 246 259 "Dragon.ml" 15 246 260
+type(
+  int * int
+)
+"Dragon.ml" 15 246 261 "Dragon.ml" 15 246 274
+type(
+  < get_pos : int * int; .. >
+)
+"Dragon.ml" 16 297 305 "Dragon.ml" 16 297 309
+type(
+  < danger : world_object_i -> unit; die : unit; draw : unit;
+    draw_z_axis : int; forfeit_gold : int option;
+    get_danger_event : world_object_i Event51.Event51.event;
+    get_die_event : unit Event51.Event51.event; get_name : string;
+    get_pos : int * int; is_obstacle : bool;
+    next_direction : Direction.direction option; receive_damage : unit;
+    receive_gold : int list -> int list; smells_like_gold : int option; .. >
+)
+"Dragon.ml" 17 311 337 "Dragon.ml" 17 311 338
+type(
+  int * int
+)
+ident(
+  int_ref p "Dragon.ml" 15 246 259 "Dragon.ml" 15 246 260
+)
+"Dragon.ml" 17 311 339 "Dragon.ml" 17 311 359
+type(
+  int option
+)
+ident(
+  int_ref dragon_inverse_speed "Dragon.ml" 13 210 214 "Dragon.ml" 13 210 234
+)
+"Dragon.ml" 47 989 1010 "Dragon.ml" 47 989 1018
+type(
+  string
+)
+type(
+  string
+)
+"Dragon.ml" 47 989 991 "Dragon.ml" 47 989 1018
+type(
+  (< danger : world_object_i -> unit; die : unit; draw : unit;
+     draw_z_axis : int; forfeit_gold : int option;
+     get_danger_event : world_object_i Event51.Event51.event;
+     get_die_event : unit Event51.Event51.event; get_name : string;
+     get_pos : int * int; is_obstacle : bool;
+     next_direction : Direction.direction option; receive_damage : unit;
+     receive_gold : int list -> int list; smells_like_gold : int option; .. >
+   as 'a) ->
+  string
+)
+"Dragon.ml" 49 1020 1037 "Dragon.ml" 49 1020 1041
+type(
+  'a
+)
+ident(
+  int_ref self "Dragon.ml" 16 297 305 "Dragon.ml" 16 297 309
+)
+"Dragon.ml" 49 1020 1037 "Dragon.ml" 49 1020 1053
+call(
+  tail
+)
+type(
+  int -> int -> string -> unit
+)
+"Dragon.ml" 49 1020 1054 "Dragon.ml" 49 1020 1066
+type(
+  int
+)
+ident(
+  ext_ref Graphics.red
+)
+"Dragon.ml" 49 1020 1067 "Dragon.ml" 49 1020 1081
+type(
+  int
+)
+ident(
+  ext_ref Graphics.black
+)
+"Dragon.ml" 49 1020 1082 "Dragon.ml" 49 1020 1084
+type(
+  string
+)
+"Dragon.ml" 49 1020 1037 "Dragon.ml" 49 1020 1084
+type(
+  unit
+)
+type(
+  unit
+)
+"Dragon.ml" 49 1020 1022 "Dragon.ml" 49 1020 1084
+type(
+  'a -> unit
+)
+"Dragon.ml" 51 1086 1110 "Dragon.ml" 51 1086 1111
+type(
+  int
+)
+type(
+  int
+)
+"Dragon.ml" 51 1086 1088 "Dragon.ml" 51 1086 1111
+type(
+  'a -> int
+)
+"Dragon.ml" 63 1331 1358 "Dragon.ml" 63 1331 1375
+type(
+  int * int -> int * int -> Direction.direction option
+)
+ident(
+  ext_ref Direction.natural
+)
+"Dragon.ml" 63 1331 1376 "Dragon.ml" 63 1331 1380
+type(
+  'a
+)
+ident(
+  int_ref self "Dragon.ml" 16 297 305 "Dragon.ml" 16 297 309
+)
+"Dragon.ml" 63 1331 1376 "Dragon.ml" 63 1331 1388
+call(
+  stack
+)
+type(
+  int * int
+)
+"Dragon.ml" 63 1331 1389 "Dragon.ml" 63 1331 1402
+type(
+  < get_pos : int * int; .. > as 'b
+)
+ident(
+  int_ref kings_landing "Dragon.ml" 15 246 261 "Dragon.ml" 15 246 274
+)
+"Dragon.ml" 63 1331 1389 "Dragon.ml" 63 1331 1410
+call(
+  stack
+)
+type(
+  int * int
+)
+"Dragon.ml" 63 1331 1358 "Dragon.ml" 63 1331 1410
+call(
+  tail
+)
+type(
+  Direction.direction option
+)
+type(
+  Direction.direction option
+)
+"Dragon.ml" 63 1331 1333 "Dragon.ml" 63 1331 1410
+type(
+  'a -> Direction.direction option
+)
