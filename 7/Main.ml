@@ -54,7 +54,7 @@ let part2_initializer () : unit =
   ignore (gen_white_walker () kings_landing)
 
 let part3_initializer () : unit =
-  ignore (gen_city ());
+  let kings_landing = gen_city () in
   ignore (gen_dany ());
   ignore (gen_wall ());
   ignore (gen_ponds ());
@@ -66,8 +66,8 @@ let part3_initializer () : unit =
     count := !count - 1
   done;
 
-  ignore(gen_dragon ());
-  ignore(gen_white_walker ())
+  ignore(gen_dragon () kings_landing);
+  ignore(gen_white_walker () kings_landing)
 
 let part4_initializer () : unit =
   ignore (gen_city ());
