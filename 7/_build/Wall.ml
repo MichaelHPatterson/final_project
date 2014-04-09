@@ -40,7 +40,5 @@ object (self)
 
   method! draw = self#draw_circle (Graphics.rgb 70 100 130) Graphics.white "W"
 
-  method! draw_z_axis = raise TODO
-
 end
 

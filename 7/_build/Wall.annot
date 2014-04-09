@@ -109,25 +109,3 @@ type(
 type(
   'a -> unit
 )
-"Wall.ml" 43 950 974 "Wall.ml" 43 950 979
-type(
-  exn -> int
-)
-ident(
-  ext_ref Pervasives.raise
-)
-"Wall.ml" 43 950 980 "Wall.ml" 43 950 984
-type(
-  exn
-)
-"Wall.ml" 43 950 974 "Wall.ml" 43 950 984
-type(
-  int
-)
-type(
-  int
-)
-"Wall.ml" 43 950 952 "Wall.ml" 43 950 984
-type(
-  'a -> int
-)
