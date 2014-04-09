@@ -18,23 +18,33 @@ class movable p (inv_speed:int option) : movable_t =
 object (self)
   inherit world_object p
 
+
   (***********************)
   (***** Initializer *****)
   (***********************)
 
   (* ### TODO: Part 2 Movement ### *)
+  initializer
+    match inv_speed with
+    | None -> ()
+    | Some s ->
+      let buffered_event = Event51.buffer s World.move_event in
+      self#register_handler buffered_event self#do_move
+
 
   (**************************)
   (***** Event Handlers *****)
   (**************************)
 
   (* ### TODO: Part 2 Movement ### *)
+  method private do_move (_ : unit list) = self#move self#next_direction
 
   (***************************)
   (***** Movable Methods *****)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
-  method next_direction = raise TODO
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is "Some North" a sufficiently "sensible default"? *)
+  method next_direction = Some North
 
 end

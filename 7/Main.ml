@@ -24,11 +24,11 @@ let gen_dany () =
 let gen_wall () =
   new Wall.wall (World.size-1,World.size-1)
 
-let gen_dragon () =
-  new Dragon.dragon (0,0)
+let gen_dragon () kings_landing =
+  new Dragon.dragon (0,0) kings_landing
 
-let gen_white_walker () =
-  new WhiteWalker.white_walker (World.size-1,World.size-1)
+let gen_white_walker () kings_landing =
+  new WhiteWalker.white_walker (World.size-1,World.size-1) kings_landing
 
 let gen_city () =
   (* Don't ignore, since we will need to pass the city to some other objects. *)
@@ -38,20 +38,20 @@ let gen_city () =
 let part1_initializer () : unit =
   ignore (new Pond.pond (0,0));
   ignore (new Town.town (1,1));
-  ignore (new KingsLanding.kings_landing (2,2));
+  let kings_landing = new KingsLanding.kings_landing (2,2) in
   ignore (new Human.human (3,3));
   ignore (new Dany.dany (4,4));
-  ignore (new Dragon.dragon (5,5));
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (new KingsLanding.kings_landing (2,2))" right under "ignore (new Town.town (1,1))" *)
+  ignore (new Dragon.dragon (5,5) kings_landing);
   ignore (new Wall.wall (6,6));
-  ignore (new WhiteWalker.white_walker (7,7))
-
-(* DO NOT TOUCH ANYTHING BELOW THIS POINT UNTIL THE PARTS ARE RELEASED *)
+  ignore (new WhiteWalker.white_walker (7,7) kings_landing)
 
 let part2_initializer () : unit =
-  ignore (gen_city ());
+  let kings_landing = gen_city () in
   ignore (new Human.human (World.size/2+1,World.size/2));
-  ignore (gen_dragon ());
-  ignore (gen_white_walker ())
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (gen_city ())" as the first line in the part2_initializer function *)
+  ignore (gen_dragon () kings_landing);
+  ignore (gen_white_walker () kings_landing)
 
 let part3_initializer () : unit =
   ignore (gen_city ());

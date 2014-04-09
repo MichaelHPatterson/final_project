@@ -57,8 +57,6 @@ object (self)
 
   method! draw = self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black ""
 
-  method! draw_z_axis = raise TODO
-
   (* ### TODO: Part 3 Actions ### *)
 
   (* ### TODO: Part 6 Custom Events ### *)

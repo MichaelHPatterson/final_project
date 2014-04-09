@@ -12,9 +12,9 @@ let dragon_starting_life = 20
 (* ### Part 2 Movement ### *)
 let dragon_inverse_speed = Some 10
 
-class dragon p : world_object_i =
+class dragon p kings_landing : Movable.movable_t =
 object (self)
-  inherit world_object p
+  inherit Movable.movable p dragon_inverse_speed
 
   (******************************)
   (***** Instance Variables *****)
@@ -59,9 +59,9 @@ object (self)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
-(*
-  method! next_direction = raise TODO
-*)
+
+  method! next_direction = Direction.natural self#get_pos kings_landing#get_pos
+
 
   (* ### TODO: Part 6 Custom Events ### *)
 

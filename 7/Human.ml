@@ -19,9 +19,10 @@ let max_sensing_range = 5
 (** Humans travel the world searching for towns to trade for gold.
     They are able to sense towns within close range, and they will return
     to King's Landing once they have traded with enough towns. *)
-class human p : world_object_i =
+(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Would it be better to include "open Movable" at the top and type "movable_t" and "movable", or to keep it as is (typing "Movable.movable_t" and "Movable.movable")? *)
+class human p : Movable.movable_t =
 object(self)
-  inherit world_object p
+  inherit Movable.movable p human_inverse_speed
 
   (******************************)
   (***** Instance Variables *****)
@@ -81,9 +82,8 @@ object(self)
 
   (* ### TODO: Part 2 Movement ### *)
 
-(*
-  method! next_direction = raise TODO
-*)
+  method! next_direction = Some (Direction.ord (Random.int 8))
+
 
   (* ### TODO: Part 5 Smart Humans ### *)
 

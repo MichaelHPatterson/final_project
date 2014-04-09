@@ -11,9 +11,9 @@ let max_destroyed_objects = 100
 
 (** A White Walker will roam the world until it has destroyed a satisfactory
     number of towns *)
-class white_walker p : world_object_i =
+class white_walker p kings_landing : Movable.movable_t =
 object (self)
-  inherit world_object p
+  inherit Movable.movable p walker_inverse_speed
 
   (******************************)
   (***** Instance Variables *****)
@@ -54,9 +54,12 @@ object (self)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
-(*
-  method! next_direction = raise TODO
-*)
+
+  method! next_direction =
+    if Random.float (float World.size) < 2. then
+      Direction.natural self#get_pos kings_landing#get_pos
+    else Some (Direction.ord (Random.int 8))
+
 
   (* ### TODO: Part 6 Custom Events ### *)
 
