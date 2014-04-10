@@ -43,7 +43,7 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Check to see if the use of one-branch "if" statements are right. *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Check to see if the one-branch "if" statements are used correctly here. *)
   method private do_action : unit -> unit = fun _ ->
     if gold <= max_gold && World.rand produce_gold_probability = 0 then
       gold <- gold + 1;

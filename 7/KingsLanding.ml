@@ -15,7 +15,12 @@ let max_gold_deposit = 3
     that humans gather. It is possible to steal gold from King's Landing;
     however the city will signal that it is in danger and its loyal humans
     will become angry. *)
-class kings_landing p : world_object_i =
+class kings_landing p :
+object
+  inherit world_object_i 
+
+  method forfeit_treasury : int -> world_object_i -> int
+end =
 object (self)
   inherit world_object p
 
@@ -24,6 +29,7 @@ object (self)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  val mutable gold : int = starting_gold
 
   (* ### TODO: Part 6 Custom Events ### *)
 
@@ -32,12 +38,17 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+  initializer
+    self#register_handler World.action_event self#do_action
 
   (**************************)
   (***** Event Handlers *****)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  method private do_action : unit -> unit = fun _ ->
+    if World.rand gold_probability = 0 then
+      gold <- gold + 1
 
   (* ### TODO: Part 4 Aging ### *)
 
@@ -55,9 +66,14 @@ object (self)
 
   method! get_name = "kings_landing"
 
-  method! draw = self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black ""
+  method! draw =
+    let gold_string = string_of_int gold in
+    self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black gold_string
 
   (* ### TODO: Part 3 Actions ### *)
+  method! receive_gold (gold_offer : int list) =
+    gold <- gold + Int.max (List.length gold_offer) max_gold_deposit;
+    []
 
   (* ### TODO: Part 6 Custom Events ### *)
 
@@ -66,6 +82,11 @@ object (self)
   (**********************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  method forfeit_treasury (n : int) (stealer : world_object_i) : int =
+    let stolen = Int.min gold n in
+    gold <- gold - stolen;
+    self#danger stealer;
+    stolen
 
   (* ### TODO: Part 6 Custom Events ### *)
 

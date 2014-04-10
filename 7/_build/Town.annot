@@ -240,534 +240,534 @@ type(
 type(
   unit
 )
-"Town.ml" 47 1277 1325 "Town.ml" 47 1277 1326
+"Town.ml" 47 1284 1332 "Town.ml" 47 1284 1333
 type(
   unit
 )
-"Town.ml" 48 1330 1337 "Town.ml" 48 1330 1341
+"Town.ml" 48 1337 1344 "Town.ml" 48 1337 1348
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 48 1330 1342 "Town.ml" 48 1330 1344
+"Town.ml" 48 1337 1349 "Town.ml" 48 1337 1351
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( <= )
 )
-"Town.ml" 48 1330 1345 "Town.ml" 48 1330 1353
+"Town.ml" 48 1337 1352 "Town.ml" 48 1337 1360
 type(
   int
 )
 ident(
   int_ref max_gold "Town.ml" 12 222 226 "Town.ml" 12 222 234
 )
-"Town.ml" 48 1330 1337 "Town.ml" 48 1330 1353
+"Town.ml" 48 1337 1344 "Town.ml" 48 1337 1360
 type(
   bool
 )
-"Town.ml" 48 1330 1354 "Town.ml" 48 1330 1356
+"Town.ml" 48 1337 1361 "Town.ml" 48 1337 1363
 type(
   bool -> bool -> bool
 )
 ident(
   ext_ref Pervasives.( && )
 )
-"Town.ml" 48 1330 1357 "Town.ml" 48 1330 1367
+"Town.ml" 48 1337 1364 "Town.ml" 48 1337 1374
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"Town.ml" 48 1330 1368 "Town.ml" 48 1330 1392
+"Town.ml" 48 1337 1375 "Town.ml" 48 1337 1399
 type(
   int
 )
 ident(
   int_ref produce_gold_probability "Town.ml" 13 239 243 "Town.ml" 13 239 267
 )
-"Town.ml" 48 1330 1357 "Town.ml" 48 1330 1392
+"Town.ml" 48 1337 1364 "Town.ml" 48 1337 1399
 call(
   stack
 )
 type(
   int
 )
-"Town.ml" 48 1330 1393 "Town.ml" 48 1330 1394
+"Town.ml" 48 1337 1400 "Town.ml" 48 1337 1401
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"Town.ml" 48 1330 1395 "Town.ml" 48 1330 1396
+"Town.ml" 48 1337 1402 "Town.ml" 48 1337 1403
 type(
   int
 )
-"Town.ml" 48 1330 1357 "Town.ml" 48 1330 1396
+"Town.ml" 48 1337 1364 "Town.ml" 48 1337 1403
 type(
   bool
 )
-"Town.ml" 48 1330 1337 "Town.ml" 48 1330 1396
+"Town.ml" 48 1337 1344 "Town.ml" 48 1337 1403
 type(
   bool
 )
-"Town.ml" 49 1402 1416 "Town.ml" 49 1402 1420
+"Town.ml" 49 1409 1423 "Town.ml" 49 1409 1427
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 49 1402 1421 "Town.ml" 49 1402 1422
+"Town.ml" 49 1409 1428 "Town.ml" 49 1409 1429
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( + )
 )
-"Town.ml" 49 1402 1423 "Town.ml" 49 1402 1424
+"Town.ml" 49 1409 1430 "Town.ml" 49 1409 1431
 type(
   int
 )
-"Town.ml" 49 1402 1416 "Town.ml" 49 1402 1424
+"Town.ml" 49 1409 1423 "Town.ml" 49 1409 1431
 type(
   int
 )
-"Town.ml" 49 1402 1408 "Town.ml" 49 1402 1424
+"Town.ml" 49 1409 1415 "Town.ml" 49 1409 1431
 type(
   unit
 )
-"Town.ml" 48 1330 1334 "Town.ml" 49 1402 1424
+"Town.ml" 48 1337 1341 "Town.ml" 49 1409 1431
 type(
   unit
 )
 type(
   unit
 )
-"Town.ml" 50 1426 1433 "Town.ml" 50 1426 1443
+"Town.ml" 50 1433 1440 "Town.ml" 50 1433 1450
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"Town.ml" 50 1426 1444 "Town.ml" 50 1426 1462
+"Town.ml" 50 1433 1451 "Town.ml" 50 1433 1469
 type(
   int
 )
 ident(
   int_ref expand_probability "Town.ml" 14 273 277 "Town.ml" 14 273 295
 )
-"Town.ml" 50 1426 1433 "Town.ml" 50 1426 1462
+"Town.ml" 50 1433 1440 "Town.ml" 50 1433 1469
 call(
   stack
 )
 type(
   int
 )
-"Town.ml" 50 1426 1463 "Town.ml" 50 1426 1464
+"Town.ml" 50 1433 1470 "Town.ml" 50 1433 1471
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"Town.ml" 50 1426 1465 "Town.ml" 50 1426 1466
+"Town.ml" 50 1433 1472 "Town.ml" 50 1433 1473
 type(
   int
 )
-"Town.ml" 50 1426 1433 "Town.ml" 50 1426 1466
+"Town.ml" 50 1433 1440 "Town.ml" 50 1433 1473
 type(
   bool
 )
-"Town.ml" 51 1472 1478 "Town.ml" 51 1472 1489
+"Town.ml" 51 1479 1485 "Town.ml" 51 1479 1496
 type(
   int -> int * int -> (int * int -> unit) -> unit
 )
 ident(
   ext_ref World.spawn
 )
-"Town.ml" 51 1472 1490 "Town.ml" 51 1472 1491
+"Town.ml" 51 1479 1497 "Town.ml" 51 1479 1498
 type(
   int
 )
-"Town.ml" 51 1472 1492 "Town.ml" 51 1472 1496
+"Town.ml" 51 1479 1499 "Town.ml" 51 1479 1503
 type(
   'a
 )
 ident(
   int_ref self "Town.ml" 23 526 534 "Town.ml" 23 526 538
 )
-"Town.ml" 51 1472 1492 "Town.ml" 51 1472 1504
+"Town.ml" 51 1479 1499 "Town.ml" 51 1479 1511
 call(
   stack
 )
 type(
   int * int
 )
-"Town.ml" 51 1472 1510 "Town.ml" 51 1472 1511
+"Town.ml" 51 1479 1517 "Town.ml" 51 1479 1518
 type(
   int * int
 )
 ident(
-  def p "Town.ml" 51 1472 1515 "Town.ml" 51 1472 1541
+  def p "Town.ml" 51 1479 1522 "Town.ml" 51 1479 1548
 )
-"Town.ml" 51 1472 1515 "Town.ml" 51 1472 1521
+"Town.ml" 51 1479 1522 "Town.ml" 51 1479 1528
 type(
   town -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Town.ml" 51 1472 1522 "Town.ml" 51 1472 1530
+"Town.ml" 51 1479 1529 "Town.ml" 51 1479 1537
 type(
   int * int -> int -> town
 )
-"Town.ml" 51 1472 1531 "Town.ml" 51 1472 1532
+"Town.ml" 51 1479 1538 "Town.ml" 51 1479 1539
 type(
   int * int
 )
 ident(
-  int_ref p "Town.ml" 51 1472 1510 "Town.ml" 51 1472 1511
+  int_ref p "Town.ml" 51 1479 1517 "Town.ml" 51 1479 1518
 )
-"Town.ml" 51 1472 1533 "Town.ml" 51 1472 1540
+"Town.ml" 51 1479 1540 "Town.ml" 51 1479 1547
 type(
   int
 )
 ident(
   int_ref gold_id "Town.ml" 22 486 499 "Town.ml" 22 486 506
 )
-"Town.ml" 51 1472 1522 "Town.ml" 51 1472 1540
+"Town.ml" 51 1479 1529 "Town.ml" 51 1479 1547
 call(
   stack
 )
 type(
   town
 )
-"Town.ml" 51 1472 1515 "Town.ml" 51 1472 1541
+"Town.ml" 51 1479 1522 "Town.ml" 51 1479 1548
 type(
   unit
 )
-"Town.ml" 51 1472 1510 "Town.ml" 51 1472 1541
+"Town.ml" 51 1479 1517 "Town.ml" 51 1479 1548
 type(
   int * int -> unit
 )
-"Town.ml" 51 1472 1478 "Town.ml" 51 1472 1542
+"Town.ml" 51 1479 1485 "Town.ml" 51 1479 1549
 call(
   tail
 )
 type(
   unit
 )
-"Town.ml" 50 1426 1430 "Town.ml" 51 1472 1542
+"Town.ml" 50 1433 1437 "Town.ml" 51 1479 1549
 type(
   unit
 )
 type(
   unit
 )
-"Town.ml" 48 1330 1334 "Town.ml" 51 1472 1542
+"Town.ml" 48 1337 1341 "Town.ml" 51 1479 1549
 type(
   unit
 )
-"Town.ml" 47 1277 1325 "Town.ml" 51 1472 1542
+"Town.ml" 47 1284 1332 "Town.ml" 51 1479 1549
 type(
   unit -> unit
 )
 type(
   unit -> unit
 )
-"Town.ml" 47 1277 1279 "Town.ml" 51 1472 1542
+"Town.ml" 47 1284 1286 "Town.ml" 51 1479 1549
 type(
   'a -> unit -> unit
 )
-"Town.ml" 60 1693 1714 "Town.ml" 60 1693 1720
+"Town.ml" 60 1700 1721 "Town.ml" 60 1700 1727
 type(
   string
 )
 type(
   string
 )
-"Town.ml" 60 1693 1695 "Town.ml" 60 1693 1720
+"Town.ml" 60 1700 1702 "Town.ml" 60 1700 1727
 type(
   'a -> string
 )
-"Town.ml" 63 1739 1747 "Town.ml" 63 1739 1758
+"Town.ml" 63 1746 1754 "Town.ml" 63 1746 1765
 type(
   string
 )
 ident(
-  def gold_string "Town.ml" 64 1783 1787 "Town.ml" 64 1783 1860
+  def gold_string "Town.ml" 64 1790 1794 "Town.ml" 64 1790 1867
 )
-"Town.ml" 63 1739 1761 "Town.ml" 63 1739 1774
+"Town.ml" 63 1746 1768 "Town.ml" 63 1746 1781
 type(
   int -> string
 )
 ident(
   ext_ref Pervasives.string_of_int
 )
-"Town.ml" 63 1739 1775 "Town.ml" 63 1739 1779
+"Town.ml" 63 1746 1782 "Town.ml" 63 1746 1786
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 63 1739 1761 "Town.ml" 63 1739 1779
+"Town.ml" 63 1746 1768 "Town.ml" 63 1746 1786
 call(
   stack
 )
 type(
   string
 )
-"Town.ml" 64 1783 1787 "Town.ml" 64 1783 1791
+"Town.ml" 64 1790 1794 "Town.ml" 64 1790 1798
 type(
   'a
 )
 ident(
   int_ref self "Town.ml" 23 526 534 "Town.ml" 23 526 538
 )
-"Town.ml" 64 1783 1787 "Town.ml" 64 1783 1803
+"Town.ml" 64 1790 1794 "Town.ml" 64 1790 1810
 call(
   tail
 )
 type(
   int -> int -> string -> unit
 )
-"Town.ml" 64 1783 1805 "Town.ml" 64 1783 1817
+"Town.ml" 64 1790 1812 "Town.ml" 64 1790 1824
 type(
   int -> int -> int -> int
 )
 ident(
   ext_ref Graphics.rgb
 )
-"Town.ml" 64 1783 1818 "Town.ml" 64 1783 1822
+"Town.ml" 64 1790 1825 "Town.ml" 64 1790 1829
 type(
   int
 )
-"Town.ml" 64 1783 1823 "Town.ml" 64 1783 1827
+"Town.ml" 64 1790 1830 "Town.ml" 64 1790 1834
 type(
   int
 )
-"Town.ml" 64 1783 1828 "Town.ml" 64 1783 1832
+"Town.ml" 64 1790 1835 "Town.ml" 64 1790 1839
 type(
   int
 )
-"Town.ml" 64 1783 1805 "Town.ml" 64 1783 1832
+"Town.ml" 64 1790 1812 "Town.ml" 64 1790 1839
 call(
   stack
 )
 type(
   int
 )
-"Town.ml" 64 1783 1834 "Town.ml" 64 1783 1848
+"Town.ml" 64 1790 1841 "Town.ml" 64 1790 1855
 type(
   int
 )
 ident(
   ext_ref Graphics.black
 )
-"Town.ml" 64 1783 1849 "Town.ml" 64 1783 1860
+"Town.ml" 64 1790 1856 "Town.ml" 64 1790 1867
 type(
   string
 )
 ident(
-  int_ref gold_string "Town.ml" 63 1739 1747 "Town.ml" 63 1739 1758
+  int_ref gold_string "Town.ml" 63 1746 1754 "Town.ml" 63 1746 1765
 )
-"Town.ml" 64 1783 1787 "Town.ml" 64 1783 1860
+"Town.ml" 64 1790 1794 "Town.ml" 64 1790 1867
 type(
   unit
 )
-"Town.ml" 63 1739 1743 "Town.ml" 64 1783 1860
+"Town.ml" 63 1746 1750 "Town.ml" 64 1790 1867
 type(
   unit
 )
 type(
   unit
 )
-"Town.ml" 62 1722 1724 "Town.ml" 64 1783 1860
+"Town.ml" 62 1729 1731 "Town.ml" 64 1790 1867
 type(
   'a -> unit
 )
-"Town.ml" 70 2112 2144 "Town.ml" 70 2112 2148
+"Town.ml" 70 2119 2151 "Town.ml" 70 2119 2155
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 70 2112 2149 "Town.ml" 70 2112 2150
+"Town.ml" 70 2119 2156 "Town.ml" 70 2119 2157
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"Town.ml" 70 2112 2151 "Town.ml" 70 2112 2152
+"Town.ml" 70 2119 2158 "Town.ml" 70 2119 2159
 type(
   int
 )
-"Town.ml" 70 2112 2144 "Town.ml" 70 2112 2152
+"Town.ml" 70 2119 2151 "Town.ml" 70 2119 2159
 type(
   bool
 )
-"Town.ml" 70 2112 2158 "Town.ml" 70 2112 2162
+"Town.ml" 70 2119 2165 "Town.ml" 70 2119 2169
 type(
   int option
 )
-"Town.ml" 70 2112 2173 "Town.ml" 70 2112 2180
+"Town.ml" 70 2119 2180 "Town.ml" 70 2119 2187
 type(
   int
 )
 ident(
   int_ref gold_id "Town.ml" 22 486 499 "Town.ml" 22 486 506
 )
-"Town.ml" 70 2112 2168 "Town.ml" 70 2112 2180
+"Town.ml" 70 2119 2175 "Town.ml" 70 2119 2187
 type(
   int option
 )
-"Town.ml" 70 2112 2141 "Town.ml" 70 2112 2180
+"Town.ml" 70 2119 2148 "Town.ml" 70 2119 2187
 type(
   int option
 )
 type(
   int option
 )
-"Town.ml" 70 2112 2114 "Town.ml" 70 2112 2180
+"Town.ml" 70 2119 2121 "Town.ml" 70 2119 2187
 type(
   'a -> int option
 )
-"Town.ml" 74 2384 2391 "Town.ml" 74 2384 2395
+"Town.ml" 74 2391 2398 "Town.ml" 74 2391 2402
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 74 2384 2396 "Town.ml" 74 2384 2397
+"Town.ml" 74 2391 2403 "Town.ml" 74 2391 2404
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"Town.ml" 74 2384 2398 "Town.ml" 74 2384 2399
+"Town.ml" 74 2391 2405 "Town.ml" 74 2391 2406
 type(
   int
 )
-"Town.ml" 74 2384 2391 "Town.ml" 74 2384 2399
+"Town.ml" 74 2391 2398 "Town.ml" 74 2391 2406
 type(
   bool
 )
-"Town.ml" 74 2384 2400 "Town.ml" 74 2384 2402
+"Town.ml" 74 2391 2407 "Town.ml" 74 2391 2409
 type(
   bool -> bool -> bool
 )
 ident(
   ext_ref Pervasives.( || )
 )
-"Town.ml" 74 2384 2403 "Town.ml" 74 2384 2413
+"Town.ml" 74 2391 2410 "Town.ml" 74 2391 2420
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"Town.ml" 74 2384 2414 "Town.ml" 74 2384 2438
+"Town.ml" 74 2391 2421 "Town.ml" 74 2391 2445
 type(
   int
 )
 ident(
   int_ref forfeit_gold_probability "Town.ml" 15 303 307 "Town.ml" 15 303 331
 )
-"Town.ml" 74 2384 2403 "Town.ml" 74 2384 2438
+"Town.ml" 74 2391 2410 "Town.ml" 74 2391 2445
 call(
   stack
 )
 type(
   int
 )
-"Town.ml" 74 2384 2439 "Town.ml" 74 2384 2440
+"Town.ml" 74 2391 2446 "Town.ml" 74 2391 2447
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( = )
 )
-"Town.ml" 74 2384 2441 "Town.ml" 74 2384 2442
+"Town.ml" 74 2391 2448 "Town.ml" 74 2391 2449
 type(
   int
 )
-"Town.ml" 74 2384 2403 "Town.ml" 74 2384 2442
+"Town.ml" 74 2391 2410 "Town.ml" 74 2391 2449
 type(
   bool
 )
-"Town.ml" 74 2384 2391 "Town.ml" 74 2384 2442
+"Town.ml" 74 2391 2398 "Town.ml" 74 2391 2449
 type(
   bool
 )
-"Town.ml" 74 2384 2448 "Town.ml" 74 2384 2452
+"Town.ml" 74 2391 2455 "Town.ml" 74 2391 2459
 type(
   int option
 )
-"Town.ml" 76 2462 2472 "Town.ml" 76 2462 2473
+"Town.ml" 76 2469 2479 "Town.ml" 76 2469 2480
 type(
   unit
 )
-"Town.ml" 76 2462 2484 "Town.ml" 76 2462 2488
+"Town.ml" 76 2469 2491 "Town.ml" 76 2469 2495
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"Town.ml" 76 2462 2489 "Town.ml" 76 2462 2490
+"Town.ml" 76 2469 2496 "Town.ml" 76 2469 2497
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( - )
 )
-"Town.ml" 76 2462 2491 "Town.ml" 76 2462 2492
+"Town.ml" 76 2469 2498 "Town.ml" 76 2469 2499
 type(
   int
 )
-"Town.ml" 76 2462 2484 "Town.ml" 76 2462 2492
+"Town.ml" 76 2469 2491 "Town.ml" 76 2469 2499
 type(
   int
 )
-"Town.ml" 76 2462 2476 "Town.ml" 76 2462 2492
+"Town.ml" 76 2469 2483 "Town.ml" 76 2469 2499
 type(
   unit
 )
-"Town.ml" 77 2496 2507 "Town.ml" 77 2496 2514
+"Town.ml" 77 2503 2514 "Town.ml" 77 2503 2521
 type(
   int
 )
 ident(
   int_ref gold_id "Town.ml" 22 486 499 "Town.ml" 22 486 506
 )
-"Town.ml" 77 2496 2502 "Town.ml" 77 2496 2514
+"Town.ml" 77 2503 2509 "Town.ml" 77 2503 2521
 type(
   int option
 )
-"Town.ml" 76 2462 2468 "Town.ml" 77 2496 2514
+"Town.ml" 76 2469 2475 "Town.ml" 77 2503 2521
 type(
   int option
 )
-"Town.ml" 74 2384 2388 "Town.ml" 77 2496 2514
+"Town.ml" 74 2391 2395 "Town.ml" 77 2503 2521
 type(
   int option
 )
 type(
   int option
 )
-"Town.ml" 73 2359 2361 "Town.ml" 77 2496 2514
+"Town.ml" 73 2366 2368 "Town.ml" 77 2503 2521
 type(
   'a -> int option
 )
