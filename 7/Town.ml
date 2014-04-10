@@ -44,7 +44,7 @@ object (self)
 
   (* ### TODO: Part 3 Actions ### *)
   method private do_action : unit -> unit = fun _ ->
-    if gold <= max_gold && World.rand produce_gold_probability = 0 then
+    if gold < max_gold && World.rand produce_gold_probability = 0 then
       gold <- gold + 1;
     if World.rand expand_probability = 0 then
       World.spawn 1 self#get_pos (fun p -> ignore(new town p gold_id))
@@ -69,7 +69,7 @@ object (self)
 
 
   method! forfeit_gold =
-    if gold = 0 || World.rand forfeit_gold_probability = 0 then None
+    if gold = 0 || World.rand forfeit_gold_probability > 0 then None
     else
       let _ = gold <- gold - 1 in
       Some gold_id

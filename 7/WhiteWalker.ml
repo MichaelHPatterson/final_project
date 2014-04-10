@@ -1,4 +1,4 @@
-open Core.Std
+1open Core.Std
 open Helpers
 open Movable
 open WorldObject
@@ -39,7 +39,9 @@ object (self)
   method private do_action : unit -> unit = fun _ ->
     let destroy (obj : world_object_i) : unit =
       obj#die; objs_destroyed <- objs_destroyed + 1 in
-    List.iter ~f:destroy (World.get self#get_pos)
+    let gold_check = fun obj -> obj#smells_like_gold <> None in
+    let gold_neighbors = List.filter ~f:gold_check (World.get self#get_pos) in
+    List.iter ~f:destroy gold_neighbors
 
   (* ### TODO: Part 6 Custom Events ### *)
 
