@@ -20,18 +20,25 @@ object (self)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  val mutable objs_destroyed : int = 0
 
   (***********************)
   (***** Initializer *****)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+  initializer
+    self#register_handler World.action_event self#do_action
 
   (**************************)
   (***** Event Handlers *****)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  method private do_action : unit -> unit = fun _ ->
+    let destroy (obj : world_object_i) : unit =
+      obj#die; objs_destroyed <- objs_destroyed + 1 in
+    List.iter ~f:destroy (World.get self#get_pos)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
@@ -43,7 +50,9 @@ object (self)
 
   method! get_name = "white_walker"
 
-  method! draw = self#draw_circle (Graphics.rgb 0x89 0xCF 0xF0) Graphics.black ""
+  method! draw =
+    let display_string = string_of_int objs_destroyed in
+    self#draw_circle (Graphics.rgb 0x89 0xCF 0xF0) Graphics.black display_string
 
   method! draw_z_axis = 4
 

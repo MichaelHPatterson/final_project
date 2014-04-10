@@ -81,7 +81,7 @@ type(
 type(
   int list
 )
-"Human.ml" 49 2038 2042 "Human.ml" 49 2038 2046
+"Human.ml" 49 2121 2125 "Human.ml" 49 2121 2129
 type(
   < danger : world_object_i -> unit; die : unit; draw : unit;
     draw_z_axis : int; forfeit_gold : int option;
@@ -95,487 +95,487 @@ type(
 ident(
   int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
 )
-"Human.ml" 49 2038 2042 "Human.ml" 49 2038 2063
+"Human.ml" 49 2121 2125 "Human.ml" 49 2121 2146
 call(
   tail
 )
 type(
   unit Event51.event -> (unit -> unit) -> unit
 )
-"Human.ml" 49 2038 2064 "Human.ml" 49 2038 2082
+"Human.ml" 49 2121 2147 "Human.ml" 49 2121 2165
 type(
   unit Event51.event
 )
 ident(
   ext_ref World.action_event
 )
-"Human.ml" 49 2038 2083 "Human.ml" 49 2038 2087
+"Human.ml" 49 2121 2166 "Human.ml" 49 2121 2170
 type(
   'a
 )
 ident(
   int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
 )
-"Human.ml" 49 2038 2083 "Human.ml" 49 2038 2097
+"Human.ml" 49 2121 2166 "Human.ml" 49 2121 2180
 call(
   stack
 )
 type(
   unit -> unit
 )
-"Human.ml" 49 2038 2042 "Human.ml" 49 2038 2097
+"Human.ml" 49 2121 2125 "Human.ml" 49 2121 2180
 type(
   'a -> unit
 )
 type(
   unit
 )
-"Human.ml" 65 2610 2641 "Human.ml" 65 2610 2649
+"Human.ml" 64 2495 2526 "Human.ml" 64 2495 2534
 type(
   world_object_i
 )
 ident(
-  def neighbor "Human.ml" 65 2610 2668 "Human.ml" 66 2677 2715
+  def neighbor "Human.ml" 64 2495 2553 "Human.ml" 65 2562 2600
 )
-"Human.ml" 66 2677 2689 "Human.ml" 66 2677 2697
+"Human.ml" 65 2562 2574 "Human.ml" 65 2562 2582
 type(
   world_object_i
 )
 ident(
-  int_ref neighbor "Human.ml" 65 2610 2641 "Human.ml" 65 2610 2649
+  int_ref neighbor "Human.ml" 64 2495 2526 "Human.ml" 64 2495 2534
 )
-"Human.ml" 66 2677 2689 "Human.ml" 66 2677 2710
+"Human.ml" 65 2562 2574 "Human.ml" 65 2562 2595
 call(
   stack
 )
 type(
   int list -> int list
 )
-"Human.ml" 66 2677 2711 "Human.ml" 66 2677 2715
+"Human.ml" 65 2562 2596 "Human.ml" 65 2562 2600
 type(
   int list
 )
 ident(
   ext_ref gold
 )
-"Human.ml" 66 2677 2689 "Human.ml" 66 2677 2715
+"Human.ml" 65 2562 2574 "Human.ml" 65 2562 2600
 type(
   int list
 )
-"Human.ml" 66 2677 2681 "Human.ml" 66 2677 2715
+"Human.ml" 65 2562 2566 "Human.ml" 65 2562 2600
 type(
   unit
 )
 type(
   unit
 )
-"Human.ml" 65 2610 2640 "Human.ml" 66 2677 2715
+"Human.ml" 64 2495 2525 "Human.ml" 65 2562 2600
 type(
   world_object_i -> unit
 )
 type(
   world_object_i -> unit
 )
-"Human.ml" 65 2610 2612 "Human.ml" 66 2677 2715
+"Human.ml" 64 2495 2497 "Human.ml" 65 2562 2600
 type(
   'a -> world_object_i -> unit
 )
-"Human.ml" 68 2717 2748 "Human.ml" 68 2717 2756
+"Human.ml" 67 2602 2633 "Human.ml" 67 2602 2641
 type(
   world_object_i
 )
 ident(
-  def neighbor "Human.ml" 68 2717 2775 "Human.ml" 71 2838 2871
+  def neighbor "Human.ml" 67 2602 2660 "Human.ml" 70 2723 2756
 )
-"Human.ml" 69 2784 2794 "Human.ml" 69 2784 2802
+"Human.ml" 68 2669 2679 "Human.ml" 68 2669 2687
 type(
   world_object_i
 )
 ident(
-  int_ref neighbor "Human.ml" 68 2717 2748 "Human.ml" 68 2717 2756
+  int_ref neighbor "Human.ml" 67 2602 2633 "Human.ml" 67 2602 2641
 )
-"Human.ml" 69 2784 2794 "Human.ml" 69 2784 2815
+"Human.ml" 68 2669 2679 "Human.ml" 68 2669 2700
 call(
   stack
 )
 type(
   int option
 )
-"Human.ml" 70 2821 2827 "Human.ml" 70 2821 2831
+"Human.ml" 69 2706 2712 "Human.ml" 69 2706 2716
 type(
   int option
 )
-"Human.ml" 70 2821 2835 "Human.ml" 70 2821 2837
+"Human.ml" 69 2706 2720 "Human.ml" 69 2706 2722
 type(
   unit
 )
-"Human.ml" 71 2838 2849 "Human.ml" 71 2838 2850
+"Human.ml" 70 2723 2734 "Human.ml" 70 2723 2735
 type(
   int
 )
 ident(
-  def g "Human.ml" 71 2838 2854 "Human.ml" 71 2838 2871
+  def g "Human.ml" 70 2723 2739 "Human.ml" 70 2723 2756
 )
-"Human.ml" 71 2838 2844 "Human.ml" 71 2838 2850
+"Human.ml" 70 2723 2729 "Human.ml" 70 2723 2735
 type(
   int option
 )
-"Human.ml" 71 2838 2862 "Human.ml" 71 2838 2863
+"Human.ml" 70 2723 2747 "Human.ml" 70 2723 2748
 type(
   int
 )
 ident(
-  int_ref g "Human.ml" 71 2838 2849 "Human.ml" 71 2838 2850
+  int_ref g "Human.ml" 70 2723 2734 "Human.ml" 70 2723 2735
 )
-"Human.ml" 71 2838 2867 "Human.ml" 71 2838 2871
+"Human.ml" 70 2723 2752 "Human.ml" 70 2723 2756
 type(
   int list
 )
 ident(
   ext_ref gold
 )
-"Human.ml" 71 2838 2862 "Human.ml" 71 2838 2871
+"Human.ml" 70 2723 2747 "Human.ml" 70 2723 2756
 type(
   int list
 )
-"Human.ml" 71 2838 2854 "Human.ml" 71 2838 2871
+"Human.ml" 70 2723 2739 "Human.ml" 70 2723 2756
 type(
   unit
 )
-"Human.ml" 69 2784 2788 "Human.ml" 71 2838 2871
+"Human.ml" 68 2669 2673 "Human.ml" 70 2723 2756
 type(
   unit
 )
 type(
   unit
 )
-"Human.ml" 68 2717 2747 "Human.ml" 71 2838 2871
+"Human.ml" 67 2602 2632 "Human.ml" 70 2723 2756
 type(
   world_object_i -> unit
 )
 type(
   world_object_i -> unit
 )
-"Human.ml" 68 2717 2719 "Human.ml" 71 2838 2871
+"Human.ml" 67 2602 2604 "Human.ml" 70 2723 2756
 type(
   'a -> world_object_i -> unit
 )
-"Human.ml" 81 3064 3085 "Human.ml" 81 3064 3092
+"Human.ml" 80 2949 2970 "Human.ml" 80 2949 2977
 type(
   string
 )
 type(
   string
 )
-"Human.ml" 81 3064 3066 "Human.ml" 81 3064 3092
+"Human.ml" 80 2949 2951 "Human.ml" 80 2949 2977
 type(
   'a -> string
 )
-"Human.ml" 84 3111 3119 "Human.ml" 84 3111 3130
+"Human.ml" 83 2996 3004 "Human.ml" 83 2996 3015
 type(
   string
 )
 ident(
-  def gold_string "Human.ml" 85 3169 3173 "Human.ml" 85 3169 3246
+  def gold_string "Human.ml" 84 3054 3058 "Human.ml" 84 3054 3131
 )
-"Human.ml" 84 3111 3133 "Human.ml" 84 3111 3146
+"Human.ml" 83 2996 3018 "Human.ml" 83 2996 3031
 type(
   int -> string
 )
 ident(
   ext_ref Pervasives.string_of_int
 )
-"Human.ml" 84 3111 3148 "Human.ml" 84 3111 3159
+"Human.ml" 83 2996 3033 "Human.ml" 83 2996 3044
 type(
   int list -> int
 )
 ident(
   ext_ref Core.Std.List.length
 )
-"Human.ml" 84 3111 3160 "Human.ml" 84 3111 3164
+"Human.ml" 83 2996 3045 "Human.ml" 83 2996 3049
 type(
   int list
 )
 ident(
   ext_ref gold
 )
-"Human.ml" 84 3111 3148 "Human.ml" 84 3111 3164
+"Human.ml" 83 2996 3033 "Human.ml" 83 2996 3049
 call(
   stack
 )
 type(
   int
 )
-"Human.ml" 84 3111 3133 "Human.ml" 84 3111 3165
+"Human.ml" 83 2996 3018 "Human.ml" 83 2996 3050
 call(
   stack
 )
 type(
   string
 )
-"Human.ml" 85 3169 3173 "Human.ml" 85 3169 3177
+"Human.ml" 84 3054 3058 "Human.ml" 84 3054 3062
 type(
   'a
 )
 ident(
   int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
 )
-"Human.ml" 85 3169 3173 "Human.ml" 85 3169 3189
+"Human.ml" 84 3054 3058 "Human.ml" 84 3054 3074
 call(
   tail
 )
 type(
   int -> int -> string -> unit
 )
-"Human.ml" 85 3169 3191 "Human.ml" 85 3169 3203
+"Human.ml" 84 3054 3076 "Human.ml" 84 3054 3088
 type(
   int -> int -> int -> int
 )
 ident(
   ext_ref Graphics.rgb
 )
-"Human.ml" 85 3169 3204 "Human.ml" 85 3169 3208
+"Human.ml" 84 3054 3089 "Human.ml" 84 3054 3093
 type(
   int
 )
-"Human.ml" 85 3169 3209 "Human.ml" 85 3169 3213
+"Human.ml" 84 3054 3094 "Human.ml" 84 3054 3098
 type(
   int
 )
-"Human.ml" 85 3169 3214 "Human.ml" 85 3169 3218
+"Human.ml" 84 3054 3099 "Human.ml" 84 3054 3103
 type(
   int
 )
-"Human.ml" 85 3169 3191 "Human.ml" 85 3169 3218
+"Human.ml" 84 3054 3076 "Human.ml" 84 3054 3103
 call(
   stack
 )
 type(
   int
 )
-"Human.ml" 85 3169 3220 "Human.ml" 85 3169 3234
+"Human.ml" 84 3054 3105 "Human.ml" 84 3054 3119
 type(
   int
 )
 ident(
   ext_ref Graphics.black
 )
-"Human.ml" 85 3169 3235 "Human.ml" 85 3169 3246
+"Human.ml" 84 3054 3120 "Human.ml" 84 3054 3131
 type(
   string
 )
 ident(
-  int_ref gold_string "Human.ml" 84 3111 3119 "Human.ml" 84 3111 3130
+  int_ref gold_string "Human.ml" 83 2996 3004 "Human.ml" 83 2996 3015
 )
-"Human.ml" 85 3169 3173 "Human.ml" 85 3169 3246
+"Human.ml" 84 3054 3058 "Human.ml" 84 3054 3131
 type(
   unit
 )
-"Human.ml" 84 3111 3115 "Human.ml" 85 3169 3246
+"Human.ml" 83 2996 3000 "Human.ml" 84 3054 3131
 type(
   unit
 )
 type(
   unit
 )
-"Human.ml" 83 3094 3096 "Human.ml" 85 3169 3246
+"Human.ml" 82 2979 2981 "Human.ml" 84 3054 3131
 type(
   'a -> unit
 )
-"Human.ml" 87 3248 3272 "Human.ml" 87 3248 3273
+"Human.ml" 86 3133 3157 "Human.ml" 86 3133 3158
 type(
   int
 )
 type(
   int
 )
-"Human.ml" 87 3248 3250 "Human.ml" 87 3248 3273
+"Human.ml" 86 3133 3135 "Human.ml" 86 3133 3158
 type(
   'a -> int
 )
-"Human.ml" 91 3517 3565 "Human.ml" 91 3517 3566
+"Human.ml" 90 3486 3534 "Human.ml" 90 3486 3535
 type(
   unit
 )
-"Human.ml" 92 3570 3578 "Human.ml" 92 3570 3587
+"Human.ml" 91 3539 3547 "Human.ml" 91 3539 3555
 type(
-  world_object_i list
+  world_object_i -> unit
 )
 ident(
-  def neighbors "Human.ml" 93 3638 3642 "Human.ml" 93 3638 3716
+  def exchange "Human.ml" 93 3657 3661 "Human.ml" 93 3657 3707
 )
-"Human.ml" 92 3570 3612 "Human.ml" 92 3570 3621
+"Human.ml" 91 3539 3557 "Human.ml" 91 3539 3565
 type(
-  int * int -> world_object_i list
+  world_object_i
 )
 ident(
-  ext_ref World.get
+  def neighbor "Human.ml" 91 3539 3584 "Human.ml" 92 3593 3653
 )
-"Human.ml" 92 3570 3622 "Human.ml" 92 3570 3626
+"Human.ml" 92 3593 3599 "Human.ml" 92 3593 3603
 type(
   'a
 )
 ident(
   int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
 )
-"Human.ml" 92 3570 3622 "Human.ml" 92 3570 3634
+"Human.ml" 92 3593 3599 "Human.ml" 92 3593 3616
 call(
   stack
 )
 type(
-  int * int
+  world_object_i -> unit
 )
-"Human.ml" 92 3570 3612 "Human.ml" 92 3570 3634
+"Human.ml" 92 3593 3617 "Human.ml" 92 3593 3625
+type(
+  world_object_i
+)
+ident(
+  int_ref neighbor "Human.ml" 91 3539 3557 "Human.ml" 91 3539 3565
+)
+"Human.ml" 92 3593 3599 "Human.ml" 92 3593 3625
+type(
+  unit
+)
+"Human.ml" 92 3593 3627 "Human.ml" 92 3593 3631
+type(
+  'a
+)
+ident(
+  int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
+)
+"Human.ml" 92 3593 3627 "Human.ml" 92 3593 3644
 call(
-  stack
+  tail
 )
 type(
-  world_object_i list
+  world_object_i -> unit
+)
+"Human.ml" 92 3593 3645 "Human.ml" 92 3593 3653
+type(
+  world_object_i
+)
+ident(
+  int_ref neighbor "Human.ml" 91 3539 3557 "Human.ml" 91 3539 3565
+)
+"Human.ml" 92 3593 3627 "Human.ml" 92 3593 3653
+type(
+  unit
+)
+"Human.ml" 92 3593 3599 "Human.ml" 92 3593 3653
+type(
+  unit
 )
 type(
-  world_object_i list
+  unit
 )
-"Human.ml" 93 3638 3642 "Human.ml" 93 3638 3651
+"Human.ml" 91 3539 3556 "Human.ml" 92 3593 3653
+type(
+  world_object_i -> unit
+)
+"Human.ml" 93 3657 3661 "Human.ml" 93 3657 3670
 type(
   world_object_i list -> f:(world_object_i -> unit) -> unit
 )
 ident(
   ext_ref Core.Std.List.iter
 )
-"Human.ml" 93 3638 3660 "Human.ml" 93 3638 3661
+"Human.ml" 93 3657 3674 "Human.ml" 93 3657 3682
 type(
-  world_object_i
+  world_object_i -> unit
 )
 ident(
-  def n "Human.ml" 93 3638 3665 "Human.ml" 93 3638 3705
+  int_ref exchange "Human.ml" 91 3539 3547 "Human.ml" 91 3539 3555
 )
-"Human.ml" 93 3638 3665 "Human.ml" 93 3638 3669
+"Human.ml" 93 3657 3684 "Human.ml" 93 3657 3693
+type(
+  int * int -> world_object_i list
+)
+ident(
+  ext_ref World.get
+)
+"Human.ml" 93 3657 3694 "Human.ml" 93 3657 3698
 type(
   'a
 )
 ident(
   int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
 )
-"Human.ml" 93 3638 3665 "Human.ml" 93 3638 3682
+"Human.ml" 93 3657 3694 "Human.ml" 93 3657 3706
 call(
   stack
 )
 type(
-  world_object_i -> unit
+  int * int
 )
-"Human.ml" 93 3638 3683 "Human.ml" 93 3638 3684
-type(
-  world_object_i
-)
-ident(
-  int_ref n "Human.ml" 93 3638 3660 "Human.ml" 93 3638 3661
-)
-"Human.ml" 93 3638 3665 "Human.ml" 93 3638 3684
-type(
-  unit
-)
-"Human.ml" 93 3638 3686 "Human.ml" 93 3638 3690
-type(
-  'a
-)
-ident(
-  int_ref self "Human.ml" 25 935 942 "Human.ml" 25 935 946
-)
-"Human.ml" 93 3638 3686 "Human.ml" 93 3638 3703
+"Human.ml" 93 3657 3684 "Human.ml" 93 3657 3706
 call(
-  tail
+  stack
 )
-type(
-  world_object_i -> unit
-)
-"Human.ml" 93 3638 3704 "Human.ml" 93 3638 3705
-type(
-  world_object_i
-)
-ident(
-  int_ref n "Human.ml" 93 3638 3660 "Human.ml" 93 3638 3661
-)
-"Human.ml" 93 3638 3686 "Human.ml" 93 3638 3705
-type(
-  unit
-)
-"Human.ml" 93 3638 3665 "Human.ml" 93 3638 3705
-type(
-  unit
-)
-"Human.ml" 93 3638 3660 "Human.ml" 93 3638 3705
-type(
-  world_object_i -> unit
-)
-"Human.ml" 93 3638 3707 "Human.ml" 93 3638 3716
 type(
   world_object_i list
 )
-ident(
-  int_ref neighbors "Human.ml" 92 3570 3578 "Human.ml" 92 3570 3587
-)
-"Human.ml" 93 3638 3642 "Human.ml" 93 3638 3716
+"Human.ml" 93 3657 3661 "Human.ml" 93 3657 3707
 call(
   tail
 )
 type(
   unit
 )
-"Human.ml" 92 3570 3574 "Human.ml" 93 3638 3716
+"Human.ml" 91 3539 3543 "Human.ml" 93 3657 3707
 type(
   unit
 )
-"Human.ml" 91 3517 3565 "Human.ml" 93 3638 3716
+"Human.ml" 90 3486 3534 "Human.ml" 93 3657 3707
 type(
   unit -> unit
 )
 type(
   unit -> unit
 )
-"Human.ml" 91 3517 3519 "Human.ml" 93 3638 3716
+"Human.ml" 90 3486 3488 "Human.ml" 93 3657 3707
 type(
   'a -> unit -> unit
 )
-"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4034
+"Human.ml" 107 3978 4011 "Human.ml" 107 3978 4024
 type(
   int -> Direction.direction
 )
 ident(
   ext_ref Direction.ord
 )
-"Human.ml" 108 3988 4036 "Human.ml" 108 3988 4046
+"Human.ml" 107 3978 4026 "Human.ml" 107 3978 4036
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"Human.ml" 108 3988 4047 "Human.ml" 108 3988 4048
+"Human.ml" 107 3978 4037 "Human.ml" 107 3978 4038
 type(
   int
 )
-"Human.ml" 108 3988 4036 "Human.ml" 108 3988 4048
+"Human.ml" 107 3978 4026 "Human.ml" 107 3978 4038
 call(
   stack
 )
 type(
   int
 )
-"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4049
+"Human.ml" 107 3978 4011 "Human.ml" 107 3978 4039
 call(
   stack
 )
 type(
   Direction.direction
 )
-"Human.ml" 108 3988 4015 "Human.ml" 108 3988 4050
+"Human.ml" 107 3978 4005 "Human.ml" 107 3978 4040
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"Human.ml" 108 3988 3990 "Human.ml" 108 3988 4050
+"Human.ml" 107 3978 3980 "Human.ml" 107 3978 4040
 type(
   'a -> Direction.direction option
 )

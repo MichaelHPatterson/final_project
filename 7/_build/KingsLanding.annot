@@ -325,233 +325,233 @@ type(
 type(
   'a -> unit
 )
-"KingsLanding.ml" 74 1841 1865 "KingsLanding.ml" 74 1841 1875
+"KingsLanding.ml" 75 2012 2036 "KingsLanding.ml" 75 2012 2046
 type(
   int list
 )
 ident(
-  def gold_offer "KingsLanding.ml" 75 1890 1894 "KingsLanding.ml" 76 1960 1966
+  def gold_offer "KingsLanding.ml" 76 2061 2065 "KingsLanding.ml" 77 2131 2137
 )
-"KingsLanding.ml" 75 1890 1902 "KingsLanding.ml" 75 1890 1906
+"KingsLanding.ml" 76 2061 2073 "KingsLanding.ml" 76 2061 2077
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"KingsLanding.ml" 75 1890 1907 "KingsLanding.ml" 75 1890 1908
+"KingsLanding.ml" 76 2061 2078 "KingsLanding.ml" 76 2061 2079
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( + )
 )
-"KingsLanding.ml" 75 1890 1909 "KingsLanding.ml" 75 1890 1916
+"KingsLanding.ml" 76 2061 2080 "KingsLanding.ml" 76 2061 2087
 type(
   int -> int -> int
 )
 ident(
   ext_ref Core.Std.Int.max
 )
-"KingsLanding.ml" 75 1890 1918 "KingsLanding.ml" 75 1890 1929
+"KingsLanding.ml" 76 2061 2089 "KingsLanding.ml" 76 2061 2100
 type(
   int list -> int
 )
 ident(
   ext_ref Core.Std.List.length
 )
-"KingsLanding.ml" 75 1890 1930 "KingsLanding.ml" 75 1890 1940
+"KingsLanding.ml" 76 2061 2101 "KingsLanding.ml" 76 2061 2111
 type(
   int list
 )
 ident(
-  int_ref gold_offer "KingsLanding.ml" 74 1841 1865 "KingsLanding.ml" 74 1841 1875
+  int_ref gold_offer "KingsLanding.ml" 75 2012 2036 "KingsLanding.ml" 75 2012 2046
 )
-"KingsLanding.ml" 75 1890 1918 "KingsLanding.ml" 75 1890 1940
+"KingsLanding.ml" 76 2061 2089 "KingsLanding.ml" 76 2061 2111
 call(
   stack
 )
 type(
   int
 )
-"KingsLanding.ml" 75 1890 1942 "KingsLanding.ml" 75 1890 1958
+"KingsLanding.ml" 76 2061 2113 "KingsLanding.ml" 76 2061 2129
 type(
   int
 )
 ident(
   int_ref max_gold_deposit "KingsLanding.ml" 12 205 209 "KingsLanding.ml" 12 205 225
 )
-"KingsLanding.ml" 75 1890 1909 "KingsLanding.ml" 75 1890 1958
+"KingsLanding.ml" 76 2061 2080 "KingsLanding.ml" 76 2061 2129
 call(
   stack
 )
 type(
   int
 )
-"KingsLanding.ml" 75 1890 1902 "KingsLanding.ml" 75 1890 1958
+"KingsLanding.ml" 76 2061 2073 "KingsLanding.ml" 76 2061 2129
 type(
   int
 )
-"KingsLanding.ml" 75 1890 1894 "KingsLanding.ml" 75 1890 1958
+"KingsLanding.ml" 76 2061 2065 "KingsLanding.ml" 76 2061 2129
 type(
   unit
 )
-"KingsLanding.ml" 76 1960 1964 "KingsLanding.ml" 76 1960 1966
+"KingsLanding.ml" 77 2131 2135 "KingsLanding.ml" 77 2131 2137
 type(
   int list
 )
-"KingsLanding.ml" 75 1890 1894 "KingsLanding.ml" 76 1960 1966
+"KingsLanding.ml" 76 2061 2065 "KingsLanding.ml" 77 2131 2137
 type(
   int list
 )
-"KingsLanding.ml" 74 1841 1864 "KingsLanding.ml" 76 1960 1966
+"KingsLanding.ml" 75 2012 2035 "KingsLanding.ml" 77 2131 2137
 type(
   int list -> int list
 )
 type(
   int list -> int list
 )
-"KingsLanding.ml" 74 1841 1843 "KingsLanding.ml" 76 1960 1966
+"KingsLanding.ml" 75 2012 2014 "KingsLanding.ml" 77 2131 2137
 type(
   'a -> int list -> int list
 )
-"KingsLanding.ml" 85 2167 2194 "KingsLanding.ml" 85 2167 2195
+"KingsLanding.ml" 87 2509 2536 "KingsLanding.ml" 87 2509 2537
 type(
   int
 )
 ident(
-  def n "KingsLanding.ml" 85 2167 2203 "KingsLanding.ml" 89 2325 2335
+  def n "KingsLanding.ml" 87 2509 2545 "KingsLanding.ml" 91 2667 2677
 )
-"KingsLanding.ml" 85 2167 2204 "KingsLanding.ml" 85 2167 2211
+"KingsLanding.ml" 87 2509 2546 "KingsLanding.ml" 87 2509 2553
 type(
   world_object_i
 )
 ident(
-  def stealer "KingsLanding.ml" 85 2167 2230 "KingsLanding.ml" 89 2325 2335
+  def stealer "KingsLanding.ml" 87 2509 2572 "KingsLanding.ml" 91 2667 2677
 )
-"KingsLanding.ml" 86 2238 2246 "KingsLanding.ml" 86 2238 2252
+"KingsLanding.ml" 88 2580 2588 "KingsLanding.ml" 88 2580 2594
 type(
   int
 )
 ident(
-  def stolen "KingsLanding.ml" 87 2273 2277 "KingsLanding.ml" 89 2325 2335
+  def stolen "KingsLanding.ml" 89 2615 2619 "KingsLanding.ml" 91 2667 2677
 )
-"KingsLanding.ml" 86 2238 2255 "KingsLanding.ml" 86 2238 2262
+"KingsLanding.ml" 88 2580 2597 "KingsLanding.ml" 88 2580 2604
 type(
   int -> int -> int
 )
 ident(
   ext_ref Core.Std.Int.min
 )
-"KingsLanding.ml" 86 2238 2263 "KingsLanding.ml" 86 2238 2267
+"KingsLanding.ml" 88 2580 2605 "KingsLanding.ml" 88 2580 2609
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"KingsLanding.ml" 86 2238 2268 "KingsLanding.ml" 86 2238 2269
+"KingsLanding.ml" 88 2580 2610 "KingsLanding.ml" 88 2580 2611
 type(
   int
 )
 ident(
-  int_ref n "KingsLanding.ml" 85 2167 2194 "KingsLanding.ml" 85 2167 2195
+  int_ref n "KingsLanding.ml" 87 2509 2536 "KingsLanding.ml" 87 2509 2537
 )
-"KingsLanding.ml" 86 2238 2255 "KingsLanding.ml" 86 2238 2269
+"KingsLanding.ml" 88 2580 2597 "KingsLanding.ml" 88 2580 2611
 call(
   stack
 )
 type(
   int
 )
-"KingsLanding.ml" 87 2273 2285 "KingsLanding.ml" 87 2273 2289
+"KingsLanding.ml" 89 2615 2627 "KingsLanding.ml" 89 2615 2631
 type(
   int
 )
 ident(
   ext_ref gold
 )
-"KingsLanding.ml" 87 2273 2290 "KingsLanding.ml" 87 2273 2291
+"KingsLanding.ml" 89 2615 2632 "KingsLanding.ml" 89 2615 2633
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( - )
 )
-"KingsLanding.ml" 87 2273 2292 "KingsLanding.ml" 87 2273 2298
+"KingsLanding.ml" 89 2615 2634 "KingsLanding.ml" 89 2615 2640
 type(
   int
 )
 ident(
-  int_ref stolen "KingsLanding.ml" 86 2238 2246 "KingsLanding.ml" 86 2238 2252
+  int_ref stolen "KingsLanding.ml" 88 2580 2588 "KingsLanding.ml" 88 2580 2594
 )
-"KingsLanding.ml" 87 2273 2285 "KingsLanding.ml" 87 2273 2298
+"KingsLanding.ml" 89 2615 2627 "KingsLanding.ml" 89 2615 2640
 type(
   int
 )
-"KingsLanding.ml" 87 2273 2277 "KingsLanding.ml" 87 2273 2298
+"KingsLanding.ml" 89 2615 2619 "KingsLanding.ml" 89 2615 2640
 type(
   unit
 )
-"KingsLanding.ml" 88 2300 2304 "KingsLanding.ml" 88 2300 2308
+"KingsLanding.ml" 90 2642 2646 "KingsLanding.ml" 90 2642 2650
 type(
   'a
 )
 ident(
   int_ref self "KingsLanding.ml" 24 606 614 "KingsLanding.ml" 24 606 618
 )
-"KingsLanding.ml" 88 2300 2304 "KingsLanding.ml" 88 2300 2315
+"KingsLanding.ml" 90 2642 2646 "KingsLanding.ml" 90 2642 2657
 call(
   stack
 )
 type(
   world_object_i -> unit
 )
-"KingsLanding.ml" 88 2300 2316 "KingsLanding.ml" 88 2300 2323
+"KingsLanding.ml" 90 2642 2658 "KingsLanding.ml" 90 2642 2665
 type(
   world_object_i
 )
 ident(
-  int_ref stealer "KingsLanding.ml" 85 2167 2204 "KingsLanding.ml" 85 2167 2211
+  int_ref stealer "KingsLanding.ml" 87 2509 2546 "KingsLanding.ml" 87 2509 2553
 )
-"KingsLanding.ml" 88 2300 2304 "KingsLanding.ml" 88 2300 2323
+"KingsLanding.ml" 90 2642 2646 "KingsLanding.ml" 90 2642 2665
 type(
   unit
 )
-"KingsLanding.ml" 89 2325 2329 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 91 2667 2671 "KingsLanding.ml" 91 2667 2677
 type(
   int
 )
 ident(
-  int_ref stolen "KingsLanding.ml" 86 2238 2246 "KingsLanding.ml" 86 2238 2252
+  int_ref stolen "KingsLanding.ml" 88 2580 2588 "KingsLanding.ml" 88 2580 2594
 )
-"KingsLanding.ml" 88 2300 2304 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 90 2642 2646 "KingsLanding.ml" 91 2667 2677
 type(
   int
 )
-"KingsLanding.ml" 87 2273 2277 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 89 2615 2619 "KingsLanding.ml" 91 2667 2677
 type(
   int
 )
-"KingsLanding.ml" 86 2238 2242 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 88 2580 2584 "KingsLanding.ml" 91 2667 2677
 type(
   int
 )
 type(
   int
 )
-"KingsLanding.ml" 85 2167 2203 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 87 2509 2545 "KingsLanding.ml" 91 2667 2677
 type(
   world_object_i -> int
 )
-"KingsLanding.ml" 85 2167 2193 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 87 2509 2535 "KingsLanding.ml" 91 2667 2677
 type(
   int -> world_object_i -> int
 )
 type(
   int -> world_object_i -> int
 )
-"KingsLanding.ml" 85 2167 2169 "KingsLanding.ml" 89 2325 2335
+"KingsLanding.ml" 87 2509 2511 "KingsLanding.ml" 91 2667 2677
 type(
   'a -> int -> world_object_i -> int
 )

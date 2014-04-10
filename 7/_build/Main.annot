@@ -426,7 +426,10 @@ type(
 )
 "Main.ml" 27 634 638 "Main.ml" 27 634 648
 type(
-  unit -> < get_pos : int * int; .. > -> Dragon.dragon
+  unit ->
+  < forfeit_treasury : int -> WorldObjectI.world_object_i -> int;
+    get_pos : int * int; .. > ->
+  Dragon.dragon
 )
 ident(
   def gen_dragon "Main.ml" 30 709 709 "Main.ml" 1 0 -1
@@ -437,7 +440,9 @@ type(
 )
 "Main.ml" 27 634 652 "Main.ml" 27 634 665
 type(
-  < get_pos : int * int; .. > as 'a
+  < forfeit_treasury : int -> WorldObjectI.world_object_i -> int;
+    get_pos : int * int; .. >
+  as 'a
 )
 ident(
   def kings_landing "Main.ml" 28 668 670 "Main.ml" 28 668 707
@@ -983,7 +988,7 @@ type(
   unit -> unit
 )
 ident(
-  def part2_initializer "Main.ml" 56 1969 1969 "Main.ml" 1 0 -1
+  def part2_initializer "Main.ml" 57 2185 2185 "Main.ml" 1 0 -1
 )
 "Main.ml" 49 1574 1596 "Main.ml" 49 1574 1598
 type(
@@ -1190,188 +1195,188 @@ type(
 type(
   unit -> unit
 )
-"Main.ml" 56 1969 1973 "Main.ml" 56 1969 1990
+"Main.ml" 57 2185 2189 "Main.ml" 57 2185 2206
 type(
   unit -> unit
 )
 ident(
-  def part3_initializer "Main.ml" 72 2362 2362 "Main.ml" 1 0 -1
+  def part3_initializer "Main.ml" 73 2578 2578 "Main.ml" 1 0 -1
 )
-"Main.ml" 56 1969 1991 "Main.ml" 56 1969 1993
+"Main.ml" 57 2185 2207 "Main.ml" 57 2185 2209
 type(
   unit
 )
-"Main.ml" 57 2003 2009 "Main.ml" 57 2003 2022
+"Main.ml" 58 2219 2225 "Main.ml" 58 2219 2238
 type(
   KingsLanding.kings_landing
 )
 ident(
-  def kings_landing "Main.ml" 58 2040 2042 "Main.ml" 70 2317 2360
+  def kings_landing "Main.ml" 59 2256 2258 "Main.ml" 71 2533 2576
 )
-"Main.ml" 57 2003 2025 "Main.ml" 57 2003 2033
+"Main.ml" 58 2219 2241 "Main.ml" 58 2219 2249
 type(
   unit -> KingsLanding.kings_landing
 )
 ident(
   int_ref gen_city "Main.ml" 33 823 827 "Main.ml" 33 823 835
 )
-"Main.ml" 57 2003 2034 "Main.ml" 57 2003 2036
+"Main.ml" 58 2219 2250 "Main.ml" 58 2219 2252
 type(
   unit
 )
-"Main.ml" 57 2003 2025 "Main.ml" 57 2003 2036
+"Main.ml" 58 2219 2241 "Main.ml" 58 2219 2252
 call(
   stack
 )
 type(
   KingsLanding.kings_landing
 )
-"Main.ml" 58 2040 2042 "Main.ml" 58 2040 2048
+"Main.ml" 59 2256 2258 "Main.ml" 59 2256 2264
 type(
   Dany.dany -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 58 2040 2050 "Main.ml" 58 2040 2058
+"Main.ml" 59 2256 2266 "Main.ml" 59 2256 2274
 type(
   unit -> Dany.dany
 )
 ident(
   int_ref gen_dany "Main.ml" 21 530 534 "Main.ml" 21 530 542
 )
-"Main.ml" 58 2040 2059 "Main.ml" 58 2040 2061
+"Main.ml" 59 2256 2275 "Main.ml" 59 2256 2277
 type(
   unit
 )
-"Main.ml" 58 2040 2050 "Main.ml" 58 2040 2061
+"Main.ml" 59 2256 2266 "Main.ml" 59 2256 2277
 call(
   stack
 )
 type(
   Dany.dany
 )
-"Main.ml" 58 2040 2042 "Main.ml" 58 2040 2062
+"Main.ml" 59 2256 2258 "Main.ml" 59 2256 2278
 type(
   unit
 )
-"Main.ml" 59 2064 2066 "Main.ml" 59 2064 2072
+"Main.ml" 60 2280 2282 "Main.ml" 60 2280 2288
 type(
   Wall.wall -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 59 2064 2074 "Main.ml" 59 2064 2082
+"Main.ml" 60 2280 2290 "Main.ml" 60 2280 2298
 type(
   unit -> Wall.wall
 )
 ident(
   int_ref gen_wall "Main.ml" 24 571 575 "Main.ml" 24 571 583
 )
-"Main.ml" 59 2064 2083 "Main.ml" 59 2064 2085
+"Main.ml" 60 2280 2299 "Main.ml" 60 2280 2301
 type(
   unit
 )
-"Main.ml" 59 2064 2074 "Main.ml" 59 2064 2085
+"Main.ml" 60 2280 2290 "Main.ml" 60 2280 2301
 call(
   stack
 )
 type(
   Wall.wall
 )
-"Main.ml" 59 2064 2066 "Main.ml" 59 2064 2086
+"Main.ml" 60 2280 2282 "Main.ml" 60 2280 2302
 type(
   unit
 )
-"Main.ml" 60 2088 2090 "Main.ml" 60 2088 2096
+"Main.ml" 61 2304 2306 "Main.ml" 61 2304 2312
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 60 2088 2098 "Main.ml" 60 2088 2107
+"Main.ml" 61 2304 2314 "Main.ml" 61 2304 2323
 type(
   unit -> unit
 )
 ident(
   int_ref gen_ponds "Main.ml" 7 89 93 "Main.ml" 7 89 102
 )
-"Main.ml" 60 2088 2108 "Main.ml" 60 2088 2110
+"Main.ml" 61 2304 2324 "Main.ml" 61 2304 2326
 type(
   unit
 )
-"Main.ml" 60 2088 2098 "Main.ml" 60 2088 2110
+"Main.ml" 61 2304 2314 "Main.ml" 61 2304 2326
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 60 2088 2090 "Main.ml" 60 2088 2111
+"Main.ml" 61 2304 2306 "Main.ml" 61 2304 2327
 type(
   unit
 )
-"Main.ml" 61 2113 2115 "Main.ml" 61 2113 2121
+"Main.ml" 62 2329 2331 "Main.ml" 62 2329 2337
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 61 2113 2123 "Main.ml" 61 2113 2132
+"Main.ml" 62 2329 2339 "Main.ml" 62 2329 2348
 type(
   unit -> unit
 )
 ident(
   int_ref gen_towns "Main.ml" 15 305 309 "Main.ml" 15 305 318
 )
-"Main.ml" 61 2113 2133 "Main.ml" 61 2113 2135
+"Main.ml" 62 2329 2349 "Main.ml" 62 2329 2351
 type(
   unit
 )
-"Main.ml" 61 2113 2123 "Main.ml" 61 2113 2135
+"Main.ml" 62 2329 2339 "Main.ml" 62 2329 2351
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 61 2113 2115 "Main.ml" 61 2113 2136
+"Main.ml" 62 2329 2331 "Main.ml" 62 2329 2352
 type(
   unit
 )
-"Main.ml" 63 2139 2145 "Main.ml" 63 2139 2150
+"Main.ml" 64 2355 2361 "Main.ml" 64 2355 2366
 type(
   int ref
 )
 ident(
-  def count "Main.ml" 64 2163 2165 "Main.ml" 70 2317 2360
+  def count "Main.ml" 65 2379 2381 "Main.ml" 71 2533 2576
 )
-"Main.ml" 63 2139 2153 "Main.ml" 63 2139 2156
+"Main.ml" 64 2355 2369 "Main.ml" 64 2355 2372
 type(
   int -> int ref
 )
 ident(
   ext_ref Pervasives.ref
 )
-"Main.ml" 63 2139 2157 "Main.ml" 63 2139 2159
+"Main.ml" 64 2355 2373 "Main.ml" 64 2355 2375
 type(
   int
 )
-"Main.ml" 63 2139 2153 "Main.ml" 63 2139 2159
+"Main.ml" 64 2355 2369 "Main.ml" 64 2355 2375
 type(
   int ref
 )
-"Main.ml" 64 2163 2172 "Main.ml" 64 2163 2177
+"Main.ml" 65 2379 2388 "Main.ml" 65 2379 2393
 type(
   int ref
 )
 ident(
-  int_ref count "Main.ml" 63 2139 2145 "Main.ml" 63 2139 2150
+  int_ref count "Main.ml" 64 2355 2361 "Main.ml" 64 2355 2366
 )
-"Main.ml" 64 2163 2171 "Main.ml" 64 2163 2177
+"Main.ml" 65 2379 2387 "Main.ml" 65 2379 2393
 type(
   int
 )
@@ -1381,121 +1386,121 @@ type(
 ident(
   ext_ref Pervasives.( ! )
 )
-"Main.ml" 64 2163 2178 "Main.ml" 64 2163 2179
+"Main.ml" 65 2379 2394 "Main.ml" 65 2379 2395
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( > )
 )
-"Main.ml" 64 2163 2180 "Main.ml" 64 2163 2181
+"Main.ml" 65 2379 2396 "Main.ml" 65 2379 2397
 type(
   int
 )
-"Main.ml" 64 2163 2171 "Main.ml" 64 2163 2181
+"Main.ml" 65 2379 2387 "Main.ml" 65 2379 2397
 type(
   bool
 )
-"Main.ml" 65 2185 2189 "Main.ml" 65 2185 2195
+"Main.ml" 66 2401 2405 "Main.ml" 66 2401 2411
 type(
   Human.human -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 65 2185 2197 "Main.ml" 65 2185 2212
+"Main.ml" 66 2401 2413 "Main.ml" 66 2401 2428
 type(
   int * int -> Human.human
 )
-"Main.ml" 65 2185 2214 "Main.ml" 65 2185 2224
+"Main.ml" 66 2401 2430 "Main.ml" 66 2401 2440
 type(
   int
 )
 ident(
   ext_ref World.size
 )
-"Main.ml" 65 2185 2224 "Main.ml" 65 2185 2225
+"Main.ml" 66 2401 2440 "Main.ml" 66 2401 2441
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( / )
 )
-"Main.ml" 65 2185 2225 "Main.ml" 65 2185 2226
+"Main.ml" 66 2401 2441 "Main.ml" 66 2401 2442
 type(
   int
 )
-"Main.ml" 65 2185 2214 "Main.ml" 65 2185 2226
+"Main.ml" 66 2401 2430 "Main.ml" 66 2401 2442
 type(
   int
 )
-"Main.ml" 65 2185 2226 "Main.ml" 65 2185 2227
+"Main.ml" 66 2401 2442 "Main.ml" 66 2401 2443
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( + )
 )
-"Main.ml" 65 2185 2227 "Main.ml" 65 2185 2228
+"Main.ml" 66 2401 2443 "Main.ml" 66 2401 2444
 type(
   int
 )
-"Main.ml" 65 2185 2214 "Main.ml" 65 2185 2228
+"Main.ml" 66 2401 2430 "Main.ml" 66 2401 2444
 type(
   int
 )
-"Main.ml" 65 2185 2229 "Main.ml" 65 2185 2239
+"Main.ml" 66 2401 2445 "Main.ml" 66 2401 2455
 type(
   int
 )
 ident(
   ext_ref World.size
 )
-"Main.ml" 65 2185 2239 "Main.ml" 65 2185 2240
+"Main.ml" 66 2401 2455 "Main.ml" 66 2401 2456
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( / )
 )
-"Main.ml" 65 2185 2240 "Main.ml" 65 2185 2241
+"Main.ml" 66 2401 2456 "Main.ml" 66 2401 2457
 type(
   int
 )
-"Main.ml" 65 2185 2229 "Main.ml" 65 2185 2241
+"Main.ml" 66 2401 2445 "Main.ml" 66 2401 2457
 type(
   int
 )
-"Main.ml" 65 2185 2214 "Main.ml" 65 2185 2241
+"Main.ml" 66 2401 2430 "Main.ml" 66 2401 2457
 type(
   int * int
 )
-"Main.ml" 65 2185 2197 "Main.ml" 65 2185 2242
+"Main.ml" 66 2401 2413 "Main.ml" 66 2401 2458
 call(
   stack
 )
 type(
   Human.human
 )
-"Main.ml" 65 2185 2189 "Main.ml" 65 2185 2243
+"Main.ml" 66 2401 2405 "Main.ml" 66 2401 2459
 type(
   unit
 )
-"Main.ml" 66 2245 2249 "Main.ml" 66 2245 2254
+"Main.ml" 67 2461 2465 "Main.ml" 67 2461 2470
 type(
   int ref
 )
 ident(
-  int_ref count "Main.ml" 63 2139 2145 "Main.ml" 63 2139 2150
+  int_ref count "Main.ml" 64 2355 2361 "Main.ml" 64 2355 2366
 )
-"Main.ml" 66 2245 2259 "Main.ml" 66 2245 2264
+"Main.ml" 67 2461 2475 "Main.ml" 67 2461 2480
 type(
   int ref
 )
 ident(
-  int_ref count "Main.ml" 63 2139 2145 "Main.ml" 63 2139 2150
+  int_ref count "Main.ml" 64 2355 2361 "Main.ml" 64 2355 2366
 )
-"Main.ml" 66 2245 2258 "Main.ml" 66 2245 2264
+"Main.ml" 67 2461 2474 "Main.ml" 67 2461 2480
 type(
   int
 )
@@ -1505,22 +1510,22 @@ type(
 ident(
   ext_ref Pervasives.( ! )
 )
-"Main.ml" 66 2245 2265 "Main.ml" 66 2245 2266
+"Main.ml" 67 2461 2481 "Main.ml" 67 2461 2482
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.( - )
 )
-"Main.ml" 66 2245 2267 "Main.ml" 66 2245 2268
+"Main.ml" 67 2461 2483 "Main.ml" 67 2461 2484
 type(
   int
 )
-"Main.ml" 66 2245 2258 "Main.ml" 66 2245 2268
+"Main.ml" 67 2461 2474 "Main.ml" 67 2461 2484
 type(
   int
 )
-"Main.ml" 66 2245 2249 "Main.ml" 66 2245 2268
+"Main.ml" 67 2461 2465 "Main.ml" 67 2461 2484
 type(
   unit
 )
@@ -1530,634 +1535,634 @@ type(
 ident(
   ext_ref Pervasives.( := )
 )
-"Main.ml" 65 2185 2189 "Main.ml" 67 2269 2275
+"Main.ml" 66 2401 2405 "Main.ml" 68 2485 2491
 type(
   unit
 )
-"Main.ml" 64 2163 2165 "Main.ml" 67 2269 2275
+"Main.ml" 65 2379 2381 "Main.ml" 68 2485 2491
 type(
   unit
 )
-"Main.ml" 69 2278 2280 "Main.ml" 69 2278 2286
+"Main.ml" 70 2494 2496 "Main.ml" 70 2494 2502
 type(
   Dragon.dragon -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 69 2278 2287 "Main.ml" 69 2278 2297
+"Main.ml" 70 2494 2503 "Main.ml" 70 2494 2513
 type(
   unit -> KingsLanding.kings_landing -> Dragon.dragon
 )
 ident(
   int_ref gen_dragon "Main.ml" 27 634 638 "Main.ml" 27 634 648
 )
-"Main.ml" 69 2278 2298 "Main.ml" 69 2278 2300
+"Main.ml" 70 2494 2514 "Main.ml" 70 2494 2516
 type(
   unit
 )
-"Main.ml" 69 2278 2301 "Main.ml" 69 2278 2314
+"Main.ml" 70 2494 2517 "Main.ml" 70 2494 2530
 type(
   KingsLanding.kings_landing
 )
 ident(
-  int_ref kings_landing "Main.ml" 57 2003 2009 "Main.ml" 57 2003 2022
+  int_ref kings_landing "Main.ml" 58 2219 2225 "Main.ml" 58 2219 2238
 )
-"Main.ml" 69 2278 2287 "Main.ml" 69 2278 2314
+"Main.ml" 70 2494 2503 "Main.ml" 70 2494 2530
 call(
   stack
 )
 type(
   Dragon.dragon
 )
-"Main.ml" 69 2278 2280 "Main.ml" 69 2278 2315
+"Main.ml" 70 2494 2496 "Main.ml" 70 2494 2531
 type(
   unit
 )
-"Main.ml" 70 2317 2319 "Main.ml" 70 2317 2325
+"Main.ml" 71 2533 2535 "Main.ml" 71 2533 2541
 type(
   WhiteWalker.white_walker -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 70 2317 2326 "Main.ml" 70 2317 2342
+"Main.ml" 71 2533 2542 "Main.ml" 71 2533 2558
 type(
   unit -> KingsLanding.kings_landing -> WhiteWalker.white_walker
 )
 ident(
   int_ref gen_white_walker "Main.ml" 30 709 713 "Main.ml" 30 709 729
 )
-"Main.ml" 70 2317 2343 "Main.ml" 70 2317 2345
+"Main.ml" 71 2533 2559 "Main.ml" 71 2533 2561
 type(
   unit
 )
-"Main.ml" 70 2317 2346 "Main.ml" 70 2317 2359
+"Main.ml" 71 2533 2562 "Main.ml" 71 2533 2575
 type(
   KingsLanding.kings_landing
 )
 ident(
-  int_ref kings_landing "Main.ml" 57 2003 2009 "Main.ml" 57 2003 2022
+  int_ref kings_landing "Main.ml" 58 2219 2225 "Main.ml" 58 2219 2238
 )
-"Main.ml" 70 2317 2326 "Main.ml" 70 2317 2359
+"Main.ml" 71 2533 2542 "Main.ml" 71 2533 2575
 call(
   stack
 )
 type(
   WhiteWalker.white_walker
 )
-"Main.ml" 70 2317 2319 "Main.ml" 70 2317 2360
+"Main.ml" 71 2533 2535 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 69 2278 2280 "Main.ml" 70 2317 2360
+"Main.ml" 70 2494 2496 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 64 2163 2165 "Main.ml" 70 2317 2360
+"Main.ml" 65 2379 2381 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 63 2139 2141 "Main.ml" 70 2317 2360
+"Main.ml" 64 2355 2357 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 61 2113 2115 "Main.ml" 70 2317 2360
+"Main.ml" 62 2329 2331 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 60 2088 2090 "Main.ml" 70 2317 2360
+"Main.ml" 61 2304 2306 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 59 2064 2066 "Main.ml" 70 2317 2360
+"Main.ml" 60 2280 2282 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 58 2040 2042 "Main.ml" 70 2317 2360
+"Main.ml" 59 2256 2258 "Main.ml" 71 2533 2576
 type(
   unit
 )
-"Main.ml" 57 2003 2005 "Main.ml" 70 2317 2360
+"Main.ml" 58 2219 2221 "Main.ml" 71 2533 2576
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 56 1969 1991 "Main.ml" 70 2317 2360
+"Main.ml" 57 2185 2207 "Main.ml" 71 2533 2576
 type(
   unit -> unit
 )
-"Main.ml" 72 2362 2366 "Main.ml" 72 2362 2383
+"Main.ml" 73 2578 2582 "Main.ml" 73 2578 2599
 type(
   unit -> unit
 )
 ident(
-  def part4_initializer "Main.ml" 77 2470 2470 "Main.ml" 1 0 -1
+  def part4_initializer "Main.ml" 78 2686 2686 "Main.ml" 1 0 -1
 )
-"Main.ml" 72 2362 2384 "Main.ml" 72 2362 2386
+"Main.ml" 73 2578 2600 "Main.ml" 73 2578 2602
 type(
   unit
 )
-"Main.ml" 73 2396 2398 "Main.ml" 73 2396 2404
+"Main.ml" 74 2612 2614 "Main.ml" 74 2612 2620
 type(
   KingsLanding.kings_landing -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 73 2396 2406 "Main.ml" 73 2396 2414
+"Main.ml" 74 2612 2622 "Main.ml" 74 2612 2630
 type(
   unit -> KingsLanding.kings_landing
 )
 ident(
   int_ref gen_city "Main.ml" 33 823 827 "Main.ml" 33 823 835
 )
-"Main.ml" 73 2396 2415 "Main.ml" 73 2396 2417
+"Main.ml" 74 2612 2631 "Main.ml" 74 2612 2633
 type(
   unit
 )
-"Main.ml" 73 2396 2406 "Main.ml" 73 2396 2417
+"Main.ml" 74 2612 2622 "Main.ml" 74 2612 2633
 call(
   stack
 )
 type(
   KingsLanding.kings_landing
 )
-"Main.ml" 73 2396 2398 "Main.ml" 73 2396 2418
+"Main.ml" 74 2612 2614 "Main.ml" 74 2612 2634
 type(
   unit
 )
-"Main.ml" 74 2420 2422 "Main.ml" 74 2420 2428
+"Main.ml" 75 2636 2638 "Main.ml" 75 2636 2644
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 74 2420 2430 "Main.ml" 74 2420 2439
+"Main.ml" 75 2636 2646 "Main.ml" 75 2636 2655
 type(
   unit -> unit
 )
 ident(
   int_ref gen_ponds "Main.ml" 7 89 93 "Main.ml" 7 89 102
 )
-"Main.ml" 74 2420 2440 "Main.ml" 74 2420 2442
+"Main.ml" 75 2636 2656 "Main.ml" 75 2636 2658
 type(
   unit
 )
-"Main.ml" 74 2420 2430 "Main.ml" 74 2420 2442
+"Main.ml" 75 2636 2646 "Main.ml" 75 2636 2658
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 74 2420 2422 "Main.ml" 74 2420 2443
+"Main.ml" 75 2636 2638 "Main.ml" 75 2636 2659
 type(
   unit
 )
-"Main.ml" 75 2445 2447 "Main.ml" 75 2445 2453
+"Main.ml" 76 2661 2663 "Main.ml" 76 2661 2669
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 75 2445 2455 "Main.ml" 75 2445 2464
+"Main.ml" 76 2661 2671 "Main.ml" 76 2661 2680
 type(
   unit -> unit
 )
 ident(
   int_ref gen_towns "Main.ml" 15 305 309 "Main.ml" 15 305 318
 )
-"Main.ml" 75 2445 2465 "Main.ml" 75 2445 2467
+"Main.ml" 76 2661 2681 "Main.ml" 76 2661 2683
 type(
   unit
 )
-"Main.ml" 75 2445 2455 "Main.ml" 75 2445 2467
+"Main.ml" 76 2661 2671 "Main.ml" 76 2661 2683
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 75 2445 2447 "Main.ml" 75 2445 2468
+"Main.ml" 76 2661 2663 "Main.ml" 76 2661 2684
 type(
   unit
 )
-"Main.ml" 74 2420 2422 "Main.ml" 75 2445 2468
+"Main.ml" 75 2636 2638 "Main.ml" 76 2661 2684
 type(
   unit
 )
-"Main.ml" 73 2396 2398 "Main.ml" 75 2445 2468
+"Main.ml" 74 2612 2614 "Main.ml" 76 2661 2684
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 72 2362 2384 "Main.ml" 75 2445 2468
+"Main.ml" 73 2578 2600 "Main.ml" 76 2661 2684
 type(
   unit -> unit
 )
-"Main.ml" 77 2470 2474 "Main.ml" 77 2470 2491
+"Main.ml" 78 2686 2690 "Main.ml" 78 2686 2707
 type(
   unit -> unit
 )
 ident(
-  def final_initializer "Main.ml" 85 2702 2702 "Main.ml" 1 0 -1
+  def final_initializer "Main.ml" 86 2918 2918 "Main.ml" 1 0 -1
 )
-"Main.ml" 77 2470 2492 "Main.ml" 77 2470 2494
+"Main.ml" 78 2686 2708 "Main.ml" 78 2686 2710
 type(
   unit
 )
-"Main.ml" 78 2504 2506 "Main.ml" 78 2504 2512
+"Main.ml" 79 2720 2722 "Main.ml" 79 2720 2728
 type(
   KingsLanding.kings_landing -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 78 2504 2514 "Main.ml" 78 2504 2522
+"Main.ml" 79 2720 2730 "Main.ml" 79 2720 2738
 type(
   unit -> KingsLanding.kings_landing
 )
 ident(
   int_ref gen_city "Main.ml" 33 823 827 "Main.ml" 33 823 835
 )
-"Main.ml" 78 2504 2523 "Main.ml" 78 2504 2525
+"Main.ml" 79 2720 2739 "Main.ml" 79 2720 2741
 type(
   unit
 )
-"Main.ml" 78 2504 2514 "Main.ml" 78 2504 2525
+"Main.ml" 79 2720 2730 "Main.ml" 79 2720 2741
 call(
   stack
 )
 type(
   KingsLanding.kings_landing
 )
-"Main.ml" 78 2504 2506 "Main.ml" 78 2504 2526
+"Main.ml" 79 2720 2722 "Main.ml" 79 2720 2742
 type(
   unit
 )
-"Main.ml" 79 2528 2530 "Main.ml" 79 2528 2536
+"Main.ml" 80 2744 2746 "Main.ml" 80 2744 2752
 type(
   Dany.dany -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 79 2528 2538 "Main.ml" 79 2528 2546
+"Main.ml" 80 2744 2754 "Main.ml" 80 2744 2762
 type(
   unit -> Dany.dany
 )
 ident(
   int_ref gen_dany "Main.ml" 21 530 534 "Main.ml" 21 530 542
 )
-"Main.ml" 79 2528 2547 "Main.ml" 79 2528 2549
+"Main.ml" 80 2744 2763 "Main.ml" 80 2744 2765
 type(
   unit
 )
-"Main.ml" 79 2528 2538 "Main.ml" 79 2528 2549
+"Main.ml" 80 2744 2754 "Main.ml" 80 2744 2765
 call(
   stack
 )
 type(
   Dany.dany
 )
-"Main.ml" 79 2528 2530 "Main.ml" 79 2528 2550
+"Main.ml" 80 2744 2746 "Main.ml" 80 2744 2766
 type(
   unit
 )
-"Main.ml" 80 2552 2554 "Main.ml" 80 2552 2560
+"Main.ml" 81 2768 2770 "Main.ml" 81 2768 2776
 type(
   Wall.wall -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 80 2552 2562 "Main.ml" 80 2552 2570
+"Main.ml" 81 2768 2778 "Main.ml" 81 2768 2786
 type(
   unit -> Wall.wall
 )
 ident(
   int_ref gen_wall "Main.ml" 24 571 575 "Main.ml" 24 571 583
 )
-"Main.ml" 80 2552 2571 "Main.ml" 80 2552 2573
+"Main.ml" 81 2768 2787 "Main.ml" 81 2768 2789
 type(
   unit
 )
-"Main.ml" 80 2552 2562 "Main.ml" 80 2552 2573
+"Main.ml" 81 2768 2778 "Main.ml" 81 2768 2789
 call(
   stack
 )
 type(
   Wall.wall
 )
-"Main.ml" 80 2552 2554 "Main.ml" 80 2552 2574
+"Main.ml" 81 2768 2770 "Main.ml" 81 2768 2790
 type(
   unit
 )
-"Main.ml" 81 2576 2578 "Main.ml" 81 2576 2584
+"Main.ml" 82 2792 2794 "Main.ml" 82 2792 2800
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 81 2576 2586 "Main.ml" 81 2576 2595
+"Main.ml" 82 2792 2802 "Main.ml" 82 2792 2811
 type(
   unit -> unit
 )
 ident(
   int_ref gen_ponds "Main.ml" 7 89 93 "Main.ml" 7 89 102
 )
-"Main.ml" 81 2576 2596 "Main.ml" 81 2576 2598
+"Main.ml" 82 2792 2812 "Main.ml" 82 2792 2814
 type(
   unit
 )
-"Main.ml" 81 2576 2586 "Main.ml" 81 2576 2598
+"Main.ml" 82 2792 2802 "Main.ml" 82 2792 2814
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 81 2576 2578 "Main.ml" 81 2576 2599
+"Main.ml" 82 2792 2794 "Main.ml" 82 2792 2815
 type(
   unit
 )
-"Main.ml" 82 2601 2603 "Main.ml" 82 2601 2609
+"Main.ml" 83 2817 2819 "Main.ml" 83 2817 2825
 type(
   unit -> unit
 )
 ident(
   ext_ref Pervasives.ignore
 )
-"Main.ml" 82 2601 2611 "Main.ml" 82 2601 2620
+"Main.ml" 83 2817 2827 "Main.ml" 83 2817 2836
 type(
   unit -> unit
 )
 ident(
   int_ref gen_towns "Main.ml" 15 305 309 "Main.ml" 15 305 318
 )
-"Main.ml" 82 2601 2621 "Main.ml" 82 2601 2623
+"Main.ml" 83 2817 2837 "Main.ml" 83 2817 2839
 type(
   unit
 )
-"Main.ml" 82 2601 2611 "Main.ml" 82 2601 2623
+"Main.ml" 83 2817 2827 "Main.ml" 83 2817 2839
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 82 2601 2603 "Main.ml" 82 2601 2624
+"Main.ml" 83 2817 2819 "Main.ml" 83 2817 2840
 type(
   unit
 )
-"Main.ml" 81 2576 2578 "Main.ml" 82 2601 2624
+"Main.ml" 82 2792 2794 "Main.ml" 83 2817 2840
 type(
   unit
 )
-"Main.ml" 80 2552 2554 "Main.ml" 82 2601 2624
+"Main.ml" 81 2768 2770 "Main.ml" 83 2817 2840
 type(
   unit
 )
-"Main.ml" 79 2528 2530 "Main.ml" 82 2601 2624
+"Main.ml" 80 2744 2746 "Main.ml" 83 2817 2840
 type(
   unit
 )
-"Main.ml" 78 2504 2506 "Main.ml" 82 2601 2624
+"Main.ml" 79 2720 2722 "Main.ml" 83 2817 2840
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 77 2470 2492 "Main.ml" 82 2601 2624
+"Main.ml" 78 2686 2708 "Main.ml" 83 2817 2840
 type(
   unit -> unit
 )
-"Main.ml" 85 2702 2706 "Main.ml" 85 2702 2716
+"Main.ml" 86 2918 2922 "Main.ml" 86 2918 2932
 type(
   int -> unit -> unit
 )
 ident(
-  def event_loop "Main.ml" 100 3288 3288 "Main.ml" 1 0 -1
+  def event_loop "Main.ml" 101 3504 3504 "Main.ml" 1 0 -1
 )
-"Main.ml" 85 2702 2717 "Main.ml" 85 2702 2721
+"Main.ml" 86 2918 2933 "Main.ml" 86 2918 2937
 type(
   int
 )
 ident(
-  def part "Main.ml" 85 2702 2722 "Main.ml" 96 3166 3171
+  def part "Main.ml" 86 2918 2938 "Main.ml" 97 3382 3387
 )
-"Main.ml" 85 2702 2722 "Main.ml" 85 2702 2724
+"Main.ml" 86 2918 2938 "Main.ml" 86 2918 2940
 type(
   unit
 )
-"Main.ml" 86 2734 2736 "Main.ml" 86 2734 2756
+"Main.ml" 87 2950 2952 "Main.ml" 87 2950 2972
 type(
   unit -> unit
 )
 ident(
   ext_ref Graphics.clear_graph
 )
-"Main.ml" 86 2734 2757 "Main.ml" 86 2734 2759
+"Main.ml" 87 2950 2973 "Main.ml" 87 2950 2975
 type(
   unit
 )
-"Main.ml" 86 2734 2736 "Main.ml" 86 2734 2759
+"Main.ml" 87 2950 2952 "Main.ml" 87 2950 2975
 type(
   unit
 )
-"Main.ml" 87 2762 2767 "Main.ml" 87 2762 2771
+"Main.ml" 88 2978 2983 "Main.ml" 88 2978 2987
 type(
   int
 )
 ident(
-  int_ref part "Main.ml" 85 2702 2717 "Main.ml" 85 2702 2721
+  int_ref part "Main.ml" 86 2918 2933 "Main.ml" 86 2918 2937
 )
-"Main.ml" 87 2762 2772 "Main.ml" 87 2762 2774
+"Main.ml" 88 2978 2988 "Main.ml" 88 2978 2990
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( >= )
 )
-"Main.ml" 87 2762 2775 "Main.ml" 87 2762 2776
+"Main.ml" 88 2978 2991 "Main.ml" 88 2978 2992
 type(
   int
 )
-"Main.ml" 87 2762 2767 "Main.ml" 87 2762 2776
+"Main.ml" 88 2978 2983 "Main.ml" 88 2978 2992
 type(
   bool
 )
-"Main.ml" 87 2762 2782 "Main.ml" 87 2762 2800
+"Main.ml" 88 2978 2998 "Main.ml" 88 2978 3016
 type(
   unit Event51.event -> unit -> unit
 )
 ident(
   ext_ref Event51.Event51.fire_event
 )
-"Main.ml" 87 2762 2801 "Main.ml" 87 2762 2817
+"Main.ml" 88 2978 3017 "Main.ml" 88 2978 3033
 type(
   unit Event51.event
 )
 ident(
   ext_ref World.move_event
 )
-"Main.ml" 87 2762 2818 "Main.ml" 87 2762 2820
+"Main.ml" 88 2978 3034 "Main.ml" 88 2978 3036
 type(
   unit
 )
-"Main.ml" 87 2762 2782 "Main.ml" 87 2762 2820
+"Main.ml" 88 2978 2998 "Main.ml" 88 2978 3036
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 87 2762 2764 "Main.ml" 87 2762 2820
+"Main.ml" 88 2978 2980 "Main.ml" 88 2978 3036
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 88 2823 2828 "Main.ml" 88 2823 2832
+"Main.ml" 89 3039 3044 "Main.ml" 89 3039 3048
 type(
   int
 )
 ident(
-  int_ref part "Main.ml" 85 2702 2717 "Main.ml" 85 2702 2721
+  int_ref part "Main.ml" 86 2918 2933 "Main.ml" 86 2918 2937
 )
-"Main.ml" 88 2823 2833 "Main.ml" 88 2823 2835
+"Main.ml" 89 3039 3049 "Main.ml" 89 3039 3051
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( >= )
 )
-"Main.ml" 88 2823 2836 "Main.ml" 88 2823 2837
+"Main.ml" 89 3039 3052 "Main.ml" 89 3039 3053
 type(
   int
 )
-"Main.ml" 88 2823 2828 "Main.ml" 88 2823 2837
+"Main.ml" 89 3039 3044 "Main.ml" 89 3039 3053
 type(
   bool
 )
-"Main.ml" 88 2823 2843 "Main.ml" 88 2823 2861
+"Main.ml" 89 3039 3059 "Main.ml" 89 3039 3077
 type(
   unit Event51.event -> unit -> unit
 )
 ident(
   ext_ref Event51.Event51.fire_event
 )
-"Main.ml" 88 2823 2862 "Main.ml" 88 2823 2880
+"Main.ml" 89 3039 3078 "Main.ml" 89 3039 3096
 type(
   unit Event51.event
 )
 ident(
   ext_ref World.action_event
 )
-"Main.ml" 88 2823 2881 "Main.ml" 88 2823 2883
+"Main.ml" 89 3039 3097 "Main.ml" 89 3039 3099
 type(
   unit
 )
-"Main.ml" 88 2823 2843 "Main.ml" 88 2823 2883
+"Main.ml" 89 3039 3059 "Main.ml" 89 3039 3099
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 88 2823 2825 "Main.ml" 88 2823 2883
+"Main.ml" 89 3039 3041 "Main.ml" 89 3039 3099
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 89 2886 2891 "Main.ml" 89 2886 2895
+"Main.ml" 90 3102 3107 "Main.ml" 90 3102 3111
 type(
   int
 )
 ident(
-  int_ref part "Main.ml" 85 2702 2717 "Main.ml" 85 2702 2721
+  int_ref part "Main.ml" 86 2918 2933 "Main.ml" 86 2918 2937
 )
-"Main.ml" 89 2886 2896 "Main.ml" 89 2886 2898
+"Main.ml" 90 3102 3112 "Main.ml" 90 3102 3114
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( >= )
 )
-"Main.ml" 89 2886 2899 "Main.ml" 89 2886 2900
+"Main.ml" 90 3102 3115 "Main.ml" 90 3102 3116
 type(
   int
 )
-"Main.ml" 89 2886 2891 "Main.ml" 89 2886 2900
+"Main.ml" 90 3102 3107 "Main.ml" 90 3102 3116
 type(
   bool
 )
-"Main.ml" 89 2886 2906 "Main.ml" 89 2886 2924
+"Main.ml" 90 3102 3122 "Main.ml" 90 3102 3140
 type(
   unit Event51.event -> unit -> unit
 )
 ident(
   ext_ref Event51.Event51.fire_event
 )
-"Main.ml" 89 2886 2925 "Main.ml" 89 2886 2940
+"Main.ml" 90 3102 3141 "Main.ml" 90 3102 3156
 type(
   unit Event51.event
 )
 ident(
   ext_ref World.age_event
 )
-"Main.ml" 89 2886 2941 "Main.ml" 89 2886 2943
+"Main.ml" 90 3102 3157 "Main.ml" 90 3102 3159
 type(
   unit
 )
-"Main.ml" 89 2886 2906 "Main.ml" 89 2886 2943
+"Main.ml" 90 3102 3122 "Main.ml" 90 3102 3159
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 89 2886 2888 "Main.ml" 89 2886 2943
+"Main.ml" 90 3102 3104 "Main.ml" 90 3102 3159
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 91 2964 2966 "Main.ml" 91 2964 2979
+"Main.ml" 92 3180 3182 "Main.ml" 92 3180 3195
 type(
   (int * int -> unit) -> unit
 )
 ident(
   ext_ref World.indices
 )
-"Main.ml" 91 2964 2990 "Main.ml" 91 2964 2991
+"Main.ml" 92 3180 3206 "Main.ml" 92 3180 3207
 type(
   int * int
 )
 ident(
-  def p "Main.ml" 92 2995 2999 "Main.ml" 95 3124 3165
+  def p "Main.ml" 93 3211 3215 "Main.ml" 96 3340 3381
 )
-"Main.ml" 92 2995 3003 "Main.ml" 92 2995 3009
+"Main.ml" 93 3211 3219 "Main.ml" 93 3211 3225
 type(
   WorldObjectI.world_object_i list
 )
 ident(
-  def sorted "Main.ml" 95 3124 3128 "Main.ml" 95 3124 3165
+  def sorted "Main.ml" 96 3340 3344 "Main.ml" 96 3340 3381
 )
-"Main.ml" 92 2995 3012 "Main.ml" 92 2995 3021
+"Main.ml" 93 3211 3228 "Main.ml" 93 3211 3237
 type(
   cmp:(WorldObjectI.world_object_i -> WorldObjectI.world_object_i -> int) ->
   WorldObjectI.world_object_i list -> WorldObjectI.world_object_i list
@@ -2165,96 +2170,96 @@ type(
 ident(
   ext_ref Core.Std.List.sort
 )
-"Main.ml" 92 2995 3032 "Main.ml" 92 2995 3033
+"Main.ml" 93 3211 3248 "Main.ml" 93 3211 3249
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  def x "Main.ml" 92 2995 3034 "Main.ml" 92 2995 3074
+  def x "Main.ml" 93 3211 3250 "Main.ml" 93 3211 3290
 )
-"Main.ml" 92 2995 3034 "Main.ml" 92 2995 3035
+"Main.ml" 93 3211 3250 "Main.ml" 93 3211 3251
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  def y "Main.ml" 92 2995 3039 "Main.ml" 92 2995 3074
+  def y "Main.ml" 93 3211 3255 "Main.ml" 93 3211 3290
 )
-"Main.ml" 92 2995 3039 "Main.ml" 92 2995 3046
+"Main.ml" 93 3211 3255 "Main.ml" 93 3211 3262
 type(
   int -> int -> int
 )
 ident(
   ext_ref Pervasives.compare
 )
-"Main.ml" 92 2995 3047 "Main.ml" 92 2995 3048
+"Main.ml" 93 3211 3263 "Main.ml" 93 3211 3264
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  int_ref x "Main.ml" 92 2995 3032 "Main.ml" 92 2995 3033
+  int_ref x "Main.ml" 93 3211 3248 "Main.ml" 93 3211 3249
 )
-"Main.ml" 92 2995 3047 "Main.ml" 92 2995 3060
+"Main.ml" 93 3211 3263 "Main.ml" 93 3211 3276
 call(
   stack
 )
 type(
   int
 )
-"Main.ml" 92 2995 3061 "Main.ml" 92 2995 3062
+"Main.ml" 93 3211 3277 "Main.ml" 93 3211 3278
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  int_ref y "Main.ml" 92 2995 3034 "Main.ml" 92 2995 3035
+  int_ref y "Main.ml" 93 3211 3250 "Main.ml" 93 3211 3251
 )
-"Main.ml" 92 2995 3061 "Main.ml" 92 2995 3074
+"Main.ml" 93 3211 3277 "Main.ml" 93 3211 3290
 call(
   stack
 )
 type(
   int
 )
-"Main.ml" 92 2995 3039 "Main.ml" 92 2995 3074
+"Main.ml" 93 3211 3255 "Main.ml" 93 3211 3290
 type(
   int
 )
-"Main.ml" 92 2995 3034 "Main.ml" 92 2995 3074
+"Main.ml" 93 3211 3250 "Main.ml" 93 3211 3290
 type(
   WorldObjectI.world_object_i -> int
 )
-"Main.ml" 92 2995 3032 "Main.ml" 92 2995 3074
+"Main.ml" 93 3211 3248 "Main.ml" 93 3211 3290
 type(
   WorldObjectI.world_object_i -> WorldObjectI.world_object_i -> int
 )
-"Main.ml" 93 3076 3104 "Main.ml" 93 3076 3113
+"Main.ml" 94 3292 3320 "Main.ml" 94 3292 3329
 type(
   int * int -> WorldObjectI.world_object_i list
 )
 ident(
   ext_ref World.get
 )
-"Main.ml" 93 3076 3114 "Main.ml" 93 3076 3115
+"Main.ml" 94 3292 3330 "Main.ml" 94 3292 3331
 type(
   int * int
 )
 ident(
-  int_ref p "Main.ml" 91 2964 2990 "Main.ml" 91 2964 2991
+  int_ref p "Main.ml" 92 3180 3206 "Main.ml" 92 3180 3207
 )
-"Main.ml" 93 3076 3104 "Main.ml" 93 3076 3115
+"Main.ml" 94 3292 3320 "Main.ml" 94 3292 3331
 call(
   stack
 )
 type(
   WorldObjectI.world_object_i list
 )
-"Main.ml" 92 2995 3012 "Main.ml" 93 3076 3116
+"Main.ml" 93 3211 3228 "Main.ml" 94 3292 3332
 call(
   stack
 )
 type(
   WorldObjectI.world_object_i list
 )
-"Main.ml" 95 3124 3128 "Main.ml" 95 3124 3137
+"Main.ml" 96 3340 3344 "Main.ml" 96 3340 3353
 type(
   WorldObjectI.world_object_i list ->
   f:(WorldObjectI.world_object_i -> unit) -> unit
@@ -2262,132 +2267,132 @@ type(
 ident(
   ext_ref Core.Std.List.iter
 )
-"Main.ml" 95 3124 3146 "Main.ml" 95 3124 3147
+"Main.ml" 96 3340 3362 "Main.ml" 96 3340 3363
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  def w "Main.ml" 95 3124 3151 "Main.ml" 95 3124 3157
+  def w "Main.ml" 96 3340 3367 "Main.ml" 96 3340 3373
 )
-"Main.ml" 95 3124 3151 "Main.ml" 95 3124 3152
+"Main.ml" 96 3340 3367 "Main.ml" 96 3340 3368
 type(
   WorldObjectI.world_object_i
 )
 ident(
-  int_ref w "Main.ml" 95 3124 3146 "Main.ml" 95 3124 3147
+  int_ref w "Main.ml" 96 3340 3362 "Main.ml" 96 3340 3363
 )
-"Main.ml" 95 3124 3151 "Main.ml" 95 3124 3157
+"Main.ml" 96 3340 3367 "Main.ml" 96 3340 3373
 call(
   tail
 )
 type(
   unit
 )
-"Main.ml" 95 3124 3146 "Main.ml" 95 3124 3157
+"Main.ml" 96 3340 3362 "Main.ml" 96 3340 3373
 type(
   WorldObjectI.world_object_i -> unit
 )
-"Main.ml" 95 3124 3159 "Main.ml" 95 3124 3165
+"Main.ml" 96 3340 3375 "Main.ml" 96 3340 3381
 type(
   WorldObjectI.world_object_i list
 )
 ident(
-  int_ref sorted "Main.ml" 92 2995 3003 "Main.ml" 92 2995 3009
+  int_ref sorted "Main.ml" 93 3211 3219 "Main.ml" 93 3211 3225
 )
-"Main.ml" 95 3124 3128 "Main.ml" 95 3124 3165
+"Main.ml" 96 3340 3344 "Main.ml" 96 3340 3381
 call(
   tail
 )
 type(
   unit
 )
-"Main.ml" 92 2995 2999 "Main.ml" 95 3124 3165
+"Main.ml" 93 3211 3215 "Main.ml" 96 3340 3381
 type(
   unit
 )
-"Main.ml" 91 2964 2990 "Main.ml" 95 3124 3165
+"Main.ml" 92 3180 3206 "Main.ml" 96 3340 3381
 type(
   int * int -> unit
 )
-"Main.ml" 91 2964 2966 "Main.ml" 96 3166 3171
+"Main.ml" 92 3180 3182 "Main.ml" 97 3382 3387
 call(
   tail
 )
 type(
   unit
 )
-"Main.ml" 89 2886 2888 "Main.ml" 96 3166 3171
+"Main.ml" 90 3102 3104 "Main.ml" 97 3382 3387
 type(
   unit
 )
-"Main.ml" 88 2823 2825 "Main.ml" 96 3166 3171
+"Main.ml" 89 3039 3041 "Main.ml" 97 3382 3387
 type(
   unit
 )
-"Main.ml" 87 2762 2764 "Main.ml" 96 3166 3171
+"Main.ml" 88 2978 2980 "Main.ml" 97 3382 3387
 type(
   unit
 )
-"Main.ml" 86 2734 2736 "Main.ml" 96 3166 3171
+"Main.ml" 87 2950 2952 "Main.ml" 97 3382 3387
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 85 2702 2722 "Main.ml" 96 3166 3171
+"Main.ml" 86 2918 2938 "Main.ml" 97 3382 3387
 type(
   unit -> unit
 )
-"Main.ml" 85 2702 2717 "Main.ml" 96 3166 3171
+"Main.ml" 86 2918 2933 "Main.ml" 97 3382 3387
 type(
   int -> unit -> unit
 )
-"Main.ml" 100 3288 3292 "Main.ml" 100 3288 3302
+"Main.ml" 101 3504 3508 "Main.ml" 101 3504 3518
 type(
   unit -> (unit -> unit) * int
 )
 ident(
-  def parse_args "Main.ml" 112 3702 3702 "Main.ml" 1 0 -1
+  def parse_args "Main.ml" 113 3918 3918 "Main.ml" 1 0 -1
 )
-"Main.ml" 100 3288 3303 "Main.ml" 100 3288 3305
+"Main.ml" 101 3504 3519 "Main.ml" 101 3504 3521
 type(
   unit
 )
-"Main.ml" 101 3331 3337 "Main.ml" 101 3331 3342
+"Main.ml" 102 3547 3553 "Main.ml" 102 3547 3558
 type(
   unit -> 'a
 )
 ident(
-  def usage "Main.ml" 102 3409 3411 "Main.ml" 109 3682 3699
+  def usage "Main.ml" 103 3625 3627 "Main.ml" 110 3898 3915
 )
-"Main.ml" 101 3331 3343 "Main.ml" 101 3331 3345
+"Main.ml" 102 3547 3559 "Main.ml" 102 3547 3561
 type(
   unit
 )
-"Main.ml" 101 3331 3348 "Main.ml" 101 3331 3361
+"Main.ml" 102 3547 3564 "Main.ml" 102 3547 3577
 type(
   (string -> unit, out_channel, unit) format -> string -> unit
 )
 ident(
   ext_ref Core.Std.Printf.printf
 )
-"Main.ml" 101 3331 3362 "Main.ml" 101 3331 3384
+"Main.ml" 102 3547 3578 "Main.ml" 102 3547 3600
 type(
   (string -> unit, out_channel, unit) format
 )
-"Main.ml" 101 3331 3385 "Main.ml" 101 3331 3393
+"Main.ml" 102 3547 3601 "Main.ml" 102 3547 3609
 type(
   string array
 )
 ident(
   ext_ref Core.Std.Sys.argv
 )
-"Main.ml" 101 3331 3395 "Main.ml" 101 3331 3396
+"Main.ml" 102 3547 3611 "Main.ml" 102 3547 3612
 type(
   int
 )
-"Main.ml" 101 3331 3385 "Main.ml" 101 3331 3397
+"Main.ml" 102 3547 3601 "Main.ml" 102 3547 3613
 type(
   string
 )
@@ -2397,112 +2402,112 @@ type(
 ident(
   ext_ref Core.Std.Array.get
 )
-"Main.ml" 101 3331 3348 "Main.ml" 101 3331 3397
+"Main.ml" 102 3547 3564 "Main.ml" 102 3547 3613
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 101 3331 3399 "Main.ml" 101 3331 3403
+"Main.ml" 102 3547 3615 "Main.ml" 102 3547 3619
 type(
   int -> 'a
 )
 ident(
   ext_ref Pervasives.exit
 )
-"Main.ml" 101 3331 3404 "Main.ml" 101 3331 3405
+"Main.ml" 102 3547 3620 "Main.ml" 102 3547 3621
 type(
   int
 )
-"Main.ml" 101 3331 3399 "Main.ml" 101 3331 3405
+"Main.ml" 102 3547 3615 "Main.ml" 102 3547 3621
 call(
   tail
 )
 type(
   'a
 )
-"Main.ml" 101 3331 3348 "Main.ml" 101 3331 3405
+"Main.ml" 102 3547 3564 "Main.ml" 102 3547 3621
 type(
   'a
 )
-"Main.ml" 101 3331 3343 "Main.ml" 101 3331 3405
+"Main.ml" 102 3547 3559 "Main.ml" 102 3547 3621
 type(
   unit -> 'a
 )
-"Main.ml" 102 3409 3414 "Main.ml" 102 3409 3426
+"Main.ml" 103 3625 3630 "Main.ml" 103 3625 3642
 type(
   string array -> int
 )
 ident(
   ext_ref Core.Std.Array.length
 )
-"Main.ml" 102 3409 3427 "Main.ml" 102 3409 3435
+"Main.ml" 103 3625 3643 "Main.ml" 103 3625 3651
 type(
   string array
 )
 ident(
   ext_ref Core.Std.Sys.argv
 )
-"Main.ml" 102 3409 3414 "Main.ml" 102 3409 3435
+"Main.ml" 103 3625 3630 "Main.ml" 103 3625 3651
 call(
   stack
 )
 type(
   int
 )
-"Main.ml" 102 3409 3436 "Main.ml" 102 3409 3438
+"Main.ml" 103 3625 3652 "Main.ml" 103 3625 3654
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( <> )
 )
-"Main.ml" 102 3409 3439 "Main.ml" 102 3409 3440
+"Main.ml" 103 3625 3655 "Main.ml" 103 3625 3656
 type(
   int
 )
-"Main.ml" 102 3409 3414 "Main.ml" 102 3409 3440
+"Main.ml" 103 3625 3630 "Main.ml" 103 3625 3656
 type(
   bool
 )
-"Main.ml" 102 3409 3446 "Main.ml" 102 3409 3451
+"Main.ml" 103 3625 3662 "Main.ml" 103 3625 3667
 type(
   unit -> unit
 )
 ident(
-  int_ref usage "Main.ml" 101 3331 3337 "Main.ml" 101 3331 3342
+  int_ref usage "Main.ml" 102 3547 3553 "Main.ml" 102 3547 3558
 )
-"Main.ml" 102 3409 3452 "Main.ml" 102 3409 3454
+"Main.ml" 103 3625 3668 "Main.ml" 103 3625 3670
 type(
   unit
 )
-"Main.ml" 102 3409 3446 "Main.ml" 102 3409 3454
+"Main.ml" 103 3625 3662 "Main.ml" 103 3625 3670
 call(
   stack
 )
 type(
   unit
 )
-"Main.ml" 102 3409 3411 "Main.ml" 102 3409 3454
+"Main.ml" 103 3625 3627 "Main.ml" 103 3625 3670
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 103 3456 3464 "Main.ml" 103 3456 3472
+"Main.ml" 104 3672 3680 "Main.ml" 104 3672 3688
 type(
   string array
 )
 ident(
   ext_ref Core.Std.Sys.argv
 )
-"Main.ml" 103 3456 3474 "Main.ml" 103 3456 3475
+"Main.ml" 104 3672 3690 "Main.ml" 104 3672 3691
 type(
   int
 )
-"Main.ml" 103 3456 3464 "Main.ml" 103 3456 3476
+"Main.ml" 104 3672 3680 "Main.ml" 104 3672 3692
 type(
   string
 )
@@ -2512,270 +2517,270 @@ type(
 ident(
   ext_ref Core.Std.Array.get
 )
-"Main.ml" 104 3482 3486 "Main.ml" 104 3482 3493
+"Main.ml" 105 3698 3702 "Main.ml" 105 3698 3709
 type(
   string
 )
-"Main.ml" 104 3482 3497 "Main.ml" 104 3482 3514
+"Main.ml" 105 3698 3713 "Main.ml" 105 3698 3730
 type(
   unit -> unit
 )
 ident(
   int_ref part1_initializer "Main.ml" 38 1012 1016 "Main.ml" 38 1012 1033
 )
-"Main.ml" 104 3482 3516 "Main.ml" 104 3482 3517
+"Main.ml" 105 3698 3732 "Main.ml" 105 3698 3733
 type(
   int
 )
-"Main.ml" 104 3482 3497 "Main.ml" 104 3482 3517
+"Main.ml" 105 3698 3713 "Main.ml" 105 3698 3733
 type(
   (unit -> unit) * int
 )
-"Main.ml" 105 3518 3522 "Main.ml" 105 3518 3529
+"Main.ml" 106 3734 3738 "Main.ml" 106 3734 3745
 type(
   string
 )
-"Main.ml" 105 3518 3533 "Main.ml" 105 3518 3550
+"Main.ml" 106 3734 3749 "Main.ml" 106 3734 3766
 type(
   unit -> unit
 )
 ident(
   int_ref part2_initializer "Main.ml" 49 1574 1578 "Main.ml" 49 1574 1595
 )
-"Main.ml" 105 3518 3552 "Main.ml" 105 3518 3553
+"Main.ml" 106 3734 3768 "Main.ml" 106 3734 3769
 type(
   int
 )
-"Main.ml" 105 3518 3533 "Main.ml" 105 3518 3553
+"Main.ml" 106 3734 3749 "Main.ml" 106 3734 3769
 type(
   (unit -> unit) * int
 )
-"Main.ml" 106 3554 3558 "Main.ml" 106 3554 3565
+"Main.ml" 107 3770 3774 "Main.ml" 107 3770 3781
 type(
   string
 )
-"Main.ml" 106 3554 3569 "Main.ml" 106 3554 3586
+"Main.ml" 107 3770 3785 "Main.ml" 107 3770 3802
 type(
   unit -> unit
 )
 ident(
-  int_ref part3_initializer "Main.ml" 56 1969 1973 "Main.ml" 56 1969 1990
+  int_ref part3_initializer "Main.ml" 57 2185 2189 "Main.ml" 57 2185 2206
 )
-"Main.ml" 106 3554 3588 "Main.ml" 106 3554 3589
+"Main.ml" 107 3770 3804 "Main.ml" 107 3770 3805
 type(
   int
 )
-"Main.ml" 106 3554 3569 "Main.ml" 106 3554 3589
+"Main.ml" 107 3770 3785 "Main.ml" 107 3770 3805
 type(
   (unit -> unit) * int
 )
-"Main.ml" 107 3590 3594 "Main.ml" 107 3590 3601
+"Main.ml" 108 3806 3810 "Main.ml" 108 3806 3817
 type(
   string
 )
-"Main.ml" 107 3590 3604 "Main.ml" 107 3590 3611
+"Main.ml" 108 3806 3820 "Main.ml" 108 3806 3827
 type(
   string
 )
-"Main.ml" 107 3590 3594 "Main.ml" 107 3590 3611
+"Main.ml" 108 3806 3810 "Main.ml" 108 3806 3827
 type(
   string
 )
-"Main.ml" 107 3590 3615 "Main.ml" 107 3590 3632
+"Main.ml" 108 3806 3831 "Main.ml" 108 3806 3848
 type(
   unit -> unit
 )
 ident(
-  int_ref part4_initializer "Main.ml" 72 2362 2366 "Main.ml" 72 2362 2383
+  int_ref part4_initializer "Main.ml" 73 2578 2582 "Main.ml" 73 2578 2599
 )
-"Main.ml" 107 3590 3634 "Main.ml" 107 3590 3635
+"Main.ml" 108 3806 3850 "Main.ml" 108 3806 3851
 type(
   int
 )
-"Main.ml" 107 3590 3615 "Main.ml" 107 3590 3635
+"Main.ml" 108 3806 3831 "Main.ml" 108 3806 3851
 type(
   (unit -> unit) * int
 )
-"Main.ml" 108 3636 3640 "Main.ml" 108 3636 3647
+"Main.ml" 109 3852 3856 "Main.ml" 109 3852 3863
 type(
   string
 )
-"Main.ml" 108 3636 3650 "Main.ml" 108 3636 3657
+"Main.ml" 109 3852 3866 "Main.ml" 109 3852 3873
 type(
   string
 )
-"Main.ml" 108 3636 3640 "Main.ml" 108 3636 3657
+"Main.ml" 109 3852 3856 "Main.ml" 109 3852 3873
 type(
   string
 )
-"Main.ml" 108 3636 3661 "Main.ml" 108 3636 3678
+"Main.ml" 109 3852 3877 "Main.ml" 109 3852 3894
 type(
   unit -> unit
 )
 ident(
-  int_ref final_initializer "Main.ml" 77 2470 2474 "Main.ml" 77 2470 2491
+  int_ref final_initializer "Main.ml" 78 2686 2690 "Main.ml" 78 2686 2707
 )
-"Main.ml" 108 3636 3680 "Main.ml" 108 3636 3681
+"Main.ml" 109 3852 3896 "Main.ml" 109 3852 3897
 type(
   int
 )
-"Main.ml" 108 3636 3661 "Main.ml" 108 3636 3681
+"Main.ml" 109 3852 3877 "Main.ml" 109 3852 3897
 type(
   (unit -> unit) * int
 )
-"Main.ml" 109 3682 3686 "Main.ml" 109 3682 3687
+"Main.ml" 110 3898 3902 "Main.ml" 110 3898 3903
 type(
   string
 )
-"Main.ml" 109 3682 3691 "Main.ml" 109 3682 3696
+"Main.ml" 110 3898 3907 "Main.ml" 110 3898 3912
 type(
   unit -> (unit -> unit) * int
 )
 ident(
-  int_ref usage "Main.ml" 101 3331 3337 "Main.ml" 101 3331 3342
+  int_ref usage "Main.ml" 102 3547 3553 "Main.ml" 102 3547 3558
 )
-"Main.ml" 109 3682 3697 "Main.ml" 109 3682 3699
+"Main.ml" 110 3898 3913 "Main.ml" 110 3898 3915
 type(
   unit
 )
-"Main.ml" 109 3682 3691 "Main.ml" 109 3682 3699
+"Main.ml" 110 3898 3907 "Main.ml" 110 3898 3915
 call(
   tail
 )
 type(
   (unit -> unit) * int
 )
-"Main.ml" 103 3456 3458 "Main.ml" 109 3682 3699
+"Main.ml" 104 3672 3674 "Main.ml" 110 3898 3915
 type(
   (unit -> unit) * int
 )
-"Main.ml" 102 3409 3411 "Main.ml" 109 3682 3699
+"Main.ml" 103 3625 3627 "Main.ml" 110 3898 3915
 type(
   (unit -> unit) * int
 )
-"Main.ml" 101 3331 3333 "Main.ml" 109 3682 3699
+"Main.ml" 102 3547 3549 "Main.ml" 110 3898 3915
 type(
   (unit -> unit) * int
 )
 type(
   (unit -> unit) * int
 )
-"Main.ml" 100 3288 3303 "Main.ml" 109 3682 3699
+"Main.ml" 101 3504 3519 "Main.ml" 110 3898 3915
 type(
   unit -> (unit -> unit) * int
 )
-"Main.ml" 112 3702 3706 "Main.ml" 112 3702 3709
+"Main.ml" 113 3918 3922 "Main.ml" 113 3918 3925
 type(
   unit -> unit
 )
 ident(
-  def run "Main.ml" 117 3812 3812 "Main.ml" 1 0 -1
+  def run "Main.ml" 118 4028 4028 "Main.ml" 1 0 -1
 )
-"Main.ml" 112 3702 3710 "Main.ml" 112 3702 3712
+"Main.ml" 113 3918 3926 "Main.ml" 113 3918 3928
 type(
   unit
 )
-"Main.ml" 113 3722 3728 "Main.ml" 113 3722 3738
+"Main.ml" 114 3938 3944 "Main.ml" 114 3938 3954
 type(
   unit -> unit
 )
 ident(
-  def initialize "Main.ml" 114 3764 3766 "Main.ml" 114 3764 3807
+  def initialize "Main.ml" 115 3980 3982 "Main.ml" 115 3980 4023
 )
-"Main.ml" 113 3722 3740 "Main.ml" 113 3722 3744
+"Main.ml" 114 3938 3956 "Main.ml" 114 3938 3960
 type(
   int
 )
 ident(
-  def part "Main.ml" 114 3764 3766 "Main.ml" 114 3764 3807
+  def part "Main.ml" 115 3980 3982 "Main.ml" 115 3980 4023
 )
-"Main.ml" 113 3722 3728 "Main.ml" 113 3722 3744
+"Main.ml" 114 3938 3944 "Main.ml" 114 3938 3960
 type(
   (unit -> unit) * int
 )
-"Main.ml" 113 3722 3747 "Main.ml" 113 3722 3757
+"Main.ml" 114 3938 3963 "Main.ml" 114 3938 3973
 type(
   unit -> (unit -> unit) * int
 )
 ident(
-  int_ref parse_args "Main.ml" 100 3288 3292 "Main.ml" 100 3288 3302
+  int_ref parse_args "Main.ml" 101 3504 3508 "Main.ml" 101 3504 3518
 )
-"Main.ml" 113 3722 3758 "Main.ml" 113 3722 3760
+"Main.ml" 114 3938 3974 "Main.ml" 114 3938 3976
 type(
   unit
 )
-"Main.ml" 113 3722 3747 "Main.ml" 113 3722 3760
+"Main.ml" 114 3938 3963 "Main.ml" 114 3938 3976
 call(
   stack
 )
 type(
   (unit -> unit) * int
 )
-"Main.ml" 114 3764 3766 "Main.ml" 114 3764 3778
+"Main.ml" 115 3980 3982 "Main.ml" 115 3980 3994
 type(
   (unit -> unit) -> (unit -> unit) -> unit
 )
 ident(
   ext_ref UI.run_world
 )
-"Main.ml" 114 3764 3779 "Main.ml" 114 3764 3789
+"Main.ml" 115 3980 3995 "Main.ml" 115 3980 4005
 type(
   unit -> unit
 )
 ident(
-  int_ref initialize "Main.ml" 113 3722 3728 "Main.ml" 113 3722 3738
+  int_ref initialize "Main.ml" 114 3938 3944 "Main.ml" 114 3938 3954
 )
-"Main.ml" 114 3764 3791 "Main.ml" 114 3764 3801
+"Main.ml" 115 3980 4007 "Main.ml" 115 3980 4017
 type(
   int -> unit -> unit
 )
 ident(
-  int_ref event_loop "Main.ml" 85 2702 2706 "Main.ml" 85 2702 2716
+  int_ref event_loop "Main.ml" 86 2918 2922 "Main.ml" 86 2918 2932
 )
-"Main.ml" 114 3764 3802 "Main.ml" 114 3764 3806
+"Main.ml" 115 3980 4018 "Main.ml" 115 3980 4022
 type(
   int
 )
 ident(
-  int_ref part "Main.ml" 113 3722 3740 "Main.ml" 113 3722 3744
+  int_ref part "Main.ml" 114 3938 3956 "Main.ml" 114 3938 3960
 )
-"Main.ml" 114 3764 3791 "Main.ml" 114 3764 3806
+"Main.ml" 115 3980 4007 "Main.ml" 115 3980 4022
 call(
   stack
 )
 type(
   unit -> unit
 )
-"Main.ml" 114 3764 3766 "Main.ml" 114 3764 3807
+"Main.ml" 115 3980 3982 "Main.ml" 115 3980 4023
 call(
   tail
 )
 type(
   unit
 )
-"Main.ml" 113 3722 3724 "Main.ml" 114 3764 3807
+"Main.ml" 114 3938 3940 "Main.ml" 115 3980 4023
 type(
   unit
 )
 type(
   unit
 )
-"Main.ml" 112 3702 3710 "Main.ml" 114 3764 3807
+"Main.ml" 113 3918 3926 "Main.ml" 115 3980 4023
 type(
   unit -> unit
 )
-"Main.ml" 117 3812 3812 "Main.ml" 117 3812 3815
+"Main.ml" 118 4028 4028 "Main.ml" 118 4028 4031
 type(
   unit -> unit
 )
 ident(
-  int_ref run "Main.ml" 112 3702 3706 "Main.ml" 112 3702 3709
+  int_ref run "Main.ml" 113 3918 3922 "Main.ml" 113 3918 3925
 )
-"Main.ml" 117 3812 3816 "Main.ml" 117 3812 3818
+"Main.ml" 118 4028 4032 "Main.ml" 118 4028 4034
 type(
   unit
 )
-"Main.ml" 117 3812 3812 "Main.ml" 117 3812 3818
+"Main.ml" 118 4028 4028 "Main.ml" 118 4028 4034
 call(
   stack
 )

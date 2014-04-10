@@ -56,220 +56,436 @@ type(
 ident(
   int_ref walker_inverse_speed "WhiteWalker.ml" 7 93 97 "WhiteWalker.ml" 7 93 117
 )
-"WhiteWalker.ml" 44 1008 1029 "WhiteWalker.ml" 44 1008 1043
+"WhiteWalker.ml" 23 560 597 "WhiteWalker.ml" 23 560 598
 type(
-  string
+  int
 )
 type(
-  string
+  int
 )
-"WhiteWalker.ml" 44 1008 1010 "WhiteWalker.ml" 44 1008 1043
+"WhiteWalker.ml" 31 736 740 "WhiteWalker.ml" 31 736 744
 type(
-  (< danger : world_object_i -> unit; die : unit; draw : unit;
-     draw_z_axis : int; forfeit_gold : int option;
-     get_danger_event : world_object_i Event51.Event51.event;
-     get_die_event : unit Event51.Event51.event; get_name : string;
-     get_pos : int * int; is_obstacle : bool;
-     next_direction : Direction.direction option; receive_damage : unit;
-     receive_gold : int list -> int list; smells_like_gold : int option; .. >
-   as 'a) ->
-  string
+  < danger : world_object_i -> unit; die : unit; draw : unit;
+    draw_z_axis : int; forfeit_gold : int option;
+    get_danger_event : world_object_i Event51.Event51.event;
+    get_die_event : unit Event51.Event51.event; get_name : string;
+    get_pos : int * int; is_obstacle : bool;
+    next_direction : Direction.direction option; receive_damage : unit;
+    receive_gold : int list -> int list; smells_like_gold : int option; .. >
+  as 'a
 )
-"WhiteWalker.ml" 46 1045 1062 "WhiteWalker.ml" 46 1045 1066
+ident(
+  int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
+)
+"WhiteWalker.ml" 31 736 740 "WhiteWalker.ml" 31 736 761
+call(
+  tail
+)
+type(
+  unit Event51.Event51.event -> (unit -> unit) -> unit
+)
+"WhiteWalker.ml" 31 736 762 "WhiteWalker.ml" 31 736 780
+type(
+  unit Event51.Event51.event
+)
+ident(
+  ext_ref World.action_event
+)
+"WhiteWalker.ml" 31 736 781 "WhiteWalker.ml" 31 736 785
 type(
   'a
 )
 ident(
   int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
 )
-"WhiteWalker.ml" 46 1045 1062 "WhiteWalker.ml" 46 1045 1078
+"WhiteWalker.ml" 31 736 781 "WhiteWalker.ml" 31 736 795
+call(
+  stack
+)
+type(
+  unit -> unit
+)
+"WhiteWalker.ml" 31 736 740 "WhiteWalker.ml" 31 736 795
+type(
+  'a -> unit
+)
+type(
+  unit
+)
+"WhiteWalker.ml" 38 928 976 "WhiteWalker.ml" 38 928 977
+type(
+  unit
+)
+"WhiteWalker.ml" 39 981 989 "WhiteWalker.ml" 39 981 996
+type(
+  world_object_i -> unit
+)
+ident(
+  def destroy "WhiteWalker.ml" 41 1084 1088 "WhiteWalker.ml" 41 1084 1133
+)
+"WhiteWalker.ml" 39 981 998 "WhiteWalker.ml" 39 981 1001
+type(
+  world_object_i
+)
+ident(
+  def obj "WhiteWalker.ml" 39 981 1020 "WhiteWalker.ml" 40 1029 1080
+)
+"WhiteWalker.ml" 40 1029 1035 "WhiteWalker.ml" 40 1029 1038
+type(
+  world_object_i
+)
+ident(
+  int_ref obj "WhiteWalker.ml" 39 981 998 "WhiteWalker.ml" 39 981 1001
+)
+"WhiteWalker.ml" 40 1029 1035 "WhiteWalker.ml" 40 1029 1042
+call(
+  stack
+)
+type(
+  unit
+)
+"WhiteWalker.ml" 40 1029 1062 "WhiteWalker.ml" 40 1029 1076
+type(
+  int
+)
+ident(
+  ext_ref objs_destroyed
+)
+"WhiteWalker.ml" 40 1029 1077 "WhiteWalker.ml" 40 1029 1078
+type(
+  int -> int -> int
+)
+ident(
+  ext_ref Pervasives.( + )
+)
+"WhiteWalker.ml" 40 1029 1079 "WhiteWalker.ml" 40 1029 1080
+type(
+  int
+)
+"WhiteWalker.ml" 40 1029 1062 "WhiteWalker.ml" 40 1029 1080
+type(
+  int
+)
+"WhiteWalker.ml" 40 1029 1044 "WhiteWalker.ml" 40 1029 1080
+type(
+  unit
+)
+"WhiteWalker.ml" 40 1029 1035 "WhiteWalker.ml" 40 1029 1080
+type(
+  unit
+)
+type(
+  unit
+)
+"WhiteWalker.ml" 39 981 997 "WhiteWalker.ml" 40 1029 1080
+type(
+  world_object_i -> unit
+)
+"WhiteWalker.ml" 41 1084 1088 "WhiteWalker.ml" 41 1084 1097
+type(
+  world_object_i list -> f:(world_object_i -> unit) -> unit
+)
+ident(
+  ext_ref Core.Std.List.iter
+)
+"WhiteWalker.ml" 41 1084 1101 "WhiteWalker.ml" 41 1084 1108
+type(
+  world_object_i -> unit
+)
+ident(
+  int_ref destroy "WhiteWalker.ml" 39 981 989 "WhiteWalker.ml" 39 981 996
+)
+"WhiteWalker.ml" 41 1084 1110 "WhiteWalker.ml" 41 1084 1119
+type(
+  int * int -> world_object_i list
+)
+ident(
+  ext_ref World.get
+)
+"WhiteWalker.ml" 41 1084 1120 "WhiteWalker.ml" 41 1084 1124
+type(
+  'a
+)
+ident(
+  int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
+)
+"WhiteWalker.ml" 41 1084 1120 "WhiteWalker.ml" 41 1084 1132
+call(
+  stack
+)
+type(
+  int * int
+)
+"WhiteWalker.ml" 41 1084 1110 "WhiteWalker.ml" 41 1084 1132
+call(
+  stack
+)
+type(
+  world_object_i list
+)
+"WhiteWalker.ml" 41 1084 1088 "WhiteWalker.ml" 41 1084 1133
+call(
+  tail
+)
+type(
+  unit
+)
+"WhiteWalker.ml" 39 981 985 "WhiteWalker.ml" 41 1084 1133
+type(
+  unit
+)
+"WhiteWalker.ml" 38 928 976 "WhiteWalker.ml" 41 1084 1133
+type(
+  unit -> unit
+)
+type(
+  unit -> unit
+)
+"WhiteWalker.ml" 38 928 930 "WhiteWalker.ml" 41 1084 1133
+type(
+  'a -> unit -> unit
+)
+"WhiteWalker.ml" 51 1327 1348 "WhiteWalker.ml" 51 1327 1362
+type(
+  string
+)
+type(
+  string
+)
+"WhiteWalker.ml" 51 1327 1329 "WhiteWalker.ml" 51 1327 1362
+type(
+  'a -> string
+)
+"WhiteWalker.ml" 54 1381 1389 "WhiteWalker.ml" 54 1381 1403
+type(
+  string
+)
+ident(
+  def display_string "WhiteWalker.ml" 55 1438 1442 "WhiteWalker.ml" 55 1438 1518
+)
+"WhiteWalker.ml" 54 1381 1406 "WhiteWalker.ml" 54 1381 1419
+type(
+  int -> string
+)
+ident(
+  ext_ref Pervasives.string_of_int
+)
+"WhiteWalker.ml" 54 1381 1420 "WhiteWalker.ml" 54 1381 1434
+type(
+  int
+)
+ident(
+  ext_ref objs_destroyed
+)
+"WhiteWalker.ml" 54 1381 1406 "WhiteWalker.ml" 54 1381 1434
+call(
+  stack
+)
+type(
+  string
+)
+"WhiteWalker.ml" 55 1438 1442 "WhiteWalker.ml" 55 1438 1446
+type(
+  'a
+)
+ident(
+  int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
+)
+"WhiteWalker.ml" 55 1438 1442 "WhiteWalker.ml" 55 1438 1458
 call(
   tail
 )
 type(
   int -> int -> string -> unit
 )
-"WhiteWalker.ml" 46 1045 1080 "WhiteWalker.ml" 46 1045 1092
+"WhiteWalker.ml" 55 1438 1460 "WhiteWalker.ml" 55 1438 1472
 type(
   int -> int -> int -> int
 )
 ident(
   ext_ref Graphics.rgb
 )
-"WhiteWalker.ml" 46 1045 1093 "WhiteWalker.ml" 46 1045 1097
+"WhiteWalker.ml" 55 1438 1473 "WhiteWalker.ml" 55 1438 1477
 type(
   int
 )
-"WhiteWalker.ml" 46 1045 1098 "WhiteWalker.ml" 46 1045 1102
+"WhiteWalker.ml" 55 1438 1478 "WhiteWalker.ml" 55 1438 1482
 type(
   int
 )
-"WhiteWalker.ml" 46 1045 1103 "WhiteWalker.ml" 46 1045 1107
+"WhiteWalker.ml" 55 1438 1483 "WhiteWalker.ml" 55 1438 1487
 type(
   int
 )
-"WhiteWalker.ml" 46 1045 1080 "WhiteWalker.ml" 46 1045 1107
+"WhiteWalker.ml" 55 1438 1460 "WhiteWalker.ml" 55 1438 1487
 call(
   stack
 )
 type(
   int
 )
-"WhiteWalker.ml" 46 1045 1109 "WhiteWalker.ml" 46 1045 1123
+"WhiteWalker.ml" 55 1438 1489 "WhiteWalker.ml" 55 1438 1503
 type(
   int
 )
 ident(
   ext_ref Graphics.black
 )
-"WhiteWalker.ml" 46 1045 1124 "WhiteWalker.ml" 46 1045 1126
+"WhiteWalker.ml" 55 1438 1504 "WhiteWalker.ml" 55 1438 1518
 type(
   string
 )
-"WhiteWalker.ml" 46 1045 1062 "WhiteWalker.ml" 46 1045 1126
+ident(
+  int_ref display_string "WhiteWalker.ml" 54 1381 1389 "WhiteWalker.ml" 54 1381 1403
+)
+"WhiteWalker.ml" 55 1438 1442 "WhiteWalker.ml" 55 1438 1518
+type(
+  unit
+)
+"WhiteWalker.ml" 54 1381 1385 "WhiteWalker.ml" 55 1438 1518
 type(
   unit
 )
 type(
   unit
 )
-"WhiteWalker.ml" 46 1045 1047 "WhiteWalker.ml" 46 1045 1126
+"WhiteWalker.ml" 53 1364 1366 "WhiteWalker.ml" 55 1438 1518
 type(
   'a -> unit
 )
-"WhiteWalker.ml" 48 1128 1152 "WhiteWalker.ml" 48 1128 1153
+"WhiteWalker.ml" 57 1520 1544 "WhiteWalker.ml" 57 1520 1545
 type(
   int
 )
 type(
   int
 )
-"WhiteWalker.ml" 48 1128 1130 "WhiteWalker.ml" 48 1128 1153
+"WhiteWalker.ml" 57 1520 1522 "WhiteWalker.ml" 57 1520 1545
 type(
   'a -> int
 )
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1373
+"WhiteWalker.ml" 68 1748 1755 "WhiteWalker.ml" 68 1748 1765
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"WhiteWalker.ml" 59 1356 1374 "WhiteWalker.ml" 59 1356 1384
+"WhiteWalker.ml" 68 1748 1766 "WhiteWalker.ml" 68 1748 1776
 type(
   int
 )
 ident(
   ext_ref World.size
 )
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1384
+"WhiteWalker.ml" 68 1748 1755 "WhiteWalker.ml" 68 1748 1776
 call(
   stack
 )
 type(
   int
 )
-"WhiteWalker.ml" 59 1356 1385 "WhiteWalker.ml" 59 1356 1386
+"WhiteWalker.ml" 68 1748 1777 "WhiteWalker.ml" 68 1748 1778
 type(
   int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( < )
 )
-"WhiteWalker.ml" 59 1356 1387 "WhiteWalker.ml" 59 1356 1388
+"WhiteWalker.ml" 68 1748 1779 "WhiteWalker.ml" 68 1748 1780
 type(
   int
 )
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1388
+"WhiteWalker.ml" 68 1748 1755 "WhiteWalker.ml" 68 1748 1780
 type(
   bool
 )
-"WhiteWalker.ml" 60 1394 1400 "WhiteWalker.ml" 60 1394 1417
+"WhiteWalker.ml" 69 1786 1792 "WhiteWalker.ml" 69 1786 1809
 type(
   int * int -> int * int -> Direction.direction option
 )
 ident(
   ext_ref Direction.natural
 )
-"WhiteWalker.ml" 60 1394 1418 "WhiteWalker.ml" 60 1394 1422
+"WhiteWalker.ml" 69 1786 1810 "WhiteWalker.ml" 69 1786 1814
 type(
   'a
 )
 ident(
   int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
 )
-"WhiteWalker.ml" 60 1394 1418 "WhiteWalker.ml" 60 1394 1430
+"WhiteWalker.ml" 69 1786 1810 "WhiteWalker.ml" 69 1786 1822
 call(
   stack
 )
 type(
   int * int
 )
-"WhiteWalker.ml" 60 1394 1431 "WhiteWalker.ml" 60 1394 1444
+"WhiteWalker.ml" 69 1786 1823 "WhiteWalker.ml" 69 1786 1836
 type(
   < get_pos : int * int; .. > as 'b
 )
 ident(
   int_ref kings_landing "WhiteWalker.ml" 14 296 317 "WhiteWalker.ml" 14 296 330
 )
-"WhiteWalker.ml" 60 1394 1431 "WhiteWalker.ml" 60 1394 1452
+"WhiteWalker.ml" 69 1786 1823 "WhiteWalker.ml" 69 1786 1844
 call(
   stack
 )
 type(
   int * int
 )
-"WhiteWalker.ml" 60 1394 1400 "WhiteWalker.ml" 60 1394 1452
+"WhiteWalker.ml" 69 1786 1792 "WhiteWalker.ml" 69 1786 1844
 call(
   tail
 )
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1481
+"WhiteWalker.ml" 70 1845 1860 "WhiteWalker.ml" 70 1845 1873
 type(
   int -> Direction.direction
 )
 ident(
   ext_ref Direction.ord
 )
-"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1493
+"WhiteWalker.ml" 70 1845 1875 "WhiteWalker.ml" 70 1845 1885
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"WhiteWalker.ml" 61 1453 1494 "WhiteWalker.ml" 61 1453 1495
+"WhiteWalker.ml" 70 1845 1886 "WhiteWalker.ml" 70 1845 1887
 type(
   int
 )
-"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1495
+"WhiteWalker.ml" 70 1845 1875 "WhiteWalker.ml" 70 1845 1887
 call(
   stack
 )
 type(
   int
 )
-"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1496
+"WhiteWalker.ml" 70 1845 1860 "WhiteWalker.ml" 70 1845 1888
 call(
   stack
 )
 type(
   Direction.direction
 )
-"WhiteWalker.ml" 61 1453 1462 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 70 1845 1854 "WhiteWalker.ml" 70 1845 1889
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 59 1356 1360 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 68 1748 1752 "WhiteWalker.ml" 70 1845 1889
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 58 1329 1331 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 67 1721 1723 "WhiteWalker.ml" 70 1845 1889
 type(
   'a -> Direction.direction option
 )
