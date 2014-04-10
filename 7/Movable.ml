@@ -45,7 +45,6 @@ object (self)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is "Some North" a sufficiently "sensible default"? *)
-  method next_direction = Some North
+  method next_direction = None
 
 end
