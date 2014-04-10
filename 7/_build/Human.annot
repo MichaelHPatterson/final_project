@@ -536,46 +536,35 @@ type(
 type(
   'a -> unit -> unit
 )
-"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4034
+"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4037
 type(
-  int -> Direction.direction
+  (int -> int) -> Direction.direction
 )
 ident(
-  ext_ref Direction.ord
+  ext_ref Direction.random
 )
-"Human.ml" 108 3988 4036 "Human.ml" 108 3988 4046
+"Human.ml" 108 3988 4039 "Human.ml" 108 3988 4049
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"Human.ml" 108 3988 4047 "Human.ml" 108 3988 4048
-type(
-  int
-)
-"Human.ml" 108 3988 4036 "Human.ml" 108 3988 4048
-call(
-  stack
-)
-type(
-  int
-)
-"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4049
+"Human.ml" 108 3988 4021 "Human.ml" 108 3988 4050
 call(
   stack
 )
 type(
   Direction.direction
 )
-"Human.ml" 108 3988 4015 "Human.ml" 108 3988 4050
+"Human.ml" 108 3988 4015 "Human.ml" 108 3988 4051
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"Human.ml" 108 3988 3990 "Human.ml" 108 3988 4050
+"Human.ml" 108 3988 3990 "Human.ml" 108 3988 4051
 type(
   'a -> Direction.direction option
 )

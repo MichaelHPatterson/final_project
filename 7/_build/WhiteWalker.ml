@@ -58,7 +58,7 @@ object (self)
   method! next_direction =
     if World.rand World.size < 2 then
       Direction.natural self#get_pos kings_landing#get_pos
-    else Some (Direction.ord (World.rand 8))
+    else Some (Direction.random (World.rand))
 
 
   (* ### TODO: Part 6 Custom Events ### *)

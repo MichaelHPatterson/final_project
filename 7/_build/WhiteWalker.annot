@@ -226,50 +226,39 @@ call(
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1481
+"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1484
 type(
-  int -> Direction.direction
+  (int -> int) -> Direction.direction
 )
 ident(
-  ext_ref Direction.ord
+  ext_ref Direction.random
 )
-"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1493
+"WhiteWalker.ml" 61 1453 1486 "WhiteWalker.ml" 61 1453 1496
 type(
   int -> int
 )
 ident(
   ext_ref World.rand
 )
-"WhiteWalker.ml" 61 1453 1494 "WhiteWalker.ml" 61 1453 1495
-type(
-  int
-)
-"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1495
-call(
-  stack
-)
-type(
-  int
-)
-"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1496
+"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1497
 call(
   stack
 )
 type(
   Direction.direction
 )
-"WhiteWalker.ml" 61 1453 1462 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 61 1453 1462 "WhiteWalker.ml" 61 1453 1498
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 59 1356 1360 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 59 1356 1360 "WhiteWalker.ml" 61 1453 1498
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 58 1329 1331 "WhiteWalker.ml" 61 1453 1497
+"WhiteWalker.ml" 58 1329 1331 "WhiteWalker.ml" 61 1453 1498
 type(
   'a -> Direction.direction option
 )

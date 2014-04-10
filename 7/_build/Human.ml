@@ -105,7 +105,7 @@ object(self)
 
   (* ### TODO: Part 2 Movement ### *)
 
-  method! next_direction = Some (Direction.ord (World.rand 8))
+  method! next_direction = Some (Direction.random (World.rand))
 
 
   (* ### TODO: Part 5 Smart Humans ### *)
