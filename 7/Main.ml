@@ -53,6 +53,7 @@ let part2_initializer () : unit =
   ignore (gen_dragon () kings_landing);
   ignore (gen_white_walker () kings_landing)
 
+(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: For some reason, the WhiteWalker doesn't seem to show up in the graphics for part 3, and the wall only shows up sometimes. *)
 let part3_initializer () : unit =
   let kings_landing = gen_city () in
   ignore (gen_dany ());

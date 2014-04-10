@@ -44,7 +44,7 @@ object(self)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this where/how we're supposed to add the listener to action_event? *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this where/how we're supposed to add the listener to action_event? This is how I've done it in a bunch of different files (Dragon.ml, Town.ml, etc.). *)
   initializer
     self#register_handler World.action_event self#do_action
 
@@ -61,7 +61,6 @@ object(self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Do I have to call these methods private or anything like that? *)
   method private deposit_gold (neighbor : world_object_i) : unit =
     gold <- neighbor#receive_gold gold
 
@@ -87,11 +86,11 @@ object(self)
   method! draw_z_axis = 2
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the right place in the file to put the do_move method? *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the right place in the file to put the do_move method? This is where I've put it in a bunch of different files (Dragon.ml, Town.ml, etc.). *)
   method private do_action : unit -> unit = fun _ ->
-    let neighbors : world_object_i list = World.get self#get_pos in
-    List.iter ~f:(fun n -> self#deposit_gold n; self#extract_gold n) neighbors
-
+    let exchange (neighbor : world_object_i) : unit =
+      self#deposit_gold neighbor; self#extract_gold neighbor in
+    List.iter ~f:exchange (World.get self#get_pos)
 
   (***************************)
   (***** Ageable Methods *****)
@@ -106,7 +105,6 @@ object(self)
   (* ### TODO: Part 2 Movement ### *)
 
   method! next_direction = Some (Direction.random (World.rand))
-
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
