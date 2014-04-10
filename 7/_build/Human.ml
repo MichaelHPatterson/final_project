@@ -8,6 +8,7 @@ open WorldObjectI
 let human_inverse_speed = Some 1
 
 (* ### Part 3 Actions ### *)
+(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What are we supposed to do here??? *)
 let max_gold_types = 5
 
 (* ### Part 4 Aging ### *)
@@ -29,6 +30,9 @@ object(self)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What are we supposed to name the gold variable??? *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Have I done this in the correct place? Should it be elsewhere? *)
+  val mutable gold : int list = []
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
@@ -39,6 +43,9 @@ object(self)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this where/how we're supposed to add the listener to action_event? *)
+  initializer
+    self#register_handler World.action_event self#do_action
 
   (* ### TODO: Part 6 Custom Events ### *)
 
@@ -53,6 +60,14 @@ object(self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Do I have to call these methods private or anything like that? *)
+  method private deposit_gold (neighbor : world_object_i) : unit =
+    gold <- neighbor#receive_gold gold
+
+  method private extract_gold (neighbor : world_object_i) : unit =
+    match neighbor#forfeit_gold with
+    | None -> ()
+    | Some g -> gold <- g :: gold
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
@@ -64,11 +79,18 @@ object(self)
 
   method! get_name = "human"
 
-  method! draw = self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black ""
+  method! draw =
+    let gold_string = string_of_int (List.length gold) in
+    self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black gold_string
 
   method! draw_z_axis = 2
 
   (* ### TODO: Part 3 Actions ### *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the right place in the file to put the do_move method? *)
+  method private do_action : unit -> unit = fun _ ->
+    let neighbors : world_object_i list = World.get self#get_pos in
+    List.iter ~f:(fun n -> self#deposit_gold n; self#extract_gold n) neighbors
+
 
   (***************************)
   (***** Ageable Methods *****)
