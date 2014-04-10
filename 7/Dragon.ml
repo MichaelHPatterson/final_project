@@ -41,7 +41,7 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
   method private do_action : unit -> unit = fun _ ->
     if self#get_pos = kings_landing#get_pos then
-      let cast = self :> world_object_i in
+      let cast = (self :> world_object_i) in
       let loot = kings_landing#forfeit_treasury gold_theft_amount cast in
       stolen_gold <- stolen_gold + loot
     
