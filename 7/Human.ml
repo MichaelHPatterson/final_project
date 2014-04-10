@@ -4,6 +4,7 @@ open Helpers
 open Movable
 open WorldObject
 open WorldObjectI
+open Ageable
 
 (* ### Part 2 Movement ### *)
 let human_inverse_speed = Some 1
@@ -20,9 +21,11 @@ let max_sensing_range = 5
 (** Humans travel the world searching for towns to trade for gold.
     They are able to sense towns within close range, and they will return
     to King's Landing once they have traded with enough towns. *)
-class human p : movable_t =
+class human p : ageable_t =
 object(self)
-  inherit movable p human_inverse_speed
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Style looks bad *)
+  inherit ageable p human_inverse_speed (World.rand human_lifetime)
+                  human_lifetime
 
   (******************************)
   (***** Instance Variables *****)
@@ -74,7 +77,7 @@ object(self)
 
   method! get_name = "human"
 
-  method! draw =
+  method! draw_picture =
     let gold_string = string_of_int (List.length gold) in
     self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black gold_string
 

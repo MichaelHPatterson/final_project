@@ -48,7 +48,9 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
   method private do_action : unit -> unit = fun _ ->
     if World.rand gold_probability = 0 then
-      gold <- gold + 1
+      gold <- gold + 1;
+    if gold >= cost_of_human && World.rand spawn_probability = 0 then
+      (gold <- gold - cost_of_human; self#generate_human)
 
   (* ### TODO: Part 4 Aging ### *)
 
@@ -57,6 +59,8 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 4 Aging ### *)
+  method private generate_human = ignore(new Human.human self#get_pos)
+    
 
   (****************************)
   (*** WorldObjectI Methods ***)
