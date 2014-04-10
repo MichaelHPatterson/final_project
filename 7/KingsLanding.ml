@@ -71,7 +71,6 @@ object (self)
     self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black gold_string
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this in the right place? *)
   method! receive_gold (gold_offer : int list) =
     gold <- gold + Int.max (List.length gold_offer) max_gold_deposit;
     []
@@ -83,7 +82,6 @@ object (self)
   (**********************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this in the right place? *)
   method forfeit_treasury (n : int) (stealer : world_object_i) : int =
     let stolen = Int.min gold n in
     gold <- gold - stolen;

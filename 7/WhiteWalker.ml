@@ -1,5 +1,6 @@
 open Core.Std
 open Helpers
+open Movable
 open WorldObject
 open WorldObjectI
 
@@ -11,9 +12,9 @@ let max_destroyed_objects = 100
 
 (** A White Walker will roam the world until it has destroyed a satisfactory
     number of towns *)
-class white_walker p kings_landing : Movable.movable_t =
+class white_walker p kings_landing : movable_t =
 object (self)
-  inherit Movable.movable p walker_inverse_speed
+  inherit movable p walker_inverse_speed
 
   (******************************)
   (***** Instance Variables *****)

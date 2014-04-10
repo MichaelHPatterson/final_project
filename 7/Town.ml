@@ -43,7 +43,6 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Check to see if the one-branch "if" statements are used correctly here. *)
   method private do_action : unit -> unit = fun _ ->
     if gold <= max_gold && World.rand produce_gold_probability = 0 then
       gold <- gold + 1;
@@ -66,10 +65,9 @@ object (self)
   (* ### TODO: Part 4 Aging ### *)
 
   (* ### TODO: Part 3 Actions ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the right place to put this method? *)
   method! smells_like_gold = if gold = 0 then None else Some gold_id
 
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the right place to put this method? *)
+
   method! forfeit_gold =
     if gold = 0 || World.rand forfeit_gold_probability = 0 then None
     else
