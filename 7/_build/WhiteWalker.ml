@@ -56,9 +56,9 @@ object (self)
   (* ### TODO: Part 2 Movement ### *)
 
   method! next_direction =
-    if Random.float (float World.size) < 2. then
+    if World.rand World.size < 2 then
       Direction.natural self#get_pos kings_landing#get_pos
-    else Some (Direction.ord (Random.int 8))
+    else Some (Direction.ord (World.rand 8))
 
 
   (* ### TODO: Part 6 Custom Events ### *)

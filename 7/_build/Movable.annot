@@ -1,12 +1,12 @@
-"Movable.ml" 17 348 362 "Movable.ml" 17 348 363
+"Movable.ml" 18 349 363 "Movable.ml" 18 349 364
 type(
   int * int
 )
-"Movable.ml" 17 348 365 "Movable.ml" 17 348 374
+"Movable.ml" 18 349 366 "Movable.ml" 18 349 375
 type(
   int option
 )
-"Movable.ml" 18 401 409 "Movable.ml" 18 401 413
+"Movable.ml" 19 402 410 "Movable.ml" 19 402 414
 type(
   < danger : world_object_i -> unit; die : unit; draw : unit;
     draw_z_axis : int; forfeit_gold : int option;
@@ -16,75 +16,75 @@ type(
     next_direction : Direction.direction option; receive_damage : unit;
     receive_gold : int list -> int list; smells_like_gold : int option; .. >
 )
-"Movable.ml" 19 415 438 "Movable.ml" 19 415 439
+"Movable.ml" 20 416 439 "Movable.ml" 20 416 440
 type(
   int * int
 )
 ident(
-  int_ref p "Movable.ml" 17 348 362 "Movable.ml" 17 348 363
+  int_ref p "Movable.ml" 18 349 363 "Movable.ml" 18 349 364
 )
-"Movable.ml" 28 579 589 "Movable.ml" 28 579 598
+"Movable.ml" 29 580 590 "Movable.ml" 29 580 599
 type(
   int option
 )
 ident(
-  int_ref inv_speed "Movable.ml" 17 348 365 "Movable.ml" 17 348 374
+  int_ref inv_speed "Movable.ml" 18 349 366 "Movable.ml" 18 349 375
 )
-"Movable.ml" 29 604 610 "Movable.ml" 29 604 614
+"Movable.ml" 30 605 611 "Movable.ml" 30 605 615
 type(
   int option
 )
-"Movable.ml" 29 604 618 "Movable.ml" 29 604 620
+"Movable.ml" 30 605 619 "Movable.ml" 30 605 621
 type(
   unit
 )
-"Movable.ml" 30 621 632 "Movable.ml" 30 621 633
+"Movable.ml" 31 622 633 "Movable.ml" 31 622 634
 type(
   int
 )
 ident(
-  def s "Movable.ml" 31 637 643 "Movable.ml" 32 701 756
+  def s "Movable.ml" 32 638 644 "Movable.ml" 33 702 757
 )
-"Movable.ml" 30 621 627 "Movable.ml" 30 621 633
+"Movable.ml" 31 622 628 "Movable.ml" 31 622 634
 type(
   int option
 )
-"Movable.ml" 31 637 647 "Movable.ml" 31 637 661
+"Movable.ml" 32 638 648 "Movable.ml" 32 638 662
 type(
   unit list Event51.event
 )
 ident(
-  def buffered_event "Movable.ml" 32 701 707 "Movable.ml" 32 701 756
+  def buffered_event "Movable.ml" 33 702 708 "Movable.ml" 33 702 757
 )
-"Movable.ml" 31 637 664 "Movable.ml" 31 637 678
+"Movable.ml" 32 638 665 "Movable.ml" 32 638 679
 type(
   int -> unit Event51.event -> unit list Event51.event
 )
 ident(
   ext_ref Event51.Event51.buffer
 )
-"Movable.ml" 31 637 679 "Movable.ml" 31 637 680
+"Movable.ml" 32 638 680 "Movable.ml" 32 638 681
 type(
   int
 )
 ident(
-  int_ref s "Movable.ml" 30 621 632 "Movable.ml" 30 621 633
+  int_ref s "Movable.ml" 31 622 633 "Movable.ml" 31 622 634
 )
-"Movable.ml" 31 637 681 "Movable.ml" 31 637 697
+"Movable.ml" 32 638 682 "Movable.ml" 32 638 698
 type(
   unit Event51.event
 )
 ident(
   ext_ref World.move_event
 )
-"Movable.ml" 31 637 664 "Movable.ml" 31 637 697
+"Movable.ml" 32 638 665 "Movable.ml" 32 638 698
 call(
   stack
 )
 type(
   unit list Event51.event
 )
-"Movable.ml" 32 701 707 "Movable.ml" 32 701 711
+"Movable.ml" 33 702 708 "Movable.ml" 33 702 712
 type(
   < danger : world_object_i -> unit; die : unit; draw : unit;
     draw_z_axis : int; forfeit_gold : int option;
@@ -96,110 +96,110 @@ type(
   as 'a
 )
 ident(
-  int_ref self "Movable.ml" 18 401 409 "Movable.ml" 18 401 413
+  int_ref self "Movable.ml" 19 402 410 "Movable.ml" 19 402 414
 )
-"Movable.ml" 32 701 707 "Movable.ml" 32 701 728
+"Movable.ml" 33 702 708 "Movable.ml" 33 702 729
 call(
   tail
 )
 type(
   unit list Event51.event -> (unit list -> unit) -> unit
 )
-"Movable.ml" 32 701 729 "Movable.ml" 32 701 743
+"Movable.ml" 33 702 730 "Movable.ml" 33 702 744
 type(
   unit list Event51.event
 )
 ident(
-  int_ref buffered_event "Movable.ml" 31 637 647 "Movable.ml" 31 637 661
+  int_ref buffered_event "Movable.ml" 32 638 648 "Movable.ml" 32 638 662
 )
-"Movable.ml" 32 701 744 "Movable.ml" 32 701 748
+"Movable.ml" 33 702 745 "Movable.ml" 33 702 749
 type(
   'a
 )
 ident(
-  int_ref self "Movable.ml" 18 401 409 "Movable.ml" 18 401 413
+  int_ref self "Movable.ml" 19 402 410 "Movable.ml" 19 402 414
 )
-"Movable.ml" 32 701 744 "Movable.ml" 32 701 756
+"Movable.ml" 33 702 745 "Movable.ml" 33 702 757
 call(
   stack
 )
 type(
   unit list -> unit
 )
-"Movable.ml" 32 701 707 "Movable.ml" 32 701 756
+"Movable.ml" 33 702 708 "Movable.ml" 33 702 757
 type(
   unit
 )
-"Movable.ml" 31 637 643 "Movable.ml" 32 701 756
+"Movable.ml" 32 638 644 "Movable.ml" 33 702 757
 type(
   unit
 )
-"Movable.ml" 28 579 583 "Movable.ml" 32 701 756
+"Movable.ml" 29 580 584 "Movable.ml" 33 702 757
 type(
   'a -> unit
 )
 type(
   unit
 )
-"Movable.ml" 40 891 917 "Movable.ml" 40 891 918
+"Movable.ml" 41 892 918 "Movable.ml" 41 892 919
 type(
   unit list
 )
-"Movable.ml" 40 891 934 "Movable.ml" 40 891 938
+"Movable.ml" 41 892 935 "Movable.ml" 41 892 939
 type(
   'a
 )
 ident(
-  int_ref self "Movable.ml" 18 401 409 "Movable.ml" 18 401 413
+  int_ref self "Movable.ml" 19 402 410 "Movable.ml" 19 402 414
 )
-"Movable.ml" 40 891 934 "Movable.ml" 40 891 943
+"Movable.ml" 41 892 935 "Movable.ml" 41 892 944
 call(
   tail
 )
 type(
   Direction.direction option -> unit
 )
-"Movable.ml" 40 891 944 "Movable.ml" 40 891 948
+"Movable.ml" 41 892 945 "Movable.ml" 41 892 949
 type(
   'a
 )
 ident(
-  int_ref self "Movable.ml" 18 401 409 "Movable.ml" 18 401 413
+  int_ref self "Movable.ml" 19 402 410 "Movable.ml" 19 402 414
 )
-"Movable.ml" 40 891 944 "Movable.ml" 40 891 963
+"Movable.ml" 41 892 945 "Movable.ml" 41 892 964
 call(
   stack
 )
 type(
   Direction.direction option
 )
-"Movable.ml" 40 891 934 "Movable.ml" 40 891 963
+"Movable.ml" 41 892 935 "Movable.ml" 41 892 964
 type(
   unit
 )
-"Movable.ml" 40 891 916 "Movable.ml" 40 891 963
+"Movable.ml" 41 892 917 "Movable.ml" 41 892 964
 type(
   unit list -> unit
 )
 type(
   unit list -> unit
 )
-"Movable.ml" 40 891 893 "Movable.ml" 40 891 963
+"Movable.ml" 41 892 894 "Movable.ml" 41 892 964
 type(
   'a -> unit list -> unit
 )
-"Movable.ml" 48 1245 1276 "Movable.ml" 48 1245 1281
+"Movable.ml" 49 1246 1277 "Movable.ml" 49 1246 1282
 type(
   Direction.direction
 )
-"Movable.ml" 48 1245 1271 "Movable.ml" 48 1245 1281
+"Movable.ml" 49 1246 1272 "Movable.ml" 49 1246 1282
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"Movable.ml" 48 1245 1247 "Movable.ml" 48 1245 1281
+"Movable.ml" 49 1246 1248 "Movable.ml" 49 1246 1282
 type(
   'a -> Direction.direction option
 )

@@ -148,139 +148,128 @@ type(
 type(
   'a -> int
 )
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1375
+"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1373
 type(
-  float -> float
+  int -> int
 )
 ident(
-  ext_ref Core.Std.Random.float
+  ext_ref World.rand
 )
-"WhiteWalker.ml" 59 1356 1377 "WhiteWalker.ml" 59 1356 1382
-type(
-  int -> float
-)
-ident(
-  ext_ref Pervasives.float
-)
-"WhiteWalker.ml" 59 1356 1383 "WhiteWalker.ml" 59 1356 1393
+"WhiteWalker.ml" 59 1356 1374 "WhiteWalker.ml" 59 1356 1384
 type(
   int
 )
 ident(
   ext_ref World.size
 )
-"WhiteWalker.ml" 59 1356 1377 "WhiteWalker.ml" 59 1356 1393
-type(
-  float
-)
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1394
+"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1384
 call(
   stack
 )
 type(
-  float
+  int
 )
-"WhiteWalker.ml" 59 1356 1395 "WhiteWalker.ml" 59 1356 1396
+"WhiteWalker.ml" 59 1356 1385 "WhiteWalker.ml" 59 1356 1386
 type(
-  float -> float -> bool
+  int -> int -> bool
 )
 ident(
   ext_ref Pervasives.( < )
 )
-"WhiteWalker.ml" 59 1356 1397 "WhiteWalker.ml" 59 1356 1399
+"WhiteWalker.ml" 59 1356 1387 "WhiteWalker.ml" 59 1356 1388
 type(
-  float
+  int
 )
-"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1399
+"WhiteWalker.ml" 59 1356 1363 "WhiteWalker.ml" 59 1356 1388
 type(
   bool
 )
-"WhiteWalker.ml" 60 1405 1411 "WhiteWalker.ml" 60 1405 1428
+"WhiteWalker.ml" 60 1394 1400 "WhiteWalker.ml" 60 1394 1417
 type(
   int * int -> int * int -> Direction.direction option
 )
 ident(
   ext_ref Direction.natural
 )
-"WhiteWalker.ml" 60 1405 1429 "WhiteWalker.ml" 60 1405 1433
+"WhiteWalker.ml" 60 1394 1418 "WhiteWalker.ml" 60 1394 1422
 type(
   'a
 )
 ident(
   int_ref self "WhiteWalker.ml" 15 353 361 "WhiteWalker.ml" 15 353 365
 )
-"WhiteWalker.ml" 60 1405 1429 "WhiteWalker.ml" 60 1405 1441
+"WhiteWalker.ml" 60 1394 1418 "WhiteWalker.ml" 60 1394 1430
 call(
   stack
 )
 type(
   int * int
 )
-"WhiteWalker.ml" 60 1405 1442 "WhiteWalker.ml" 60 1405 1455
+"WhiteWalker.ml" 60 1394 1431 "WhiteWalker.ml" 60 1394 1444
 type(
   < get_pos : int * int; .. > as 'b
 )
 ident(
   int_ref kings_landing "WhiteWalker.ml" 14 296 317 "WhiteWalker.ml" 14 296 330
 )
-"WhiteWalker.ml" 60 1405 1442 "WhiteWalker.ml" 60 1405 1463
+"WhiteWalker.ml" 60 1394 1431 "WhiteWalker.ml" 60 1394 1452
 call(
   stack
 )
 type(
   int * int
 )
-"WhiteWalker.ml" 60 1405 1411 "WhiteWalker.ml" 60 1405 1463
+"WhiteWalker.ml" 60 1394 1400 "WhiteWalker.ml" 60 1394 1452
 call(
   tail
 )
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 61 1464 1479 "WhiteWalker.ml" 61 1464 1492
+"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1481
 type(
   int -> Direction.direction
 )
 ident(
   ext_ref Direction.ord
 )
-"WhiteWalker.ml" 61 1464 1494 "WhiteWalker.ml" 61 1464 1504
+"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1493
 type(
   int -> int
 )
 ident(
-  ext_ref Core.Std.Random.int
+  ext_ref World.rand
 )
-"WhiteWalker.ml" 61 1464 1505 "WhiteWalker.ml" 61 1464 1506
+"WhiteWalker.ml" 61 1453 1494 "WhiteWalker.ml" 61 1453 1495
 type(
   int
 )
-"WhiteWalker.ml" 61 1464 1494 "WhiteWalker.ml" 61 1464 1506
+"WhiteWalker.ml" 61 1453 1483 "WhiteWalker.ml" 61 1453 1495
 call(
   stack
 )
 type(
   int
 )
-"WhiteWalker.ml" 61 1464 1479 "WhiteWalker.ml" 61 1464 1507
+"WhiteWalker.ml" 61 1453 1468 "WhiteWalker.ml" 61 1453 1496
 call(
   stack
 )
 type(
   Direction.direction
 )
-"WhiteWalker.ml" 61 1464 1473 "WhiteWalker.ml" 61 1464 1508
+"WhiteWalker.ml" 61 1453 1462 "WhiteWalker.ml" 61 1453 1497
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 59 1356 1360 "WhiteWalker.ml" 61 1464 1508
+"WhiteWalker.ml" 59 1356 1360 "WhiteWalker.ml" 61 1453 1497
 type(
   Direction.direction option
 )
 type(
   Direction.direction option
 )
-"WhiteWalker.ml" 58 1329 1331 "WhiteWalker.ml" 61 1464 1508
+"WhiteWalker.ml" 58 1329 1331 "WhiteWalker.ml" 61 1453 1497
 type(
   'a -> Direction.direction option
 )

@@ -32,6 +32,7 @@ object(self)
   (* ### TODO: Part 3 Actions ### *)
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What are we supposed to name the gold variable??? *)
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Have I done this in the correct place? Should it be elsewhere? *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Am I correct to initialize this value to an empty list? *)
   val mutable gold : int list = []
 
   (* ### TODO: Part 5 Smart Humans ### *)
@@ -104,7 +105,7 @@ object(self)
 
   (* ### TODO: Part 2 Movement ### *)
 
-  method! next_direction = Some (Direction.ord (Random.int 8))
+  method! next_direction = Some (Direction.ord (World.rand 8))
 
 
   (* ### TODO: Part 5 Smart Humans ### *)

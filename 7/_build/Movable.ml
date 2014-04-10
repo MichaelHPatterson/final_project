@@ -14,6 +14,7 @@ object
   method next_direction : Direction.direction option
 end
 
+
 class movable p (inv_speed:int option) : movable_t =
 object (self)
   inherit world_object p
