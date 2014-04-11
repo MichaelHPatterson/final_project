@@ -20,6 +20,10 @@ object
   inherit world_object_i 
 
   method forfeit_treasury : int -> world_object_i -> int
+
+  method get_gold_event : int Event51.event
+
+  method get_gold : int
 end =
 object (self)
   inherit world_object p
@@ -32,6 +36,8 @@ object (self)
   val mutable gold : int = starting_gold
 
   (* ### TODO: Part 6 Custom Events ### *)
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Should this be mutable? And is it the right way to do it? *)
+  val mutable gold_event : int event = Event51.new_event ()
 
   (***********************)
   (***** Initializer *****)
@@ -46,7 +52,7 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  method private do_action : unit -> unit = fun _ ->
+  method private do_action () : unit =
     if World.rand gold_probability = 0 then
       gold <- gold + 1;
     if gold >= cost_of_human && World.rand spawn_probability = 0 then
@@ -80,6 +86,8 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
   method! receive_gold (gold_offer : int list) =
     gold <- gold + Int.max (List.length gold_offer) max_gold_deposit;
+    (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is the 2nd argument correct? The specs don't explicitly say what exactly it should be. *)
+    Event51.fire_event gold_event gold;
     []
 
   (* ### TODO: Part 6 Custom Events ### *)
@@ -96,5 +104,10 @@ object (self)
     stolen
 
   (* ### TODO: Part 6 Custom Events ### *)
+
+  method get_gold_event : int event = gold_event
+
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What is the purpose of this method? It never gets referenced again *)
+  method get_gold : int = gold
 
 end

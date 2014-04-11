@@ -1,4 +1,4 @@
-1open Core.Std
+open Core.Std
 open Helpers
 open Movable
 open WorldObject
@@ -36,7 +36,7 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  method private do_action : unit -> unit = fun _ ->
+  method private do_action () : unit =
     let destroy (obj : world_object_i) : unit =
       obj#die; objs_destroyed <- objs_destroyed + 1 in
     let gold_check = fun obj -> obj#smells_like_gold <> None in

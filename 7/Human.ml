@@ -116,7 +116,7 @@ object(self)
   method! draw_z_axis = 2
 
   (* ### TODO: Part 3 Actions ### *)
-  method private do_action : unit -> unit = fun _ ->
+  method private do_action () : unit =
     let exchange (neighbor : world_object_i) : unit =
       self#deposit_gold neighbor; self#extract_gold neighbor in
     List.iter ~f:exchange (World.get self#get_pos)
