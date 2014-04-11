@@ -40,7 +40,7 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
   (* Note: Is the location of this function in the file correct? In Human.ml, we have do_action under the "WorldObjectI Methods"; should we have do_age under the same header in this file as well? If we don't, then we wouldn't be consistent; but if we do, then this header would be empty. Also, do_age (and do_action) are event handlers, so this seems like it might belong under the "Event Handlers section". *)
-  method private do_age : unit -> unit = fun _ ->
+  method private do_age () : unit =
     if lifetime > 0 then lifetime <- lifetime - 1;
     if lifetime = 0 then self#die
 

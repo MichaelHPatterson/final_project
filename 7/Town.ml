@@ -45,7 +45,7 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
-  method private do_action : unit -> unit = fun _ ->
+  method private do_action () : unit =
     if gold < max_gold && World.rand produce_gold_probability = 0 then
       gold <- gold + 1;
     if World.rand expand_probability = 0 then
