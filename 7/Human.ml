@@ -1,11 +1,12 @@
 open Core.Std
+open Ageable
+open CarbonBased
 open Event51
 open Helpers
 open Movable
 open WorldObject
 open WorldObjectI
-open Ageable
-open CarbonBased
+
 
 (* ### Part 2 Movement ### *)
 let human_inverse_speed = Some 1
@@ -21,7 +22,7 @@ let max_sensing_range = 5
 
 class type human_t =
 object
-  inherit Ageable.ageable_t
+  inherit ageable_t
   
   method private next_direction_default : Direction.direction option
 
@@ -34,7 +35,7 @@ end
 
 class human p (home : world_object_i): human_t =
 object(self)
-  inherit Ageable.ageable p (World.rand human_lifetime) human_lifetime
+  inherit carbon_based p human_inverse_speed (World.rand human_lifetime) human_lifetime
 
   (******************************)
   (***** Instance Variables *****)
@@ -81,10 +82,14 @@ object(self)
     | Some g -> gold <- g :: gold
 
   method private magnet_gold : world_object_i option =
-    let in_range = objects_within_range self#get_pos sensing_range in
-    let check_gold obj = List.mem self#gold obj#smells_like_gold in
+    let in_range = World.objects_within_range self#get_pos sensing_range in
+    let check_gold (obj : world_object_i) : bool =
+      match obj#smells_like_gold with
+      | None -> false
+      | Some x -> not (List.mem gold x) in
+
     let gold_list =
-      List.filter in_range (fun x -> x#get_name="town" && not(check_gold x)) in
+      List.filter in_range (fun x -> x#get_name="town" && check_gold x) in
     let dist_to pt = Direction.distance self#get_pos pt in
     let find_closest x acc =
       match acc with
@@ -130,7 +135,7 @@ object(self)
 
   method! next_direction =
     if List.length (unique gold) >= gold_types
-    then Direction.natural self#get_pos kings_landing#get_pos else (
+    then Direction.natural self#get_pos home#get_pos else (
       if self#magnet_gold <> None 
       then Direction.natural self#get_pos (self#magnet_gold)#get_pos else (
 	self#next_direction_default))
@@ -145,7 +150,7 @@ object(self)
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
-  method! next_direction_default = None
+  method next_direction_default = None
 
-  method! gold_length = List.length gold
+  method gold_length = List.length gold
 end
