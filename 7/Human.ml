@@ -89,7 +89,7 @@ object(self)
       | Some x -> not (List.mem gold x) in
 
     let gold_list =
-      List.filter in_range (fun x -> x#get_name="town" && check_gold x) in
+      List.filter in_range ~f:(fun x -> x#get_name="town" && check_gold x) in
     let dist_to pt = Direction.distance self#get_pos pt in
     let find_closest x acc =
       match acc with
@@ -137,10 +137,9 @@ object(self)
     if List.length (unique gold) >= gold_types
     then World.direction_from_to self#get_pos home#get_pos
     else
-      if self#magnet_gold <> None 
-      then let magnet_town = let Some obj = self#magnet_gold in obj in
-	World.direction_from_to self#get_pos magnet_town#get_pos
-      else self#next_direction_default
+      match self#magnet_gold with
+      | None -> self#next_direction_default
+      | Some obj -> World.direction_from_to self#get_pos obj#get_pos
 
   (* ### TODO: Part 5 Smart Humans ### *)
 

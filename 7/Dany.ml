@@ -24,7 +24,7 @@ object (self)
 
   (* ### TODO: Part 6 Custom Events ### *)
   initializer
-    self#register_handler city#get_gold_event self#get_spawn
+    self#register_handler city#get_gold_event self#do_spawn
 
   (**************************)
   (***** Event Handlers *****)
@@ -35,9 +35,9 @@ object (self)
     (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is there no better way to do this? *)
     let no_dragons = World.fold (fun o b -> b && o#get_name <> "dragon") true in
     if city_gold >= spawn_dragon_gold && no_dragons then
-      ignore(new Dragon.dragon self#get_pos city);
+      (ignore(new Dragon.dragon self#get_pos city);
       print_string "dragons! \n";
-      flush_all
+      flush_all ())
       
 
   (********************************)

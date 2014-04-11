@@ -5,8 +5,8 @@ open WorldObjectI
 
 (* Baratheons should travel in a random direction. *)
 class baratheon p city : human_t =
-object (self)
-  inherit human p city as super
+object
+  inherit human p city
 
   (******************************)
   (***** Instance Variables *****)

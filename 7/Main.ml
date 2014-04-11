@@ -39,7 +39,7 @@ let part1_initializer () : unit =
   ignore (new Pond.pond (0,0));
   ignore (new Town.town (1,1) 0);
   let kings_landing = new KingsLanding.kings_landing (2,2) in
-  ignore (new Human.human (3,3) kings_landing);
+  ignore (new Human.human (3,3) (kings_landing :> WorldObjectI.world_object_i));
   ignore (new Dany.dany (4,4) kings_landing);
 
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (new KingsLanding.kings_landing (2,2))" right under "ignore (new Town.town (1,1))" *)
@@ -49,7 +49,7 @@ let part1_initializer () : unit =
 
 let part2_initializer () : unit =
   let kings_landing = gen_city () in
-  ignore (new Human.human (World.size/2+1,World.size/2));
+  ignore (new Human.human (World.size/2+1,World.size/2) (kings_landing :> WorldObjectI.world_object_i));
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (gen_city ())" as the first line in the part2_initializer function *)
   ignore (gen_dragon kings_landing);
   ignore (gen_white_walker kings_landing)
@@ -64,7 +64,7 @@ let part3_initializer () : unit =
 
   let count = ref 20 in
   while !count > 0 do
-    ignore (new Human.human (World.size/2+1,World.size/2));
+    ignore (new Human.human (World.size/2+1,World.size/2) (kings_landing :> WorldObjectI.world_object_i));
     count := !count - 1
   done;
 
@@ -79,7 +79,7 @@ let part4_initializer () : unit =
 let final_initializer () : unit =
   let kings_landing = gen_city () in
   ignore (gen_dany kings_landing);
-  ignore (gen_wall wall);
+  ignore (gen_wall kings_landing);
   ignore (gen_ponds ());
   ignore (gen_towns ())
 
