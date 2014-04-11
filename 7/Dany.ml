@@ -35,7 +35,7 @@ object (self)
     (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is there no better way to do this? *)
     let no_dragons = World.fold (fun o b -> b && o#get_name <> "dragon") true in
     if city_gold >= spawn_dragon_gold && no_dragons then
-      (ignore(new Dragon.dragon self#get_pos city);
+      (ignore(new Dragon.dragon self#get_pos city self);
       print_string "dragons! \n";
       flush_all ())
       
