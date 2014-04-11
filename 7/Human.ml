@@ -127,9 +127,11 @@ object(self)
 
   method! next_direction =
     if List.length (unique gold) >= gold_types
-    then Direction.natural self#get_pos kings_landing#get_pos
+    then Direction.natural self#get_pos kings_landing#get_pos else (
+      if self#magnet_gold <> None 
+      then Direction.natural self#get_pos (self#magnet_gold)#get_pos else (
+	self#next_direction_default))
 
- self#next_direction_default
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
