@@ -4,6 +4,8 @@ open Helpers
 open Movable
 open WorldObject
 open WorldObjectI
+open Ageable
+open CarbonBased
 
 (* ### Part 2 Movement ### *)
 let human_inverse_speed = Some 1
@@ -29,6 +31,7 @@ end
 (** Humans travel the world searching for towns to trade for gold.
     They are able to sense towns within close range, and they will return
     to King's Landing once they have traded with enough towns. *)
+
 class human p (home : world_object_i): human_t =
 object(self)
   inherit Ageable.ageable p (World.rand human_lifetime) human_lifetime
@@ -101,7 +104,7 @@ object(self)
 
   method! get_name = "human"
 
-  method! draw =
+  method! draw_picture =
     let gold_string = string_of_int (List.length gold) in
     self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black gold_string
 
@@ -131,7 +134,6 @@ object(self)
       if self#magnet_gold <> None 
       then Direction.natural self#get_pos (self#magnet_gold)#get_pos else (
 	self#next_direction_default))
-
 
   (* ### TODO: Part 5 Smart Humans ### *)
 

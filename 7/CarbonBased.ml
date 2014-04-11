@@ -11,4 +11,9 @@ object (self)
 
   (* ### TODO: Part 4 Aging *)
 
+  initializer
+    (* unit -> unit function that spawns a new dust object upon death *)
+    let spawn_dust () = ignore(new Dust.dust self#get_pos self#get_name) in
+    self#register_handler self#get_die_event spawn_dust
+
 end

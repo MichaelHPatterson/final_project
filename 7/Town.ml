@@ -2,6 +2,8 @@ open Core.Std
 open Helpers
 open WorldObject
 open WorldObjectI
+open Ageable
+open CarbonBased
 
 (* ### Part 3 Actions ### *)
 let next_gold_id = ref 0
@@ -19,9 +21,9 @@ let town_lifetime = 2000
 
 (** Towns produce gold.  They will also eventually die if they are not cross
     pollenated. *)
-class town p gold_id : world_object_i =
+class town p gold_id : ageable_t =
 object (self)
-  inherit world_object p
+  inherit carbon_based p None (World.rand town_lifetime) town_lifetime
 
   (******************************)
   (***** Instance Variables *****)
@@ -58,7 +60,8 @@ object (self)
 
   method! get_name = "town"
 
-  method! draw =
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the correct way to override and draw correctly? It works fine, but I'm not sure if it's what they're looking for. *)
+  method! draw_picture =
     let gold_string = string_of_int gold in
     self#draw_circle (Graphics.rgb 0x96 0x4B 0x00) Graphics.black gold_string
 
@@ -67,7 +70,6 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
   method! smells_like_gold = if gold = 0 then None else Some gold_id
 
-
   method! forfeit_gold =
     if gold = 0 || World.rand forfeit_gold_probability > 0 then None
     else
@@ -75,5 +77,8 @@ object (self)
       Some gold_id
 
   (* ### TODO: Part 4 Aging ### *)
-
+  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Correct location in the file? *)
+  method! receive_gold (gold_list : int list) : int list =
+    if List.exists ~f:((<>) gold_id) gold_list then self#reset_life;
+    gold_list
 end

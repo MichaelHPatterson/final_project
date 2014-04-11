@@ -12,4 +12,8 @@ object (self)
   (***************************)
 
   (* ### TODO: Part 4 Aging ### *)
+
+  method! draw_picture : unit =
+    let name_sub : string = String.sub name 0 2 in
+    self#draw_circle (Graphics.rgb 150 150 150) Graphics.black name_sub
 end
