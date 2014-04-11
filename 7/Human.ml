@@ -21,7 +21,7 @@ let max_sensing_range = 5
 
 class type human_t =
 object
-  inherit Ageable.ageable_t
+  inherit ageable_t
   
   method private next_direction_default : Direction.direction option
 
@@ -34,7 +34,7 @@ end
 
 class human p (home : world_object_i): human_t =
 object(self)
-  inherit Ageable.ageable p (World.rand human_lifetime) human_lifetime
+  inherit carbon_based p human_inverse_speed (World.rand human_lifetime) human_lifetime
 
   (******************************)
   (***** Instance Variables *****)
@@ -130,10 +130,11 @@ object(self)
 
   method! next_direction =
     if List.length (unique gold) >= gold_types
-    then Direction.natural self#get_pos kings_landing#get_pos else (
+    then World.direction_from_to self#get_pos home#get_pos
+    else
       if self#magnet_gold <> None 
-      then Direction.natural self#get_pos (self#magnet_gold)#get_pos else (
-	self#next_direction_default))
+      then World.direction_from_to self#get_pos (self#magnet_gold)#get_pos
+      else self#next_direction_default
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
@@ -145,7 +146,7 @@ object(self)
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
-  method! next_direction_default = None
+  method next_direction_default = None
 
-  method! gold_length = List.length gold
+  method gold_length = List.length gold
 end
