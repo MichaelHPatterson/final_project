@@ -3,6 +3,7 @@ open Helpers
 open WorldObject
 open WorldObjectI
 open Ageable
+open CarbonBased
 
 (* ### Part 3 Actions ### *)
 let next_gold_id = ref 0
@@ -22,7 +23,7 @@ let town_lifetime = 2000
     pollenated. *)
 class town p gold_id : ageable_t =
 object (self)
-  inherit ageable p None (World.rand town_lifetime) town_lifetime
+  inherit carbon_based p None (World.rand town_lifetime) town_lifetime
 
   (******************************)
   (***** Instance Variables *****)

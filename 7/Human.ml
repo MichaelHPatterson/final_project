@@ -5,6 +5,7 @@ open Movable
 open WorldObject
 open WorldObjectI
 open Ageable
+open CarbonBased
 
 (* ### Part 2 Movement ### *)
 let human_inverse_speed = Some 1
@@ -24,7 +25,7 @@ let max_sensing_range = 5
 class human p : ageable_t =
 object(self)
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Style looks bad *)
-  inherit ageable p human_inverse_speed (World.rand human_lifetime)
+  inherit carbon_based p human_inverse_speed (World.rand human_lifetime)
                   human_lifetime
 
   (******************************)
@@ -101,7 +102,7 @@ object(self)
 
   (* ### TODO: Part 2 Movement ### *)
 
-  method! next_direction = Some (Direction.random (World.rand))
+  method! next_direction = Some (Direction.random World.rand)
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
