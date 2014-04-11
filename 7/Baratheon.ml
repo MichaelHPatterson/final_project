@@ -5,7 +5,7 @@ open WorldObjectI
 (* Baratheons should travel in a random direction. *)
 class baratheon p city : world_object_i =
 object (self)
-  inherit world_object p as super
+  inherit Human.human p city as super
 
   (******************************)
   (***** Instance Variables *****)
@@ -24,6 +24,9 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 5 Smart Humans *)
+  method! get_name = "baratheon"
+
+  method! next_direction_default = Some (Direction.random (World.rand))
 
 end
 
