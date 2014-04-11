@@ -39,7 +39,7 @@ let part1_initializer () : unit =
   ignore (new Pond.pond (0,0));
   ignore (new Town.town (1,1) 0);
   let kings_landing = new KingsLanding.kings_landing (2,2) in
-  ignore (new Human.human (3,3));
+  ignore (new Human.human (3,3) kings_landing);
   ignore (new Dany.dany (4,4));
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (new KingsLanding.kings_landing (2,2))" right under "ignore (new Town.town (1,1))" *)
   ignore (new Dragon.dragon (5,5) kings_landing);

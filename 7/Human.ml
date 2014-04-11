@@ -119,7 +119,7 @@ object(self)
   method private do_action : unit -> unit = fun _ ->
     let exchange (neighbor : world_object_i) : unit =
       self#deposit_gold neighbor; self#extract_gold neighbor in
-    List.iter ~f:exchange (World.get self#get_pos) self#sensing_range
+    List.iter ~f:exchange (World.get self#get_pos)
 
   (***************************)
   (***** Ageable Methods *****)
@@ -135,10 +135,12 @@ object(self)
 
   method! next_direction =
     if List.length (unique gold) >= gold_types
-    then Direction.natural self#get_pos home#get_pos else (
+    then World.direction_from_to self#get_pos home#get_pos
+    else
       if self#magnet_gold <> None 
-      then Direction.natural self#get_pos (self#magnet_gold)#get_pos else (
-	self#next_direction_default))
+      then let magnet_town = let Some obj = self#magnet_gold in obj in
+	World.direction_from_to self#get_pos magnet_town#get_pos
+      else self#next_direction_default
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
@@ -150,7 +152,7 @@ object(self)
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
-  method next_direction_default = None
+  method private next_direction_default = None
 
-  method gold_length = List.length gold
+  method private gold_length = List.length gold
 end

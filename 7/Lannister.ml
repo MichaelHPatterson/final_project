@@ -1,11 +1,12 @@
 open Core.Std
+open Human
 open WorldObject
 open WorldObjectI
 
 (* Baratheons should travel in a random direction. *)
-class baratheon p city : world_object_i =
+class lannister p city : human_t =
 object (self)
-  inherit Human.human p city as super
+  inherit human p city as super
 
   (******************************)
   (***** Instance Variables *****)
@@ -33,8 +34,8 @@ object (self)
   (* NOOOOOOOOOOOOOTE: this will infinite loop if we ever have a situation 
    * where our lannister is completely surrounded by shit. although this is true
    * for everything that moves randomly, I guess *)
-  method! next_direction_default =
-    let dir_ref = ref (super#next_direction_default);
+  method! private next_direction_default =
+    let dir_ref = ref (super#next_direction_default) in
     let move_attempt = Direction.move_point self#get_pos !dir_ref in
     let no_move = (!dir_ref = None) || World.can_move move_attempt in
     while no_move do

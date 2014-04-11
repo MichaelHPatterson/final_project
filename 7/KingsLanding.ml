@@ -59,7 +59,10 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 4 Aging ### *)
-  method private generate_human = ignore(new Human.human self#get_pos)
+  method private generate_human =
+    if World.rand 2 = 0 then ignore(new Baratheon.baratheon self#get_pos 
+      (self :> world_object_i))
+    else ignore(new Lannister.lannister self#get_pos (self :> world_object_i))
     
 
   (****************************)
