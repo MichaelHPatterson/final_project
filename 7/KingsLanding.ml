@@ -36,8 +36,7 @@ object (self)
   val mutable gold : int = starting_gold
 
   (* ### TODO: Part 6 Custom Events ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Should this be mutable? And is it the right way to do it? *)
-  val mutable gold_event : int Event51.event = Event51.new_event ()
+  val gold_event : int Event51.event = Event51.new_event ()
 
   (***********************)
   (***** Initializer *****)
@@ -86,8 +85,7 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
   method! receive_gold (gold_offer : int list) =
     gold <- gold + Int.max (List.length gold_offer) max_gold_deposit;
-    (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is the 2nd argument correct? The specs don't explicitly say what exactly it should be. *)
-    Event51.fire_event gold_event gold;
+    Event51.fire_event gold_event self#get_gold;
     []
 
   (* ### TODO: Part 6 Custom Events ### *)
@@ -107,7 +105,6 @@ object (self)
 
   method get_gold_event : int Event51.event = gold_event
 
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What is the purpose of this method? It never gets referenced again *)
   method get_gold : int = gold
 
 end

@@ -82,11 +82,10 @@ object (self)
 
   (* ### TODO: Part 2 Movement ### *)
 
+  (* ### TODO: Part 6 Custom Events ### *)
+
   method! next_direction =
     let dst = if stolen_gold = 0 then kings_landing#get_pos else dany#get_pos in
     World.direction_from_to self#get_pos dst
-
-
-  (* ### TODO: Part 6 Custom Events ### *)
 
 end

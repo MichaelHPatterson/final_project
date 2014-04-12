@@ -28,7 +28,7 @@ object
 
   (* ### TODO: Part 5 Smart Humans *)
   (* baratheons move in a random direction by default *)
-  method! private next_direction_default = Some (Direction.random (World.rand))
+  method! private next_direction_default = Some (Direction.random World.rand)
 
 end
 
