@@ -12,9 +12,12 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 1 Basic ### *)
+
   method! get_name = "pond"
 
+  (* Draws a blue circle with no text *)
   method! draw = self#draw_circle Graphics.blue Graphics.black ""
 
+  (* Overrides is_obstacle to make the pond an obstacle*)
   method! is_obstacle = true
 end
