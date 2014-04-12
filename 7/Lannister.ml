@@ -11,8 +11,6 @@ object (self)
   (******************************)
   (***** Instance Variables *****)
   (******************************)
-  
-  val mutable traj : Direction.direction option  = super#next_direction_default
 
   (* ### TODO: Part 5 Smart Humans *)
 
