@@ -1,6 +1,7 @@
 open Core.Std
 open Helpers
 open Movable
+open WorldObjectI
 
 (* ### Part 3 Actions ### *)
 let gold_theft_amount = 1000

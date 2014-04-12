@@ -45,7 +45,7 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
 
   (* Responds to an action event. If dangerous, destroys all neighbors that
-   * smells like gold. If neighboring Dany and not dangerous, then dies. *)
+   * smells like gold. If neighboring wall and not dangerous, then dies. *)
   method private do_action () : unit =
     if self#is_dangerous then
       let destroy (obj : world_object_i) : unit =
