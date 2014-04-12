@@ -39,7 +39,7 @@ object (self)
     let no_walkers = World.fold walker_checker true in
     if smelly_num > town_limit && no_walkers then
       (ignore(new WhiteWalker.white_walker self#get_pos kings_landing self);
-      print_string "white walkers! \n";
+      print_string "white walkers! ";
       flush_all ())
 
   (********************************)
