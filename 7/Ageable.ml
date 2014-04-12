@@ -1,11 +1,12 @@
 open Core.Std
 open Helpers
+open Movable
 
 (** Class type for objects which age over time.  After aging an ageable object
     will eventually die. *)
 class type ageable_t =
 object
-  inherit Movable.movable_t
+  inherit movable_t
 
   (** Draw just the picture portion of this object. After drawing this
       picture, the life bar for the object will be drawn on top. *)
@@ -18,12 +19,13 @@ end
 
 class ageable p inv_speed starting_lifetime max_lifetime : ageable_t =
 object (self)
-  inherit Movable.movable p inv_speed
+  inherit movable p inv_speed
 
   (******************************)
   (***** Instance Variables *****)
   (******************************)
-
+  
+  (* sets initial lifetime equal to starting_lifetime argument *)
   val mutable lifetime = starting_lifetime
 
   (***********************)
@@ -31,6 +33,8 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 4 Aging ### *)
+
+  (* adds the lifetime listener to age event *)
   initializer
     self#register_handler World.age_event self#do_age
 
@@ -40,6 +44,7 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
 
+  (* function that either decrements life or calls die element *)
   method private do_age () : unit =
     if lifetime > 0 then lifetime <- lifetime - 1;
     if lifetime = 0 then self#die
@@ -48,6 +53,7 @@ object (self)
   (***** Helper Methods *****)
   (**************************)
 
+  (* draws health bar of a human *)
   method private draw_life : unit =
     let v = Float.of_int lifetime /. Float.of_int max_lifetime in
     self#draw_status_bar Graphics.red v
@@ -56,6 +62,8 @@ object (self)
   (***** WorldObjectI Methods *****)
   (********************************)
 
+  (* calls both draw_picture and draw_life methods, drawing the object itself
+   * and its corresponding health bar *)
   method! draw : unit =
     self#draw_picture ;
     self#draw_life

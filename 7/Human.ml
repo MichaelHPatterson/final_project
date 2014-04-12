@@ -3,7 +3,6 @@ open Ageable
 open CarbonBased
 open Event51
 open Helpers
-open Movable
 open WorldObject
 open WorldObjectI
 
@@ -35,13 +34,16 @@ end
 
 class human p (home : world_object_i): human_t =
 object(self)
-  inherit carbon_based p human_inverse_speed (World.rand human_lifetime) human_lifetime
+  inherit carbon_based p human_inverse_speed (World.rand human_lifetime) 
+          human_lifetime
 
   (******************************)
   (***** Instance Variables *****)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  
+  (* initializes starting gold to empty list *)
   val mutable gold : int list = []
 
   (* ### TODO: Part 5 Smart Humans ### *)
@@ -52,6 +54,7 @@ object(self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
+  (* keeps track of dangerous object *)
   val mutable danger_object : world_object_i option = None
 
   (***********************)
@@ -59,6 +62,9 @@ object(self)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* adds do_action listener to action event, and adds react_danger listener
+   * to the get_danger event *)
   initializer
     self#register_handler World.action_event self#do_action;
     self#register_handler home#get_danger_event self#react_danger
@@ -70,7 +76,9 @@ object(self)
   (**************************)
 
   (* ### TODO: Part 6 Custom Events ### *)
-
+  
+  (* exchanges gold, if possible, with all neighbor objects; if a dangerous 
+   * object is detected, it will do damage to the object and the human dies *)
   method private do_action () : unit =
     let exchange (neighbor : world_object_i) : unit =
       self#deposit_gold neighbor; self#extract_gold neighbor in
@@ -82,10 +90,13 @@ object(self)
         (o#receive_damage;
         self#die)
 
+  (* every time a get_danger_event is fired, the dangerous object is stored in
+   * danger_object; listener for enemy's death is added to die_event of enemy *)
   method private react_danger (enemy : world_object_i) : unit =
     danger_object <- Some enemy;
     self#register_handler enemy#get_die_event self#enemy_dead
 
+  (* upon enemy's death, removes it from danger_object *)
   method private enemy_dead () : unit = danger_object <- None
 
   (**************************)
@@ -93,14 +104,21 @@ object(self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+  (* calls the receive_gold method on neighbor, the return value of which is the
+   * gold that may be kept by the human itself; its gold is updated to this *)
   method private deposit_gold (neighbor : world_object_i) : unit =
     gold <- neighbor#receive_gold gold
 
+  (* calls forfeit_gold on neighbor, which returns the gold that can be added to
+   * the human's list of gold *)
   method private extract_gold (neighbor : world_object_i) : unit =
     match neighbor#forfeit_gold with
     | None -> ()
     | Some g -> gold <- g :: gold
 
+  (* a two-step process for finding the closest town within a certain range with
+   * an uncollected gold type: first, all towns within range and w/ uncollected
+   * gold type are found, and then  with a gold type*)
   method private magnet_gold : world_object_i option =
     let in_range = World.objects_within_range self#get_pos sensing_range in
     let check_gold (obj : world_object_i) : bool =
@@ -128,7 +146,8 @@ object(self)
   (* ### TODO: Part 1 Basic ### *)
 
   method! get_name = "human"
-
+  
+  (* draws the default human circle with a string of number of gold *)
   method! draw_picture =
     let gold_string = string_of_int (List.length gold) in
     self#draw_circle (Graphics.rgb 0xC9 0xC0 0xBB) Graphics.black gold_string
@@ -148,7 +167,10 @@ object(self)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
-
+  
+  (* if danger_object detected, will go toward that object; if max gold types
+   * are met/exceeded, then go home (King's Landing); else, travel with default
+   * direction *)
   method! next_direction =
     match danger_object with
     | Some o -> World.direction_from_to self#get_pos o#get_pos
@@ -170,7 +192,9 @@ object(self)
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
+  (* default next direction of a normal human is None *)
   method private next_direction_default = None
 
+  (* allows the amount of gold to be accessed outside object *)
   method private gold_length = List.length gold
 end

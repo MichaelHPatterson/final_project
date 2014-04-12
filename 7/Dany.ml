@@ -23,6 +23,9 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 6 Custom Events ### *)
+
+  (* adds the dragon-spawning listener to the King's Landing event, which fires
+   * every time the city gets gold *)
   initializer
     self#register_handler city#get_gold_event self#do_spawn
 
@@ -31,6 +34,9 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 6 Custom Events ### *)
+
+  (* method called when get_gold_event fires; will cause dragon to spawn if no
+   * dragons are alive or if city's gold exceeds some 'spawn_dragon_gold' *)
   method private do_spawn (city_gold : int) : unit =
     let no_dragons = World.fold (fun o b -> b && o#get_name <> "dragon") true in
     if city_gold >= spawn_dragon_gold && no_dragons then
@@ -47,7 +53,9 @@ object (self)
 
   method! get_name = "dany"
 
-  method! draw = self#draw_circle Graphics.black (Graphics.rgb 0x80 0x00 0x80) "D"
+  (* displays circle showing "D" for Dany *)
+  method! draw =
+    self#draw_circle Graphics.black (Graphics.rgb 0x80 0x00 0x80) "D"
 
   (* ### TODO: Part 6 Custom Events *)
 

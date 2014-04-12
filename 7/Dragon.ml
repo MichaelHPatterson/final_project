@@ -1,8 +1,6 @@
 open Core.Std
 open Helpers
 open Movable
-open WorldObject
-open WorldObjectI
 
 (* ### Part 3 Actions ### *)
 let gold_theft_amount = 1000
@@ -22,9 +20,13 @@ object (self)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* sets initial stolen gold value to 0 *) 
   val mutable stolen_gold : int = 0
 
   (* ### TODO: Part 6 Events ### *)
+
+  (* sets initial life to dragon_starting_life *)
   val mutable life : int = dragon_starting_life
 
   (***********************)
@@ -32,6 +34,8 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* adds action listener to the world action event *)
   initializer
     self#register_handler World.action_event self#do_action
 
@@ -40,14 +44,15 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Dragon steals gold if on King's Landing, and performs up to two actions if
+   * it has gold and is on Dany: it drops gold and might die/return to Dany if
+   * gold in King's Landing is less than half of gold_theft_amount *)
   method private do_action () : unit =
     if self#get_pos = kings_landing#get_pos then
       (let cast = (self :> world_object_i) in
       let loot = kings_landing#forfeit_treasury gold_theft_amount cast in
       stolen_gold <- stolen_gold + loot);
-    (* The 2nd condition (stolen_gold > 0) makes sure that the dragon doesn't
-     * just spawn, move around randomly for a bit because of ponds, land back
-     * on Dany on accident, and then die. *)
     if self#get_pos = dany#get_pos && stolen_gold > 0 then
       (stolen_gold <- 0;
       if kings_landing#get_gold < gold_theft_amount / 2 then self#die)
@@ -62,6 +67,7 @@ object (self)
 
   method! get_name = "dragon"
 
+  (* Draws the dragon with his stolen gold *)
   method! draw =
     let stolen_gold_string = string_of_int stolen_gold in
     self#draw_circle Graphics.red Graphics.black stolen_gold_string
@@ -71,7 +77,8 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
 
   (* ### TODO: Part 6 Custom Events ### *)
-
+  
+  (* either decrements the life of dragon or causes it to die if 0 *)
   method! receive_damage =
     life <- life - 1;
     if life <= 0 then self#die
@@ -84,6 +91,8 @@ object (self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
+  (* flies to King's Landing if it does not have stolen gold; flies back to Dany
+   * if it does *)
   method! next_direction =
     let dst = if stolen_gold = 0 then kings_landing#get_pos else dany#get_pos in
     World.direction_from_to self#get_pos dst
