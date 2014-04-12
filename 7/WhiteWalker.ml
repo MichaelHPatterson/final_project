@@ -46,7 +46,10 @@ object (self)
     else if self#get_pos = wall#get_pos then self#die
 
   (* ### TODO: Part 6 Custom Events ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Correct location in file? *)
+
+  (* Method that evaluates whether the White Walker should stay dangerous.
+   * Placed under "Event Handlers" because there's no better location, and it's
+   * closely associated with do_action. *)
   method private is_dangerous : bool = objs_destroyed < max_destroyed_objects
 
   (********************************)

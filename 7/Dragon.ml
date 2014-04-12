@@ -71,7 +71,7 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
 
   (* ### TODO: Part 6 Custom Events ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the correct location? *)
+
   method! receive_damage =
     life <- life - 1;
     if life <= 0 then self#die

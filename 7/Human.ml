@@ -71,6 +71,17 @@ object(self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
+  method private do_action () : unit =
+    let exchange (neighbor : world_object_i) : unit =
+      self#deposit_gold neighbor; self#extract_gold neighbor in
+    List.iter ~f:exchange (World.get self#get_pos);
+    match danger_object with
+    | None -> ()
+    | Some o ->
+      if self#get_pos = o#get_pos then
+        (o#receive_damage;
+        self#die)
+
   method private react_danger (enemy : world_object_i) : unit =
     danger_object <- Some enemy;
     self#register_handler enemy#get_die_event self#enemy_dead
@@ -125,16 +136,6 @@ object(self)
   method! draw_z_axis = 2
 
   (* ### TODO: Part 3 Actions ### *)
-  method private do_action () : unit =
-    let exchange (neighbor : world_object_i) : unit =
-      self#deposit_gold neighbor; self#extract_gold neighbor in
-    List.iter ~f:exchange (World.get self#get_pos);
-    match danger_object with
-    | None -> ()
-    | Some o ->
-      if self#get_pos = o#get_pos then
-        (o#receive_damage;
-        self#die)
 
   (***************************)
   (***** Ageable Methods *****)

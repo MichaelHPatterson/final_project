@@ -60,7 +60,6 @@ object (self)
 
   method! get_name = "town"
 
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this the correct way to override and draw correctly? It works fine, but I'm not sure if it's what they're looking for. *)
   method! draw_picture =
     let gold_string = string_of_int gold in
     self#draw_circle (Graphics.rgb 0x96 0x4B 0x00) Graphics.black gold_string
@@ -77,7 +76,7 @@ object (self)
       Some gold_id
 
   (* ### TODO: Part 4 Aging ### *)
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Correct location in the file? *)
+
   method! receive_gold (gold_list : int list) : int list =
     if List.exists ~f:((<>) gold_id) gold_list then self#reset_life;
     gold_list
