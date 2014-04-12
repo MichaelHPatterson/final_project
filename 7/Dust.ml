@@ -15,7 +15,7 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
   
-  (* draws the dust itself with a truncated string *)
+  (* draws the dust as a circle with the first 2 letters of the dead object *)
   method! draw_picture : unit =
     let name_sub : string = String.sub name ~pos:0 ~len:2 in
     self#draw_circle (Graphics.rgb 150 150 150) Graphics.black name_sub

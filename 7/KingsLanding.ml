@@ -120,10 +120,10 @@ object (self)
 
   (* Forfeits money to a dragon. Gives up the min of current gold and the amount
    * requested. Updates gold and fires a danger event. *)
-  method forfeit_treasury (n : int) (stealer : world_object_i) : int =
+  method forfeit_treasury (n : int) (thief : world_object_i) : int =
     let stolen = Int.min gold n in
     gold <- gold - stolen;
-    self#danger stealer;
+    self#danger thief;
     stolen
 
   (* ### TODO: Part 6 Custom Events ### *)

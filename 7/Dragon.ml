@@ -1,6 +1,7 @@
 open Core.Std
 open Helpers
 open Movable
+open WorldObjectI
 
 (* ### Part 3 Actions ### *)
 let gold_theft_amount = 1000
@@ -21,7 +22,7 @@ object (self)
 
   (* ### TODO: Part 3 Actions ### *)
 
-  (* sets initial stolen gold value to 0 *) 
+  (* Contains amount of gold stolen, initialized to 0 *) 
   val mutable stolen_gold : int = 0
 
   (* ### TODO: Part 6 Events ### *)
@@ -45,6 +46,8 @@ object (self)
 
   (* ### TODO: Part 3 Actions ### *)
 
+  (* ### TODO: Part 6 Custom Events ### *)
+
   (* Dragon steals gold if on King's Landing, and performs up to two actions if
    * it has gold and is on Dany: it drops gold and might die/return to Dany if
    * gold in King's Landing is less than half of gold_theft_amount *)
@@ -56,8 +59,6 @@ object (self)
     if self#get_pos = dany#get_pos && stolen_gold > 0 then
       (stolen_gold <- 0;
       if kings_landing#get_gold < gold_theft_amount / 2 then self#die)
-
-  (* ### TODO: Part 6 Custom Events ### *)
 
   (********************************)
   (***** WorldObjectI Methods *****)

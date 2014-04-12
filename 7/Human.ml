@@ -43,7 +43,7 @@ object(self)
 
   (* ### TODO: Part 3 Actions ### *)
   
-  (* initializes starting gold to empty list *)
+  (* Contains a list of gold objects carried. Initialized to empty list *)
   val mutable gold : int list = []
 
   (* ### TODO: Part 5 Smart Humans ### *)
@@ -54,8 +54,10 @@ object(self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
-  (* keeps track of dangerous object *)
+  (* Track of dangerous object. Becomes Some of the dangerous object if there
+   * is one, and None if there isn't. *)
   val mutable danger_object : world_object_i option = None
+
 
   (***********************)
   (***** Initializer *****)
@@ -64,12 +66,13 @@ object(self)
   (* ### TODO: Part 3 Actions ### *)
 
   (* adds do_action listener to action event, and adds react_danger listener
-   * to the get_danger event *)
+   * to the get_danger_event event *)
   initializer
     self#register_handler World.action_event self#do_action;
     self#register_handler home#get_danger_event self#react_danger
 
   (* ### TODO: Part 6 Custom Events ### *)
+
 
   (**************************)
   (***** Event Handlers *****)
@@ -90,14 +93,13 @@ object(self)
         (o#receive_damage;
         self#die)
 
-  (* every time a get_danger_event is fired, the dangerous object is stored in
-   * danger_object; listener for enemy's death is added to die_event of enemy *)
+  (* Every time a get_danger_event is fired, the dangerous object is stored in
+   * danger_object. Adds a listener function to the enemy's die_event that
+   * resets danger_object to None. *)
   method private react_danger (enemy : world_object_i) : unit =
     danger_object <- Some enemy;
-    self#register_handler enemy#get_die_event self#enemy_dead
+    self#register_handler enemy#get_die_event (fun _ -> danger_object <- None)
 
-  (* upon enemy's death, removes it from danger_object *)
-  method private enemy_dead () : unit = danger_object <- None
 
   (**************************)
   (***** Helper Methods *****)
@@ -126,7 +128,7 @@ object(self)
       | None -> false
       | Some x -> not (List.mem gold x) in
     let gold_list =
-      List.filter in_range ~f:(fun x -> x#get_name="town" && check_gold x) in
+      List.filter in_range ~f:(fun x -> check_gold x) in
     let dist_to pt = Direction.distance self#get_pos pt in
     let find_closest x acc =
       match acc with
@@ -134,9 +136,9 @@ object(self)
       | Some x' -> if (dist_to x#get_pos) < (dist_to x'#get_pos) then Some x
 		   else acc in
     List.fold_right gold_list ~f:find_closest ~init: None
-				
 								  
   (* ### TODO: Part 5 Smart Humans ### *)
+
 
   (********************************)
   (***** WorldObjectI Methods *****)
@@ -184,6 +186,7 @@ object(self)
   (* ### TODO: Part 5 Smart Humans ### *)
 
   (* ### TODO: Part 6 Custom Events ### *)
+
 
   (***********************)
   (**** Human Methods ****)

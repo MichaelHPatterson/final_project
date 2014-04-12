@@ -74,7 +74,9 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
 
-  (* Default draw_picture function -- draws a white circle with no text *)
-  method draw_picture : unit = self#draw_circle Graphics.white Graphics.black ""
+  (* Default draw_picture function -- draws a green circle with no text *)
+  method draw_picture : unit = self#draw_circle Graphics.green Graphics.black ""
+
+  (* Restores life to maximum value *)
   method reset_life = lifetime <- max_lifetime
 end

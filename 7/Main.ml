@@ -1,3 +1,13 @@
+(* Partner 1's name: Madhusudan ("Madhu") Vijay
+ * Partner 1's code.seas account: mvijay
+ *
+ * Partner 2's name: Michael Patterson
+ * Partner 2's code.seas account: michaelpatterson
+ *
+ * CS51, Problem Set 7 (Game of Thrones)
+ * April 12, 2014
+ *)
+
 open Core.Std
 open Event51
 
@@ -66,6 +76,7 @@ let part2_initializer () : unit =
  * variables to pass into other objects as parameters. *)
 let part3_initializer () : unit =
   let kings_landing = gen_city () in
+  let cast = (kings_landing :> WorldObjectI.world_object_i) in
   let dany = gen_dany kings_landing in
   let wall = gen_wall kings_landing in
   ignore (gen_ponds ());
@@ -73,7 +84,7 @@ let part3_initializer () : unit =
 
   let count = ref 20 in
   while !count > 0 do
-    ignore (new Human.human (World.size/2+1,World.size/2) (kings_landing :> WorldObjectI.world_object_i));
+    ignore (new Human.human (World.size/2+1,World.size/2) cast);
     count := !count - 1
   done;
 

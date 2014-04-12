@@ -23,7 +23,7 @@ object (self)
 
   (* ### TODO: Part 3 Actions ### *)
 
-  (* Mutable variable to track the number of objects destroyed *)
+  (* Variable to track the number of objects destroyed, initialized to 0 *)
   val mutable objs_destroyed : int = 0
 
 

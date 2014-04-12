@@ -83,12 +83,12 @@ object (self)
   (* ### TODO: Part 3 Actions ### *)
 
   (* smells like gold if the amount of gold is nonzero *)
-  method! smells_like_gold = if gold = 0 then None else Some gold_id
+  method! smells_like_gold = if gold <= 0 then None else Some gold_id
 
   (* Forfeits a unit of gold with probability 1/forfeit_gold_probability,
    * if current gold is nonzero. *)
   method! forfeit_gold =
-    if gold = 0 || World.rand forfeit_gold_probability > 0 then None
+    if gold <= 0 || World.rand forfeit_gold_probability > 0 then None
     else
       let _ = gold <- gold - 1 in
       Some gold_id
