@@ -14,8 +14,9 @@ object (self)
 
   (* ### TODO: Part 5 Smart Humans *)
 
-  (* Uses the same initial default value (None) as Human. (The compiler didn't
-   * let us call super#next_direction_default to do this.) *)
+  (* Variable containing the direction. Uses the same initial default value
+   * (None) as Human. (The compiler didn't let us call
+   * super#next_direction_default to do this.) *)
   val mutable traj : Direction.direction option = None
 
   (********************************)
