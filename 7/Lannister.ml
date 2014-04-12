@@ -11,6 +11,8 @@ object (self)
   (******************************)
   (***** Instance Variables *****)
   (******************************)
+  
+  val mutable traj : Direction.direction option  = super#next_direction_default
 
   (* ### TODO: Part 5 Smart Humans *)
 
@@ -35,13 +37,13 @@ object (self)
    * where our lannister is completely surrounded by shit. although this is true
    * for everything that moves randomly, I guess *)
   method! private next_direction_default =
-    let dir_ref = ref (super#next_direction_default) in
-    let move_attempt = Direction.move_point self#get_pos !dir_ref in
-    let no_move = (!dir_ref = None) || World.can_move move_attempt in
-    while no_move do
-      dir_ref := Some (Direction.random (World.rand))
+    let no_move (dir: Direction.direction option) : bool =
+      let move_attempt x = Direction.move_point self#get_pos x in
+      (traj = None) || not (World.can_move (move_attempt traj)) in
+    while (no_move traj) do
+      traj <- Some (Direction.random (World.rand))
     done;
-    !dir_ref
+    traj
 
 end
 
