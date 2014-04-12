@@ -45,7 +45,10 @@ object (self)
       (let cast = (self :> world_object_i) in
       let loot = kings_landing#forfeit_treasury gold_theft_amount cast in
       stolen_gold <- stolen_gold + loot);
-    if self#get_pos = dany#get_pos then
+    (* The 2nd condition (stolen_gold > 0) makes sure that the dragon doesn't
+     * just spawn, move around randomly for a bit because of ponds, land back
+     * on Dany on accident, and then die. *)
+    if self#get_pos = dany#get_pos && stolen_gold > 0 then
       (stolen_gold <- 0;
       if kings_landing#get_gold < gold_theft_amount / 2 then self#die)
 
