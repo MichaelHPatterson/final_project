@@ -24,11 +24,11 @@ let gen_dany kings_landing =
 let gen_wall kings_landing =
   new Wall.wall (World.size-1,World.size-1) kings_landing
 
-let gen_dragon kings_landing =
-  new Dragon.dragon (0,0) kings_landing
+let gen_dragon kings_landing dany =
+  new Dragon.dragon (0,0) kings_landing dany
 
-let gen_white_walker kings_landing =
-  new WhiteWalker.white_walker (World.size-1,World.size-1) kings_landing
+let gen_white_walker kings_landing wall =
+  new WhiteWalker.white_walker (World.size-1,World.size-1) kings_landing wall
 
 let gen_city () =
   (* Don't ignore, since we will need to pass the city to some other objects. *)
@@ -39,37 +39,36 @@ let part1_initializer () : unit =
   ignore (new Pond.pond (0,0));
   ignore (new Town.town (1,1) 0);
   let kings_landing = new KingsLanding.kings_landing (2,2) in
-  ignore (new Human.human (3,3) kings_landing);
-  ignore (new Dany.dany (4,4) kings_landing);
-
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (new KingsLanding.kings_landing (2,2))" right under "ignore (new Town.town (1,1))" *)
-  ignore (new Dragon.dragon (5,5) kings_landing);
-  ignore (new Wall.wall (6,6) kings_landing);
-  ignore (new WhiteWalker.white_walker (7,7) kings_landing)
+  ignore (new Human.human (3,3) (kings_landing :> WorldObjectI.world_object_i));
+  let dany = new Dany.dany (4,4) kings_landing in
+  ignore (new Dragon.dragon (5,5) kings_landing dany);
+  let wall = new Wall.wall (6,6) kings_landing in
+  ignore (new WhiteWalker.white_walker (7,7) kings_landing wall)
 
 let part2_initializer () : unit =
   let kings_landing = gen_city () in
-  ignore (new Human.human (World.size/2+1,World.size/2));
-  (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Is this done correctly? Before, it just had "ignore (gen_city ())" as the first line in the part2_initializer function *)
-  ignore (gen_dragon kings_landing);
-  ignore (gen_white_walker kings_landing)
+  let cast = (kings_landing :> WorldObjectI.world_object_i) in
+  ignore (new Human.human (World.size/2+1,World.size/2) cast);
+  (* Uses kings_landing as a dummy argument for the dragon's and white walker's
+   * homes, because there isn't a Dany or a wall. *)
+  ignore (gen_dragon kings_landing kings_landing);
+  ignore (gen_white_walker kings_landing kings_landing)
 
-(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: For some reason, the WhiteWalker doesn't seem to show up in the graphics for part 3, and the wall only shows up sometimes. *)
 let part3_initializer () : unit =
   let kings_landing = gen_city () in
-  ignore (gen_dany kings_landing);
-  ignore (gen_wall kings_landing);
+  let dany = gen_dany kings_landing in
+  let wall = gen_wall kings_landing in
   ignore (gen_ponds ());
   ignore (gen_towns ());
 
   let count = ref 20 in
   while !count > 0 do
-    ignore (new Human.human (World.size/2+1,World.size/2));
+    ignore (new Human.human (World.size/2+1,World.size/2) (kings_landing :> WorldObjectI.world_object_i));
     count := !count - 1
   done;
 
-  ignore(gen_dragon kings_landing);
-  ignore(gen_white_walker kings_landing)
+  ignore(gen_dragon kings_landing dany);
+  ignore(gen_white_walker kings_landing wall)
 
 let part4_initializer () : unit =
   ignore (gen_city ());
@@ -79,7 +78,7 @@ let part4_initializer () : unit =
 let final_initializer () : unit =
   let kings_landing = gen_city () in
   ignore (gen_dany kings_landing);
-  ignore (gen_wall wall);
+  ignore (gen_wall kings_landing);
   ignore (gen_ponds ());
   ignore (gen_towns ())
 

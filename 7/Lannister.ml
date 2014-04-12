@@ -16,6 +16,10 @@ object (self)
 
   (* ### TODO: Part 5 Smart Humans *)
 
+  (* Uses the same initial default value (None) as Human. (The compiler didn't
+   * let us call super#next_direction_default to do this.) *)
+  val mutable traj : Direction.direction option = None
+
   (********************************)
   (***** WorldObjectI Methods *****)
   (********************************)
@@ -29,7 +33,7 @@ object (self)
   (* ### TODO: Part 5 Smart Humans *)
   method! get_name = "lannister"
 
-  method! draw =
+  method! draw_picture =
     let gold_string = string_of_int (super#gold_length) in
     self#draw_circle (Graphics.rgb 0xFF 0xEF 0x00) Graphics.black gold_string
 
@@ -37,14 +41,14 @@ object (self)
    * where our lannister is completely surrounded by shit. although this is true
    * for everything that moves randomly, I guess *)
   method! private next_direction_default =
-    let no_move (dir: Direction.direction option) : bool =
-      let move_attempt x = Direction.move_point self#get_pos x in
-      (traj = None) || not (World.can_move (move_attempt traj)) in
-    while (no_move traj) do
-      traj <- Some (Direction.random (World.rand))
-    done;
-    traj
+    let rec new_dir (d : Direction.direction) =
+      let next_pt = Direction.move_point self#get_pos (Some d) in
+      if World.can_move next_pt then
+        let _ = traj <- Some d in Some d
+      else new_dir (Direction.random World.rand)
+    in
+    match traj with
+    | None -> new_dir (Direction.random World.rand)
+    | Some d -> new_dir d
 
 end
-
-

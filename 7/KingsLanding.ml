@@ -37,7 +37,7 @@ object (self)
 
   (* ### TODO: Part 6 Custom Events ### *)
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: Should this be mutable? And is it the right way to do it? *)
-  val mutable gold_event : int event = Event51.new_event ()
+  val mutable gold_event : int Event51.event = Event51.new_event ()
 
   (***********************)
   (***** Initializer *****)
@@ -66,8 +66,8 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
   method private generate_human =
-    if World.rand 2 = 0 then ignore(new Baratheon.baratheon self#get_pos 
-      (self :> world_object_i))
+    if World.rand 2 = 0 then
+      ignore(new Baratheon.baratheon self#get_pos (self :> world_object_i))
     else ignore(new Lannister.lannister self#get_pos (self :> world_object_i))
     
 
@@ -105,7 +105,7 @@ object (self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
-  method get_gold_event : int event = gold_event
+  method get_gold_event : int Event51.event = gold_event
 
   (* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: What is the purpose of this method? It never gets referenced again *)
   method get_gold : int = gold

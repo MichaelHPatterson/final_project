@@ -18,7 +18,7 @@ end
 
 class ageable p inv_speed starting_lifetime max_lifetime : ageable_t =
 object (self)
-  inherit Movable.movable p inv_speed as super
+  inherit Movable.movable p inv_speed
 
   (******************************)
   (***** Instance Variables *****)

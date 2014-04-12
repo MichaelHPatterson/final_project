@@ -52,13 +52,16 @@ object(self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
+  val mutable danger_object : world_object_i option = None
+
   (***********************)
   (***** Initializer *****)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
   initializer
-    self#register_handler World.action_event self#do_action
+    self#register_handler World.action_event self#do_action;
+    self#register_handler home#get_danger_event self#react_danger
 
   (* ### TODO: Part 6 Custom Events ### *)
 
@@ -67,6 +70,12 @@ object(self)
   (**************************)
 
   (* ### TODO: Part 6 Custom Events ### *)
+
+  method private react_danger (enemy : world_object_i) : unit =
+    danger_object <- Some enemy;
+    self#register_handler enemy#get_die_event self#enemy_dead
+
+  method private enemy_dead () : unit = danger_object <- None
 
   (**************************)
   (***** Helper Methods *****)
@@ -89,7 +98,7 @@ object(self)
       | Some x -> not (List.mem gold x) in
 
     let gold_list =
-      List.filter in_range (fun x -> x#get_name="town" && check_gold x) in
+      List.filter in_range ~f:(fun x -> x#get_name="town" && check_gold x) in
     let dist_to pt = Direction.distance self#get_pos pt in
     let find_closest x acc =
       match acc with
@@ -119,7 +128,13 @@ object(self)
   method private do_action () : unit =
     let exchange (neighbor : world_object_i) : unit =
       self#deposit_gold neighbor; self#extract_gold neighbor in
-    List.iter ~f:exchange (World.get self#get_pos)
+    List.iter ~f:exchange (World.get self#get_pos);
+    match danger_object with
+    | None -> ()
+    | Some o ->
+      if self#get_pos = o#get_pos then
+        (o#receive_damage;
+        self#die)
 
   (***************************)
   (***** Ageable Methods *****)
@@ -134,13 +149,15 @@ object(self)
   (* ### TODO: Part 2 Movement ### *)
 
   method! next_direction =
-    if List.length (unique gold) >= gold_types
-    then World.direction_from_to self#get_pos home#get_pos
-    else
-      if self#magnet_gold <> None 
-      then let magnet_town = let Some obj = self#magnet_gold in obj in
-	World.direction_from_to self#get_pos magnet_town#get_pos
-      else self#next_direction_default
+    match danger_object with
+    | Some o -> World.direction_from_to self#get_pos o#get_pos
+    | None ->
+      if List.length (unique gold) >= gold_types
+      then World.direction_from_to self#get_pos home#get_pos
+      else
+        match self#magnet_gold with
+        | None -> self#next_direction_default
+        | Some obj -> World.direction_from_to self#get_pos obj#get_pos
 
   (* ### TODO: Part 5 Smart Humans ### *)
 
