@@ -23,21 +23,22 @@ object (self)
   (********************************)
 
   (* ### TODO: Part 5 Smart Humans *)
+  method! get_name = "lannister"
 
   (***********************)
   (***** Human Methods *****)
   (***********************)
 
   (* ### TODO: Part 5 Smart Humans *)
-  method! get_name = "lannister"
-
+  (* display a gold circle to represent a lannister, and prints the amount of
+   * gold the lannister has on the circle (by calling from super *)
   method! draw_picture =
     let gold_string = string_of_int (super#gold_length) in
     self#draw_circle (Graphics.rgb 0xFF 0xEF 0x00) Graphics.black gold_string
 
-  (* NOOOOOOOOOOOOOTE: this will infinite loop if we ever have a situation 
-   * where our lannister is completely surrounded by shit. although this is true
-   * for everything that moves randomly, I guess *)
+  (* This will infinite loop if we ever have a situation where our lannister is
+   * completely surrounded by ponds and/or boundaries of the map. The lannister
+   * will have no unobstructed direction to move in. *)
   method! private next_direction_default =
     let rec new_dir (d : Direction.direction) =
       let next_pt = Direction.move_point self#get_pos (Some d) in
