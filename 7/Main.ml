@@ -18,15 +18,19 @@ let gen_towns () : unit =
                    (fun () -> gold_id := Town.get_next_gold_id ())
                    (fun p -> ignore (new Town.town p !gold_id))
 
+(* Generate Dany with kings_landing as a parameter *)
 let gen_dany kings_landing =
   new Dany.dany (0,0) kings_landing
 
+(* Generate the wall with kings_landing as a parameter *)
 let gen_wall kings_landing =
   new Wall.wall (World.size-1,World.size-1) kings_landing
 
+(* Generate a dragon with kings_landing and dany as parameters *)
 let gen_dragon kings_landing dany =
   new Dragon.dragon (0,0) kings_landing dany
 
+(* Generate a White Walker using kings_landing and the wall as parameters *)
 let gen_white_walker kings_landing wall =
   new WhiteWalker.white_walker (World.size-1,World.size-1) kings_landing wall
 
@@ -35,6 +39,8 @@ let gen_city () =
   new KingsLanding.kings_landing (World.size/2,World.size/2)
 
 (* Initializer functions *)
+(* Part 1 initializer, which stores King's Landing, Dany, and the wall in local
+ * variables to pass into other objects as parameters. *)
 let part1_initializer () : unit =
   ignore (new Pond.pond (0,0));
   ignore (new Town.town (1,1) 0);
@@ -45,6 +51,8 @@ let part1_initializer () : unit =
   let wall = new Wall.wall (6,6) kings_landing in
   ignore (new WhiteWalker.white_walker (7,7) kings_landing wall)
 
+(* Part 2 initializer, which stores King's Landing in a local variable in order
+ * to construct a human, dragon, and White Walker. *)
 let part2_initializer () : unit =
   let kings_landing = gen_city () in
   let cast = (kings_landing :> WorldObjectI.world_object_i) in
@@ -54,6 +62,8 @@ let part2_initializer () : unit =
   ignore (gen_dragon kings_landing kings_landing);
   ignore (gen_white_walker kings_landing kings_landing)
 
+(* Part 3 initializer, which stores King's Landing, Dany, and the wall in local
+ * variables to pass into other objects as parameters. *)
 let part3_initializer () : unit =
   let kings_landing = gen_city () in
   let dany = gen_dany kings_landing in
@@ -70,11 +80,14 @@ let part3_initializer () : unit =
   ignore(gen_dragon kings_landing dany);
   ignore(gen_white_walker kings_landing wall)
 
+(* Initializer for part 4 *)
 let part4_initializer () : unit =
   ignore (gen_city ());
   ignore (gen_ponds ());
   ignore (gen_towns ())
 
+(* Part 5 initializer, which stores King's Landing in a local variable in order
+ * to construct Dany and the wall. *)
 let final_initializer () : unit =
   let kings_landing = gen_city () in
   ignore (gen_dany kings_landing);
@@ -109,7 +122,7 @@ let parse_args () : (unit -> unit) * int =
   | "final" | "part6" -> final_initializer, 6
   | _ -> usage ()
 
-
+(* Runs everything *)
 let run () : unit =
   let initialize, part = parse_args () in
   UI.run_world initialize (event_loop part)

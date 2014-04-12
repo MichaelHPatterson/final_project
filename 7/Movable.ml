@@ -14,9 +14,11 @@ object
   method next_direction : Direction.direction option
 end
 
-
+(* A class for any movable objects, taking a point p and the inverse of
+ * the speed inv_speed as parameters. *)
 class movable p (inv_speed:int option) : movable_t =
 object (self)
+  (* inherits world_object using the point p *)
   inherit world_object p
 
 
@@ -25,6 +27,10 @@ object (self)
   (***********************)
 
   (* ### TODO: Part 2 Movement ### *)
+
+  (* If inv_speed is not None, then use Event51.buffer to generate an event that
+   * fires on every s fires of World.move_event. Adds a listener to that event
+   * that calls do_move. *)
   initializer
     match inv_speed with
     | None -> ()
@@ -38,13 +44,18 @@ object (self)
   (**************************)
 
   (* ### TODO: Part 2 Movement ### *)
+
+  (* Moves by calling the move from WorldObject.ml and next_direction *)
   method private do_move (_ : unit list) = self#move self#next_direction
+
 
   (***************************)
   (***** Movable Methods *****)
   (***************************)
 
   (* ### TODO: Part 2 Movement ### *)
+
+  (* Arbitrary default for next_direction, keeping the object stationery *)
   method next_direction = None
 
 end

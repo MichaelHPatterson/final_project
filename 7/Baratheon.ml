@@ -1,7 +1,5 @@
 open Core.Std
 open Human
-open WorldObject
-open WorldObjectI
 
 (* Baratheons should travel in a random direction. *)
 class baratheon p city : human_t =

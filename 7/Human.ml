@@ -34,7 +34,7 @@ end
 
 class human p (home : world_object_i): human_t =
 object(self)
-  inherit carbon_based p human_inverse_speed (World.rand human_lifetime) 
+  inherit carbon_based p human_inverse_speed (World.rand human_lifetime)
           human_lifetime
 
   (******************************)
@@ -125,7 +125,6 @@ object(self)
       match obj#smells_like_gold with
       | None -> false
       | Some x -> not (List.mem gold x) in
-
     let gold_list =
       List.filter in_range ~f:(fun x -> x#get_name="town" && check_gold x) in
     let dist_to pt = Direction.distance self#get_pos pt in

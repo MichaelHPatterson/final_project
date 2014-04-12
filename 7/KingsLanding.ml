@@ -26,6 +26,7 @@ object
   method get_gold : int
 end =
 object (self)
+  (* inherits from world_object using the point p *)
   inherit world_object p
 
   (******************************)
@@ -33,24 +34,36 @@ object (self)
   (******************************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Contains the gold amount, initialized as starting_gold *)
   val mutable gold : int = starting_gold
 
   (* ### TODO: Part 6 Custom Events ### *)
+
+  (* Event that fires when the city receives gold *)
   val gold_event : int Event51.event = Event51.new_event ()
+
 
   (***********************)
   (***** Initializer *****)
   (***********************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Adds a listener to World.action_event that calls do_action *)
   initializer
     self#register_handler World.action_event self#do_action
+
 
   (**************************)
   (***** Event Handlers *****)
   (**************************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Responds to an action event. Spawns human if there's enough gold, with
+   * probability 1/spawn_probability. Increments gold with probability
+   * 1/gold_probability. *)
   method private do_action () : unit =
     if World.rand gold_probability = 0 then
       gold <- gold + 1;
@@ -59,11 +72,14 @@ object (self)
 
   (* ### TODO: Part 4 Aging ### *)
 
+
   (**************************)
   (***** Helper Methods *****)
   (**************************)
 
   (* ### TODO: Part 4 Aging ### *)
+
+  (* Helper that spawns a Baratheon or a Lannister, with equal probability. *)
   method private generate_human =
     if World.rand 2 = 0 then
       ignore(new Baratheon.baratheon self#get_pos (self :> world_object_i))
@@ -78,23 +94,32 @@ object (self)
 
   method! get_name = "kings_landing"
 
+  (* Draws a yellow circle displaying the amount of gold in black *)
   method! draw =
     let gold_string = string_of_int gold in
     self#draw_circle (Graphics.rgb 0xFF 0xD7 0x00) Graphics.black gold_string
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Receives gold. Collects the minimum of max_gold_deposit and List.length
+   * gold_offer, and allows the depositor to keep nothing. Fires gold_event with
+   * the current amount of gold. *)
   method! receive_gold (gold_offer : int list) =
-    gold <- gold + Int.max (List.length gold_offer) max_gold_deposit;
+    gold <- gold + Int.min (List.length gold_offer) max_gold_deposit;
     Event51.fire_event gold_event self#get_gold;
     []
 
   (* ### TODO: Part 6 Custom Events ### *)
+
 
   (**********************************)
   (***** King's Landing Methods *****)
   (**********************************)
 
   (* ### TODO: Part 3 Actions ### *)
+
+  (* Forfeits money to a dragon. Gives up the min of current gold and the amount
+   * requested. Updates gold and fires a danger event. *)
   method forfeit_treasury (n : int) (stealer : world_object_i) : int =
     let stolen = Int.min gold n in
     gold <- gold - stolen;
@@ -103,8 +128,10 @@ object (self)
 
   (* ### TODO: Part 6 Custom Events ### *)
 
+  (* exposes the gold_event outside the class *)
   method get_gold_event : int Event51.event = gold_event
 
+  (* exposes the amount of gold *)
   method get_gold : int = gold
 
 end

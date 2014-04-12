@@ -96,5 +96,4 @@ object (self)
   method! next_direction =
     let dst = if stolen_gold = 0 then kings_landing#get_pos else dany#get_pos in
     World.direction_from_to self#get_pos dst
-
 end
