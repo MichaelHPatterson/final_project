@@ -9,6 +9,22 @@ struct
   exception SizeMismatch
   exception IndexOutOfBounds
 
+  let zero_vec (len : int) : vec = Array.create ~len 0.
+
+  let zero_mat (cols : int) (rows : int) : mat =
+    Array.create ~len:cols (Array.create ~len:rows 0.)
+
+  (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
+  let basis_vec ~(dim : int) (n : int) : vec =
+    if n >= dim then raise IndexOutOfBounds
+    else
+      let result : vec = Array.create ~len:dim 0. in
+      result.(n) <- 1.;
+      result
+
+  let identity (n : int) : mat =
+    Array.init n ~f:(fun i -> basis_vec ~dim:n i)
+
   let map2 ~(f : float -> float -> 'a) (l1 : vec) (l2 : vec) : 'a array =
     let len1 = Array.length l1 in
     if len1 <> Array.length l2 then raise SizeMismatch
@@ -35,17 +51,6 @@ struct
       done;
       !result
 
-  (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
-  let basis_vec ~(dim : int) (n : int) : vec =
-    if n >= dim then raise IndexOutOfBounds
-    else
-      let result : vec = Array.create ~len:dim 0. in
-      result.(n) <- 1.;
-      result
-
-  let identity (n : int) : mat =
-    Array.init n ~f:(fun i -> basis_vec ~dim:n i)
-
   let transpose (m : mat) : mat =
     let num_cols = Array.length m in
     if num_cols = 0 then m
@@ -70,7 +75,9 @@ struct
       m.(n1) <- m.(n2);
       m.(n2) <- v
 
-  (* Note: This doesn't work at all *)
+  (* Row_reduces a matrix. Seems to be working properly based on very limited
+   * testing, but further testing is needed. Based on an algorithm I learned
+   * in math, and the steps of that algorithm are copy-pasted in as comments. *)
   let row_reduce (m : mat) : mat =
     (* Column reduces rows n through Array.length m - 1 of m. Assumes that <piv>
      * pivotal 1's have been generated so far. *)
@@ -87,7 +94,7 @@ struct
         for i = len - 1 downto piv do
 	  if m.(i).(row) <> 0. then ans := (i, m.(i).(row))
 	done;
-        !ans
+        let (c, _) = !ans in if c = len then None else Some !ans
       in
       match first_nonzero m n with
       | None ->
@@ -107,40 +114,8 @@ struct
 	done;
 
 	col_reduce_past m (n + 1) (piv + 1)
-    transpose (col_reduce_past (transpose m) 0 0)
 
-  (* Note: This is totally wrong *)
-  (*
-  let row_reduce (m : mat) : mat =
-    let m = transpose m in
-    let len = Array.length m in
-    let tracker : bool array = Array.create ~len false in
-    let next_col (start_from : int) : col_remaining =
-      if start_from >= Array.length tracker then Done
-      else if tracker.(start_from) then start_from
-      else next_col (start_from + 1)
-    in
-    for i = 0 to len - 1 do
-      next_col i
-    done;
-    (* Tries to put a pivotal 1 at j,k. *)
-    let jk_col_reduce (n : mat) (j : int) (k : int) : mat =
-      let len = Array.length n in
-      if j >= len or k >= len then raise IndexOutOfBounds
-      else if n.(j).(k) = 0. then n
-      else
-        let _ = n.(j) <- scalar_mult (1. /. n.(j).(k)) n.(j) in
-        for l = 0 to len - 1 do
-          if j <> l then n.(l) <- add_vec n.(l) (scalar_mult (-1.) (scalar_mult n.(j).(k) n.(j)))
-        done;
-        tracker.(j) <- true;
-        n
-    in
-    for i = 0 to Array.length m - 1 do
-      jk_col_reduce m i
-    done;
-    transpose m
-   *)
+    in transpose (col_reduce_past (transpose m) 0 0)
 end
 
 (* For typing convenience *)
