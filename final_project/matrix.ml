@@ -1,4 +1,5 @@
 exception TODO
+open Core.Std
 
 (* Note: this is just preliminary and could require some modifications. *)
 module FloatMatrix =
@@ -37,7 +38,8 @@ struct
 
   let add_vec : vec -> vec -> vec = map2 ~f:(+.)
 
-  let scalar_mult (factor : float) (m : vec) = Array.map ~f:(( *. ) factor) m
+  let scalar_mult (factor : float) (m : vec) : vec =
+    Array.map ~f:(( *. ) factor) m
 
   (* Multiplies a square matrix m with a vector v. Interprets each sub-array in
    * m as a column of m. *)
@@ -116,7 +118,32 @@ struct
 	col_reduce_past m (n + 1) (piv + 1)
 
     in transpose (col_reduce_past (transpose m) 0 0)
+
+
+  (* This function should ideally compute both eigenvalues and the corresponding
+   * eigenvectors simultaneously (i.e. the return type should be something like
+   * "(float * vec) list"). That shouldn't be very hard to add in. *)
+  (* Note: The call to Polynomial.newton_all_slow doesn't work with C-c C-e; it
+   * requires compilation from the terminal. *)
+  let eigenvalues (m : mat) : float list =
+    let dim = Array.length m in
+    let new_vec = ref (basis_vec ~dim 0) in
+    let new_mat = zero_mat (dim + 1) dim in
+    new_mat.(0) <- !new_vec;
+    for i = 0 to dim - 1 do
+      new_vec := mult m !new_vec;
+      new_mat.(i+1) <- !new_vec
+    done;
+    let p =
+      Array.append (scalar_mult (-1.) (row_reduce new_mat).(dim)) [|1.|] in
+    Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.001
 end
 
 (* For typing convenience *)
 module M = FloatMatrix
+
+(* Simple test matrix, with eigenvalues 0, 1, and 3 *)
+let v = M.eigenvalues [|[|1.;-1.;0.|]; [|-1.;2.;-1.|]; [|0.;-1.;1.|]|] in
+Printf.printf "Eigenvalues:";
+List.iter ~f:(fun f -> Printf.printf " %f" f) v;
+Printf.printf "\n"

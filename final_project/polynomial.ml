@@ -13,7 +13,7 @@ open Core.Std
  * index of each element equals the corresponding exponent.) *)
 type poly = float array
 
-let rec evaluate (p : poly) (v : float) : float =
+let evaluate (p : poly) (v : float) : float =
   let vals : float array = Array.mapi ~f:(fun i x -> x *. (v ** float i)) p in
   Array.fold_right ~f:(+.) ~init:0. vals
 
@@ -89,11 +89,11 @@ let rec rand_interval (len : int) (min : float) (max : float) : interval =
 
 let union (i1 : interval) (i2 : interval) : interval = fix (i1 @ i2)
 
-let rec is_in (f : float) (i : interval) : bool =
+let is_in (f : float) (i : interval) : bool =
   let f = fun c (x,y) -> c || (f >= x && f <= y) in
   List.fold_left ~f ~init:false i
 
-let rec is_in_interior (f : float) (i : interval) : bool =
+let is_in_interior (f : float) (i : interval) : bool =
   let f = fun c (x,y) -> c || (f > x && f < y) in
   List.fold_left ~f ~init:false i
 
@@ -104,6 +104,7 @@ let rec bounds (i : interval) : float * float =
   | [x] -> x
   | (l,_) :: i' -> let (_,h) = bounds i' in (l, h)
 
+(* Subtracts i2 from i1.*)
 let subtract (i1 : interval) (i2 : interval) : interval =
   let rec sub_helper (i : interval) ((x,y) : float * float) : interval =
     match i with
