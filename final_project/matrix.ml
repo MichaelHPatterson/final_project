@@ -1,6 +1,8 @@
 exception TODO
 open Core.Std
 
+Random.self_init ();;
+
 (* Note: this is just preliminary and could require some modifications. *)
 module FloatMatrix =
 struct
@@ -9,6 +11,7 @@ struct
 
   exception SizeMismatch
   exception IndexOutOfBounds
+  exception NotSquare
 
   let zero_vec (len : int) : vec = Array.create ~len 0.
 
@@ -23,8 +26,8 @@ struct
       result.(n) <- 1.;
       result
 
-  let identity (n : int) : mat =
-    Array.init n ~f:(fun i -> basis_vec ~dim:n i)
+  let identity (dim : int) : mat =
+    Array.init dim ~f:(fun i -> basis_vec ~dim i)
 
   let map2 ~(f : float -> float -> 'a) (l1 : vec) (l2 : vec) : 'a array =
     let len1 = Array.length l1 in
@@ -38,8 +41,21 @@ struct
 
   let add_vec : vec -> vec -> vec = map2 ~f:(+.)
 
-  let scalar_mult (factor : float) (m : vec) : vec =
-    Array.map ~f:(( *. ) factor) m
+  let add_mat (m1 : mat) (m2 : mat) : mat =
+    let (len1, len2) = (Array.length m1, Array.length m2) in
+    if len1 <> len2 then raise SizeMismatch
+    else
+      let result = zero_mat len1 (Array.length m1.(0)) in
+      for i = 0 to len1 - 1 do
+	result.(i) <- add_vec m1.(i) m2.(i)
+      done;
+      result
+
+  let scalar_mult_vec (v : vec) (factor : float) : vec =
+    Array.map ~f:(( *. ) factor) v
+
+  let scalar_mult_mat (m : mat) (factor : float) : mat =
+    Array.map ~f:(fun v -> scalar_mult_vec v factor) m
 
   (* Multiplies a square matrix m with a vector v. Interprets each sub-array in
    * m as a column of m. *)
@@ -49,7 +65,7 @@ struct
     else
       let result : vec ref = ref (Array.create ~len 0.) in
       for i = 0 to len - 1 do
-        result := add_vec !result (scalar_mult v.(i) m.(i))
+        result := add_vec !result (scalar_mult_vec m.(i) v.(i))
       done;
       !result
 
@@ -107,12 +123,12 @@ struct
 	swap m n swap_col;
 
         (* (b) DIVIDE by this entry to get a pivotal 1. *)
-        m.(n) <- scalar_mult (1. /. value) m.(n);
+        m.(n) <- scalar_mult_vec m.(n) (1. /. value);
 
         (* (c) SUBTRACT multiples of the first row from the others to clear out the
             rest of the column under the pivotal 1. *)
         for i = 0 to len - 1 do
-	  if i <> n then m.(i) <- add_vec m.(i) (scalar_mult (-1. *. m.(i).(n)) m.(n))
+	  if i <> n then m.(i) <- add_vec m.(i) (scalar_mult_vec m.(n) (-1. *. m.(i).(n)))
 	done;
 
 	col_reduce_past m (n + 1) (piv + 1)
@@ -120,14 +136,56 @@ struct
     in transpose (col_reduce_past (transpose m) 0 0)
 
 
+  let print_vec (v : vec) : unit =
+    let len = Array.length v in
+    if len = 0 then ()
+    else 
+      Printf.printf "[|%f" v.(0);
+      for i = 1 to len - 1 do
+	Printf.printf "; %f" v.(i)
+      done;
+      Printf.printf "|]";
+      flush_all ()
+
+  let print_mat (m : mat) : unit =
+    Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
+
+  (* Inverts a square matrix with the help of row-reduction. *)
+  let inverse (m : mat) : mat option =
+    let width = Array.length m in
+    let height = Array.length m.(0) in
+    if width <> height then raise NotSquare
+    else
+      let new_mat : mat = row_reduce (Array.append m (identity width)) in
+      let is_identity = ref true in
+      for i = 0 to width - 1 do
+	for j = 0 to height - 1 do
+	  if i = j then
+	    (if Float.abs (new_mat.(i).(j) -. 1.) > 0.001 then is_identity := false)
+	  else if Float.abs new_mat.(i).(j) > 0.001 then is_identity := false
+	done;
+      done;
+      if not !is_identity then None
+      else
+	let result : mat = zero_mat width height in
+	for i = 0 to width - 1 do
+	  result.(i) <- new_mat.(i + width)
+	done;
+	Some result
+
+
   (* This function should ideally compute both eigenvalues and the corresponding
    * eigenvectors simultaneously (i.e. the return type should be something like
    * "(float * vec) list"). That shouldn't be very hard to add in. *)
   (* Note: The call to Polynomial.newton_all_slow doesn't work with C-c C-e; it
    * requires compilation from the terminal. *)
-  let eigenvalues (m : mat) : float list =
+  (* This function sometimes just fails to terminate. *)
+  let eigen (m : mat) : (float * vec) list =
     let dim = Array.length m in
-    let new_vec = ref (basis_vec ~dim 0) in
+    let start : vec = zero_vec dim in
+    Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 100. +. 5.) start;
+    print_vec start; Printf.printf "\n";
+    let new_vec = ref start in
     let new_mat = zero_mat (dim + 1) dim in
     new_mat.(0) <- !new_vec;
     for i = 0 to dim - 1 do
@@ -135,15 +193,55 @@ struct
       new_mat.(i+1) <- !new_vec
     done;
     let p =
-      Array.append (scalar_mult (-1.) (row_reduce new_mat).(dim)) [|1.|] in
-    Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.001
+      Array.append (scalar_mult_vec (row_reduce new_mat).(dim) (-1.)) [|1.|] in
+    Polynomial.print_poly p; Printf.printf "\n"; flush_all ();
+    let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.0001) in
+    let f (index : int) (e : float) : float * vec =
+      let v = ref start in
+      for j = 0 to Array.length eigenvalues - 1 do
+	if index <> j then
+	  let matrix = add_mat m (scalar_mult_mat (identity dim) ((-1.) *. eigenvalues.(j))) in
+	  v := mult matrix !v
+      done;
+      (e, !v)
+    in Array.to_list (Array.mapi ~f eigenvalues)
 end
 
 (* For typing convenience *)
 module M = FloatMatrix
 
-(* Simple test matrix, with eigenvalues 0, 1, and 3 *)
-let v = M.eigenvalues [|[|1.;-1.;0.|]; [|-1.;2.;-1.|]; [|0.;-1.;1.|]|] in
-Printf.printf "Eigenvalues:";
-List.iter ~f:(fun f -> Printf.printf " %f" f) v;
-Printf.printf "\n"
+(* Verifying that the 5x5 identity matrix is invertible *)
+let m1 = M.identity 5 in
+match M.inverse m1 with
+| None -> Printf.printf "The matrix is not invertible.\n\n\n"
+| Some m -> M.print_mat m; Printf.printf "\n\n"
+;;
+
+(* A more difficult invertible matrix *)
+let m2 = [|[|0.127131; 0.873108; 0.116526; 0.452341|]; [|0.405467; 0.91256; 0.0373603; 0.50571|]; [|0.703187; 0.126679; 0.537015; 0.710102|]; [|0.964194; 0.052814; 0.731034; 0.103877|]|] in
+match M.inverse m2 with
+| None -> Printf.printf "The matrix is not invertible.\n\n\n"
+| Some m -> M.print_mat m; Printf.printf "\n\n"
+;;
+
+(* A non-invertible matrix *)
+let m3 = [|[|1.; 0.; 0.; 0.; 0.|]; [|0.; 1.; 0.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 0.; 0.; 1.|]|] in
+match M.inverse m3 with
+| None -> Printf.printf "The matrix is not invertible.\n\n\n"
+| Some m -> M.print_mat m; Printf.printf "\n\n"
+;;
+
+(* Simple test matrix, with eigenvalues -1, 4, and 7 *)
+let m4 = [|[|4.;0.;0.|]; [|-2.;2.;-5.|]; [|4.5;-3.;4.|]|] in
+let v = M.eigen m4 in
+let f (value, vector) =
+  Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
+  M.print_vec vector;
+  Printf.printf "\n"
+in
+List.iter ~f v;
+Printf.printf "\n";
+match M.inverse m4 with
+| None -> Printf.printf "The matrix is not invertible.\n\n\n"
+| Some m -> M.print_mat m; Printf.printf "\n\n";
+;;

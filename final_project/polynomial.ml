@@ -13,6 +13,13 @@ open Core.Std
  * index of each element equals the corresponding exponent.) *)
 type poly = float array
 
+let print_poly (p : poly) : unit =
+  Printf.printf "[|%f" p.(0);
+  for i = 1 to Array.length p - 1 do
+    Printf.printf "; %f" p.(i)
+  done;
+  Printf.printf "|]"
+
 let evaluate (p : poly) (v : float) : float =
   let vals : float array = Array.mapi ~f:(fun i x -> x *. (v ** float i)) p in
   Array.fold_right ~f:(+.) ~init:0. vals
