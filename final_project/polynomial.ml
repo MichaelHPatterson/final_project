@@ -18,7 +18,8 @@ let print_poly (p : poly) : unit =
   for i = 1 to Array.length p - 1 do
     Printf.printf "; %f" p.(i)
   done;
-  Printf.printf "|]"
+  Printf.printf "|]";
+  flush_all ()
 
 let evaluate (p : poly) (v : float) : float =
   let vals : float array = Array.mapi ~f:(fun i x -> x *. (v ** float i)) p in
@@ -31,12 +32,26 @@ let derivative (p : poly) : poly =
   Array.blit p' 1 ans 0 len;
   ans
 
-let rec newton (p : poly) (g : float) (epsilon : float) : float =
+let rec newton (p : poly) (g : float) (epsilon : float) : float option =
   let abs_float : float -> float = fun x -> if x > 0. then x else (-.x) in
-  if abs_float (evaluate p g) < epsilon then g
+  if abs_float (evaluate p g) < epsilon then Some g
   else
-    let g' = g -. (evaluate p g) /. (evaluate (derivative p) g) in
-    newton p g' epsilon
+    let deriv = evaluate (derivative p) g in
+    if deriv = 0. then None
+    else
+      let g' = g -. (evaluate p g) /. deriv in
+      newton p g' epsilon
+
+(* Same as function above, but assumes known derivative d *)
+let rec newton_d (p : poly) (d : poly) (g : float) (epsilon : float) : float option =
+  let abs_float : float -> float = fun x -> if x > 0. then x else (-.x) in
+  if abs_float (evaluate p g) < epsilon then Some g
+  else
+    let deriv = evaluate d g in
+    if deriv = 0. then None
+    else 
+      let g' = g -. (evaluate p g) /. deriv in
+      newton_d p d g' epsilon
 
 (* Fairly slow method of repeatedly applying Newton's method to find all roots
  * of p, between lower and upper. Increments each try by try_prec, and uses
@@ -47,17 +62,20 @@ let rec newton (p : poly) (g : float) (epsilon : float) : float =
  * never fail to find all real roots between lower and upper, while the faster
  * function newton_all_fast might. *)
 let newton_all_slow (p : poly) ((lower, upper) : float * float) (try_prec : float) (duplicate_prec : float) (answer_prec : float) : float list =
-  let rec newton_int_rec ((low, high) : float * float) (curr : float list) : float list =
+  let rec newton_int_rec (d : poly) ((low, high) : float * float) (curr : float list) : float list =
     if low > high then curr
     else
       let g = low in
-      let root : float = newton p g answer_prec in
+      let root : float option = newton_d p d g answer_prec in
       let new_low = low +. try_prec in
       let new_list =
-        let f = fun b r -> b || Float.abs (r -. root) < duplicate_prec in
-        if List.fold_left ~f ~init:false curr then curr else root :: curr in
-      newton_int_rec (new_low, high) new_list
-  in newton_int_rec (lower, upper) []
+	match root with
+	| None -> curr
+	| Some root' ->
+          let f = fun b r -> b || Float.abs (r -. root') < duplicate_prec in
+          if List.fold_left ~f ~init:false curr then curr else root' :: curr in
+      newton_int_rec d (new_low, high) new_list
+  in newton_int_rec (derivative p) (lower, upper) []
 
 
 
@@ -144,14 +162,14 @@ let newton_all_fast (p : poly) (i : interval) (try_prec : float) (duplicate_prec
     match g with
     | None -> curr
     | Some f ->
-      let root : float = newton p f answer_prec in
-      let new_int = subtract i [(Float.min f root, Float.max f root +. try_prec)] in
-      Printf.printf "New interval:";
-      List.iter new_int ~f:(fun (x,y) -> Printf.printf " (%f,%f)" x y);
-      Printf.printf "\n";
-      let new_list =
-        let f = fun b r -> b || Float.abs (r -. root) < duplicate_prec in
-        if List.fold_left ~f ~init:false curr then curr
-        else let _ = Printf.printf "New root: %f\n" root in root :: curr in
-      newton_int_rec new_int new_list
+      match newton p f answer_prec with
+      | None ->
+	let new_int = subtract i [(f, f +. try_prec)] in
+	newton_int_rec new_int curr
+      | Some root ->
+        let new_int = subtract i [(Float.min f root, Float.max f root +. try_prec)] in
+	let new_list =
+          let f = fun b r -> b || Float.abs (r -. root) < duplicate_prec in
+          if List.fold_left ~f ~init:false curr then curr else root :: curr in
+	newton_int_rec new_int new_list
   in newton_int_rec i []
