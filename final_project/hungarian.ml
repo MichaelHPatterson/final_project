@@ -1,6 +1,34 @@
+(* CS51 Final Project: N x N Matching
+ * CS51 Spring 2014
+ * Authors : Madhu Vijay & Michael Patterson
+ * hungarian.ml -- Provides interface for implementation of the Hungarian
+ * algorithm, which minimizes the cost of matching in a cost matrix. *)
+
 open Core.Std
 open Polynomial
 open Matrix.FloatMatrix
+
+exception Empty
+
+Random.self_init ();
+
+module type HUNGARIAN =
+sig
+  type value
+  type vec
+  type mat
+
+  (* allows us to compensate for floating-point inprecision -- this allows us to
+   * treat numbers so close to 0 as practically 0 *)
+  val zero_sensitivity : float
+
+  (* runs the Hungarian algorithm on the matrix, returning (int * int) tuples
+   * that represent the matches of columns and rows *)
+  val optimize : mat -> (int * int) option
+
+  (* prints the results of running the Hungarian algorithm  *)
+  val print_results : (int * int) list -> unit
+end
 
 (* NOTE: I have switched the meaning of columns and rows, relative to the
  * Wikipedia article (i.e. in this implementation, each column represents
@@ -8,9 +36,9 @@ open Matrix.FloatMatrix
 
 let zero_sensitivity = 0.1;;
 
-Random.self_init ();
 
-exception Empty
+
+
 
 let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
 

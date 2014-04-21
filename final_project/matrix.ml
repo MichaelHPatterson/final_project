@@ -67,10 +67,8 @@ sig
    * the int keeps track of pivotal columns used in eigenvalue calculation *)
   val row_reduce : mat -> (mat * int)
 
-  (* Prints a vector to the command line *)
+  (* Prints vectors or matrices to the command line *)
   val print_vec : vec -> unit
-
-  (* Prints a matrix to the command line *)
   val print_mat : mat -> unit
 
   (* Returns the inverse of matrix, or None if it is not invertible *)
@@ -85,6 +83,11 @@ sig
   
   (* calculates the matrix exponential of a given matrix *)
   val exponentiate : mat -> mat
+
+  (* diagonalizes a matrix, returning a tuple of a matrix of an orthnormal
+     eigenbasis and a diagonal matrix of eigenvalues *)
+  val diagonalize : mat -> (mat * mat)
+end
 								  
 (* Note: this is just preliminary and could require some modifications. *)
 module FloatMatrix =
