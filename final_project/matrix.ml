@@ -1,8 +1,91 @@
-exception TODO
+(* CS51 Final Project: N x N Matching
+ * CS51 Spring 2014
+ * Authors : Madhu Vijay & Michael Patterson
+ * matrix.ml -- Provides interface for matrix manipulation (e.g  addition,
+ * row reduction, etc.) *)
+
 open Core.Std
+
+exception TODO
+exception SizeMismatch
+exception IndexOutOfBounds
+exception NotSquare
 
 Random.self_init ();;
 
+module type MATRIX =
+sig
+  (* type of elements in the matrix *)
+  type value
+  (* type for the vector *)
+  type vec
+  (* type for the matrix*)
+  type mat
+
+  (* takes dimension as an int argument and returns 0 vec of that dim *)
+  val zero_vec : int -> vec
+
+  (* takes number of columns as first arg, number of rows as second arg, and 
+   * returns 0 matrix of those dimensions *)
+  val zero_mat : int -> int -> mat
+
+  (* Constructs the nth standard basis vector (zero-indexed) in R^dim, where
+   * dim is the first int argument and n is the second *)
+  val basis_vec : int -> int -> vec
+
+  (* takes one argument for dimension and returns identity matrix *)
+  val identity : int -> mat
+
+  (* performs specified operation on two vectors, returning another vector *)
+  val map2 : (value -> value -> value) -> vec -> vec -> vec
+	 
+  (* adds two vectors together *)
+  val add_vec : vec -> vec -> vec
+
+  (* adds two same-dimension matrices together *)
+  val add_mat : mat -> mat -> mat
+
+  (* returns the scalar multiple of a vector *)
+  val scalar_mult_vec : vec -> value -> vec
+
+  (* returns the scalar multiple of a matrix *)
+  val scalar_mult_mat : mat -> value -> mat
+
+  (* Multiplies a square matrix m with a vector v. *)
+  val mult_vec : mat -> vec -> vec
+
+  (* Multiplies two square matrices in order *)
+  val mult_mat : mat - mat -> mat
+
+  (* Takes the tranpose of the matrix, making their columns into rows *)
+  val transpose : mat -> mat
+ 
+  (* Swaps two columns, denoted by int arguments, in the matrix *)
+  val swap : mat -> int -> int -> unit
+
+  (* Performs row-reduction on a matrix, returning a mat * int tuple because
+   * the int keeps track of pivotal columns used in eigenvalue calculation *)
+  val row_reduce : mat -> (mat * int)
+
+  (* Prints a vector to the command line *)
+  val print_vec : vec -> unit
+
+  (* Prints a matrix to the command line *)
+  val print_mat : mat -> unit
+
+  (* Returns the inverse of matrix, or None if it is not invertible *)
+  val inverse : mat -> mat option
+
+  (* Finds the eigensystem of a matrix, defined as an array of float-vector
+   * tuples. *)
+  val eigen : mat -> (float * vec) array
+
+  (* calculates e to a certain level of precision, given by an int *)
+  val e : int -> float
+  
+  (* calculates the matrix exponential of a given matrix *)
+  val exponentiate : mat -> mat
+								  
 (* Note: this is just preliminary and could require some modifications. *)
 module FloatMatrix =
 struct
@@ -10,9 +93,7 @@ struct
   (* matrix = array of columns *)
   type mat = vec array
 
-  exception SizeMismatch
-  exception IndexOutOfBounds
-  exception NotSquare
+  
 
   let zero_vec (len : int) : vec = Array.create ~len 0.
 
