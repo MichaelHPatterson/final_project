@@ -1,0 +1,171 @@
+General Overview of Project
+
+I. FILE I/0
+II. MATRIX EXPONENTIATION
+III. PAGERANK
+IV. HUNGARIAN ALGORITHM
+V. MAIN.ML (PUTTING IT TOGETHER)
+
+I. FILE I/O
+
+In a nutshell:
+- reading owner/element rankings from a text file with a particular invariant
+- writing matrices to text file with particular invariant
+
+
+What we have now:
+- can write basic matrices to files
+
+
+What we need:
+- an invariant for owner/element ranking .txt files. This is one possibility:
+
+"owner 1 name"
+"element 1 name" owner1-element1 relationship
+"element 2 name" owner1-element2 relationship
+.
+.
+"element n name" owner1-elementn relationship
+
+"owner 2 name"
+"element 1 name" owner2-element1 relationship
+"element 2 name" owner2-element2 relationship
+.
+.
+"element n name" owner2-elementn relationship
+
+.
+.
+
+"owner n name"
+1
+.
+.
+n
+
+
+Note that, because the point of NxN matching is that owners are not going to rank all the elements, the representation above indicates individual subsets of some n < N, the number of total elements. This is also why the strings for element names are required. Also, although keeping data as spread out as this means that the text file is potentially lengthy, it means that we can utilize the "read_lines" function in the JaneStreet library:
+
+val read_lines : string -> string list
+read_lines filename Opens filename, reads all lines, and closes the file.
+
+This will make things much easier to implement in the read module.
+
+
+We also need:
+- to solidify what our data structures are going to be
+
+An array would definitely be the easiest in terms of storing rankings. However, we also need to keep track of owner and element columns. This is where our Binary Search Tree comes in. It will consist of a dict, with names as the keys, and column or row numbers in the matrix. So, for this tree to actually be useful I think we need to maintain an invariant of alphabetization.
+
+We will thus have three separate data structures: a matrix of owner-element
+rankings, a BST dict of owner-index entries, and a BST dict of element-index entries.
+
+Side note: According to the Array module in JaneStreet, the maximum length of
+an array is 2097151. So presumably we can have a matrix of a maximum dimension over 2e6.
+
+
+(Thus) we also need:
+- To write a dict.ml module. This shouldn't be particularly difficult, especially because we have Pset 5 to build off and modify. A BST shouldn't be too complicated, at least compared to the 2-3 tree.
+
+
+We also need:
+- to finish implementing this FILE I/O (my job)
+	- code the read module, which will read the .txt that meets our invariant and store the results in corresponding data structures
+	- finish coding the write module
+		- Make it abstract, applicable to any matrix (and not just int)
+		- Label the columns and rows, and provide a separate printing-out of these columns and rows. (What would be the best way to do this? Maybe pull an Excel and have numerical rows and alphanumerical columns?)
+		- Fix style.
+
+
+
+II. MATRIX EXPONENTIATION
+
+In a nutshell:
+- can take the matrix exponential of matrix, which will allow us to weigh the pageranks of earlier steps more than the pageranks of later steps.
+- e^M = In + M + M^2/(2!) + M^3/(3!) + ...
+- requires eigenanalysis, diagonalization, myriad helper algorithms
+
+
+What we have now:
+- a completed implementation of computing an eigensystem, which includes a completed polynomial solver with Newton's method
+- an incomplete implementation of a faster polynomial solver
+- an incomplete implementation of the matrix exponential
+
+
+What we need:
+- a completed matrix exponential, "completed" meaning it handles the invariant that the matrix we are exponentiating is symmetric (which means that the spectral theorem may be utilized)
+
+
+We also (might) need:
+- a completed, faster polynomial solver if that proves to be a performance bottleneck
+
+
+
+III. PAGERANK
+
+In a nutshell:
+- computing the relationships between all elements
+- computing the personalized pageranks of all owners with all elements
+
+
+What we have:
+- a good foundation for matrix operations (including the transpose)
+
+
+What we need:
+- An implementation of A^T * A, i.e. taking the dot products of all column vectors with all others. The dot product will be our quantified measure of a relationship, which will require a numerical representation of rankings. This also means that a conversion over the whole matrix to numerical representation might be necessary. No ranking should be 0, and a neutral one (e.g. 5 out of 10) should be around 0. Negative rankings should be negative, and positive ranking should be positive. The cancellation of negatives will increase correlation.
+
+One of our main issues will be how to handle the dot products of columns with themselves, which will make up the diagonal of our relationship matrix. The diagonal should likely consist of some constant k. k is important because it represents how much importance will be retained by the elements that a person ranked themselves. Too high of a k would put too much emphasis on the elements that a person ranked themselves. However, too low a k would put too much emphasis on others, and mitigate the possibility of that being a match. Some tweaking will be necessary to decide on an appropriate k.
+
+Another issue will be keeping the relationship matrix stochastic. If any column has a sum of > 1, then we're in trouble when it comes to taking matrix powers. Also, I believe similar bad things could happen with using negatives. So, we must take care to "normalize" our relationship matrix. Negative relationships should be a positive fraction close to 0. Positive relationships should be a higher fraction, closer to (1 - k) than 0. Neutral relationships should be near the middle. Again, some tweaking will need to be done to develop the formula for keeping the columns positive, stochastic, and transitional.
+
+
+
+IV. HUNGARIAN ALGORITHM
+
+In a nutshell:
+- taking personalized pageranks as costs, where the better pagerank value becomes the lowest cost
+
+
+What we have:
+- a near-comprehensive implementation of the algorithm
+
+
+What we need:
+- a completed algorithm that takes into account that a higher pagerank must correspond to a lower cost. This will be accomplished by finding the highest cost in the matrix and taking highest cost - x for all costs x in the matrix.
+
+
+We also need:
+- an efficient way to store the matches -- could we use existing data structures, or should we make a new one?
+
+
+We also need:
+- an efficienty way to print the matches - really storage and printing efficiency will probably go hand-in-hand
+
+
+
+V. MAIN.ML
+
+In a nutshell:
+- FILE I/O -> EXPONENTIATION/PAGERANK -> HUNGARIAN -> FILE I/O
+
+
+What we have:
+- nothing but the basic implementations so far
+
+
+What we need:
+- Pseudocode for how data is going to be orchestrated through the program. The general flow of data should look something like this:
+	- reading of data from a .txt file
+	- storage of data into data structures (e.g. matrix and dicts)
+	- conversion of relationships into numerical form
+	- calculation of dot product and transition/stochastic matrix
+	- performing of matrix exponentiation on matrix
+	- conversion of pageranks for all n owners into a cost matrix
+	- performing of Hungarian algorithm
+	- storing of Hungarian algorithm results into data structure
+	- writing of results to output file
+
+
+We also need:
+- some way to interact with the command line (GoT pset should be good example of this). This should be to specify the file of input data and perhaps the name of output matches
