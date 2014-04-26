@@ -55,7 +55,7 @@ sig
   val mult_vec : mat -> vec -> vec
 
   (* Multiplies two square matrices in order *)
-  val mult_mat : mat - mat -> mat
+  val mult_mat : mat -> mat -> mat
 
   (* Takes the tranpose of the matrix, making their columns into rows *)
   val transpose : mat -> mat
