@@ -10,6 +10,7 @@ exception TODO
 exception SizeMismatch
 exception IndexOutOfBounds
 exception NotSquare
+exception InversionError
 
 Random.self_init ();;
 
@@ -55,7 +56,7 @@ sig
   val mult_vec : mat -> vec -> vec
 
   (* Multiplies two square matrices in order *)
-  val mult_mat : mat - mat -> mat
+  val mult_mat : mat -> mat -> mat
 
   (* Takes the tranpose of the matrix, making their columns into rows *)
   val transpose : mat -> mat
@@ -96,10 +97,10 @@ struct
   (* matrix = array of columns *)
   type mat = vec array
 
-  
-
+  (* Generates a vector of 0's with length len. *)
   let zero_vec (len : int) : vec = Array.create ~len 0.
 
+  (* Generates a matrix of 0's with the specified dimensions. *)
   let zero_mat (cols : int) (rows : int) : mat =
     Array.create ~len:cols (Array.create ~len:rows 0.)
 
@@ -111,9 +112,11 @@ struct
       result.(n) <- 1.;
       result
 
+  (* Generates the dim x dim identity matrix. *)
   let identity (dim : int) : mat =
     Array.init dim ~f:(fun i -> basis_vec ~dim i)
 
+  (* Computes [|f l1.(0) l2.(0); f l1.(1); f l2.(1); ...|]. *)
   let map2 ~(f : float -> float -> 'a) (l1 : vec) (l2 : vec) : 'a array =
     let len1 = Array.length l1 in
     if len1 <> Array.length l2 then raise SizeMismatch
@@ -124,8 +127,10 @@ struct
       done;
       result
 
+  (* Adds two vectors. *)
   let add_vec : vec -> vec -> vec = map2 ~f:(+.)
 
+  (* Adds two matrices. *)
   let add_mat (m1 : mat) (m2 : mat) : mat =
     let (len1, len2) = (Array.length m1, Array.length m2) in
     if len1 <> len2 then raise SizeMismatch
@@ -136,11 +141,18 @@ struct
       done;
       result
 
+  (* Multiplies the vector v by a scalar value. *)
   let scalar_mult_vec (v : vec) (factor : float) : vec =
     Array.map ~f:(( *. ) factor) v
 
+  (* Multiplies the matrix m by a scalar value. *)
   let scalar_mult_mat (m : mat) (factor : float) : mat =
     Array.map ~f:(fun v -> scalar_mult_vec v factor) m
+
+  (* Adds coeff * the identity matrix to m. *)
+  let add_identity (m : mat) (coeff : float) : mat =
+    let i = scalar_mult_mat (identity (Array.length m)) coeff in
+    add_mat m i
 
   (* Multiplies a square matrix m with a vector v. Interprets each sub-array in
    * m as a column of m. *)
@@ -169,6 +181,7 @@ struct
 	done;
 	result
 
+  (* Computes the transpose of the matrix m. *)
   let transpose (m : mat) : mat =
     let num_cols = Array.length m in
     if num_cols = 0 then m
@@ -184,6 +197,7 @@ struct
       done;
       result
 
+  (* Swaps columns n1 and n2 in the matrix m. *)
   let swap (m : mat) (n1 : int) (n2 : int) : unit =
     let len = Array.length m in
     if n1 >= len || n2 >= len then raise IndexOutOfBounds
@@ -194,8 +208,8 @@ struct
       m.(n2) <- v
 
   (* Row_reduces a matrix. Seems to be working properly, but further testing
-   * couldn't hurt. Based on an algorithm I learned in math, and the steps of
-   * that algorithm are copy-pasted in as comments. *)
+   * couldn't hurt. The steps of the algorithm, from my math class, are pasted
+   * in as comments. *)
   let row_reduce (m : mat) : mat * int =
     (* Column reduces rows n through Array.length m - 1 of m. Assumes that <piv>
      * pivotal 1's have been generated so far. *)
@@ -238,6 +252,7 @@ struct
     in let (m,p) = col_reduce_past (transpose m) 0 0 in (transpose m, p)
 
 
+  (* Prints out a vector. *)
   let print_vec (v : vec) : unit =
     let len = Array.length v in
     if len = 0 then ()
@@ -249,8 +264,29 @@ struct
       Printf.printf "|]";
       flush_all ()
 
+  (* Prints out a matrix. *)
   let print_mat (m : mat) : unit =
     Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
+
+  (* Checks whether the first n columns of m are the identity matrix. *)
+  let is_identity (m : mat) (n : int) (precision : float) : bool =
+    let m =
+      try (Array.sub m 0 n)
+      with (Invalid_argument _) -> raise IndexOutOfBounds in
+    let id_tracker = ref true in
+    let _ = try
+    (for i = 0 to n - 1 do
+      if Array.length m.(i) <> n then raise NotSquare;
+      for j = 0 to n - 1 do
+	if i = j then
+	  (if Float.abs (m.(i).(j) -. 1.) > precision then id_tracker := false)
+	else if Float.abs m.(i).(j) > precision then id_tracker := false
+      done
+    done)
+    (* Given a properly constructed matrix, the only way an index could go out
+     * of bounds in the statements above is if m is not square. *)
+    with (Invalid_argument "index out of bounds") -> raise NotSquare
+    in !id_tracker
 
   (* Inverts a square matrix with the help of row-reduction. *)
   let inverse (m : mat) : mat option =
@@ -259,15 +295,7 @@ struct
     if width <> height then raise NotSquare
     else
       let new_mat : mat = let (m,_) = row_reduce (Array.append m (identity width)) in m in
-      let is_identity = ref true in
-      for i = 0 to width - 1 do
-	for j = 0 to height - 1 do
-	  if i = j then
-	    (if Float.abs (new_mat.(i).(j) -. 1.) > 0.001 then is_identity := false)
-	  else if Float.abs new_mat.(i).(j) > 0.001 then is_identity := false
-	done;
-      done;
-      if not !is_identity then None
+      if not (is_identity new_mat width 0.001) then None
       else
 	let result : mat = zero_mat width height in
 	for i = 0 to width - 1 do
@@ -275,10 +303,7 @@ struct
 	done;
 	Some result
 
-
-  (* This function should ideally compute both eigenvalues and the corresponding
-   * eigenvectors simultaneously (i.e. the return type should be something like
-   * "(float * vec) list"). That shouldn't be very hard to add in. *)
+  (* Returns the eigenvalues and eigenvectors of a matrix m. *)
   (* Note: The call to Polynomial.newton_all_slow doesn't work with C-c C-e; it
    * requires compilation from the terminal. *)
   (* Note: I'm not sure if this works with matrices that have repeated
@@ -302,7 +327,7 @@ struct
       let v = ref start in
       for j = 0 to Array.length eigenvalues - 1 do
 	if index <> j then
-	  let matrix = add_mat m (scalar_mult_mat (identity dim) ((-1.) *. eigenvalues.(j))) in
+	  let matrix = add_identity m ((-1.) *. eigenvalues.(j)) in
 	  v := mult_vec matrix !v
       done;
       (e, !v)
@@ -336,7 +361,7 @@ struct
 	  let v = ref start_vec in
 	  for j = 0 to Array.length eigenvalues - 1 do
 	    if index <> j then
-	      let matrix = add_mat m (scalar_mult_mat (identity dim) ((-1.) *. eigenvalues.(j))) in
+	      let matrix = add_identity m ((-1.) *. eigenvalues.(j)) in
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
@@ -365,10 +390,10 @@ struct
       if x <= 1 then 1
       else x * factorial (x - 1)
     in
-    let rec e_rec (from : int) : float =
-      if from > precision then 0.
-      else 1. /. (float (factorial from)) +. e_rec (from + 1)
-    in e_rec 0
+    let rec e_rec (from : int) (curr : float) : float =
+      if from > precision then curr
+      else e_rec (from + 1) (curr +. (1. /. (float (factorial from))))
+    in e_rec 0 0.
 
   (* This is still in development -- e.g. it has an incomplete match statement at the bottom. *)
   let exponentiate (m : mat) : mat =
@@ -380,7 +405,15 @@ struct
       eigenbasis.(i) <- vector
     in
     Array.iteri ~f (eigen m);
-    mult_mat eigenbasis (mult_mat diagonal (let Some inv = inverse eigenbasis in inv))
+    let inv = match inverse eigenbasis with
+      | None -> raise InversionError
+      | Some matrix -> matrix
+    in mult_mat eigenbasis (mult_mat diagonal inv)
+
+  (* Takes a matrix m of rankings, and computes m^T * m (where m^T is the
+   * transpose of m), which is the matrix of element relationships. *)
+  let rank_to_relations (m : mat) : mat =
+    mult_mat (transpose m) m
 end
 
 (* For typing convenience *)

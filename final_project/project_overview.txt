@@ -25,7 +25,7 @@ What we need:
 "element 2 name" owner1-element2 relationship
 .
 .
-"element n name" owner1-elementn relationship
+"element n name" owner1-element relationship
 
 "owner 2 name"
 "element 1 name" owner2-element1 relationship
@@ -94,6 +94,8 @@ What we have now:
 
 What we need:
 - a completed matrix exponential, "completed" meaning it handles the invariant that the matrix we are exponentiating is symmetric (which means that the spectral theorem may be utilized)
+- make sure that the eigen function works with matrices that have repeated eigenvalues (and, more generally, make sure it doesn't mess up any particular corner cases)
+- perhaps edit the polynomial solver so that "try_prec" doesn't have to be inputted (the function should start with a large try_prec and "narrow in" until all roots are found
 
 
 We also (might) need:
@@ -124,7 +126,7 @@ Another issue will be keeping the relationship matrix stochastic. If any column 
 IV. HUNGARIAN ALGORITHM
 
 In a nutshell:
-- taking personalized pageranks as costs, where the better pagerank value becomes the lowest cost
+- taking personalized pageranks as costs, where the better pagerank value becomes the lower cost
 
 
 What we have:
@@ -132,6 +134,8 @@ What we have:
 
 
 What we need:
+- fix errors in steps 1-2
+- steps 3-5 of the algorithm (using Wikipedia's division of steps)
 - a completed algorithm that takes into account that a higher pagerank must correspond to a lower cost. This will be accomplished by finding the highest cost in the matrix and taking highest cost - x for all costs x in the matrix.
 
 
@@ -140,7 +144,7 @@ We also need:
 
 
 We also need:
-- an efficienty way to print the matches - really storage and printing efficiency will probably go hand-in-hand
+- an efficient way to print the matches - really storage and printing efficiency will probably go hand-in-hand
 
 
 
