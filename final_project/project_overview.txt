@@ -21,18 +21,21 @@ What we need:
 - an invariant for owner/element ranking .txt files. This is one possibility:
 
 "owner 1 name"
-"element 1 name" owner1-element1 relationship
-"element 2 name" owner1-element2 relationship
+"element 1 name" : owner1-element1 relationship
+"element 2 name" : owner1-element2 relationship
 .
 .
+
 "element n name" owner1-element relationship
+=======
+"element n name" : owner1-element relationship
 
 "owner 2 name"
-"element 1 name" owner2-element1 relationship
-"element 2 name" owner2-element2 relationship
+"element 1 name" : owner2-element1 relationship
+"element 2 name" : owner2-element2 relationship
 .
 .
-"element n name" owner2-elementn relationship
+"element n name" : owner2-element relationship
 
 .
 .
