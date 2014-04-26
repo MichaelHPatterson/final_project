@@ -120,6 +120,9 @@ let random_matrix (dim : int) : mat =
   done;
   !m
 
+(* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
+ * generating a matrix, and testing the algorithm. If it yields a result,
+ * stop; else try again with another random matrix until it works. *)
 let rec test1 () : unit =
   let m = random_matrix 4 in
   print_mat m; Printf.printf "\n";
@@ -129,7 +132,9 @@ let rec test1 () : unit =
   | None -> Printf.printf "Failed attempt.\n"; test1 ()
   | Some r -> print_results r
 
-let rec test2 (num_tries : int) (dim : int) : unit =
+(* Test function that gives me a feel for how often steps 1 and 2 of the
+ * algorithm are sufficient to solve the problem. *)
+let test2 (num_tries : int) (dim : int) : unit =
   let counter = ref 0 in
   for i = 0 to num_tries - 1 do
     let m = random_matrix dim in
