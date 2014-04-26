@@ -1,11 +1,9 @@
 (* CS51 Final Project: N x N Matching
  * CS51 Spring 2014
  * Authors : Madhu Vijay & Michael Patterson
- * read_write.ml -- provides read/write functionality from/to .csv files *)
+ * read_write.ml -- provides read/write functionality from/to .txt files *)
 
 open Core.Std
-
-
 
 (* Signature for writing to file. Note that the only exposed function is actually
  * writing to a file. This provides a favorable abstraction layer. *)
