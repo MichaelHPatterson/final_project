@@ -64,9 +64,11 @@ struct
   type vec = value array
   type mat = vec array
 
+  (* general fold function for matrices; probably should go in matrix.ml *)
   let matrix_fold (matrix : 'b array array) ~(f : 'a -> 'b -> 'a) ~(init : 'a) : 'a =
     Array.fold matrix ~init:init ~f:(fun acc x -> Array.fold x ~init:acc ~f:f)
 
+  (* general map function for matrices; probably should go in matrix.ml *)
   let matrix_map matrix f =
     let len = Array.length matrix in
     let result = Array.create ~len:len (Array.create ~len:len (f (matrix.(0)).(0))) in
@@ -75,6 +77,7 @@ struct
     done;
     result
 
+  (* formats a row of a string matrix for display in .txt file *)
   let row_concat (row : string array) (space : int) : string =
     let build_string (str : string) : string =
       (* space maker *)
@@ -88,9 +91,11 @@ struct
 
     Array.fold_right row ~f:(fun x acc -> (build_string x) ^ acc) ~init:""
 
+  (* calls row_concat to format the whole string matrix for display *)
   let string_mat_to_strings (matrix : string array array) (space : int) : string list  =
     Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc) ~init:[]
 
+  (* actually writes to file by converting to string matrix, formatting, and writing *)
   let mat_to_file (matrix : mat) (filename : string) : unit =
     let string_matrix = matrix_map matrix string_of_int in
     let max_len = matrix_fold string_matrix ~f:(fun acc x -> max (String.length x) acc) ~init: 0 in
@@ -138,16 +143,23 @@ struct
   type mat = vec array
 
   module SDict = Psetdict.Make (Psetdict.StringIntDictArg)
-	       
-  let rank_matrix (len : int) = Array.create ~len:len (Array.create ~len:len 0)
 
+  (* instantiates a square matrix of len dimensions *)
+  let rank_matrix (len : int) = Array.create ~len:len (Array.create ~len:len 0)
+  
+  (* a ref for storing owners and their indices *)
   let owner_dict = ref (SDict.empty)
+  (* a ref for storing the current max owner index *)
   let owner_index = ref 0
 
+  (* a ref for storing elements and their indices *)
   let elt_dict = ref (SDict.empty)
+  (* a ref for storing the current max element index *)
   let elt_index = ref 0
 
-  let process_elt (line : string) : (string, int) =
+  (* converts the element-rank line into a (string, int) tuple by splitting at
+   * the colon *)
+  let process_elt (line : string) =
     let string_list = List.map (String.rsplit2_exn line ':') String.strip in
     match string_list with
     | a :: b :: [] -> (a, int_of_string b)
@@ -159,23 +171,23 @@ struct
      * the line; this is an invariant of the .txt file *)
     let elt_check (line : string) = String.contains line ':' in
     let owner_num = List.fold_right file_lines 
-      ~f:(fun x acc -> if elt_check x then acc else 1 + acc) ~init:0 in
+      ~f:(fun x acc -> if not (elt_check x) then acc + 1 else acc) ~init:0 in
     let return_matrix = rank_matrix owner_num in
     let add_to_dict (subject : string) : unit =
       if not (elt_check subject) then (
-	if SDict.member (!owner_dict) subject then
+	if SDict.member (!owner_dict) (String.strip subject) then
 	  failwith "owner already in dict"
-	else (owner_dict := SDict.insert (!owner_dict) (!owner_index);
+	else (owner_dict := SDict.insert (!owner_dict) (String.strip subject) (!owner_index);
 	      owner_index := (!owner_index) + 1))
       else (
 	let (a, b) = process_elt subject in
 	match SDict.lookup (!elt_dict) a with
 	| None -> (
 	   elt_dict := SDict.insert (!elt_dict) a elt_index;
-	   (return_matrix.(!owner_index)).(!elt_index) <- b;
+	   (return_matrix.(!owner_index - 1)).(!elt_index) <- b;
 	   elt_index := (!elt_index) + 1)
 	| Some x ->
-	   (return_matrix.(!owner_index)).(x) <- b) in
+	   (return_matrix.(!owner_index - 1)).(x) <- b) in
     List.iter file_lines ~f:add_to_dict;
     return_matrix
 
