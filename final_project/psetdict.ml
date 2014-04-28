@@ -44,12 +44,12 @@ sig
   val string_of_key: key -> string
   val string_of_value : value -> string
   val string_of_dict : dict -> string
+  val key_of_string : string -> key
+  val val_of_int : int -> value
 
   (* Runs all the tests. see TESTING EXPLANATION below *)
   val run_tests : unit -> unit
 end
-
-
 
 (* Argument module signature to our DICT functors *)
 module type DICT_ARG =
@@ -59,6 +59,8 @@ sig
   val compare : key -> key -> Ordering.t
   val string_of_key : key -> string
   val string_of_value : value -> string
+  val key_of_string : string -> key
+  val val_of_int : int -> value
 
   (* Functions used for testing. *)
 
@@ -99,6 +101,8 @@ struct
     | _ -> failwith "invalid compare "
   let string_of_key key = key
   let string_of_value = string_of_int
+  let key_of_string my_string = my_string
+  let val_of_int my_int = my_int
   let gen_key () = "0"
   let gen_key_gt x () = string_of_int ((int_of_string x) + 1)
   let gen_key_lt x () = string_of_int ((int_of_string x) - 1)
@@ -178,6 +182,8 @@ struct
     let f = (fun y (k,v) -> y ^ "\n key: " ^ D.string_of_key k ^
       "; value: (" ^ D.string_of_value v ^ ")") in
     List.fold_left ~f:f ~init:"" d
+  let key_of_string = D.key_of_string
+  let val_of_int = D.val_of_int
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
@@ -273,7 +279,7 @@ struct
     ()
 
 end
-
+  
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
   AssocListDict(D)

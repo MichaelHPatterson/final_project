@@ -1,21 +1,11 @@
-all: matrix polynomial hungarian
-	corebuild matrix.native
-	corebuild polynomial.native
-	corebuild hungarian.native
+all: read_write.ml psetdict.ml
+	corebuild read_write.native
+	corebuild psetdict.native
 
-matrix:
-	corebuild matrix.native
+read_write: corebuild read_write.native
 
-polynomial:
-	corebuild polynomial.native
-
-hungarian:
-	corebuild hungarian.native
-
-check:
-	chmod u+x ../check_width
-	../check_width modules.ml
-	../check_width ps4.ml
+psetdict:
+	corebuild psetdict.native
 
 clean:
 	rm -rf _build *.native
