@@ -5,7 +5,7 @@
 
 open Core.Std
 
-module type MATRIX =
+module type MATRIX_ARG =
 sig
   (* type for matrix implementation *)
   type value
@@ -32,7 +32,7 @@ end
  * in the terminal. Also note that the module is needed because of the need for 
  * a matrix functor *)
 
-module Printer (M: MATRIX) : (PRINT with type value = M.value) =
+module Printer (M: MATRIX_ARG) : (PRINT with type value = M.value) =
 struct
   type value = M.value
 

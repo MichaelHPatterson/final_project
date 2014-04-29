@@ -7,23 +7,143 @@ open Core.Std
 open Psetdict
 open Helpers
 
-module type MATRIX =
+exception TODO
+exception SizeMismatch
+exception IndexOutOfBounds
+exception NotSquare
+exception InversionError
+
+(*
+module type MATRIX_DISPLAY =
 sig
-  (* type for matrix implementation *)
   type value
 
   val string_of_val : value -> string
 
   val val_of_string : string -> value
+end
+*)
+
+(* a "helper functor" that is used for most tasks involving matrices *)
+module type MATRIX_ARG =
+sig
+  (* type for matrix implementation *)
+  type value
+  type vec = value array
+  type mat = vec array
+
+  val string_of_val : value -> string
+
+  val val_of_string : string -> value
+
+  val float_of_val : value -> float
+
+  val val_of_float : float -> value
 
   val zero_value : value
 
   val big_test_matrix : value array array
 end
 
-(* Signature for writing to file. Note that the only exposed function is actually
- * writing to a file. This provides a favorable abstraction layer. *)
+module type MATRIX =
+sig
+  type value
+  type vec = value array
+  type mat = vec array
 
+  val string_of_val : value -> string
+
+  val val_of_string : string -> value
+
+  val float_of_val : value -> float
+
+  val val_of_float : float -> value
+
+  val zero_value : value
+
+  val big_test_matrix : value array array
+
+  val zero_vec : int -> vec
+
+  val zero_mat : int -> int -> mat
+
+  val basis_vec : dim:int -> int -> vec
+
+  val identity : int -> mat
+
+  val map2 : f:(value -> value -> 'a) -> vec -> vec -> 'a array
+
+  val add_vec : vec -> vec -> vec
+
+  val add_mat : mat -> mat -> mat
+end
+
+module FloatExtended (M : MATRIX_ARG) : (MATRIX with type value = M.value)= 
+struct
+  type value = M.value
+  type vec = value array
+  type mat = vec array
+
+  let string_of_val = M.string_of_val
+
+  let val_of_string = M.val_of_string
+
+  let float_of_val = M.float_of_val
+
+  let val_of_float = M.val_of_float
+
+  let zero_value = M.zero_value
+
+  let big_test_matrix = M.big_test_matrix
+
+  (* Generates a vector of 0's with length len. *)
+  let zero_vec (len : int) : vec = Array.create ~len M.zero_value
+
+  (* Generates a matrix of 0's with the specified dimensions. *)
+  let zero_mat (cols : int) (rows : int) : mat =
+    Array.create ~len:cols (Array.create ~len:rows M.zero_value)
+
+  (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
+  let basis_vec ~(dim : int) (n : int) : vec =
+    if n >= dim then raise IndexOutOfBounds
+    else
+      let result : vec = Array.create ~len:dim M.zero_value in
+      result.(n) <- (val_of_float 1.);
+      result
+
+  (* Generates the dim x dim identity matrix. *)
+  let identity (dim : int) : mat =
+    Array.init dim ~f:(fun i -> basis_vec ~dim i)
+
+  (* Computes [|f l1.(0) l2.(0); f l1.(1); f l2.(1); ...|]. *)
+  let map2 ~(f : value -> value -> 'a) (l1 : vec) (l2 : vec) : 'a array =
+    let len1 = Array.length l1 in
+    if len1 <> Array.length l2 then raise SizeMismatch
+    else
+      let result = Array.create ~len:len1 (f l1.(0) l2.(0)) in
+      for i = 0 to len1 - 1 do
+        result.(i) <- f l1.(i) l2.(i)
+      done;
+      result
+
+  (* Adds two vectors. *)
+  let add_vec : vec -> vec -> vec = map2 
+    ~f:(fun x y -> M.val_of_float ((M.float_of_val x) +. (M.float_of_val y)))
+
+  (* Adds two matrices. *)
+  let add_mat (m1 : mat) (m2 : mat) : mat =
+    let (len1, len2) = (Array.length m1, Array.length m2) in
+    if len1 <> len2 then raise SizeMismatch
+    else
+      let result = zero_mat len1 (Array.length m1.(0)) in
+      for i = 0 to len1 - 1 do
+	result.(i) <- add_vec m1.(i) m2.(i)
+      done;
+      result
+end
+
+(* Signature for writing to file. The only exposed functions are writing to a
+ * file and running tests, which provides a favorable abstraction layer. *)
 module type WRITE =
 sig
   (* types for the matrix implementation *)
@@ -41,7 +161,6 @@ end
 
 (* Signature for reading from a file. Note that the only exposed function is
  * actually reading the file, favorable for abstraction. *)
-
 module type READ =
 sig
   (* types for dict implementation *)
@@ -58,9 +177,12 @@ sig
   val process_file : string -> (mat * dict * dict)
 end
  
-module IntMatrix : MATRIX =
+(* an int implementation *)
+module IntMatrix : MATRIX_ARG =
 struct
   type value = int
+  type vec = value array
+  type mat = vec array
 
   let zero_value = 0
 
@@ -68,13 +190,20 @@ struct
 
   let string_of_val = string_of_int
 
+  let float_of_val = Float.of_int
+
+  let val_of_float = Float.to_int
+
   let big_test_matrix = [| [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] ; 
     [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] |]
 end
 
-module StringMatrix : MATRIX =
+(* a string implementation *)
+module StringMatrix : MATRIX_ARG =
 struct
   type value = string
+  type vec = value array
+  type mat = vec array
 
   let zero_value = ""
 
@@ -82,13 +211,37 @@ struct
 
   let string_of_val x = x
 
+  let float_of_val = Float.of_string
+
+  let val_of_float = Float.to_string
+
   let big_test_matrix = [| [| "Po"; "Doc"; "Pinky"; "Miles" |]; 
     [| "A"; "B"; "C"; "D" |]; [| "1"; "2"; "3"; "4" |]; 
     [| "a"; "b"; "c"; "d" |] |]
 end
 
+module FloatMatrix : MATRIX_ARG =
+struct
+  type value = float
+  type vec = value array
+  type mat = vec array
+
+  let string_of_val = Float.to_string
+
+  let val_of_string = Float.of_string
+
+  let float_of_val x = x
+
+  let val_of_float x = x
+
+  let zero_value = 0.0
+
+  let big_test_matrix = [| [| 1.5; 2.0; 3.0; 4.0 |]; [| 5.0; 6.0; 7.0; 8.0 |];
+    [| 9.0; 10.0; 11.0; 12.0 |]; [| 13.0; 14.0; 15.0; 16.0 |] |]
+end
+
 (* Writes matrices of some type given by M to a text file. *)
-module Write(M: MATRIX) : (WRITE with type value = M.value) =
+module Write(M: MATRIX_ARG) : (WRITE with type value = M.value) =
 struct
   type value = M.value
   type vec = value array
@@ -152,11 +305,14 @@ module StringMatrixModule = Write(StringMatrix);;
 StringMatrixModule.mat_to_file (StringMatrix.big_test_matrix) 
   "string_write_test.txt";;
 
+module FloatMatrixModule = Write(FloatMatrix);;
+FloatMatrixModule.mat_to_file(FloatMatrix.big_test_matrix) "float_write_test.txt";;
+
 (* Signature for reading a file and building a matrix, with dicts for indexing
  * the rows and columns. Requires a matrix functor, which defines the type of 
  * the matrix. Also requires a dict functor, which defines the dict that is 
  * stored. *)
-module Read (M: MATRIX) (D: DICT) : (READ with type key = D.key
+module Read (M: MATRIX_ARG) (D: DICT) : (READ with type key = D.key
   with type value = D.value with type dict = D.dict
     with type mat_value = M.value) = 
 struct
@@ -202,8 +358,8 @@ struct
      * the line; this is an invariant of the .txt file *)
     let elt_check (line : string) : bool = String.contains line ':' in
 
-    (* checks how many owners are in the .txt file and returns a square matrix of
-     * the same dimension as this quantity *)
+    (* checks how many owners are in the .txt file and returns a square matrix
+     * of the same dimension as this quantity *)
     let owner_num : int = List.fold_right file_lines 
       ~f:(fun x acc -> if not (elt_check x) then acc + 1 else acc) ~init:0 in
     let return_matrix = rank_matrix owner_num in
@@ -226,7 +382,7 @@ struct
 	else (owner_dict := D.insert (!owner_dict) (D.key_of_string subj) 
                (D.val_of_int (!owner_index)));
 	      owner_index := (!owner_index) + 1)
-      (* if it's an elt than either add to the dict and matrix if it's a new elt,
+      (* if it's an elt than either add to the dict and matrix if it's a new elt
        * or just add to the matrix if it already has an index *)
       else (
 	let (a, b) = process_elt subject in
@@ -252,6 +408,20 @@ IntDrugWrite.mat_to_file (get_mat (IntDrugRead.process_file "test_input.txt"))
   "test_output.txt";;
  
 IntDrugWrite.mat_to_file (get_mat (IntDrugRead.process_file "test_input.txt"))
-  "score.txt";;
+  "test_output2.txt";;
 
 let my_matrix = IntDrugRead.process_file "test_input.txt";;
+
+
+(* Tests with Matrix operations *)
+module FloatRead = Read (FloatMatrix) (Make(StringIntDictArg));;
+module FloatWrite = Write (FloatMatrix);;
+module FloatOps = FloatExtended (FloatMatrix);;
+
+FloatWrite.mat_to_file (get_mat (FloatRead.process_file "test_float_input.txt"))
+  "test_output3.txt";;
+
+let my_float_matrix = get_mat (FloatRead.process_file "test_float_input.txt");;
+
+FloatWrite.mat_to_file ((FloatOps.add_mat my_float_matrix 
+  (FloatOps.identity 5))) "test_output4.txt";;

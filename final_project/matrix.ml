@@ -19,9 +19,9 @@ sig
   (* type of elements in the matrix *)
   type value
   (* type for the vector *)
-  type vec
-  (* type for the matrix*)
-  type mat
+  type vec = value array
+  (* type for the matrix - an array of columns *)
+  type mat = vec array
 
   (* takes dimension as an int argument and returns 0 vec of that dim *)
   val zero_vec : int -> vec
@@ -93,8 +93,8 @@ end
 (* Note: this is just preliminary and could require some modifications. *)
 module FloatMatrix =
 struct
-  type vec = float array
-  (* matrix = array of columns *)
+  type value = float
+  type vec = value array
   type mat = vec array
 
   (* Generates a vector of 0's with length len. *)
