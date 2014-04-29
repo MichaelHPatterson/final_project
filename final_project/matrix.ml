@@ -17,7 +17,7 @@ Random.self_init ();;
 module type MATRIX =
 sig
   (* type of elements in the matrix *)
-  type value
+  type value = float
   (* type for the vector *)
   type vec = value array
   (* type for the matrix - an array of columns *)
@@ -32,13 +32,13 @@ sig
 
   (* Constructs the nth standard basis vector (zero-indexed) in R^dim, where
    * dim is the first int argument and n is the second *)
-  val basis_vec : int -> int -> vec
+  val basis_vec : dim:int -> int -> vec
 
   (* takes one argument for dimension and returns identity matrix *)
   val identity : int -> mat
 
   (* performs specified operation on two vectors, returning another vector *)
-  val map2 : (value -> value -> value) -> vec -> vec -> vec
+  val map2 : f:(value -> value -> 'a) -> vec -> vec -> 'a array
 	 
   (* adds two vectors together *)
   val add_vec : vec -> vec -> vec
@@ -47,10 +47,10 @@ sig
   val add_mat : mat -> mat -> mat
 
   (* returns the scalar multiple of a vector *)
-  val scalar_mult_vec : vec -> value -> vec
+  val scalar_mult_vec : vec -> float -> vec
 
   (* returns the scalar multiple of a matrix *)
-  val scalar_mult_mat : mat -> value -> mat
+  val scalar_mult_mat : mat -> float -> mat
 
   (* Multiplies a square matrix m with a vector v. *)
   val mult_vec : mat -> vec -> vec

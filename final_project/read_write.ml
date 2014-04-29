@@ -17,19 +17,11 @@ exception InversionError
 module type MATRIX_ARG =
 sig
   (* type for matrix implementation *)
-  type value
-  type vec = value array
-  type mat = vec array
+  type value = float
 
   val string_of_val : value -> string
 
   val val_of_string : string -> value
-
-  val float_of_val : value -> float
-
-  val val_of_float : float -> value
-
-  val zero_value : value
 
   val big_test_matrix : value array array
 end
@@ -40,7 +32,7 @@ end
 module type WRITE =
 sig
   (* types for the matrix implementation *)
-  type value
+  type value = float
   type vec = value array
   type mat = vec array
 
@@ -62,7 +54,7 @@ sig
   type dict
 
   (* types for the matrix implementation *)
-  type mat_value
+  type mat_value = float
   type vec = mat_value array
   type mat = vec array
 
@@ -70,52 +62,6 @@ sig
   val process_file : string -> (mat * dict * dict)
 end
  
-
-(* an int implementation *)
-module IntMatrix : MATRIX_ARG =
-struct
-  type value = int
-  type vec = value array
-  type mat = vec array
-
-  let zero_value = 0
-
-  let val_of_string = int_of_string
-
-  let string_of_val = string_of_int
-
-  let float_of_val = Float.of_int
-
-  let val_of_float = Float.to_int
-
-  let big_test_matrix = [| [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] ; 
-    [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] |]
-end
-
-
-(* a string implementation *)
-module StringMatrix : MATRIX_ARG =
-struct
-  type value = string
-  type vec = value array
-  type mat = vec array
-
-  let zero_value = ""
-
-  let val_of_string x = x
-
-  let string_of_val x = x
-
-  let float_of_val = Float.of_string
-
-  let val_of_float = Float.to_string
-
-  let big_test_matrix = [| [| "Po"; "Doc"; "Pinky"; "Miles" |]; 
-    [| "A"; "B"; "C"; "D" |]; [| "1"; "2"; "3"; "4" |]; 
-    [| "a"; "b"; "c"; "d" |] |]
-end
-
-
 module FloatMatrix : MATRIX_ARG =
 struct
   type value = float
@@ -126,21 +72,15 @@ struct
 
   let val_of_string = Float.of_string
 
-  let float_of_val x = x
-
-  let val_of_float x = x
-
-  let zero_value = 0.0
-
   let big_test_matrix = [| [| 1.5; 2.0; 3.0; 4.0 |]; [| 5.0; 6.0; 7.0; 8.0 |];
     [| 9.0; 10.0; 11.0; 12.0 |]; [| 13.0; 14.0; 15.0; 16.0 |] |]
 end
 
 
 (* Writes matrices of some type given by M to a text file. *)
-module Write(M: MATRIX_ARG) : (WRITE with type value = M.value) =
+module Write(M: MATRIX_ARG) : WRITE =
 struct
-  type value = M.value
+  type value = float
   type vec = value array
   type mat = vec array
 
@@ -193,16 +133,6 @@ struct
     ()
 end
 
-
-(* tests for an int matrix *)
-module IntMatrixModule = Write(IntMatrix);;
-IntMatrixModule.run_tests();;
-
-(* tests for a string matrix *)
-module StringMatrixModule = Write(StringMatrix);;
-StringMatrixModule.mat_to_file (StringMatrix.big_test_matrix) 
-  "string_write_test.txt";;
-
 module FloatMatrixModule = Write(FloatMatrix);;
 FloatMatrixModule.mat_to_file(FloatMatrix.big_test_matrix) 
   "float_write_test.txt";;
@@ -213,26 +143,25 @@ FloatMatrixModule.mat_to_file(FloatMatrix.big_test_matrix)
  * the matrix. Also requires a dict functor, which defines the dict that is 
  * stored. *)
 module Read (M: MATRIX_ARG) (D: DICT) : (READ with type key = D.key
-  with type value = D.value with type dict = D.dict
-    with type mat_value = M.value) = 
+  with type value = D.value with type dict = D.dict) = 
 struct
 
   type key = D.key
   type value = D.value
   type dict = D.dict
 
-  type mat_value = M.value
+  type mat_value = float
   type vec = mat_value array
   type mat = vec array
 
   (* instantiates a square matrix of len dimensions *)
-  let rank_matrix (len : int) = Array.make_matrix len len M.zero_value
+  let rank_matrix (len : int) = Array.make_matrix len len 0.0
   
   (* The following code  fucks things up -- all of the columns become uniform.
    * I think this is because the m.(x).(y) notation doesn't work for normal
    * two-dimensional arrays. However, it works for the make_matrix two-
    * dimensional arrays.
-   * Array.create ~len:len (Array.create ~len:len M.zero_value) *)
+   * Array.create ~len:len (Array.create ~len:len 0.0) *)
   
   (* converts the element-rank line into a (string, mat_value) tuple by 
    * splitting at the colon *)
@@ -300,23 +229,9 @@ struct
     (return_matrix, (!owner_dict), (!elt_dict))
 end
 
-(* Tests for Reading and then Writing *) 
-module IntDrugRead = Read (IntMatrix) (Make(StringIntDictArg));;
-module IntDrugWrite = Write (IntMatrix);;
-
-IntDrugWrite.mat_to_file (Helpers.get_mat (IntDrugRead.process_file 
-  "test_input.txt")) "test_output.txt";;
- 
-IntDrugWrite.mat_to_file (Helpers.get_mat (IntDrugRead.process_file 
-  "test_input.txt")) "test_output2.txt";;
-
-let my_matrix = IntDrugRead.process_file "test_input.txt";;
-
-
 (* Tests with Matrix operations *)
 module FloatRead = Read (FloatMatrix) (Make(StringIntDictArg));;
 module FloatWrite = Write (FloatMatrix);;
-module FloatOps = FloatExtended (FloatMatrix);;
 
 FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
   "test_float_input.txt")) "test_output3.txt";;
