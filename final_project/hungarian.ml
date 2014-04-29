@@ -34,7 +34,7 @@ end
  * Wikipedia article (i.e. in this implementation, each column represents
  * a person and each row represents a choice, rather than vice versa). *)
 
-let zero_sensitivity = 0.1;;
+let zero_sensitivity = 0.01;;
 
 
 
@@ -42,10 +42,12 @@ let zero_sensitivity = 0.1;;
 
 let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
 
+let is_zero (x : float) : bool = Float.abs x <= zero_sensitivity
+
 let zero_indices (v : vec) : int list =
   let l = ref [] in
   for i = Array.length v - 1 downto 0 do
-    if Float.abs v.(i) <= zero_sensitivity then l := i :: !l
+    if is_zero v.(i) then l := i :: !l
   done;
   !l
 
@@ -57,6 +59,8 @@ let shift_to_zero (v : vec) : vec = add_to_vec v ((-1.) *. (find_min_vec v))
 
 let swap_list : (int * int) list -> (int * int) list =
   let swap (x,y) = (y,x) in List.map ~f:swap
+
+type hungarian_status = Finished of (int * int) list | Unfinished of (int * int) list
 
 (* Checks the current matrix to see if an optimal assignment can be carried out,
  * after steps 1 and 2 of the algorithm have been done. *)
@@ -107,6 +111,41 @@ let rec print_results (r : (int * int) list) : unit =
       print_results r');
   flush_all ()
 
+(* Arguments: (1) the matrix, after applying steps_12, and (2) the assignments that have already been made,
+ * in the form of column * row.
+ * Returns: (1) List of "marked" columns. (2) List of "marked" rows. Note that these
+ * "markings" denote the smallest number of lines required to cover all 0's in m. *)
+let mark_zeros (m : mat) (curr : (int * int) list) : int list * int list =
+  let marked_cols : int list ref = ref [] in
+  let marked_rows : int list ref = ref [] in
+  let dim = Array.length m in
+  (* Mark all columns having no assignments. *)
+  for i = 0 to dim - 1 do
+    if List.fold_left ~f:(fun b (c,_) -> b || c = i) ~init:false curr then
+      marked_cols := i :: !marked_cols
+  done;
+  let do_loop () =
+    (* Mark all rows having zeros in marked columns. *)
+    let f (c : int) : unit =
+      Array.iteri ~f:(fun i x -> if is_zero x then marked_rows := i :: !marked_rows) m.(c) in
+    List.iter ~f !marked_cols;
+    (* Mark all columns having assignments in marked rows. *)
+    let f (r : int) : unit =
+      Array.iteri ~f:(fun i x -> if is_zero x then marked_cols := i :: !marked_cols) (transpose m).(r) in
+    List.iter ~f !marked_rows
+  in
+  let rec call_loop () : unit =
+    let (curr_marked_rows, curr_marked_cols) = (!marked_rows, !marked_cols) in
+    do_loop ();
+    if curr_marked_rows = !marked_rows && curr_marked_cols = !marked_cols then ()
+    else call_loop ()
+  in
+  call_loop ();
+  let new_marked_cols = ref [] in
+  for i = 0 to dim - 1 do
+    if not (List.mem !marked_cols i) then new_marked_cols := i :: !new_marked_cols
+  done;
+  (!new_marked_cols, !marked_rows)
 
 (* Generates a random dim x dim matrix of integers from 0 to 99 *)
 let random_matrix (dim : int) : mat =

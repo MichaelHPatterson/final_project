@@ -3,6 +3,7 @@ all: read_write.ml psetdict.ml helpers.ml matrixops.ml
 	corebuild psetdict.native
 	corebuild helpers.native
 	corebuild matrixops.native
+	corebuild hungarian.native
 
 read_write: corebuild read_write.native
 
@@ -14,6 +15,9 @@ helpers:
 
 matrixtest:
 	corebuild matrixops.native
+
+hungarian:
+	corebuild hungarian.native
 
 clean:
 	rm -rf _build *.native
