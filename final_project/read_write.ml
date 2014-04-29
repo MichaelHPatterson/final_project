@@ -5,6 +5,7 @@
 
 open Core.Std
 open Psetdict
+open Helpers
 
 module type MATRIX =
 sig
@@ -54,7 +55,7 @@ sig
   type mat = vec array
 
   (* reads a .txt file of a specific invariant, returning the ranking matrix *)
-  val process_file : string -> mat
+  val process_file : string -> (mat * dict * dict)
 end
  
 module IntMatrix : MATRIX =
@@ -67,7 +68,8 @@ struct
 
   let string_of_val = string_of_int
 
-  let big_test_matrix = [| [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] ; [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] |]
+  let big_test_matrix = [| [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] ; 
+    [| 1; 2; 3; 4 |] ; [| 2; 3; 4; 5; |] |]
 end
 
 module StringMatrix : MATRIX =
@@ -80,8 +82,9 @@ struct
 
   let string_of_val x = x
 
-  let big_test_matrix = [| [| "Po"; "Doc"; "Pinky"; "Miles" |]; [| "A"; "B"; "C"; "D" |]; [| "1"; "2"; "3"; "4" |];
-			   [| "a"; "b"; "c"; "d" |] |]
+  let big_test_matrix = [| [| "Po"; "Doc"; "Pinky"; "Miles" |]; 
+    [| "A"; "B"; "C"; "D" |]; [| "1"; "2"; "3"; "4" |]; 
+    [| "a"; "b"; "c"; "d" |] |]
 end
 
 (* Writes matrices of some type given by M to a text file. *)
@@ -90,19 +93,6 @@ struct
   type value = M.value
   type vec = value array
   type mat = vec array
-
-  (* general fold function for matrices; probably should go in matrix.ml *)
-  let matrix_fold (matrix : 'b array array) ~(f : 'a -> 'b -> 'a) ~(init : 'a) : 'a =
-    Array.fold matrix ~init:init ~f:(fun acc x -> Array.fold x ~init:acc ~f:f)
-
-  (* general map function for matrices; probably should go in matrix.ml *)
-  let matrix_map (matrix : 'a array array) ~(f : 'a -> 'b) : 'b array array =
-    let len = Array.length matrix in
-    let result = Array.create ~len:len (Array.create ~len:len (f (matrix.(0)).(0))) in
-    for i = 0 to len - 1 do
-      result.(i) <- Array.map f matrix.(i)
-    done;
-    result
 
   (* formats a row of a string matrix for display in .txt file *)
   let row_concat (row : string array) (space : int) : string =
@@ -113,19 +103,22 @@ struct
 	match empties with
 	| 0 -> ""
 	| _ -> " " ^ make_space (empties - 1) in
-      
+
       (make_space (space - (String.length str))) ^ str in
 
     Array.fold_right row ~f:(fun x acc -> (build_string x) ^ acc) ~init:""
 
   (* calls row_concat to format the whole string matrix for display *)
-  let string_mat_to_strings (matrix : string array array) (space : int) : string list  =
-    Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc) ~init:[]
+  let string_mat_to_strings (matrix : string array array) (space : int)
+      : string list  =
+    Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc)
+      ~init:[]
 
-  (* actually writes to file by converting to string matrix, formatting, and writing *)
+  (* converts matrix to string matrix, formats, and writes to file *)
   let mat_to_file (matrix : mat) (filename : string) : unit =
     let string_matrix = matrix_map matrix ~f:M.string_of_val in
-    let max_len = matrix_fold string_matrix ~f:(fun acc x -> max (String.length x) acc) ~init: 0 in
+    let max_len = matrix_fold string_matrix ~f:(fun acc x -> max 
+      (String.length x) acc) ~init: 0 in
     let to_strings = string_mat_to_strings string_matrix (max_len + 1) in
     Out_channel.write_lines filename to_strings
 
@@ -156,14 +149,16 @@ IntMatrixModule.run_tests();;
 
 (* tests for a string matrix *)
 module StringMatrixModule = Write(StringMatrix);;
-StringMatrixModule.mat_to_file (StringMatrix.big_test_matrix) "string_write_test.txt";;
+StringMatrixModule.mat_to_file (StringMatrix.big_test_matrix) 
+  "string_write_test.txt";;
 
 (* Signature for reading a file and building a matrix, with dicts for indexing
  * the rows and columns. Requires a matrix functor, which defines the type of 
  * the matrix. Also requires a dict functor, which defines the dict that is 
  * stored. *)
 module Read (M: MATRIX) (D: DICT) : (READ with type key = D.key
-  with type value = D.value with type dict = D.dict with type mat_value = M.value) = 
+  with type value = D.value with type dict = D.dict
+    with type mat_value = M.value) = 
 struct
 
   type key = D.key
@@ -177,65 +172,86 @@ struct
   (* instantiates a square matrix of len dimensions *)
   let rank_matrix (len : int) = Array.make_matrix len len M.zero_value
   
-  (* This fucks things up -- all of the columns become uniform. I think
-   * this is because the m.(x).(y) notation doesn't work for normal
+  (* The following code  fucks things up -- all of the columns become uniform.
+   * I think this is because the m.(x).(y) notation doesn't work for normal
    * two-dimensional arrays. However, it works for the make_matrix two-
-   * dimensional arrays:
+   * dimensional arrays.
    * Array.create ~len:len (Array.create ~len:len M.zero_value) *)
   
-  (* a ref for storing owners and their indices *)
-  let owner_dict = ref (D.empty)
-  (* a ref for storing the current max owner index *)
-  let owner_index = ref 0
-
-  (* a ref for storing elements and their indices *)
-  let elt_dict = ref (D.empty)
-  (* a ref for storing the current max element index *)
-  let elt_index = ref 0
-
-  (* converts the element-rank line into a (string, mat_value) tuple by splitting at
-   * the colon *)
+  (* converts the element-rank line into a (string, mat_value) tuple by 
+   * splitting at the colon *)
   let process_elt (line : string) =
     let (a, b) = String.rsplit2_exn line ':' in
     (String.strip a, M.val_of_string (String.strip b))
     
-  let process_file (filename : string) : mat =
-    let file_lines = In_channel.read_lines filename in
+  let process_file (filename : string) : (mat * dict * dict) =
+    (* a ref for storing owners and their indices *)
+    let owner_dict : dict ref = ref (D.empty) in
+    (* a ref for storing the current max owner index *)
+    let owner_index : int ref = ref 0 in
+
+    (* a ref for storing elements and their indices *)
+    let elt_dict : dict ref = ref (D.empty) in
+    (* a ref for storing the current max element index *)
+    let elt_index : int ref = ref 0 in
+   
+    (* a string list of all lines in the file*)
+    let file_lines : string list = In_channel.read_lines filename in
 
     (* checks if the line is for an owner or element by looking for a colon in
      * the line; this is an invariant of the .txt file *)
     let elt_check (line : string) : bool = String.contains line ':' in
-    let owner_num = List.fold_right file_lines 
+
+    (* checks how many owners are in the .txt file and returns a square matrix of
+     * the same dimension as this quantity *)
+    let owner_num : int = List.fold_right file_lines 
       ~f:(fun x acc -> if not (elt_check x) then acc + 1 else acc) ~init:0 in
     let return_matrix = rank_matrix owner_num in
+    
+    (* updates a specific point in the matrix *)
+    let update_matrix (matrix : mat) (row : int) (col : int) 
+      (new_val : mat_value) : unit = matrix.(row).(col) <- new_val in
 
-    let update_matrix (matrix : mat) (row : int) (col : int) (new_val : mat_value) : unit =
-      matrix.(row).(col) <- new_val in
-
+    (* adds owners and elts to their respective dicts, and adds rankings of elts
+     * by owners to their specific index in a matrix *)
     let add_to_dict (subject : string) : unit =
-      if ((String.strip subject) = "") then () else
+      let subj = String.strip subject in
+      (* if a line is empty, it's not an owner or elt *)     
+      if (subj = "") then () else
+      (* if it's an owner then add that owner to dict, or if owner is already in
+       * dict then return error *)
       if not (elt_check subject) then (
-	if D.member (!owner_dict) (D.key_of_string (String.strip subject)) then
+	if D.member (!owner_dict) (D.key_of_string subj) then
 	  failwith "owner already in dict"
-	else (owner_dict := D.insert (!owner_dict) (D.key_of_string (String.strip subject)) (D.val_of_int (!owner_index));
-	      owner_index := (!owner_index) + 1))
+	else (owner_dict := D.insert (!owner_dict) (D.key_of_string subj) 
+               (D.val_of_int (!owner_index)));
+	      owner_index := (!owner_index) + 1)
+      (* if it's an elt than either add to the dict and matrix if it's a new elt,
+       * or just add to the matrix if it already has an index *)
       else (
 	let (a, b) = process_elt subject in
 	match D.lookup (!elt_dict) (D.key_of_string a) with
 	| None -> (
-	   elt_dict := D.insert (!elt_dict) (D.key_of_string a) (D.val_of_int (!elt_index));
+	   elt_dict := D.insert (!elt_dict) (D.key_of_string a) 
+             (D.val_of_int (!elt_index));
 	   update_matrix return_matrix (!owner_index - 1) (!elt_index) b;
 	   elt_index := (!elt_index) + 1)
 	| Some x ->
-	   update_matrix return_matrix (!owner_index - 1) (int_of_string (D.string_of_value x)) b) in
+	   update_matrix return_matrix (!owner_index - 1) 
+	     (int_of_string (D.string_of_value x)) b) in
+
     List.iter file_lines ~f:add_to_dict;
-    return_matrix
+    (return_matrix, (!owner_dict), (!elt_dict))
 end
 
 (* Tests for Reading and then Writing *) 
 module IntDrugRead = Read (IntMatrix) (Make(StringIntDictArg));;
 module IntDrugWrite = Write (IntMatrix);;
-IntDrugWrite.mat_to_file (IntDrugRead.process_file "test_input.txt") "test_output.txt";;
+
+IntDrugWrite.mat_to_file (get_mat (IntDrugRead.process_file "test_input.txt"))
+  "test_output.txt";;
  
-(* This works by itself, but I need to make some dict modifications *)
-(* let my_matrix = IntDrugRead.process_file "jane.txt";; *)
+IntDrugWrite.mat_to_file (get_mat (IntDrugRead.process_file "test_input.txt"))
+  "score.txt";;
+
+let my_matrix = IntDrugRead.process_file "test_input.txt";;
