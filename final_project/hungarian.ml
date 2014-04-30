@@ -309,6 +309,6 @@ let test2 (dim : int) (num_tries : int) : unit =
   let avg_time = !total_time /. (float num_tries) in
   Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2, when working on %ix%i matrices.\n" !counter num_tries dim dim;
   Printf.printf "On average, each test took %f, " avg_time;
-  Printf.printf "or (%i * %f) ^ 1.5, seconds.\n" dim (avg_time ** (1. /. 1.5) /. (float dim))
+  Printf.printf "or (%i * %f)^1.5, seconds.\n" dim (avg_time ** (1. /. 1.5) /. (float dim))
 
 in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 1000; test2 18 1000; test2 20 1000; test2 30 1000; test2 40 1000; test2 50 1000
