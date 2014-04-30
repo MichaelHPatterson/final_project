@@ -9,6 +9,7 @@ open Polynomial
 open Matrix.FloatMatrix
 
 exception Empty
+exception AlgorithmError
 
 Random.self_init ();
 
@@ -44,6 +45,14 @@ let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
 
 let is_zero (x : float) : bool = Float.abs x <= zero_sensitivity
 
+let rec print_results (r : (int * int) list) : unit =
+  (match r with
+   | [] -> Printf.printf "\n\n"
+   | (i,j) :: r' ->
+      Printf.printf "Person %i assigned to element %i.\n" i j;
+      print_results r');
+  flush_all ()
+
 let zero_indices (v : vec) : int list =
   let l = ref [] in
   for i = Array.length v - 1 downto 0 do
@@ -65,35 +74,66 @@ type hungarian_status = Finished of (int * int) list | Unfinished of (int * int)
 (* Checks the current matrix to see if an optimal assignment can be carried out,
  * after steps 1 and 2 of the algorithm have been done. *)
 (* INCOMPLETE [see note at the bottom of the function] *)
-let is_trivially_finished (m : mat) : (int * int) list option =
+let is_finished (m : mat) : hungarian_status =
   let zeros : int list array = Array.map ~f:zero_indices m in
-  if Array.fold_right ~f:(fun l c -> c || List.length l = 0) ~init:false zeros
+  (*if Array.fold_right ~f:(fun l c -> c || List.length l = 0) ~init:false zeros
   then None
-  else
+  else*)
     let dim = Array.length m in
-    let row_checker = ref true in
+    (*let row_checker = ref true in*)
     (* this line is dumb, there must be some better way to do it, I just don't feel like finding it *)
-    let zeros_rows = List.to_array (List.concat (Array.to_list zeros)) in
+    (*let zeros_rows = List.to_array (List.concat (Array.to_list zeros)) in
     for i = 0 to dim - 1 do
       if not (Array.mem zeros_rows i) then row_checker := false
     done;
     if not !row_checker then None
-    else
+    else*)
       let result : (int * int) list ref = ref [] in
-      let is_assigned ((person, element) : int * int) : bool =
-	List.fold_left ~f:(fun c (x,y) -> c || x = person || y = element) ~init:false !result in
+      let is_assigned ((person, element) : int * int) (results : (int * int) list) : bool =
+	List.fold_left ~f:(fun c (p,e) -> c || p = person || e = element) ~init:false results in
       let f i l =
 	match l with
-	| [j] -> if not (is_assigned (i,j)) then result := (i,j) :: !result
+	| [j] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
 	| _ -> ()
       in Array.iteri ~f zeros;
       let zeros_trans : int list array = Array.map ~f:zero_indices (transpose m) in
       let f j l =
 	match l with
-	| [i] -> if not (is_assigned (i,j)) then result := (i,j) :: !result
+	| [i] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
         | _ -> ()
       in Array.iteri ~f zeros_trans;
-      if List.length !result = dim then Some !result else None
+      if List.length !result = dim then Finished !result
+      else
+	let unassigned_people = ref [] in
+	let unassigned_elts = ref [] in
+	for i = 0 to dim - 1 do
+	  (* The 0's are just used as placeholders -- any integer would do just as well *)
+	  if not (List.fold_left ~f:(fun c (p,_) -> c || p = i) ~init:false !result)
+	  then unassigned_people := i :: !unassigned_people;
+	  if not (List.fold_left ~f:(fun c (_,e) -> c || e = i) ~init:false !result)
+	  then unassigned_elts := i :: !unassigned_elts;
+	  flush_all ();
+	done;
+	let possible_new = List.cartesian_product !unassigned_people !unassigned_elts in
+        let possible_new = List.filter ~f:(fun (p,e) -> not (is_assigned (p,e) !result) && is_zero m.(p).(e)) possible_new in
+	let rec check_finished (possible_pairs : (int * int) list) (curr_results : (int * int) list) : hungarian_status =
+	  match possible_pairs with
+	  | [] ->
+	    if List.length curr_results >= dim then Finished curr_results
+	    else Unfinished curr_results
+	  | (p,e) :: possible_pairs' ->
+	    if is_assigned (p,e) curr_results then check_finished possible_pairs' curr_results
+	    else
+	      (match check_finished possible_pairs' ((p,e) :: curr_results) with
+	      | Unfinished r -> check_finished possible_pairs' curr_results
+	      | Finished r -> Finished r)
+	in
+	check_finished possible_new !result
+	(*let f (p,e) =
+	  if not (is_assigned (p,e) !result) && is_zero m.(p).(e)
+	  then result := (p,e) :: !result
+	in List.iter ~f !possible_new;
+	if List.length !result = dim then Finished !result else	Unfinished !result*)
       (* NOTE: THIS IS INCOMPLETE -- There are still cases where the function
        * returns None when there is a solution (specifically, the function
        * ignores rows/columns that have more than 1 zero, while those situations
@@ -103,36 +143,34 @@ let is_trivially_finished (m : mat) : (int * int) list option =
 let steps_12 (m : mat) : mat =
   transpose (Array.map ~f:shift_to_zero (transpose (Array.map ~f:shift_to_zero m)))
 
-let rec print_results (r : (int * int) list) : unit =
-  (match r with
-   | [] -> Printf.printf "\n\n"
-   | (i,j) :: r' ->
-      Printf.printf "Person %i assigned to element %i.\n" i j;
-      print_results r');
-  flush_all ()
-
 (* Arguments: (1) the matrix, after applying steps_12, and (2) the assignments that have already been made,
  * in the form of column * row.
  * Returns: (1) List of "marked" columns. (2) List of "marked" rows. Note that these
  * "markings" denote the smallest number of lines required to cover all 0's in m. *)
-let mark_zeros (m : mat) (curr : (int * int) list) : int list * int list =
+let mark_zeros (m : mat) (assignments : (int * int) list) : int list * int list =
   let marked_cols : int list ref = ref [] in
   let marked_rows : int list ref = ref [] in
   let dim = Array.length m in
   (* Mark all columns having no assignments. *)
   for i = 0 to dim - 1 do
-    if List.fold_left ~f:(fun b (c,_) -> b || c = i) ~init:false curr then
+    if List.fold_left ~f:(fun b (c,_) -> b && c <> i) ~init:true assignments then
       marked_cols := i :: !marked_cols
   done;
   let do_loop () =
     (* Mark all rows having zeros in marked columns. *)
-    let f (c : int) : unit =
-      Array.iteri ~f:(fun i x -> if is_zero x then marked_rows := i :: !marked_rows) m.(c) in
-    List.iter ~f !marked_cols;
+    let f1 (c : int) : unit =
+      let f i x =
+	if is_zero x && not (List.mem !marked_rows i)
+	then marked_rows := i :: !marked_rows in
+      Array.iteri ~f m.(c) in
+    List.iter ~f:f1 !marked_cols;
     (* Mark all columns having assignments in marked rows. *)
-    let f (r : int) : unit =
-      Array.iteri ~f:(fun i x -> if is_zero x then marked_cols := i :: !marked_cols) (transpose m).(r) in
-    List.iter ~f !marked_rows
+    let f2 (r : int) : unit =
+      let f i _ =
+	if List.mem assignments (i,r) && not (List.mem !marked_cols i)
+	then marked_cols := i :: !marked_cols in
+      Array.iteri ~f (transpose m).(r) in
+    List.iter ~f:f2 !marked_rows
   in
   let rec call_loop () : unit =
     let (curr_marked_rows, curr_marked_cols) = (!marked_rows, !marked_cols) in
@@ -146,6 +184,75 @@ let mark_zeros (m : mat) (curr : (int * int) list) : int list * int list =
     if not (List.mem !marked_cols i) then new_marked_cols := i :: !new_marked_cols
   done;
   (!new_marked_cols, !marked_rows)
+      
+
+(* Carries out steps 3 and 4 of the Hungarian algorithm, assuming that the
+ * parameter matrix m has already undergone steps 1 and 2. *)
+let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
+  let dim = Array.length m in
+  if List.length assignments = dim then assignments
+  else
+    (* This is inefficient -- the mark_zeros function gets called separately on each recursive call *)
+    let _ = (print_mat m; Printf.printf "\n\n"; flush_all ()) in
+    let (marked_cols, marked_rows) = mark_zeros m assignments in
+    let unmarked = Array.map ~f:(Array.filteri ~f:(fun r _ -> not (List.mem marked_rows r))) (Array.filteri ~f:(fun c _ -> not (List.mem marked_cols c)) m) in
+    (*********** This structure here is terrible -- figure out a better way to check whether the matrix is assignable without risking an error, and without having the dummy line "raise AlgorithmError" ***********)
+    if Array.length unmarked = 0 || Array.length unmarked.(0) = 0 then
+      match is_finished m with
+      | Finished lst -> lst
+      | Unfinished lst -> raise AlgorithmError
+    else
+      let min (c : vec) : float = Array.fold_right ~f:Float.min ~init:c.(0) c in
+      let min_unmarked = Array.fold_right ~f:(fun col init -> Float.min (min col) init) ~init:unmarked.(0).(0) unmarked in
+      let is_double_marked c r = List.mem marked_cols c && List.mem marked_rows r in
+      let is_unmarked c r = not (List.mem marked_cols c || List.mem marked_rows r) in
+      let _ = try
+	  (for c = 0 to dim - 1 do
+	     for r = 0 to dim - 1 do
+	       if is_double_marked c r then m.(c).(r) <- m.(c).(r) +. min_unmarked
+	       else if is_unmarked c r then m.(c).(r) <- m.(c).(r) -. min_unmarked
+	     done
+	   done)
+	with (Invalid_argument "index out of bounds") -> raise Matrix.NotSquare
+      in
+      match is_finished m with
+      | Finished lst -> lst
+      | Unfinished lst -> steps_34 m lst
+
+(* shitty function for testing *)
+let brute_force (m : mat) : float =
+  let len = Array.length m in
+  let generate_perm () : int array =
+    let perm = Array.create ~len (-1) in
+    for i = 0 to len - 1 do
+      let rec gen_num () : unit =
+	let new_num = Random.int len in
+	if Array.mem perm new_num then gen_num ()
+	else perm.(i) <- new_num
+      in gen_num ()
+    done;
+    (* NOTE: This screws up if the size of the matrix is 0... but it's just a shitty test function anyway *)
+    Printf.printf "[|%i" perm.(0);
+    for i = 1 to len - 1 do
+      Printf.printf "; %i" perm.(i)
+    done;
+    Printf.printf "|]";
+    flush_all ();
+    perm
+  in
+  let perm = generate_perm () in
+  let cost = ref 0. in
+  for i = 0 to len - 1 do
+    cost := !cost +. m.(i).(perm.(i))
+  done;
+  !cost
+
+let brute_force_n (m : mat) (n : int) : unit =
+  for i = 0 to n - 1 do
+    let cost = brute_force m in
+    Printf.printf "\t=====>\t%f\n" cost;
+    flush_all ()
+  done
 
 (* Generates a random dim x dim matrix of integers from 0 to 99 *)
 let random_matrix (dim : int) : mat =
@@ -167,18 +274,41 @@ let rec test1 () : unit =
   print_mat m; Printf.printf "\n";
   let m' = steps_12 m in
   Printf.printf "After steps 1 and 2:\n"; print_mat m'; Printf.printf "\n";
-  match is_trivially_finished m' with
-  | None -> Printf.printf "Failed attempt.\n"; test1 ()
-  | Some r -> print_results r
+  (match is_finished m' with
+  | Unfinished _ -> Printf.printf "Failed attempt.\n"; test1 ()
+  | Finished r -> print_results r);
+  flush_all ()
 
-(* Test function that gives me a feel for how often steps 1 and 2 of the
+(* Test function that gives a feel for how often steps 1 and 2 of the
  * algorithm are sufficient to solve the problem. *)
-let test2 (num_tries : int) (dim : int) : unit =
+let test2 (dim : int) (num_tries : int) : unit =
   let counter = ref 0 in
+  let total_time = ref 0. in
   for i = 0 to num_tries - 1 do
+    (*Printf.printf "==========================\n\n";*)
+    (* NOTE: This "gettimeofday" function will give weird values if the program is run at 11:59:59, since it resets
+     * to zero at 00:00:00.*)
+    let start_time = Unix.gettimeofday () in
     let m = random_matrix dim in
-    if is_trivially_finished (steps_12 m) <> None then counter := !counter + 1
+    (*print_mat m;
+    Printf.printf "\n\n";*)
+    let m = steps_12 m in
+    (*print_mat m;*)
+    let solution = is_finished m in
+    (match solution with
+    | Finished assignments -> ((*print_results assignments; *)counter := !counter + 1)
+    | Unfinished assignments ->
+      let end_time = Unix.gettimeofday () in
+      total_time := !total_time +. end_time -. start_time
+      (*Printf.printf "Proceeding to steps 3 and 4.\n"*)(*;
+      let assignments = steps_34 m assignments in
+      print_results assignments*));
+    (*Printf.printf "\n\n\n";
+    flush_all ();*)
   done;
-  Printf.printf "\n\n%i attempts (of %i total) led to a solution from steps 1 and 2, when working on %ix%i matrices.\n" !counter num_tries dim dim
+  let avg_time = !total_time /. (float num_tries) in
+  Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2, when working on %ix%i matrices.\n" !counter num_tries dim dim;
+  Printf.printf "On average, each test took %f, " avg_time;
+  Printf.printf "or (%i * %f)^1.5, seconds.\n" dim (avg_time ** (1. /. 1.5) /. (float dim))
 
-in test1 (); test2 10000 4
+in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 1000; test2 18 1000; test2 20 1000; test2 30 1000; test2 40 1000; test2 50 1000
