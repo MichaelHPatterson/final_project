@@ -90,7 +90,9 @@ let is_finished (m : mat) : hungarian_status =
     else*)
       let result : (int * int) list ref = ref [] in
       let is_assigned ((person, element) : int * int) (results : (int * int) list) : bool =
-	List.fold_left ~f:(fun c (p,e) -> c || p = person || e = element) ~init:false results in
+	(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: I'm not sure if this line works -- have to verify *)
+	List.exists ~f:(fun (p,e) -> p = person || e = element ) results in
+	(* List.fold_left ~f:(fun c (p,e) -> c || p = person || e = element) ~init:false results in *)
       let f i l =
 	match l with
 	| [j] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result

@@ -104,6 +104,68 @@ struct
   let zero_mat (cols : int) (rows : int) : mat =
     Array.create ~len:cols (zero_vec rows)
 
+  (* Checks whether v is the zero vector. *)
+  let is_zero_vec (v : vec) (precision : float) : bool =
+    Array.for_all v ~f:(fun x -> Float.abs x <= precision)
+
+  (* Computes the transpose of the matrix m. *)
+  let transpose (m : mat) : mat =
+    let num_cols = Array.length m in
+    if num_cols = 0 then m
+    else
+      let num_rows = Array.length m.(0) in
+      let result = Array.make_matrix ~dimx:num_rows ~dimy:num_cols 0. in
+      for i = 0 to num_rows - 1 do
+        let v : vec = Array.create ~len:num_cols 0. in
+        for j = 0 to num_cols - 1 do
+	  v.(j) <- m.(j).(i)
+        done;
+        result.(i) <- v
+      done;
+      result
+
+  (* Prints out a vector. *)
+  let print_vec (v : vec) : unit =
+    let len = Array.length v in
+    if len = 0 then ()
+    else 
+      Printf.printf "[|%f" v.(0);
+      for i = 1 to len - 1 do
+	Printf.printf "; %f" v.(i)
+      done;
+      Printf.printf "|]";
+      flush_all ()
+
+  (* Prints out a matrix. *)
+  let print_mat (m : mat) : unit =
+    Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
+
+  (* Multiplies the vector v by a scalar value. *)
+  let scalar_mult_vec (v : vec) (factor : float) : vec =
+    Array.map ~f:(( *. ) factor) v
+
+  (* Multiplies the matrix m by a scalar value. *)
+  let scalar_mult_mat (m : mat) (factor : float) : mat =
+    Array.map ~f:(fun v -> scalar_mult_vec v factor) m
+
+  let equal (v1 : vec) (v2 : vec) (precision : float) : bool =
+    try (Array.for_all2_exn ~f:(fun a b -> Float.abs (a -. b) <= precision) v1 v2)
+    with (Invalid_argument _) -> raise SizeMismatch
+
+  (* Checks whether v1 is a scalar multiple of v2. *)
+  let is_multiple (v1 : vec) (v2 : vec) (precision : float) : bool =
+    let ratios : float array =
+      try (Array.map2_exn ~f:(/.) v1 v2)
+      with (Invalid_argument _) -> raise SizeMismatch
+    in
+    if Array.length ratios = 0 then true
+    else
+      let first_non_nan : float =
+	let f a x = if not (Float.is_nan a) || Float.is_nan x then a else x in
+	Array.fold ~f ~init:Float.nan ratios in
+      equal v1 (scalar_mult_vec v2 first_non_nan) precision
+      (* Array.for_all ~f:(fun r -> first_non_nan -. r <= precision || Float.is_nan r) ratios *)
+
   (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
   let basis_vec ~(dim : int) (n : int) : vec =
     if n >= dim then raise IndexOutOfBounds
@@ -141,14 +203,6 @@ struct
       done;
       result
 
-  (* Multiplies the vector v by a scalar value. *)
-  let scalar_mult_vec (v : vec) (factor : float) : vec =
-    Array.map ~f:(( *. ) factor) v
-
-  (* Multiplies the matrix m by a scalar value. *)
-  let scalar_mult_mat (m : mat) (factor : float) : mat =
-    Array.map ~f:(fun v -> scalar_mult_vec v factor) m
-
   (* Adds coeff * the identity matrix to m. *)
   let add_identity (m : mat) (coeff : float) : mat =
     let i = scalar_mult_mat (identity (Array.length m)) coeff in
@@ -180,22 +234,6 @@ struct
 	  result.(i) <- mult_vec m1 m2.(i)
 	done;
 	result
-
-  (* Computes the transpose of the matrix m. *)
-  let transpose (m : mat) : mat =
-    let num_cols = Array.length m in
-    if num_cols = 0 then m
-    else
-      let num_rows = Array.length m.(0) in
-      let result = Array.make_matrix ~dimx:num_rows ~dimy:num_cols 0. in
-      for i = 0 to num_rows - 1 do
-        let v : vec = Array.create ~len:num_cols 0. in
-        for j = 0 to num_cols - 1 do
-	  v.(j) <- m.(j).(i)
-        done;
-        result.(i) <- v
-      done;
-      result
 
   (* Swaps columns n1 and n2 in the matrix m. *)
   let swap (m : mat) (n1 : int) (n2 : int) : unit =
@@ -251,27 +289,10 @@ struct
 
     in let (m,p) = col_reduce_past (transpose m) 0 0 in (transpose m, p)
 
-
-  (* Prints out a vector. *)
-  let print_vec (v : vec) : unit =
-    let len = Array.length v in
-    if len = 0 then ()
-    else 
-      Printf.printf "[|%f" v.(0);
-      for i = 1 to len - 1 do
-	Printf.printf "; %f" v.(i)
-      done;
-      Printf.printf "|]";
-      flush_all ()
-
-  (* Prints out a matrix. *)
-  let print_mat (m : mat) : unit =
-    Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
-
   (* Checks whether the first n columns of m are the identity matrix. *)
   let is_identity (m : mat) (n : int) (precision : float) : bool =
     let m =
-      try (Array.sub m 0 n)
+      try (Array.sub m ~pos:0 ~len:n)
       with (Invalid_argument _) -> raise IndexOutOfBounds in
     let id_tracker = ref true in
     let _ = try
@@ -354,32 +375,35 @@ struct
 	  if size > dim then Array.append test_mat.(size - 1) [|-1.|]
           else let _ = test_mat.(size - 1).(size - 1) <- (-1.) in test_mat.(size - 1)
         in
-	Polynomial.print_poly p; Printf.printf "\n"; flush_all ();						       
 	let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.0001) in
-	Printf.printf "Found eigenvalues\n"; flush_all ();
 	let f (index : int) (e : float) : float * vec =
 	  let v = ref start_vec in
 	  for j = 0 to Array.length eigenvalues - 1 do
-	    if index <> j then
+	    if j <> index then
 	      let matrix = add_identity m ((-1.) *. eigenvalues.(j)) in
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
-	in Array.to_list (Array.mapi ~f eigenvalues)
+	in Array.to_list (Array.filter ~f:(fun (_,v) -> not (is_zero_vec v 0.001)) (Array.mapi ~f eigenvalues))
       in
     let gen_vec () : vec =
       let start : vec = zero_vec dim in
       Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 100. +. 5.) start;
       start
     in
-    let rec check_repeat (already_found : int) : (float * vec) list =
+    let rec find_all (already_found : int) : (float * vec) list =
       let start = gen_vec () in
-      let e = find start start [||] in
+      let remove_repeats (evs : (float * vec) list) : (float * vec) list =
+	let f lst (e,v) =
+	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_multiple v v' 0.01)) lst)
+	in List.fold_left ~f ~init:[] evs
+      in
+      let e = remove_repeats (find start start [||]) in
       let num_found = List.length e + already_found in
-      if num_found < dim then e @ (check_repeat num_found)
+      if num_found < dim then remove_repeats (e @ (find_all num_found))
       else e
     in
-    List.to_array (check_repeat 0)
+    List.to_array (find_all 0)
 
   (* Estimates e by summing 1/i! from i=0 to i=precision. This could also be
    * done by evaluating (1+1/k)^k for large k, but k would have to be really
@@ -404,7 +428,7 @@ struct
       diagonal.(i) <- scalar_mult_vec (basis_vec ~dim i) ((e 15) ** value);
       eigenbasis.(i) <- vector
     in
-    Array.iteri ~f (eigen m);
+    Array.iteri ~f (eigen_new m);
     let inv = match inverse eigenbasis with
       | None -> raise InversionError
       | Some matrix -> matrix
@@ -419,40 +443,54 @@ end
 (* For typing convenience *)
 module M = FloatMatrix
 
-(* Verifying that the 5x5 identity matrix is invertible *)
+let eigen_print (m : M.mat) : unit =
+  let f (value, vector) =
+    Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
+    M.print_vec vector;
+    Printf.printf "\n"
+  in
+  Array.iter ~f (M.eigen_new m);
+  Printf.printf "\n"
+
+let inv_print (m : M.mat) : unit =
+  match M.inverse m with
+  | None -> Printf.printf "The matrix is not invertible.\n\n"
+  | Some m' -> Printf.printf "Inverse:\n"; M.print_mat m'; Printf.printf "\n"
+
+(* Verifying that the 5x5 identity matrix has an eigenbasis and is invertible *)
 let m1 = M.identity 5 in
-match M.inverse m1 with
-| None -> Printf.printf "The matrix is not invertible.\n\n\n"
-| Some m -> M.print_mat m; Printf.printf "\n\n"
+eigen_print m1;
+inv_print m1;
+M.print_mat (M.exponentiate m1); Printf.printf "\n"
 ;;
 
 (* A more difficult invertible matrix *)
 let m2 = [|[|0.127131; 0.873108; 0.116526; 0.452341|]; [|0.405467; 0.91256; 0.0373603; 0.50571|]; [|0.703187; 0.126679; 0.537015; 0.710102|]; [|0.964194; 0.052814; 0.731034; 0.103877|]|] in
-(match M.inverse m2 with
-| None -> Printf.printf "The matrix is not invertible.\n\n"
-| Some m -> M.print_mat m; Printf.printf "\n");
+inv_print m2;
 M.print_mat (M.exponentiate m2); Printf.printf "\n\n\n"
 ;;
 
 (* A non-invertible matrix *)
-let m3 = [|[|1.; 0.; 0.; 0.; 0.|]; [|0.; 1.; 0.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 0.; 0.; 1.|]|] in
-match M.inverse m3 with
-| None -> Printf.printf "The matrix is not invertible.\n\n\n"
-| Some m -> M.print_mat m; Printf.printf "\n\n"
+inv_print [|[|1.; 0.; 0.; 0.; 0.|]; [|0.; 1.; 0.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 0.; 0.; 1.|]|]
 ;;
 
 (* Simple invertible test matrix, with eigenvalues -1, 4, and 7 *)
 let m4 = [|[|4.;0.;0.|]; [|-2.;2.;-5.|]; [|4.5;-3.;4.|]|] in
-let v = M.eigen m4 in
-let f (value, vector) =
-  Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
-  M.print_vec vector;
-  Printf.printf "\n"
-in
-Array.iter ~f v;
-Printf.printf "\n";
-(match M.inverse m4 with
-| None -> Printf.printf "The matrix is not invertible.\n\n"
-| Some m -> M.print_mat m; Printf.printf "\n");
-M.print_mat (M.exponentiate m4); Printf.printf "\n"
+eigen_print m4;
+inv_print m4;
+M.print_mat (M.exponentiate m4); Printf.printf "\n\n"
+;;
+
+(* More difficult matrix -- has eigenvalues 1, 2, and 2 *)
+let m5 = [|[|2.;0.;0.|]; [|1.;2.;1.|]; [|-1.;0.;1.|]|] in
+eigen_print m5;
+inv_print m5;
+M.print_mat (M.exponentiate m5); Printf.printf "\n\n"
+;;
+
+(* Another weird matrix, with eigenvalues 1, 1, and 3 *)
+let m6 = [|[|1.;0.;0.|]; [|0.;1.;0.|]; [|2.;0.;3.;|]|] in
+eigen_print m6;
+inv_print m6;
+M.print_mat (M.exponentiate m6); Printf.printf "\n"
 ;;

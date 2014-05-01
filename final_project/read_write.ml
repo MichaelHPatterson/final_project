@@ -155,7 +155,7 @@ struct
   type mat = vec array
 
   (* instantiates a square matrix of len dimensions *)
-  let rank_matrix (len : int) = Array.make_matrix len len 0.0
+  let rank_matrix (len : int) = Array.make_matrix ~dimx:len ~dimy:len 0.0
   
   (* The following code  fucks things up -- all of the columns become uniform.
    * I think this is because the m.(x).(y) notation doesn't work for normal
@@ -166,17 +166,17 @@ struct
   (* converts the element-rank line into a (string, mat_value) tuple by 
    * splitting at the colon *)
   let process_elt (line : string) =
-    let (a, b) = String.rsplit2_exn line ':' in
+    let (a, b) = String.rsplit2_exn line ~on:':' in
     (String.strip a, M.val_of_string (String.strip b))
     
   let process_file (filename : string) : (mat * dict * dict) =
     (* a ref for storing owners and their indices *)
-    let owner_dict : dict ref = ref (D.empty) in
+    let owner_dict : dict ref = ref D.empty in
     (* a ref for storing the current max owner index *)
     let owner_index : int ref = ref 0 in
 
     (* a ref for storing elements and their indices *)
-    let elt_dict : dict ref = ref (D.empty) in
+    let elt_dict : dict ref = ref D.empty in
     (* a ref for storing the current max element index *)
     let elt_index : int ref = ref 0 in
    
@@ -202,31 +202,30 @@ struct
     let add_to_dict (subject : string) : unit =
       let subj = String.strip subject in
       (* if a line is empty, it's not an owner or elt *)     
-      if (subj = "") then () else
+      if subj = "" then ()
       (* if it's an owner then add that owner to dict, or if owner is already in
        * dict then return error *)
-      if not (elt_check subject) then (
-	if D.member (!owner_dict) (D.key_of_string subj) then
+      else if not (elt_check subject) then
+	if D.member !owner_dict (D.key_of_string subj) then
 	  failwith "owner already in dict"
-	else (owner_dict := D.insert (!owner_dict) (D.key_of_string subj) 
-               (D.val_of_int (!owner_index)));
-	      owner_index := (!owner_index) + 1)
+	else (owner_dict := D.insert !owner_dict (D.key_of_string subj) 
+               (D.val_of_int !owner_index);
+	      owner_index := !owner_index + 1)
       (* if it's an elt than either add to the dict and matrix if it's a new elt
        * or just add to the matrix if it already has an index *)
-      else (
+      else
 	let (a, b) = process_elt subject in
 	match D.lookup (!elt_dict) (D.key_of_string a) with
 	| None -> (
-	   elt_dict := D.insert (!elt_dict) (D.key_of_string a) 
-             (D.val_of_int (!elt_index));
-	   update_matrix return_matrix (!owner_index - 1) (!elt_index) b;
-	   elt_index := (!elt_index) + 1)
+	   elt_dict := D.insert !elt_dict (D.key_of_string a) 
+             (D.val_of_int !elt_index);
+	   update_matrix return_matrix (!owner_index - 1) !elt_index b;
+	   elt_index := !elt_index + 1)
 	| Some x ->
 	   update_matrix return_matrix (!owner_index - 1) 
-	     (int_of_string (D.string_of_value x)) b) in
-
+	     (int_of_string (D.string_of_value x)) b in
     List.iter file_lines ~f:add_to_dict;
-    (return_matrix, (!owner_dict), (!elt_dict))
+    (return_matrix, !owner_dict, !elt_dict)
 end
 
 (* Tests with Matrix operations *)
