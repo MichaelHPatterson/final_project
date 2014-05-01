@@ -414,8 +414,8 @@ struct
    * Our program will not require the removal of entries from a dictionary, so
    * this is meant simply to appease the requirements of the signature. *)
   let rec remove (d : dict) (my_key : key) : dict =
-    fold (fun k v acc -> if (k_compare my_key k = Equal) then acc
-			 else insert acc k v) empty d
+    fold (fun k v acc -> if (key_compare my_key k = Equal) then acc
+			 else insert acc (k,v)) empty d
 
   (* Also coded in the interest of time, because this has no use in our program
    * and is only coded for appeasing the sig *)
@@ -429,6 +429,18 @@ struct
     | Leaf -> true
     | Two (_, left, _, right) -> let factor = balance_factor d in
         (factor < 2 && factor > -2) && (is_balanced left) && (is_balanced right)
+
+  (* a depth-first traversal function that is used for testing of the insert
+   * function in run_tests *)
+  let rec traverse (d : dict) : int list option =
+    match d with
+    | Leaf -> None
+    | Two (_, left, (k,v), right) -> 
+       (match (traverse left, traverse right) with
+	| (None, None) -> Some [k]
+	| (None, Some x) -> Some (k :: x)
+	| (Some x, None) -> Some (x @ [k])
+	| (Some x, Some y) -> Some ((x @ [k]) @ y))
 
   let run_tests () : unit =
     let rand : int -> int = Random.self_init () ; Random.int in
@@ -447,7 +459,13 @@ struct
     for i = 0 to 50 do
       let rand_list = list_gen 50 [] in
       if is_balanced (add_list_to (rand_list)) then ()
-      else print_list rand_list
+      else print_list rand_list;
+      let sorted_list = List.sort (Int.compare) rand_list in
+      let traverse_list = match traverse (add_list_to (rand_list)) with
+	| None -> []
+	| Some x -> x in
+      if sorted_list = traverse_list then ()
+      else print_list rand_list;
     done
 end
 
