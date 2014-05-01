@@ -480,4 +480,4 @@ end
 
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
-  AssocListDict(D)
+  BSTDict(D)

@@ -124,7 +124,7 @@ struct
 
   let test_mat_to_file () =
     let my_mat = M.big_test_matrix in
-    mat_to_file my_mat "int_write_test.txt"
+    mat_to_file my_mat "write_test.txt"
 
   let run_tests () =
     test_row ();
@@ -234,10 +234,10 @@ module FloatRead = Read (FloatMatrix) (Make(StringIntDictArg));;
 module FloatWrite = Write (FloatMatrix);;
 
 FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
-  "test_float_input.txt")) "test_output3.txt";;
+  "test_float_input.txt")) "test_output1.txt";;
 
 let my_float_matrix = Helpers.get_mat (FloatRead.process_file
  "test_float_input.txt");;
 
 FloatWrite.mat_to_file ((FloatOps.add_mat my_float_matrix 
-  (FloatOps.identity 5))) "test_output4.txt";;
+  (FloatOps.identity 5))) "test_output2.txt";;
