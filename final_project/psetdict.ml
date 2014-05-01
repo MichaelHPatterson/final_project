@@ -281,18 +281,13 @@ struct
     ()
 
 end
-(*
+
+
 module BSTDict(D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
 struct
   type key = D.key
   type value = D.value
- *)
-
-module BSTDict =
-struct
-  type key = int
-  type value = string
   (* A dictionary entry is a (key, value) pair. *)
   type pair = key * value
 
@@ -307,15 +302,12 @@ struct
     match d with
     | Leaf -> init
     | Two (_, left, (k, v), right) -> fold f (fold f (f k v init) right) left
-  
-  let key_compare x y =
-    if x < y then Less else if x > y then Greater else Equal
 
   let rec lookup (d : dict) (k : key) : value option =
     match d with
     | Leaf -> None
     | Two (_, left, (k1, v1), right) ->
-       (match key_compare k k1 with
+       (match D.compare k k1 with
 	| Equal -> Some v1
 	| Less -> lookup left k
 	| Greater -> lookup right k)
@@ -323,7 +315,7 @@ struct
   let k_compare p1 p2 =
     let (x, _) = p1 in
     let (y, _) = p2 in
-    if x < y then Less else if x > y then Greater else Equal
+    D.compare x y
 
   let member d k = (lookup d k) <> None
 
@@ -397,25 +389,27 @@ struct
     | x -> if (x < 3 && x > -3) then d else failwith "balance_factor out of
 						      bounds")
     
-  let rec insert (d : dict) (p : pair) : dict =
-    match d with
-    | Leaf -> Two(1, Leaf, p, Leaf)
-    | Two (_, left, p1, right) -> 
-       (match k_compare p p1 with
-	| Equal -> failwith "already in dict"
-	| Less -> (
-	   let new_left = insert left p in
-	   balance (Two(get_height new_left right, new_left, p1, right)))
-	| Greater -> (
-	   let new_right = insert right p in
-	   balance (Two(get_height left new_right, left, p1, new_right))))
+  let insert (d : dict) (k : key) (v : value) : dict = 
+    let rec insert_help (d : dict) (p : pair) : dict =
+      match d with
+      | Leaf -> Two(1, Leaf, p, Leaf)
+      | Two (_, left, p1, right) -> 
+	 (match k_compare p p1 with
+	  | Equal -> failwith "already in dict"
+	  | Less -> (
+	    let new_left = insert_help left p in
+	    balance (Two(get_height new_left right, new_left, p1, right)))
+	  | Greater -> (
+	    let new_right = insert_help right p in
+	    balance (Two(get_height left new_right, left, p1, new_right)))) in
+    insert_help d (k,v)
 
   (* In the interest of time, this remove function has been coded inefficiently.
    * Our program will not require the removal of entries from a dictionary, so
    * this is meant simply to appease the requirements of the signature. *)
   let rec remove (d : dict) (my_key : key) : dict =
-    fold (fun k v acc -> if (key_compare my_key k = Equal) then acc
-			 else insert acc (k,v)) empty d
+    fold (fun k v acc -> if (D.compare my_key k = Equal) then acc
+			 else insert acc k v) empty d
 
   (* Also coded in the interest of time, because this has no use in our program
    * and is only coded for appeasing the sig *)
@@ -424,6 +418,13 @@ struct
     | Leaf -> None
     | Two (_, _, (k, v), _) -> Some (k, v, remove d k)
 
+  let string_of_key = D.string_of_key
+  let string_of_value = D.string_of_value
+  let string_of_dict d = "unimplemented"
+  let key_of_string = D.key_of_string
+  let val_of_int = D.val_of_int
+
+  (* a function that checks the balancing of a tree for testing purposes *)
   let rec is_balanced (d : dict) : bool = 
     match d with
     | Leaf -> true
@@ -432,7 +433,7 @@ struct
 
   (* a depth-first traversal function that is used for testing of the insert
    * function in run_tests *)
-  let rec traverse (d : dict) : int list option =
+  let rec traverse (d : dict) : 'a list option =
     match d with
     | Leaf -> None
     | Two (_, left, (k,v), right) -> 
@@ -442,25 +443,33 @@ struct
 	| (Some x, None) -> Some (x @ [k])
 	| (Some x, Some y) -> Some ((x @ [k]) @ y))
 
+  let bool_compare (a : 'a) (b : 'a) : bool = not (D.compare a b <> Equal)
+
+  let int_compare (a : 'a) (b : 'a) : int =
+    match D.compare a b with
+    | Less -> -1
+    | Equal -> 0
+    | Greater -> 1
+
   let run_tests () : unit =
-    let rand : int -> int = Random.self_init () ; Random.int in
-    let rec list_gen (num : int) (lst : int list) : int list =
+    let rec list_gen (num : int) (lst : key list) : key list =
       if num <= 0 then lst
-      else (let rand_num = rand 250 in
-	   if not (List.mem lst rand_num) 
-	   then list_gen (num - 1) (rand_num :: lst)
+      else (let rand_val = D.gen_key_random () in
+	   if not (List.mem ?equal:(Some bool_compare) lst rand_val) 
+	   then list_gen (num - 1) (rand_val :: lst)
 	   else list_gen num lst) in
-    let add_list_to (lst : int list) : dict =
-      List.fold_right lst ~f:(fun x acc -> insert acc (x, "")) ~init:empty in
-    let print_list (lst : int list) : unit =
+    let add_list_to (lst : key list) : dict =
+      List.fold_right lst ~f:(fun x acc -> insert acc x (D.gen_value ()))
+	~init:empty in
+    let print_list (lst : key list) : unit =
       List.iter lst (
-        fun x -> Out_channel.output_string stdout (string_of_int x ^ "\n");
+        fun x -> Out_channel.output_string stdout ((string_of_key x) ^ "\n");
 		 Out_channel.flush stdout) in
     for i = 0 to 50 do
       let rand_list = list_gen 50 [] in
       if is_balanced (add_list_to (rand_list)) then ()
       else print_list rand_list;
-      let sorted_list = List.sort (Int.compare) rand_list in
+      let sorted_list = List.sort ~cmp:int_compare rand_list in
       let traverse_list = match traverse (add_list_to (rand_list)) with
 	| None -> []
 	| Some x -> x in
