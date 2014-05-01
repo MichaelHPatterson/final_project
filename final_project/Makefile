@@ -1,4 +1,4 @@
-all: read_write.ml psetdict.ml helpers.ml matrixops.ml
+all: read_write.ml psetdict.ml helpers.ml matrixops.ml hungarian.ml
 	corebuild read_write.native
 	corebuild psetdict.native
 	corebuild helpers.native

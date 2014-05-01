@@ -94,6 +94,8 @@ struct
   type key = string
   type value = int
   let rec compare x y = 
+    (* Less means that x comes alphabetically before y; Greater means that it
+     * comes after *)
     match String.compare x y with
     | 0 -> Equal
     | -1 -> Less
@@ -279,7 +281,203 @@ struct
     ()
 
 end
+
+
+module BSTDict(D:DICT_ARG) : (DICT with type key = D.key
+  with type value = D.value) =
+struct
+  type key = D.key
+  type value = D.value
+  (* A dictionary entry is a (key, value) pair. *)
+  type pair = key * value
+
+  (* Type definition for dictionary as a BST *)
+  type dict = 
+    | Leaf
+    | Two of int * dict * pair * dict
+
+  let empty : dict = Leaf
+
+  let rec fold (f : key -> value -> 'a -> 'a) (init : 'a) (d : dict) : 'a =
+    match d with
+    | Leaf -> init
+    | Two (_, left, (k, v), right) -> fold f (fold f (f k v init) right) left
+
+  let rec lookup (d : dict) (k : key) : value option =
+    match d with
+    | Leaf -> None
+    | Two (_, left, (k1, v1), right) ->
+       (match D.compare k k1 with
+	| Equal -> Some v1
+	| Less -> lookup left k
+	| Greater -> lookup right k)
   
+  let k_compare p1 p2 =
+    let (x, _) = p1 in
+    let (y, _) = p2 in
+    D.compare x y
+
+  let member d k = (lookup d k) <> None
+
+  let rec get_height (d1 : dict) (d2 : dict) : int = 
+    match (d1, d2) with
+    | (Leaf, Leaf) -> 1
+    | (Leaf, Two (_, left, _, right)) -> (get_height left right) + 1
+    | (Two (_, left, _, right), Leaf) -> (get_height left right) + 1
+    | (Two (_, left1, _, right1), Two (_, left2, _, right2)) ->
+       (max (get_height left1 right1) (get_height left2 right2)) + 1
+
+  let extract_height (d : dict) : int = 
+    match d with
+    | Leaf -> 0
+    | Two (x, _, _, _) -> x
+
+  let is_leaf (d : dict) : bool =
+    match d with
+    | Leaf -> true
+    | _ -> false
+
+  let balance_factor (my_dict : dict) : int =
+    if is_leaf my_dict then failwith "got Leaf in balance_factor" else
+      let Two (_, left, _, right) = my_dict in
+      (extract_height left) - (extract_height right)
+
+  let balance (d : dict) : dict =
+    let left_left (input : dict) : dict =
+      if is_leaf input then failwith "got Leaf in left_left" else
+      let Two (my_height, l_dict, my_pair, r_dict) = input in
+      let Two (_, l_ldict, l_pair, l_rdict) = l_dict in
+      Two(my_height-1, l_ldict, l_pair, Two(my_height-2, l_rdict, my_pair, 
+        r_dict)) in
+    
+    let left_right (input : dict) : dict =
+      if is_leaf input then failwith "got Leaf in left_right" else
+      let Two (my_height, l_dict, my_pair, r_dict) = input in
+      let Two (_, l_ldict, l_pair, l_rdict) = l_dict in
+      let Two (_, l_r_ldict, l_rpair, l_r_rdict) = l_rdict in
+      Two(my_height, Two(my_height-1, Two(my_height-2, l_ldict, l_pair,
+        l_r_ldict), l_rpair, l_r_rdict), my_pair, r_dict) in
+
+    let right_right (input : dict) : dict =
+      if is_leaf input then failwith "got Leaf in right_right" else
+      let Two (my_height, l_dict, my_pair, r_dict) = input in
+      let Two (_, r_ldict, r_pair, r_rdict) = r_dict in
+      Two(my_height-1, Two(my_height-2, l_dict, my_pair, r_ldict), r_pair,
+        r_rdict) in
+
+    let right_left (input : dict) : dict =
+      if is_leaf input then failwith "got Leaf in right_left" else
+      let Two (my_height, l_dict, my_pair, r_dict) = input in
+      let Two (_, r_ldict, r_pair, r_rdict) = r_dict in
+      let Two (_, r_l_ldict, r_lpair, r_l_rdict) = r_ldict in
+      Two(my_height, l_dict, my_pair, Two(my_height-1, r_l_ldict, r_lpair,
+        Two(my_height-2, r_l_rdict, r_pair, r_rdict))) in
+
+    if is_leaf d then d else (
+    let Two (dict_height, dict_left, dict_pair, dict_right) = d in
+    match balance_factor d with
+    | 2 -> (
+       let bal_left = balance_factor dict_left in
+       if bal_left = -1 then left_left(left_right d)
+       else (if (bal_left = 0 || bal_left = 1) then left_left d
+	     else failwith "invalid balance_factor"))
+    | -2 -> (
+      let bal_right = balance_factor dict_right in
+      if bal_right = 1 then right_right(right_left d)
+      else (if (bal_right = 0 || bal_right = -1) then right_right d
+	    else failwith "invalid balance_factor"))
+    | x -> if (x < 3 && x > -3) then d else failwith "balance_factor out of
+						      bounds")
+    
+  let insert (d : dict) (k : key) (v : value) : dict = 
+    let rec insert_help (d : dict) (p : pair) : dict =
+      match d with
+      | Leaf -> Two(1, Leaf, p, Leaf)
+      | Two (_, left, p1, right) -> 
+	 (match k_compare p p1 with
+	  | Equal -> failwith "already in dict"
+	  | Less -> (
+	    let new_left = insert_help left p in
+	    balance (Two(get_height new_left right, new_left, p1, right)))
+	  | Greater -> (
+	    let new_right = insert_help right p in
+	    balance (Two(get_height left new_right, left, p1, new_right)))) in
+    insert_help d (k,v)
+
+  (* In the interest of time, this remove function has been coded inefficiently.
+   * Our program will not require the removal of entries from a dictionary, so
+   * this is meant simply to appease the requirements of the signature. *)
+  let rec remove (d : dict) (my_key : key) : dict =
+    fold (fun k v acc -> if (D.compare my_key k = Equal) then acc
+			 else insert acc k v) empty d
+
+  (* Also coded in the interest of time, because this has no use in our program
+   * and is only coded for appeasing the sig *)
+  let choose (d : dict) : (key * value * dict) option =
+    match d with
+    | Leaf -> None
+    | Two (_, _, (k, v), _) -> Some (k, v, remove d k)
+
+  let string_of_key = D.string_of_key
+  let string_of_value = D.string_of_value
+  let string_of_dict d = "unimplemented"
+  let key_of_string = D.key_of_string
+  let val_of_int = D.val_of_int
+
+  (* a function that checks the balancing of a tree for testing purposes *)
+  let rec is_balanced (d : dict) : bool = 
+    match d with
+    | Leaf -> true
+    | Two (_, left, _, right) -> let factor = balance_factor d in
+        (factor < 2 && factor > -2) && (is_balanced left) && (is_balanced right)
+
+  (* a depth-first traversal function that is used for testing of the insert
+   * function in run_tests *)
+  let rec traverse (d : dict) : 'a list option =
+    match d with
+    | Leaf -> None
+    | Two (_, left, (k,v), right) -> 
+       (match (traverse left, traverse right) with
+	| (None, None) -> Some [k]
+	| (None, Some x) -> Some (k :: x)
+	| (Some x, None) -> Some (x @ [k])
+	| (Some x, Some y) -> Some ((x @ [k]) @ y))
+
+  let bool_compare (a : 'a) (b : 'a) : bool = not (D.compare a b <> Equal)
+
+  let int_compare (a : 'a) (b : 'a) : int =
+    match D.compare a b with
+    | Less -> -1
+    | Equal -> 0
+    | Greater -> 1
+
+  let run_tests () : unit =
+    let rec list_gen (num : int) (lst : key list) : key list =
+      if num <= 0 then lst
+      else (let rand_val = D.gen_key_random () in
+	   if not (List.mem ?equal:(Some bool_compare) lst rand_val) 
+	   then list_gen (num - 1) (rand_val :: lst)
+	   else list_gen num lst) in
+    let add_list_to (lst : key list) : dict =
+      List.fold_right lst ~f:(fun x acc -> insert acc x (D.gen_value ()))
+	~init:empty in
+    let print_list (lst : key list) : unit =
+      List.iter lst (
+        fun x -> Out_channel.output_string stdout ((string_of_key x) ^ "\n");
+		 Out_channel.flush stdout) in
+    for i = 0 to 50 do
+      let rand_list = list_gen 50 [] in
+      if is_balanced (add_list_to (rand_list)) then ()
+      else print_list rand_list;
+      let sorted_list = List.sort ~cmp:int_compare rand_list in
+      let traverse_list = match traverse (add_list_to (rand_list)) with
+	| None -> []
+	| Some x -> x in
+      if sorted_list = traverse_list then ()
+      else print_list rand_list;
+    done
+end
+
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
-  AssocListDict(D)
+  BSTDict(D)
