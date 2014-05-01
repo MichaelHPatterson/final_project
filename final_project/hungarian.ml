@@ -125,7 +125,7 @@ let is_finished (m : mat) : hungarian_status =
 	    if is_assigned (p,e) curr_results then check_finished possible_pairs' curr_results
 	    else
 	      (match check_finished possible_pairs' ((p,e) :: curr_results) with
-	      | Unfinished r -> check_finished possible_pairs' curr_results
+	      | Unfinished _ -> check_finished possible_pairs' curr_results
 	      | Finished r -> Finished r)
 	in
 	check_finished possible_new !result
@@ -196,11 +196,11 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
     let _ = (print_mat m; Printf.printf "\n\n"; flush_all ()) in
     let (marked_cols, marked_rows) = mark_zeros m assignments in
     let unmarked = Array.map ~f:(Array.filteri ~f:(fun r _ -> not (List.mem marked_rows r))) (Array.filteri ~f:(fun c _ -> not (List.mem marked_cols c)) m) in
-    (*********** This structure here is terrible -- figure out a better way to check whether the matrix is assignable without risking an error, and without having the dummy line "raise AlgorithmError" ***********)
+    (*********** This structure here is terrible -- figure out a better way to check whether the matrix is assignable without risking an error, and without having the dummy line "raise AlgorithmError", if possible ***********)
     if Array.length unmarked = 0 || Array.length unmarked.(0) = 0 then
       match is_finished m with
       | Finished lst -> lst
-      | Unfinished lst -> raise AlgorithmError
+      | Unfinished _ -> raise AlgorithmError
     else
       let min (c : vec) : float = Array.fold_right ~f:Float.min ~init:c.(0) c in
       let min_unmarked = Array.fold_right ~f:(fun col init -> Float.min (min col) init) ~init:unmarked.(0).(0) unmarked in
@@ -248,7 +248,7 @@ let brute_force (m : mat) : float =
   !cost
 
 let brute_force_n (m : mat) (n : int) : unit =
-  for i = 0 to n - 1 do
+  for _i = 0 to n - 1 do
     let cost = brute_force m in
     Printf.printf "\t=====>\t%f\n" cost;
     flush_all ()
@@ -256,15 +256,15 @@ let brute_force_n (m : mat) (n : int) : unit =
 
 (* Generates a random dim x dim matrix of integers from 0 to 99 *)
 let random_matrix (dim : int) : mat =
-  let m : mat ref = ref [||] in
+  let m : mat = zero_mat dim dim in
   for i = 0 to dim - 1 do
     let v = Array.create ~len:dim 0. in
     for j = 0 to dim - 1 do
       v.(j) <- float (Random.int 100);
     done;
-    m := Array.append !m [|v|]
+    m.(i) <- v
   done;
-  !m
+  m
 
 (* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
  * generating a matrix, and testing the algorithm. If it yields a result,
@@ -284,7 +284,7 @@ let rec test1 () : unit =
 let test2 (dim : int) (num_tries : int) : unit =
   let counter = ref 0 in
   let total_time = ref 0. in
-  for i = 0 to num_tries - 1 do
+  for _i = 0 to num_tries - 1 do
     (*Printf.printf "==========================\n\n";*)
     (* NOTE: This "gettimeofday" function will give weird values if the program is run at 11:59:59, since it resets
      * to zero at 00:00:00.*)
@@ -297,18 +297,19 @@ let test2 (dim : int) (num_tries : int) : unit =
     let solution = is_finished m in
     (match solution with
     | Finished assignments -> ((*print_results assignments; *)counter := !counter + 1)
-    | Unfinished assignments ->
-      let end_time = Unix.gettimeofday () in
-      total_time := !total_time +. end_time -. start_time
+    | Unfinished assignments -> ()
       (*Printf.printf "Proceeding to steps 3 and 4.\n"*)(*;
       let assignments = steps_34 m assignments in
       print_results assignments*));
+    let end_time = Unix.gettimeofday () in
+    total_time := !total_time +. end_time -. start_time
     (*Printf.printf "\n\n\n";
     flush_all ();*)
   done;
   let avg_time = !total_time /. (float num_tries) in
-  Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2, when working on %ix%i matrices.\n" !counter num_tries dim dim;
+  Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2 alone, when working on %ix%i matrices.\n" !counter num_tries dim dim;
   Printf.printf "On average, each test took %f, " avg_time;
-  Printf.printf "or (%i * %f)^1.5, seconds.\n" dim (avg_time ** (1. /. 1.5) /. (float dim))
+  Printf.printf "or (%i * %f)^1.5, seconds.\n" dim (avg_time ** (1. /. 1.5) /. (float dim));
+  flush_all ()
 
-in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 1000; test2 18 1000; test2 20 1000; test2 30 1000; test2 40 1000; test2 50 1000
+in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 1000; test2 18 1000; test2 20 1000; test2 30 1000; test2 40 1000; test2 50 100; test2 75 1; test2 90 1; test2 100 1; test2 250 1

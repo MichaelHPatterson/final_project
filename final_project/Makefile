@@ -4,6 +4,7 @@ all: read_write.ml psetdict.ml helpers.ml matrixops.ml
 	corebuild helpers.native
 	corebuild matrixops.native
 	corebuild hungarian.native
+	corebuild matrix.native
 
 read_write: corebuild read_write.native
 
@@ -15,6 +16,9 @@ helpers:
 
 matrixtest:
 	corebuild matrixops.native
+
+matrix:
+	corebuild matrix.native
 
 hungarian:
 	corebuild hungarian.native

@@ -102,7 +102,7 @@ struct
 
   (* Generates a matrix of 0's with the specified dimensions. *)
   let zero_mat (cols : int) (rows : int) : mat =
-    Array.create ~len:cols (Array.create ~len:rows 0.)
+    Array.create ~len:cols (zero_vec rows)
 
   (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
   let basis_vec ~(dim : int) (n : int) : vec =
@@ -187,7 +187,7 @@ struct
     if num_cols = 0 then m
     else
       let num_rows = Array.length m.(0) in
-      let result = Array.make_matrix num_rows num_cols 0. in
+      let result = Array.make_matrix ~dimx:num_rows ~dimy:num_cols 0. in
       for i = 0 to num_rows - 1 do
         let v : vec = Array.create ~len:num_cols 0. in
         for j = 0 to num_cols - 1 do
