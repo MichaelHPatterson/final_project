@@ -384,7 +384,7 @@ struct
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
-	in Array.to_list (Array.filter ~f:(fun (_,v) -> not (is_zero_vec v 0.001)) (Array.mapi ~f eigenvalues))
+	in Array.to_list (Array.filter ~f:(fun (_,v) -> not (is_zero_vec v 0.01)) (Array.mapi ~f eigenvalues))
       in
     let gen_vec () : vec =
       let start : vec = zero_vec dim in
@@ -395,7 +395,7 @@ struct
       let start = gen_vec () in
       let remove_repeats (evs : (float * vec) list) : (float * vec) list =
 	let f lst (e,v) =
-	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_multiple v v' 0.01)) lst)
+	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_multiple v v' 0.1)) lst)
 	in List.fold_left ~f ~init:[] evs
       in
       let e = remove_repeats (find start start [||]) in
@@ -429,6 +429,7 @@ struct
       eigenbasis.(i) <- vector
     in
     Array.iteri ~f (eigen_new m);
+    Printf.printf "Matrix of eigenvectors:\n"; print_mat eigenbasis; Printf.printf "\n";
     let inv = match inverse eigenbasis with
       | None -> raise InversionError
       | Some matrix -> matrix
@@ -485,10 +486,12 @@ M.print_mat (M.exponentiate m4); Printf.printf "\n\n"
 let m5 = [|[|2.;0.;0.|]; [|1.;2.;1.|]; [|-1.;0.;1.|]|] in
 eigen_print m5;
 inv_print m5;
-M.print_mat (M.exponentiate m5); Printf.printf "\n\n"
+M.print_mat (M.exponentiate m5); Printf.printf "\n"
 ;;
 
 (* Another weird matrix, with eigenvalues 1, 1, and 3 *)
+(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: This example sometimes results in 1 or more of the following 5 problems: (1) eigen_new only finds 1 or 2 eigenvectors but not all 3; (2) eigen_new returns MORE than 3 vectors, and some vectors are scalar multiples ofe ach other; (3) eigen_new returns a zero vector; (4) the exponentiation function throws the InversionError exception (probably caused by problems #1, #2, and perhaps #3 above); and/or (5) the exponentiation function causes the basis_vec function to throw an IndexOutOfBounds exception *)
+(* UPDATE: I think it's fixed now *)
 let m6 = [|[|1.;0.;0.|]; [|0.;1.;0.|]; [|2.;0.;3.;|]|] in
 eigen_print m6;
 inv_print m6;
