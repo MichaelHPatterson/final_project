@@ -77,10 +77,10 @@ let rec newton_all_slow (p : poly) ((lower, upper) : float * float) (try_prec : 
   let degree = Array.foldi ~f ~init:0 p in
   let num_solutions = List.length solutions in
   match Int.compare degree num_solutions with
-  | 1 -> Printf.printf "Found %i solutions, expected %i.\n" num_solutions degree;
-	 let try_prec = try_prec /. 10. in
-	 let duplicate_prec = duplicate_prec /. 10. in
-	 let answer_prec = answer_prec /. 10. in
+  | 1 -> Printf.printf "Found %i solutions, expected %i. Solutions:" num_solutions degree;
+	 List.iter ~f:(fun x -> Printf.printf " %f" x) solutions; Printf.printf "\n"; flush_all ();
+	 let duplicate_prec = duplicate_prec /. 2. in
+	 let answer_prec = answer_prec /. 2. in
 	 Printf.printf "Using try precision %f, duplicate precision %f, and answer precision %f.\n" try_prec duplicate_prec answer_prec;
 	 flush_all ();
 	 newton_all_slow p (lower,upper) try_prec duplicate_prec answer_prec

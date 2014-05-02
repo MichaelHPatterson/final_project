@@ -101,8 +101,8 @@ struct
   let zero_vec (len : int) : vec = Array.create ~len 0.
 
   (* Generates a matrix of 0's with the specified dimensions. *)
-  let zero_mat (cols : int) (rows : int) : mat =
-    Array.make_matrix ~dimx:cols ~dimy:rows 0.
+  let zero_mat (dimx : int) (dimy : int) : mat =
+    Array.make_matrix ~dimx ~dimy 0.
 
   (* Checks whether v is the zero vector. *)
   let is_zero_vec (v : vec) (precision : float) : bool =
@@ -398,7 +398,7 @@ struct
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
-	in let a = Array.to_list (Array.filter ~f:(fun (e,v) -> let b = not (is_zero_vec v 0.0001) in if b then true else (Printf.printf "The following vector, with eigenvalue %f, is the zero vector and is being excluded: " e; print_vec v; Printf.printf "\n"; flush_all (); false)) (Array.mapi ~f eigenvalues)) in (Printf.printf "Length: %i\n" (List.length a); a)
+	in let a = Array.to_list (Array.filter ~f:(fun (e,v) -> let b = not (is_zero_vec v 0.00001) in if b then true else (Printf.printf "The following vector, with eigenvalue %f, is the zero vector and is being excluded: " e; print_vec v; Printf.printf "\n"; flush_all (); false)) (Array.mapi ~f eigenvalues)) in (Printf.printf "Length: %i\n" (List.length a); a)
       in
     let gen_vec () : vec =
       let start : vec = zero_vec dim in
@@ -488,6 +488,39 @@ struct
       | Some matrix -> matrix
     in mult_mat eigenbasis (mult_mat diagonal inv)
 
+  (*let exponentiate2 (m : mat) : mat =
+    let dim = Array.length m in
+    let prec = Float.to_int (float dim *. 1.5) + 1 in
+    let mat_pow (m : mat) (p : int) =
+      let rec mat_pow_helper (curr : mat) (m : mat) (p : int) =
+	if p <= 0 then curr
+	else mat_pow_helper (mult_mat curr m) m (p - 1)
+      in mat_pow_helper (identity dim) m p
+    in
+    let rec factorial (n : int) : float =
+      if n <= 0 then 1.
+      else (float n) *. factorial (n - 1) in
+    let rec exp_helper (m : mat) (prec : int) (curr : mat) : mat =
+      if prec < 0 then curr
+      else
+	let next_term = scalar_mult_mat (mat_pow m prec) (1. /. (factorial prec)) in
+	if prec = dim || prec = Float.to_int (1.5 *. (float dim)) then
+	  (Printf.printf "\nNow adding m^%i/%i!, which is:\n" prec prec;
+	   print_mat next_term);
+	exp_helper m (prec - 1) (add_mat curr next_term)
+    in exp_helper m prec (zero_mat dim dim)*)
+
+  let exponentiate2 (m : mat) : mat =
+    let dim = Array.length m in
+    let stop = dim * 2 in
+    let rec exp_helper (curr : mat) (last : mat) (pos : int) : mat =
+      if pos > stop then curr
+      else
+	let next = scalar_mult_mat (mult_mat m last) (1. /. float pos) in
+	exp_helper (add_mat curr next) next (pos + 1) in
+    let i = identity dim in
+    exp_helper i i 1
+
   (* Takes a matrix m of rankings, and computes m^T * m (where m^T is the
    * transpose of m), which is the matrix of element relationships. *)
   let rank_to_relations (m : mat) : mat =
@@ -511,6 +544,7 @@ let inv_print (m : M.mat) : unit =
   | None -> Printf.printf "The matrix is not invertible.\n\n"
   | Some m' -> Printf.printf "Inverse:\n"; M.print_mat m'; Printf.printf "\n"
 
+(*
 (* Verifying that the 5x5 identity matrix has an eigenbasis and is invertible *)
 let m1 = M.identity 5 in
 eigen_print m1;
@@ -550,3 +584,4 @@ eigen_print m6;
 inv_print m6;
 M.print_mat (M.exponentiate m6); Printf.printf "\n"
 ;;
+  *)
