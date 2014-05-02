@@ -150,12 +150,18 @@ struct
   let scalar_mult_mat (m : mat) (factor : float) : mat =
     Array.map ~f:(fun v -> scalar_mult_vec v factor) m
 
-  let equal (v1 : vec) (v2 : vec) (precision : float) : bool =
-    try (Array.for_all2_exn ~f:(fun a b -> Float.abs (a -. b) <= precision) v1 v2)
+  let equal_vec (v1 : vec) (v2 : vec) (precision : float) : bool =
+    let f a b = Float.abs (a -. b) <= precision in
+    try (Array.for_all2_exn ~f v1 v2)
     with (Invalid_argument _) -> raise SizeMismatch
 
-  (* Checks whether v1 is a scalar multiple of v2. *)
-  let is_multiple (v1 : vec) (v2 : vec) (precision : float) : bool =
+  let equal_mat (m1 : mat) (m2 : mat) (precision : float) : bool =
+    try (Array.for_all2_exn ~f:(fun v1 v2 -> equal_vec v1 v2 precision) m1 m2)
+    with (Invalid_argument _) -> raise SizeMismatch
+
+  (* Checks whether v1 is a scalar multiple of v2. The 3rd argument is the
+   * allowed percent error. *)
+  let is_mult (v1 : vec) (v2 : vec) (perc : float) : bool =
     let ratios : float array =
       try (Array.map2_exn ~f:(/.) v1 v2)
       with (Invalid_argument _) -> raise SizeMismatch
@@ -165,7 +171,9 @@ struct
       let first_non_nan : float =
 	let f a x = if not (Float.is_nan a) || Float.is_nan x then a else x in
 	Array.fold ~f ~init:Float.nan ratios in
-      equal v1 (scalar_mult_vec v2 first_non_nan) precision
+      let v1' = scalar_mult_vec v2 first_non_nan in
+      let min_val = Array.fold ~f:Float.min ~init:v1'.(0) v1' in
+      equal_vec v1 (scalar_mult_vec v2 first_non_nan) (perc *. min_val)
       (* Array.for_all ~f:(fun r -> first_non_nan -. r <= precision || Float.is_nan r) ratios *)
 
   (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
@@ -345,7 +353,7 @@ struct
     done;
     let p =
       Array.append (scalar_mult_vec (let (m,_) = row_reduce new_mat in m).(dim) (-1.)) [|1.|] in
-    let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.0001) in
+    let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-1000., 1000.) 1. 0.01 0.0001) in
     let f (index : int) (e : float) : float * vec =
       let v = ref start in
       for j = 0 to Array.length eigenvalues - 1 do
@@ -366,19 +374,22 @@ struct
    * the other version would still work with that corner case. *)
   let eigen_new (m : mat) : (float * vec) array =
     let dim = Array.length m in
-    let rec find (start_vec : vec) (v : vec) (curr : mat) : (float * vec) list =
+    let rec find (start_vec : vec) (v : vec) (curr : mat) ((l,u) : float * float) : (float * vec) list =
       let next_vec = mult_vec m v in
       let curr = Array.append curr [|next_vec|] in
-      Printf.printf "\n"; print_mat curr; Printf.printf "\n";
+      print_mat curr; Printf.printf "\n";
       let size = Array.length curr in
       let (test_mat, piv) = row_reduce curr in
-      if size = piv then find start_vec next_vec curr
+      if size = piv then find start_vec next_vec curr (l,u)
       else
 	let p =
 	  if size > dim then Array.append test_mat.(size - 1) [|-1.|]
           else let _ = test_mat.(size - 1).(size - 1) <- (-1.) in test_mat.(size - 1)
         in
-	let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-100., 100.) 1. 0.01 0.0001) in
+	Printf.printf "Analyzing polynomial: "; print_vec p; Printf.printf "\n";
+	let eigenvalues = List.to_array (Polynomial.newton_all_slow p (l,u) 0.1 0.01 0.00001) in
+	Printf.printf "Found %i eigenvalues:" (Array.length eigenvalues);
+	Array.iter ~f:(fun e -> Printf.printf " %f" e) eigenvalues; Printf.printf "\n";
 	let f (index : int) (e : float) : float * vec =
 	  let v = ref start_vec in
 	  for j = 0 to Array.length eigenvalues - 1 do
@@ -387,27 +398,56 @@ struct
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
-	in Array.to_list (Array.filter ~f:(fun (_,v) -> not (is_zero_vec v 0.01)) (Array.mapi ~f eigenvalues))
+	in let a = Array.to_list (Array.filter ~f:(fun (e,v) -> let b = not (is_zero_vec v 0.0001) in if b then true else (Printf.printf "The following vector, with eigenvalue %f, is the zero vector and is being excluded: " e; print_vec v; Printf.printf "\n"; flush_all (); false)) (Array.mapi ~f eigenvalues)) in (Printf.printf "Length: %i\n" (List.length a); a)
       in
     let gen_vec () : vec =
       let start : vec = zero_vec dim in
-      Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 100. +. 5.) start;
+      Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 10. +. 5.) start;
       start
     in
-    let rec find_all (already_found : int) : (float * vec) list =
+    let rec find_all (already_found : (float * vec) list) ((l,u) : float * float) : (float * vec) list =
       let start = gen_vec () in
       Printf.printf "\nStarting with vector: "; print_vec start; Printf.printf "\n\n";
       let remove_repeats (evs : (float * vec) list) : (float * vec) list =
 	let f lst (e,v) =
-	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_multiple v v' 0.1)) lst)
+	  (e,v) :: (List.filter ~f:(fun (_,v') -> let b = not (is_mult v v' 0.01) in if b then true else (Printf.printf "The vector: "; print_vec v; Printf.printf "\nis a scalar multiple of the vector: "; print_vec v'; Printf.printf "\n"; false)) lst)
 	in List.fold_left ~f ~init:[] evs
       in
-      let e = remove_repeats (find start start [|start|]) in
-      let num_found = List.length e + already_found in
-      if num_found < dim then remove_repeats (e @ (find_all num_found))
-      else e
+      let evs = find start start [|start|] (l,u) @ already_found in
+      Printf.printf "WITHOUT REMOVING REPEATS:\n";
+      List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
+      Printf.printf "\n";
+      let evs = remove_repeats evs in
+      Printf.printf "AFTER REMOVING REPEATS:\n";
+      List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
+      Printf.printf "\n"; flush_all ();
+      let num_found = List.length evs in
+      Printf.printf "Have found a total of %i so far.\n" num_found; flush_all (); Thread.delay (if dim > 3 then 1. else 0.5);
+      if num_found < dim then find_all evs (l,u)
+      else (Printf.printf "Done!\n"; List.iter ~f:(fun (_,v) -> print_vec v; Printf.printf "\n") evs; flush_all (); (*Thread.delay 1.; *)evs)
     in
-    List.to_array (find_all 0)
+    let rec call_finder ((l,u) : float * float) : (float * vec) list =
+      try (try (
+	let e = find_all [] (l,u) in
+	if List.length e <> dim then call_finder (2. *. l, 2. *. u)
+        else
+	  let p : mat ref = ref [||] in
+	  let d : mat ref = ref [||] in
+	  let n : int ref = ref 0 in
+	  List.iter ~f:(fun (a,v) -> p := Array.append !p [|v|]; d := Array.append !d [|scalar_mult_vec (basis_vec ~dim !n) a|]; n := !n + 1) e;
+	  let m' =
+	    match inverse !p with
+	    | None -> raise InversionError
+	    | Some matrix -> mult_mat (mult_mat !p !d) matrix in
+	  if (let b = equal_mat m m' 0.1 in if b then true else let _ = (Printf.printf "Function screwed up!\n"; flush_all (); print_mat m') in false) then e
+	  else call_finder (2. *. l, 2. *. u)
+(*	if List.for_all ~f:(fun (_,v) -> let b = is_mult (mult_vec m v) v 0.5 in if b then true else (let _ = (Printf.printf "Function screwed up!\nVector: "; print_vec v; Printf.printf "\nMultiplied by matrix: "; print_vec (mult_vec m v); Printf.printf "\n"; flush_all ()) in false)) e then e
+	else call_finder (2. *. l, 2. *. u)*)
+      )
+      with IndexOutOfBounds -> (Printf.printf "Index out of bounds!\n"; flush_all (); call_finder (2. *. l, 2. *. u)))
+      with InversionError -> (Printf.printf "Algorithm error!\n"; flush_all (); call_finder (2. *. l, 2. *. u)) in
+    Printf.printf "Analyzing the matrix:\n"; print_mat m; flush_all ();
+    List.to_array (call_finder (-100.,100.))
 
   (* Estimates e by summing 1/i! from i=0 to i=precision. This could also be
    * done by evaluating (1+1/k)^k for large k, but k would have to be really

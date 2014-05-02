@@ -11,11 +11,14 @@ open Matrix.FloatMatrix
  * owner. pagerank = exponential of dot product matrix * owner's preference *)
 let pageranks (matrix : mat) =
   let dot_products = mult_mat matrix (transpose matrix) in
-  Out_channel.output_string stdout "hi I'm here haaands \n";
-  Printf.printf "ORIGINAL MATRIX:\n";
-  print_mat dot_products;
-  Printf.printf "===================";
-  flush_all();
+  (*Printf.printf "ORIGINAL MATRIX:\n"; print_mat dot_products; Printf.printf "\n";
+  let mat_exponential = exponentiate dot_products in
+  print_mat mat_exponential;
+  flush_all();*)
+  let maxes = Array.map ~f:(Array.fold ~f:Float.max ~init:0.) dot_products in
+  let max = Array.fold ~f:Float.max ~init:0. maxes in
+  let dot_products = scalar_mult_mat dot_products (1. /. max) in
+  Printf.printf "DIVIDED MATRIX:\n"; print_mat dot_products; Printf.printf "\n";
   let mat_exponential = exponentiate dot_products in
   print_mat mat_exponential;
   flush_all();
@@ -27,7 +30,7 @@ let random_matrix (dim : int) : mat =
   for i = 0 to dim - 1 do
     let v = Array.create ~len:dim 0. in
     for j = 0 to dim - 1 do
-      v.(j) <- float (Random.int 10);
+      v.(j) <- float (Random.int 5);
     done;
     m.(i) <- v
   done;
@@ -35,7 +38,7 @@ let random_matrix (dim : int) : mat =
 
 let tests (times : int) : unit =
   for _i = 0 to times do
-    ignore (pageranks (random_matrix 3))
+    ignore (pageranks (random_matrix 5))
   done;;
 
 tests 50;;

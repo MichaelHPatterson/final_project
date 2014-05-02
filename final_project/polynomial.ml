@@ -1,10 +1,6 @@
 open Core.Std
 
-(* Note to Mike: I'm not 100% sure this will be useful, but I do know that the
- * algorithm we learned in Math 23 for finding eigenvalues/eigenvectors relied 
- * on the ability to solve a polynomial equations, so I've tried to implement
- * that here. Hopefully it ends up being useful somehow. *)
-
+exception AlgorithmError
 
 (********************* TYPES AND OPERATIONS FOR POLYNOMIALS *********************)
 
@@ -29,7 +25,7 @@ let derivative (p : poly) : poly =
   let p' : poly = Array.mapi ~f:(fun i x -> float i *. x) p in
   let len : int = Array.length p' - 1 in
   let ans : poly = Array.create ~len 0. in
-  Array.blit p' 1 ans 0 len;
+  Array.blit ~src:p' ~src_pos:1 ~dst:ans ~dst_pos:0 ~len;
   ans
 
 let rec newton (p : poly) (g : float) (epsilon : float) : float option =
@@ -61,7 +57,7 @@ let rec newton_d (p : poly) (d : poly) (g : float) (epsilon : float) : float opt
  * but if the precision values and lower/upper are right, newton_all_slow should
  * never fail to find all real roots between lower and upper, while the faster
  * function newton_all_fast might. *)
-let newton_all_slow (p : poly) ((lower, upper) : float * float) (try_prec : float) (duplicate_prec : float) (answer_prec : float) : float list =
+let rec newton_all_slow (p : poly) ((lower, upper) : float * float) (try_prec : float) (duplicate_prec : float) (answer_prec : float) : float list =
   let rec newton_int_rec (d : poly) ((low, high) : float * float) (curr : float list) : float list =
     if low > high then curr
     else
@@ -72,11 +68,29 @@ let newton_all_slow (p : poly) ((lower, upper) : float * float) (try_prec : floa
 	match root with
 	| None -> curr
 	| Some root' ->
-          let f = fun b r -> b || Float.abs (r -. root') < duplicate_prec in
-          if List.fold_left ~f ~init:false curr then curr else root' :: curr in
+	  let f r = Float.abs (r -. root') < duplicate_prec in
+          if List.exists ~f curr then curr else root' :: curr in
       newton_int_rec d (new_low, high) new_list
-  in newton_int_rec (derivative p) (lower, upper) []
-
+  in
+  let solutions = newton_int_rec (derivative p) (lower, upper) [] in
+  let f i c x = if Float.abs x > answer_prec then i else c in
+  let degree = Array.foldi ~f ~init:0 p in
+  let num_solutions = List.length solutions in
+  match Int.compare degree num_solutions with
+  | 1 -> Printf.printf "Found %i solutions, expected %i.\n" num_solutions degree;
+	 let try_prec = try_prec /. 10. in
+	 let duplicate_prec = duplicate_prec /. 10. in
+	 let answer_prec = answer_prec /. 10. in
+	 Printf.printf "Using try precision %f, duplicate precision %f, and answer precision %f.\n" try_prec duplicate_prec answer_prec;
+	 flush_all ();
+	 newton_all_slow p (lower,upper) try_prec duplicate_prec answer_prec
+  | 0 -> Printf.printf "Found correct number of solutions.\n"; flush_all (); solutions
+  | _ -> Printf.printf "Found %i solutions, expected %i.\n" num_solutions degree;
+	 Printf.printf "Solutions:"; List.iter ~f:(fun x -> Printf.printf " %f" x) solutions; Printf.printf "\n";
+	 let try_prec = try_prec *. 2. in
+	 let duplicate_prec = duplicate_prec *. 2. in
+	 let answer_prec = answer_prec /. 10. in
+	 newton_all_slow p (lower,upper) try_prec duplicate_prec answer_prec
 
 
 (********************* TYPES AND OPERATIONS FOR INTERVALS *********************)
