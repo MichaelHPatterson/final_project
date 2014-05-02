@@ -102,7 +102,7 @@ struct
 
   (* Generates a matrix of 0's with the specified dimensions. *)
   let zero_mat (cols : int) (rows : int) : mat =
-    Array.create ~len:cols (zero_vec rows)
+    Array.make_matrix ~dimx:cols ~dimy:rows 0.
 
   (* Checks whether v is the zero vector. *)
   let is_zero_vec (v : vec) (precision : float) : bool =
