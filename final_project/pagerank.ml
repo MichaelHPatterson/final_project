@@ -4,23 +4,37 @@
  * pagerank.ml -- performs pagerank operations on the elements, which is
  * personalized for each owner *)
 
-module type PAGERANK =
-sig
+open Core.Std
+open Matrix.FloatMatrix
 
-  type dict
+(* Returns an array of vectors, where each vector represents the pageranks of an
+ * owner. pagerank = exponential of dot product matrix * owner's preference *)
+let pageranks (matrix : mat) =
+  let dot_products = mult_mat matrix (transpose matrix) in
+  Out_channel.output_string stdout "hi I'm here haaands \n";
+  flush_all();
+  print_mat dot_products;
+  flush_all();
+  let mat_exponential = exponentiate dot_products in
+  print_mat mat_exponential;
+  flush_all();
+  mult_mat mat_exponential matrix
 
-  type vec
-  type mat
+(* Generates a random dim x dim matrix of integers from 0 to 99 *)
+let random_matrix (dim : int) : mat =
+  let m : mat = zero_mat dim dim in
+  for i = 0 to dim - 1 do
+    let v = Array.create ~len:dim 0. in
+    for j = 0 to dim - 1 do
+      v.(j) <- float (Random.int 10);
+    done;
+    m.(i) <- v
+  done;
+  m
 
-  (* performs final operations to the relationship matrix, e.g. adding some
-   * multiple of the identity matrix *)
-  val finalize : mat -> unit
+let tests (times : int) : unit =
+  for _i = 0 to times do
+    ignore (pageranks (random_matrix 3))
+  done;;
 
-  (* instantiates a vector of owner preferences *)
-  val preferences : dict -> vec
-
-  (* given a vector of owner preferences, returns the personalized pagerank,
-   * defined as the vector * the matrix exponential of the relationship 
-   * matrix *)
-  val calculate : vec -> mat -> vec
-end
+tests 50;;

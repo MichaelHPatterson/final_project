@@ -22,8 +22,6 @@ sig
   val string_of_val : value -> string
 
   val val_of_string : string -> value
-
-  val big_test_matrix : value array array
 end
 
 
@@ -58,7 +56,9 @@ sig
   type vec = mat_value array
   type mat = vec array
 
-  (* reads a .txt file of a specific invariant, returning the ranking matrix *)
+  (* reads a .txt file of a specific invariant, returning the ranking matrix
+   * Note: The ranking matrix will have the owners as rows and the elements as
+   * columns. *)
   val process_file : string -> (mat * dict * dict)
 end
  
@@ -71,9 +71,6 @@ struct
   let string_of_val = Float.to_string
 
   let val_of_string = Float.of_string
-
-  let big_test_matrix = [| [| 1.5; 2.0; 3.0; 4.0 |]; [| 5.0; 6.0; 7.0; 8.0 |];
-    [| 9.0; 10.0; 11.0; 12.0 |]; [| 13.0; 14.0; 15.0; 16.0 |] |]
 end
 
 
@@ -123,7 +120,8 @@ struct
     assert (result = [" 1 2 3 4"; " 2 3 4 5"])
 
   let test_mat_to_file () =
-    let my_mat = M.big_test_matrix in
+    let my_mat = [| [| 1.5; 2.0; 3.0; 4.0 |]; [| 5.0; 6.0; 7.0; 8.0 |];
+    [| 9.0; 10.0; 11.0; 12.0 |]; [| 13.0; 14.0; 15.0; 16.0 |] |] in
     mat_to_file my_mat "write_test.txt"
 
   let run_tests () =
@@ -132,10 +130,6 @@ struct
     test_mat_to_file ();
     ()
 end
-
-module FloatMatrixModule = Write(FloatMatrix);;
-FloatMatrixModule.mat_to_file(FloatMatrix.big_test_matrix) 
-  "float_write_test.txt";;
 
 
 (* Signature for reading a file and building a matrix, with dicts for indexing
