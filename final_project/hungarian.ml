@@ -293,6 +293,12 @@ let random_matrix (dim : int) : mat =
   done;
   m
 
+let hungarian (m : mat) : (int * int) list =
+  let m = steps_12 m in
+  match is_finished m with
+  | Finished lst -> lst
+  | Unfinished lst -> steps_34 m lst
+
 (* formats the results of the Hungarian algorithm in terms of string pairs,
  * assuming that the argument is (owner index * elt index) pairs *)
 let format_hungarian (lst : (int * int) list) (owner_dict : dict)

@@ -17,12 +17,15 @@ let pageranks (matrix : mat) : mat =
   flush_all();*)
   let maxes = Array.map ~f:(Array.fold ~f:Float.max ~init:0.) dot_products in
   let max = Array.fold ~f:Float.max ~init:0. maxes in
+  let sum_vec v = Array.fold ~f:(+.) ~init:0. v in
+  let sum = sum_vec (Array.map ~f:sum_vec dot_products) in
+  let avg = sum /. (float (Array.length matrix) ** 2.) in
   let dot_products = scalar_mult_mat dot_products (1. /. max) in
-  Printf.printf "DIVIDED MATRIX:\n"; print_mat dot_products; Printf.printf "\n";
-  let mat_exponential = exponentiate dot_products in
+  (*Printf.printf "DIVIDED MATRIX:\n"; print_mat dot_products; Printf.printf "\n"; flush_all ();*)
+  (*let mat_exponential = *)ignore(exponentiate2 dot_products)(* in
   print_mat mat_exponential;
   flush_all();
-  mult_mat mat_exponential matrix
+  mult_mat mat_exponential matrix*)
 
 (* Converts a matrix of pageranks into a matrix of costs *)
 let cost_matrix (matrix : mat) : mat = 
@@ -44,8 +47,16 @@ let random_matrix (dim : int) : mat =
   m
 
 let tests (times : int) : unit =
+  let total_time = ref 0. in
   for _i = 0 to times do
-    ignore (pageranks (random_matrix 5))
-  done;;
+    let start_time = Unix.gettimeofday () in
+    ignore (pageranks (random_matrix 60));
+    let end_time = Unix.gettimeofday () in
+    let time = end_time -. start_time in
+    total_time := !total_time +. time;
+    Printf.printf "\nDONE!!! That took a total of %f seconds.\n\n" time; flush_all ();
+    (*Thread.delay 1.*)
+  done;
+  Printf.printf "==============\nAVERAGE TIME: %f seconds\n\n" (!total_time /. (float times));;
 
-tests 50;;
+tests 20;;
