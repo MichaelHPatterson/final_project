@@ -1,8 +1,7 @@
-all: read_write.ml psetdict.ml helpers.ml matrixops.ml hungarian.ml pagerank.ml
+all: read_write.ml psetdict.ml helpers.ml hungarian.ml pagerank.ml
 	corebuild read_write.native
 	corebuild psetdict.native
 	corebuild helpers.native
-	corebuild matrixops.native
 	corebuild hungarian.native
 	corebuild matrix.native
 	corebuild pagerank.native
@@ -14,9 +13,6 @@ psetdict:
 
 helpers:
 	corebuild helpers.native
-
-matrixtest:
-	corebuild matrixops.native
 
 matrix:
 	corebuild matrix.native

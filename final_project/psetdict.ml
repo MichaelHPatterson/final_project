@@ -1,8 +1,8 @@
 (* CS51 Final Project: N x N Matching
  * CS51 Spring 2014
  * Authors: Madhu Vijay & Michael Patterson
- * psetdict.ml -- adapted from PS5 dict.ml; provides basic dict functionality in
- * the form of an AssocListDict *)
+ * dict.ml -- provides dict functionality for use in reading from files; adapted
+ * from PS5 but with new AVLDict, which uses an AVL tree *)
 
 open Core.Std
 
@@ -88,19 +88,21 @@ sig
 end
 
 
-
+(* The functor that will be used for our owner and elt dicts. Owners and elts
+ * will be stored as strings, and their corresponding indices in the ranking
+ * matrix will be stored as ints. *)
 module StringIntDictArg : DICT_ARG =
 struct
   type key = string
   type value = int
-  let rec compare x y = 
+  let compare x y = 
     (* Less means that x comes alphabetically before y; Greater means that it
      * comes after *)
     match String.compare x y with
     | 0 -> Equal
     | -1 -> Less
     | 1 -> Greater
-    | _ -> failwith "invalid compare "
+    | _ -> failwith "invalid compare"
   let string_of_key key = key
   let string_of_value = string_of_int
   let key_of_string my_string = my_string
@@ -126,8 +128,9 @@ struct
 end
 
 
-
-(* An association list implementation of our DICT signature. *)
+(* Directly copied from the AssocListDict in PS5. Not used in our final
+ * implementation, but was useful for testing purposes. "An association list 
+ * implementation of our DICT signature." *)
 module AssocListDict(D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
 struct
@@ -283,7 +286,10 @@ struct
 end
 
 
-module BSTDict(D:DICT_ARG) : (DICT with type key = D.key
+(* A dictionary of an AVL tree, a self-balancing binary search tree that offers
+ * n*log(n) runtime. NOTE: Has an invariant whereby insertions of keys already
+ * in the dictionary are not required *)
+module AVLDict(D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
 struct
   type key = D.key
@@ -291,18 +297,26 @@ struct
   (* A dictionary entry is a (key, value) pair. *)
   type pair = key * value
 
-  (* Type definition for dictionary as a BST *)
+  (* Type definition for dictionary as a BST. Dicts are either a leaf or a pair
+   * with two branches, which could include up to two leaves. Also stores its
+   * height. *)
   type dict = 
     | Leaf
     | Two of int * dict * pair * dict
-
+  
+  (* empty dict is just a leaf *)
   let empty : dict = Leaf
 
+  (* folds over the whole function, starting with the top node of the tree and
+   * then moving down, evaluating right branches of Two Branches before left
+   *  branches *)
   let rec fold (f : key -> value -> 'a -> 'a) (init : 'a) (d : dict) : 'a =
     match d with
     | Leaf -> init
     | Two (_, left, (k, v), right) -> fold f (fold f (f k v init) right) left
 
+  (* looks up a specific key and returns its value, or None if the key is not
+   * in the dict *)
   let rec lookup (d : dict) (k : key) : value option =
     match d with
     | Leaf -> None
@@ -312,13 +326,17 @@ struct
 	| Less -> lookup left k
 	| Greater -> lookup right k)
   
+  (* Given two pairs, returns the comparison of their keys *)
   let k_compare p1 p2 =
     let (x, _) = p1 in
     let (y, _) = p2 in
     D.compare x y
 
+  (* returns true if key is in dict, false if it's not *)
   let member d k = (lookup d k) <> None
 
+  (* given the left and right branches of a tree as arguments, returns the
+   * height of the tree, i.e. the max height b/t left and right branches + 1 *)
   let rec get_height (d1 : dict) (d2 : dict) : int = 
     match (d1, d2) with
     | (Leaf, Leaf) -> 1
@@ -327,68 +345,87 @@ struct
     | (Two (_, left1, _, right1), Two (_, left2, _, right2)) ->
        (max (get_height left1 right1) (get_height left2 right2)) + 1
 
+  (* finds height of tree from its data structure *)
   let extract_height (d : dict) : int = 
     match d with
     | Leaf -> 0
     | Two (x, _, _, _) -> x
 
-  let is_leaf (d : dict) : bool =
-    match d with
-    | Leaf -> true
-    | _ -> false
-
+  (* returns the difference in height of a tree's left and right branches; used
+   * to check for balanced-ness *)
   let balance_factor (my_dict : dict) : int =
-    if is_leaf my_dict then failwith "got Leaf in balance_factor" else
-      let Two (_, left, _, right) = my_dict in
-      (extract_height left) - (extract_height right)
+      match my_dict with
+      | Leaf -> failwith "got Leaf in balance_factor"
+      | Two (_, left, _, right) -> (extract_height left)-(extract_height right)
 
+  (* balances the tree by matching a tree with one of four unbalanced instances.
+   * For more information on how this works, see photo in our documentation. *)
   let balance (d : dict) : dict =
     let left_left (input : dict) : dict =
-      if is_leaf input then failwith "got Leaf in left_left" else
-      let Two (my_height, l_dict, my_pair, r_dict) = input in
-      let Two (_, l_ldict, l_pair, l_rdict) = l_dict in
-      Two(my_height-1, l_ldict, l_pair, Two(my_height-2, l_rdict, my_pair, 
-        r_dict)) in
+      match input with
+      | Leaf -> failwith "got Leaf in left_left"
+      | Two(my_height, l_dict, my_pair, r_dict) ->
+	 (match l_dict with
+	 | Leaf -> failwith "got Leaf in left_left"
+	 | Two(_, l_ldict, l_pair, l_rdict) ->
+	 Two(my_height-1, l_ldict, l_pair, Two(my_height-2, l_rdict, my_pair, 
+           r_dict))) in
     
     let left_right (input : dict) : dict =
-      if is_leaf input then failwith "got Leaf in left_right" else
-      let Two (my_height, l_dict, my_pair, r_dict) = input in
-      let Two (_, l_ldict, l_pair, l_rdict) = l_dict in
-      let Two (_, l_r_ldict, l_rpair, l_r_rdict) = l_rdict in
-      Two(my_height, Two(my_height-1, Two(my_height-2, l_ldict, l_pair,
-        l_r_ldict), l_rpair, l_r_rdict), my_pair, r_dict) in
+      match input with
+      | Leaf -> failwith "got Leaf in left_right"
+      | Two(my_height, l_dict, my_pair, r_dict) ->
+	 (match l_dict with
+	  | Leaf -> failwith "got Leaf in left_right"
+	  | Two(_, l_ldict, l_pair, l_rdict) ->
+	     (match l_rdict with
+	      | Leaf -> failwith "got Leaf in left_right"
+	      | Two (_, l_r_ldict, l_rpair, l_r_rdict) ->
+	 Two(my_height, Two(my_height-1, Two(my_height-2, l_ldict, l_pair,
+           l_r_ldict), l_rpair, l_r_rdict), my_pair, r_dict))) in
 
     let right_right (input : dict) : dict =
-      if is_leaf input then failwith "got Leaf in right_right" else
-      let Two (my_height, l_dict, my_pair, r_dict) = input in
-      let Two (_, r_ldict, r_pair, r_rdict) = r_dict in
-      Two(my_height-1, Two(my_height-2, l_dict, my_pair, r_ldict), r_pair,
-        r_rdict) in
+      match input with
+      | Leaf -> failwith "got Leaf in right_right"
+      | Two(my_height, l_dict, my_pair, r_dict) ->
+	 (match r_dict with
+	  | Leaf -> failwith "got Leaf in right_right"
+	  | Two(_, r_ldict, r_pair, r_rdict) ->
+	 Two(my_height-1, Two(my_height-2, l_dict, my_pair, r_ldict), r_pair,
+           r_rdict)) in
 
     let right_left (input : dict) : dict =
-      if is_leaf input then failwith "got Leaf in right_left" else
-      let Two (my_height, l_dict, my_pair, r_dict) = input in
-      let Two (_, r_ldict, r_pair, r_rdict) = r_dict in
-      let Two (_, r_l_ldict, r_lpair, r_l_rdict) = r_ldict in
-      Two(my_height, l_dict, my_pair, Two(my_height-1, r_l_ldict, r_lpair,
-        Two(my_height-2, r_l_rdict, r_pair, r_rdict))) in
+      match input with
+      | Leaf -> failwith "got Leaf in right_left"
+      | Two(my_height, l_dict, my_pair, r_dict) ->
+	 (match r_dict with
+	  | Leaf -> failwith "got Leaf in right_left"
+	  | Two(_, r_ldict, r_pair, r_rdict) ->
+	     (match r_ldict with
+	      | Leaf -> failwith "got Leaf in right_left"
+	      | Two(_, r_l_ldict, r_lpair, r_l_rdict) ->
+	 Two(my_height, l_dict, my_pair, Two(my_height-1, r_l_ldict, r_lpair,
+           Two(my_height-2, r_l_rdict, r_pair, r_rdict))))) in
 
-    if is_leaf d then d else (
-    let Two (dict_height, dict_left, dict_pair, dict_right) = d in
-    match balance_factor d with
-    | 2 -> (
-       let bal_left = balance_factor dict_left in
-       if bal_left = -1 then left_left(left_right d)
-       else (if (bal_left = 0 || bal_left = 1) then left_left d
-	     else failwith "invalid balance_factor"))
-    | -2 -> (
-      let bal_right = balance_factor dict_right in
-      if bal_right = 1 then right_right(right_left d)
-      else (if (bal_right = 0 || bal_right = -1) then right_right d
-	    else failwith "invalid balance_factor"))
-    | x -> if (x < 3 && x > -3) then d else failwith "balance_factor out of
+    match d with
+    | Leaf -> d
+    | Two(_, dict_left, _, dict_right) ->
+       (match balance_factor d with
+	| 2 -> (
+	  let bal_left = balance_factor dict_left in
+	  if bal_left = -1 then left_left(left_right d)
+	  else (if (bal_left = 0 || bal_left = 1) then left_left d
+		else failwith "invalid balance_factor"))
+	| -2 -> (
+	  let bal_right = balance_factor dict_right in
+	  if bal_right = 1 then right_right(right_left d)
+	  else (if (bal_right = 0 || bal_right = -1) then right_right d
+		else failwith "invalid balance_factor"))
+	| x -> if (x < 3 && x > -3) then d else failwith "balance_factor out of
 						      bounds")
-    
+  
+  (* inserts a key,value pair into a dict, balancing the tree as the key is 
+   * inserted *)
   let insert (d : dict) (k : key) (v : value) : dict = 
     let rec insert_help (d : dict) (p : pair) : dict =
       match d with
@@ -407,7 +444,7 @@ struct
   (* In the interest of time, this remove function has been coded inefficiently.
    * Our program will not require the removal of entries from a dictionary, so
    * this is meant simply to appease the requirements of the signature. *)
-  let rec remove (d : dict) (my_key : key) : dict =
+  let remove (d : dict) (my_key : key) : dict =
     fold (fun k v acc -> if (D.compare my_key k = Equal) then acc
 			 else insert acc k v) empty d
 
@@ -420,7 +457,10 @@ struct
 
   let string_of_key = D.string_of_key
   let string_of_value = D.string_of_value
-  let string_of_dict d = "unimplemented"
+  let string_of_dict (d : dict) : string = 
+    let f = (fun k v curr -> curr ^ "\n key: " ^ string_of_key k ^
+      "; value: (" ^ string_of_value v ^ ")") in
+    fold f "" d
   let key_of_string = D.key_of_string
   let val_of_int = D.val_of_int
 
@@ -436,21 +476,24 @@ struct
   let rec traverse (d : dict) : 'a list option =
     match d with
     | Leaf -> None
-    | Two (_, left, (k,v), right) -> 
+    | Two (_, left, (k,_), right) -> 
        (match (traverse left, traverse right) with
 	| (None, None) -> Some [k]
 	| (None, Some x) -> Some (k :: x)
 	| (Some x, None) -> Some (x @ [k])
 	| (Some x, Some y) -> Some ((x @ [k]) @ y))
 
+  (* converts the comparison function to output bool *)
   let bool_compare (a : 'a) (b : 'a) : bool = not (D.compare a b <> Equal)
 
+  (* converts the compare function to output ints *)
   let int_compare (a : 'a) (b : 'a) : int =
     match D.compare a b with
     | Less -> -1
     | Equal -> 0
     | Greater -> 1
 
+  (* runs various tests related to AVL tree *)
   let run_tests () : unit =
     let rec list_gen (num : int) (lst : key list) : key list =
       if num <= 0 then lst
@@ -462,10 +505,10 @@ struct
       List.fold_right lst ~f:(fun x acc -> insert acc x (D.gen_value ()))
 	~init:empty in
     let print_list (lst : key list) : unit =
-      List.iter lst (
+      List.iter lst ~f:(
         fun x -> Out_channel.output_string stdout ((string_of_key x) ^ "\n");
 		 Out_channel.flush stdout) in
-    for i = 0 to 50 do
+    for _i = 0 to 50 do
       let rand_list = list_gen 50 [] in
       if is_balanced (add_list_to (rand_list)) then ()
       else print_list rand_list;
@@ -478,6 +521,8 @@ struct
     done
 end
 
+(* Make will return the dict specified below, allowing for the dict to be easily
+ * changed *)
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =
-  BSTDict(D)
+  AVLDict(D);;

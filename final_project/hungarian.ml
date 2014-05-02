@@ -7,6 +7,7 @@
 open Core.Std
 open Polynomial
 open Matrix.FloatMatrix
+open Read_write.FloatRead
 
 exception Empty
 exception AlgorithmError
@@ -292,6 +293,15 @@ let random_matrix (dim : int) : mat =
   done;
   m
 
+(*
+let format_hungarian (lst : (int * int) list) (owner_dict : dict)
+  (elt_dict : dict) : string list =
+  let extract (x : int option) : int =
+    match x with
+    | None -> failwith "not in dict"
+    | Some index -> index in
+  let converted = List.map ~f:(fun (x,y) -> (extract (lookup *)
+
 (* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
  * generating a matrix, and testing the algorithm. If it yields a result,
  * stop; else try again with another random matrix until it works. *)
@@ -320,26 +330,18 @@ let test2 (dim : int) (num_tries : int) : unit =
   let counter = ref 0 in
   let total_time = ref 0. in
   for _i = 0 to num_tries - 1 do
-    (*Printf.printf "==========================\n\n";*)
-    (* NOTE: This "gettimeofday" function will give weird values if the program is run at 11:59:59, since it resets
+    (* NOTE: This "gettimeofday" function will give weird values if the program
+   is run at 11:59:59, since it resets
      * to zero at 00:00:00.*)
     let start_time = Unix.gettimeofday () in
     let m = random_matrix dim in
-    (*print_mat m;
-    Printf.printf "\n\n";*)
     let m = steps_12 m in
-    (*print_mat m;*)
     let solution = is_finished m in
     (match solution with
-    | Finished assignments -> ((*print_results assignments; *)counter := !counter + 1)
-    | Unfinished assignments ->
-      (*Printf.printf "Proceeding to steps 3 and 4.\n"*)
-      let assignments = steps_34 m assignments in ()
-      (*print_results assignments*));
+    | Finished _ -> (counter := !counter + 1)
+    | Unfinished assignments -> ignore (steps_34 m assignments));
     let end_time = Unix.gettimeofday () in
     total_time := !total_time +. end_time -. start_time
-    (*Printf.printf "\n\n\n";
-    flush_all ();*)
   done;
   let avg_time = !total_time /. (float num_tries) in
   Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2 alone, when working on %ix%i matrices.\n" !counter num_tries dim dim;

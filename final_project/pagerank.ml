@@ -21,6 +21,11 @@ let pageranks (matrix : mat) =
   flush_all();
   mult_mat mat_exponential matrix
 
+
+(* Converts a matrix of rankings into a matrix of rankings, and then into a
+ * matrix of costs *)
+let cost_matrix (matrix : mat) : mat = failwith "unimplemented"
+
 (* Generates a random dim x dim matrix of integers from 0 to 99 *)
 let random_matrix (dim : int) : mat =
   let m : mat = zero_mat dim dim in

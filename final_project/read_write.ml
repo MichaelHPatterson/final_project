@@ -5,7 +5,7 @@
 
 open Core.Std
 open Psetdict
-open Matrixops
+open Matrix
 
 exception TODO
 exception SizeMismatch
@@ -34,7 +34,11 @@ sig
   type vec = value array
   type mat = vec array
 
-  (* writes a whole matrix to a .txt file of given name *)
+  (* prepares a whole matrix for writing to a file by formatting the matrix to
+   * be written into a list of strings to be printed *)
+  val mat_formatted : mat  -> string list
+
+  (* writes a matrix to a file of specified name *)
   val mat_to_file : mat -> string -> unit
 
   (* runs tests for writing *)
@@ -56,13 +60,16 @@ sig
   type vec = mat_value array
   type mat = vec array
 
+  (* allows us to look up indices for use in Hungarian algorithm *)
+  val dict_fold : (key -> value -> 'a -> 'a) -> 'a -> dict -> 'a
+
   (* reads a .txt file of a specific invariant, returning the ranking matrix
    * Note: The ranking matrix will have the owners as rows and the elements as
    * columns. *)
   val process_file : string -> (mat * dict * dict)
 end
  
-module FloatMatrix : MATRIX_ARG =
+module FloatMatrixArg : MATRIX_ARG =
 struct
   type value = float
   type vec = value array
@@ -101,13 +108,16 @@ struct
     Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc)
       ~init:[]
 
-  (* converts matrix to string matrix, formats, and writes to file *)
-  let mat_to_file (matrix : mat) (filename : string) : unit =
+  let mat_formatted (matrix : mat) : string list =
     let string_matrix = Helpers.matrix_map matrix ~f:M.string_of_val in
     let max_len = Helpers.matrix_fold string_matrix ~f:(fun acc x -> max 
       (String.length x) acc) ~init: 0 in
     let to_strings = string_mat_to_strings string_matrix (max_len + 1) in
-    Out_channel.write_lines filename to_strings
+      to_strings
+
+  (* converts matrix to string matrix, formats, and writes to file *)
+  let mat_to_file (matrix : mat) (filename : string) : unit =
+    Out_channel.write_lines filename (mat_formatted matrix)
 
   let test_row () =
     let my_array = [| "1"; "2"; "3"; "4" |] in
@@ -151,12 +161,14 @@ struct
   (* instantiates a square matrix of len dimensions *)
   let rank_matrix (len : int) = Array.make_matrix ~dimx:len ~dimy:len 0.0
   
-  (* The following code  fucks things up -- all of the columns become uniform.
+  (* The following code screws things up -- all of the columns become uniform.
    * I think this is because the m.(x).(y) notation doesn't work for normal
    * two-dimensional arrays. However, it works for the make_matrix two-
    * dimensional arrays.
    * Array.create ~len:len (Array.create ~len:len 0.0) *)
   
+  let dict_fold = D.fold
+
   (* converts the element-rank line into a (string, mat_value) tuple by 
    * splitting at the colon *)
   let process_elt (line : string) =
@@ -222,15 +234,15 @@ struct
     (return_matrix, !owner_dict, !elt_dict)
 end
 
-(* Tests with Matrix operations *)
-module FloatRead = Read (FloatMatrix) (Make(StringIntDictArg));;
-module FloatWrite = Write (FloatMatrix);;
+module FloatRead = Read (FloatMatrixArg) (Make(StringIntDictArg));;
+module FloatWrite = Write (FloatMatrixArg);;
 
+(* Tests with Matrix operations *)
 FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
   "test_float_input.txt")) "test_output1.txt";;
 
 let my_float_matrix = Helpers.get_mat (FloatRead.process_file
  "test_float_input.txt");;
 
-FloatWrite.mat_to_file ((FloatOps.add_mat my_float_matrix 
-  (FloatOps.identity 5))) "test_output2.txt";;
+FloatWrite.mat_to_file ((FloatMatrix.add_mat my_float_matrix 
+  (FloatMatrix.identity 5))) "test_output2.txt";;

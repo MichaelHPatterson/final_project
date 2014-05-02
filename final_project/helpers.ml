@@ -68,16 +68,8 @@ let matrix_fold (matrix : 'b array array) ~(f : 'a -> 'b -> 'a) ~(init : 'a)
 (* general map function for matrices *)
 let matrix_map (matrix : 'a array array) ~(f : 'a -> 'b) : 'b array array =
   let len = Array.length matrix in
-  let result = Array.make_matrix len len (f (matrix.(0).(0))) in
+  let result = Array.make_matrix ~dimx:len ~dimy:len (f (matrix.(0).(0))) in
   for i = 0 to len -1 do
-    result.(i) <- Array.map f matrix.(i)
+    result.(i) <- Array.map ~f:f matrix.(i)
   done;
   result
-
-(* some code useful for dict debugging purposes *)
-(*
-    Out_channel.output_string stdout (D.string_of_dict (!owner_dict));
-    Out_channel.flush stdout;
-    Out_channel.output_string stdout (D.string_of_dict (!elt_dict));
-    Out_channel.flush stdout
- *)
