@@ -20,11 +20,15 @@ sig
   type value = float
 
   val string_of_val : value -> string
-
   val val_of_string : string -> value
 		
-  (* the default value for when a  *)		  
+  (* the default value for when an elt does not have a ranking for an owner *)
   val default : value
+
+  (* the maximum and minimum values of our ranking system. If a value is found
+   * that is found outside these bounds, then throw an error *)
+  val min : value
+  val max : value
 end
 
 
@@ -32,9 +36,14 @@ end
  * file and running tests, which provides a favorable abstraction layer. *)
 module type WRITE =
 sig
+  (* types for dictionary use*)
+  type key
+  type value
+  type dict
+
   (* types for the matrix implementation *)
-  type value = float
-  type vec = value array
+  type mat_value = float
+  type vec = mat_value array
   type mat = vec array
 
   (* prepares a whole matrix for writing to a file by formatting the matrix to
@@ -77,16 +86,20 @@ sig
    * columns. *)
   val process_file : string -> (mat * dict * dict)
 end
- 
+
+
+(* A functor for 1-10 rankings. *)
 module FloatMatrixArg : MATRIX_ARG =
 struct
   type value = float
-  type vec = value array
-  type mat = vec array
 
   let string_of_val = Float.to_string
 
   let val_of_string = Float.of_string
+
+  let default = 5.
+  let min = 0.
+  let max = 10.
 end
 
 
@@ -120,7 +133,8 @@ struct
       : string list  =
     Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc)
       ~init:[]
-
+   
+  (* formats a matrix for display, but does not write to file *)
   let mat_formatted (matrix : mat) : string list =
     let string_matrix = Helpers.matrix_map matrix ~f:M.string_of_val in
     let max_len = Helpers.matrix_fold string_matrix ~f:(fun acc x -> max 
@@ -134,36 +148,40 @@ struct
 
   (* converts the matrix, owner dict, and elt dict into the file invariant of
    * inputs *)
-  let data_to_file (input : (mat * dict * dict)) : unit =
+  let data_to_file (input : (mat * dict * dict)) (filename : string) : unit =
     let (input_mat, owner_dict, elt_dict) = input in
     let key_value_list (d: dict) = D.fold (fun k v acc -> ((D.string_of_key k),
-      (D.int_of_val v) :: acc)) [] d in
+      (D.int_of_val v)) :: acc) [] d in
     let snd_sort a b : int =
-    let (_, x) = a in
-    let (_, y) = b in
-    Int.compare x y in
+      let (_, x) = a in
+      let (_, y) = b in
+      Int.compare x y in
     let sort_owners_by_vals = 
-      List.to_array (List.sort ~cmp:snd_sort key_value_list in
+      List.to_array (List.sort ~cmp:snd_sort (key_value_list owner_dict)) in
     let sort_elts_by_vals = 
-      List.to_array (List.sort ~cmp:snd_sort key_value_list) in
+      List.to_array (List.sort ~cmp:snd_sort (key_value_list elt_dict)) in
+
     let format_owners (input : (string * int)) : string list =
       let (owner_string, owner_ind) = input in
       let owner_row = input_mat.(owner_ind) in
       let string_format (elt_str : string) (rank_str : string) : string =
 	elt_str ^ " : " ^ rank_str in
-      let current_index = ref 0 in
       let get_string a : string =
 	let (x, _) = a in x in
-      let list_of_rankings = Array.fold owner_row ~init:[] ~f:(
-       fun acc x -> (string_format (get_string (sort_elts_by_vals.(!current_index))) (string_of_int x)) :: acc; current_index := !current_index + 1) in
-      owner_string :: (List.rev list_of_rankings) in
+      let current_elt (x : int) : string = 
+	get_string (sort_elts_by_vals.(x)) in
+      let list_of_rankings = Array.fold owner_row ~init:([],0) ~f:(
+       fun acc x -> let (lst, index) = acc in
+         ((string_format (current_elt index) (M.string_of_val x)) :: lst,
+	  index + 1)) in
+      owner_string :: (List.rev (fst list_of_rankings)) in
 
     let my_strings = Array.fold sort_owners_by_vals ~init:[] ~f:(
       fun acc x -> (format_owners x) :: acc) in
     let lists_append (lst : string list list) : string list =
-    List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
-    lists_append (List.rev my_strings)
-
+      List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
+    let formatted_out = lists_append (List.rev my_strings) in
+    Out_channel.write_lines filename formatted_out
 
 
   let test_row () =
@@ -220,10 +238,16 @@ struct
   let dict_fold = D.fold
 
   (* converts the element-rank line into a (string, mat_value) tuple by 
-   * splitting at the colon *)
+   * splitting at the colon. Also, checks that all rankings are in the bounds of
+   * the limits in the matrix functor *)
   let process_elt (line : string) =
     let (a, b) = String.rsplit2_exn line ~on:':' in
-    (String.strip a, M.val_of_string (String.strip b))
+    let check_bounds my_val = (my_val >= M.min) && (my_val <= M.max) in
+    let process_val (str : string) =
+      let processed = M.val_of_string (String.strip b) in
+      if check_bounds processed 
+      then (String.strip a, M.val_of_string (String.strip b))
+      else failwith "ranking not in bounds"
     
   let process_file (filename : string) : (mat * dict * dict) =
     (* a ref for storing owners and their indices *)
