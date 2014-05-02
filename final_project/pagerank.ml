@@ -26,7 +26,7 @@ let random_matrix (dim : int) : mat =
   for i = 0 to dim - 1 do
     let v = Array.create ~len:dim 0. in
     for j = 0 to dim - 1 do
-      v.(j) <- float (Random.int 10);
+      v.(j) <- float (Random.int 50);
     done;
     m.(i) <- v
   done;
