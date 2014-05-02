@@ -46,12 +46,11 @@ let tests (times : int) : unit =
   let total_time = ref 0. in
   for _i = 0 to times do
     let start_time = Unix.gettimeofday () in
-    ignore (pageranks (random_matrix 60));
+    ignore (pageranks (random_matrix 100));
     let end_time = Unix.gettimeofday () in
     let time = end_time -. start_time in
     total_time := !total_time +. time;
     Printf.printf "\nDONE!!! That took a total of %f seconds.\n\n" time; flush_all ();
-    (*Thread.delay 1.*)
   done;
   Printf.printf "==============\nAVERAGE TIME: %f seconds\n\n" (!total_time /. (float times));;
 

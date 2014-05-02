@@ -41,9 +41,10 @@ let zero_sensitivity = 0.01;;
 
 
 
-
+(* Adds a scalar value to every element in a vector. *)
 let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
 
+(* Checks whether a floating point value is "close enough" to zero. *)
 let is_zero (x : float) : bool = Float.abs x <= zero_sensitivity
 
 let rec print_results (r : (int * int) list) : unit =
@@ -54,6 +55,7 @@ let rec print_results (r : (int * int) list) : unit =
       print_results r');
   flush_all ()
 
+(* Returns a list containing the indices of all zeros in v. *)
 let zero_indices (v : vec) : int list =
   let l = ref [] in
   for i = Array.length v - 1 downto 0 do
@@ -61,112 +63,90 @@ let zero_indices (v : vec) : int list =
   done;
   !l
 
+(* Finds the smallest element in v. *)
 let find_min_vec (v : vec) : float =
   if Array.length v = 0 then raise Empty
   else Array.fold_right ~f:Float.min ~init:v.(0) v
 
+(* Subtracts the smallest element of v from each element, so that its lowest
+ * element is zero and all other elements are nonnegative. *)
 let shift_to_zero (v : vec) : vec = add_to_vec v ((-1.) *. (find_min_vec v))
 
-let swap_list : (int * int) list -> (int * int) list =
-  let swap (x,y) = (y,x) in List.map ~f:swap
-
-type hungarian_status = Finished of (int * int) list | Unfinished of (int * int) list
-
-(* Checks the current matrix to see if an optimal assignment can be carried out,
- * after steps 1 and 2 of the algorithm have been done. *)
-(* INCOMPLETE [see note at the bottom of the function] *)
-let is_finished (m : mat) : hungarian_status =
-  let zeros : int list array = Array.map ~f:zero_indices m in
-  (*if Array.fold_right ~f:(fun l c -> c || List.length l = 0) ~init:false zeros
-  then None
-  else*)
-    let dim = Array.length m in
-    (*let row_checker = ref true in*)
-    (* this line is dumb, there must be some better way to do it, I just don't feel like finding it *)
-    (*let zeros_rows = List.to_array (List.concat (Array.to_list zeros)) in
-    for i = 0 to dim - 1 do
-      if not (Array.mem zeros_rows i) then row_checker := false
-    done;
-    if not !row_checker then None
-    else*)
-      let result : (int * int) list ref = ref [] in
-      let is_assigned ((person, element) : int * int) (results : (int * int) list) : bool =
-	(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: I'm not sure if this line works -- have to verify *)
-	List.exists ~f:(fun (p,e) -> p = person || e = element ) results in
-	(* List.fold_left ~f:(fun c (p,e) -> c || p = person || e = element) ~init:false results in *)
-      let f i l =
-	match l with
-	| [j] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
-	| _ -> ()
-      in Array.iteri ~f zeros;
-      let zeros_trans : int list array = Array.map ~f:zero_indices (transpose m) in
-      let f j l =
-	match l with
-	| [i] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
-        | _ -> ()
-      in Array.iteri ~f zeros_trans;
-      match Int.compare (List.length !result) dim with
-      | 1 -> raise AlgorithmError
-      | 0 -> Finished !result
-      | _ ->
-	let unassigned_people = ref [] in
-	let unassigned_elts = ref [] in
-	for i = 0 to dim - 1 do
-	  (* The 0's are just used as placeholders -- any integer would do just as well *)
-	  if not (List.exists ~f:(fun (p,_) -> p = i) !result)
-	  then unassigned_people := i :: !unassigned_people;
-	  if not (List.exists ~f:(fun (_,e) -> e = i) !result)
-	  then unassigned_elts := i :: !unassigned_elts;
-	  flush_all ()
-	done;
-	let possible_new = List.cartesian_product !unassigned_people !unassigned_elts in
-        let possible_new = List.filter ~f:(fun (p,e) -> not (is_assigned (p,e) !result) && is_zero m.(p).(e)) possible_new in
-	let best_possible = ref !result in
-	let rec check_finished (possible_pairs : (int * int) list) (curr_results : (int * int) list) : hungarian_status =
-	  match possible_pairs with
-	  | [] ->
-	    (match Int.compare (List.length curr_results) dim with
-	    | 1 -> raise AlgorithmError
-	    | 0 -> Finished curr_results
-	    | _ -> Unfinished curr_results)
-	  | (p,e) :: possible_pairs' ->
-	    if is_assigned (p,e) curr_results then check_finished possible_pairs' curr_results
-	    else
-	      (match check_finished possible_pairs' ((p,e) :: curr_results) with
-	      | Unfinished r ->
-		if List.length r > List.length !best_possible then best_possible := r;
-		check_finished possible_pairs' curr_results
-	      | Finished r -> Finished r)
-	in
-	match check_finished possible_new !result with
-	| Finished r -> Finished r
-	| Unfinished _ -> Unfinished !best_possible
-	(*let f (p,e) =
-	  if not (is_assigned (p,e) !result) && is_zero m.(p).(e)
-	  then result := (p,e) :: !result
-	in List.iter ~f !possible_new;
-	if List.length !result = dim then Finished !result else	Unfinished !result*)
-      (* NOTE: THIS IS INCOMPLETE -- There are still cases where the function
-       * returns None when there is a solution (specifically, the function
-       * ignores rows/columns that have more than 1 zero, while those situations
-       * could still have a solution). *)
-
-(* Subtracts the lowest element from each row, and from each column *)
+(* Subtracts the lowest element from each row, and from each column. Called
+ * "steps_12" because these actions are described as steps 1 and 2 of the
+ * algorithm on Wikipedia. *)
 let steps_12 (m : mat) : mat =
   transpose (Array.map ~f:shift_to_zero (transpose (Array.map ~f:shift_to_zero m)))
 
-(* Arguments: (1) the matrix, after applying steps_12, and (2) the assignments that have already been made,
- * in the form of column * row.
- * Returns: (1) List of "marked" columns. (2) List of "marked" rows. Note that these
- * "markings" denote the smallest number of lines required to cover all 0's in m. *)
+(* A type used below to check whether ALL assignments can be made (Finished), or
+ * that's not yet possible (Unfinished). *)
+type hungarian_status = Finished of (int * int) list | Unfinished of (int * int) list
+
+(* Checks the current matrix to see if an optimal assignment can be carried out
+ * based on the locations of 0's in m, after applying steps_12. *)
+let is_finished (m : mat) : hungarian_status =
+  let zeros : int list array = Array.map ~f:zero_indices m in
+  let dim = Array.length m in
+  let result : (int * int) list ref = ref [] in
+  let is_assigned ((person, element) : int * int) (results : (int * int) list) : bool =
+    List.exists ~f:(fun (p,e) -> p = person || e = element ) results in
+  let f i l =
+    match l with
+    | [j] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
+    | _ -> ()
+  in Array.iteri ~f zeros;
+  let zeros_trans : int list array = Array.map ~f:zero_indices (transpose m) in
+  let f j l =
+    match l with
+    | [i] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
+    | _ -> ()
+  in Array.iteri ~f zeros_trans;
+  match Int.compare (List.length !result) dim with
+  | 1 -> raise AlgorithmError
+  | 0 -> Finished !result
+  | _ ->
+    let unassigned_people = ref [] in
+    let unassigned_elts = ref [] in
+    for i = 0 to dim - 1 do
+      if not (List.exists ~f:(fun (p,_) -> p = i) !result)
+      then unassigned_people := i :: !unassigned_people;
+      if not (List.exists ~f:(fun (_,e) -> e = i) !result)
+      then unassigned_elts := i :: !unassigned_elts;
+    done;
+    let possible_new = List.cartesian_product !unassigned_people !unassigned_elts in
+    let possible_new = List.filter ~f:(fun (p,e) -> not (is_assigned (p,e) !result) && is_zero m.(p).(e)) possible_new in
+    let best_possible = ref !result in
+    let rec check_finished (possible_pairs : (int * int) list) (curr_results : (int * int) list) : hungarian_status =
+      match possible_pairs with
+      | [] ->
+	 (match Int.compare (List.length curr_results) dim with
+	  | 1 -> raise AlgorithmError
+	  | 0 -> Finished curr_results
+	  | _ -> Unfinished curr_results)
+      | (p,e) :: possible_pairs' ->
+	 if is_assigned (p,e) curr_results then check_finished possible_pairs' curr_results
+	 else
+	   (match check_finished possible_pairs' ((p,e) :: curr_results) with
+	    | Unfinished r ->
+	       if List.length r > List.length !best_possible then best_possible := r;
+	       check_finished possible_pairs' curr_results
+	    | Finished r -> Finished r)
+    in
+    match check_finished possible_new !result with
+    | Finished r -> Finished r
+    | Unfinished _ -> Unfinished !best_possible
+
+(* "Marks" the columns and rows of m, returning the smallest set of markings
+ * required to cover all zeros in m. Takes the matrix m and the assignments made
+ * so far as arguments. *)
 let mark_zeros (m : mat) (assignments : (int * int) list) : int list * int list =
-  let marked_cols : int list ref = ref [] in
+  let unmarked_cols : int list ref = ref [] in
   let marked_rows : int list ref = ref [] in
   let dim = Array.length m in
   (* Mark all columns having no assignments. *)
   for i = 0 to dim - 1 do
     if List.fold_left ~f:(fun b (c,_) -> b && c <> i) ~init:true assignments then
-      marked_cols := i :: !marked_cols
+      unmarked_cols := i :: !unmarked_cols
   done;
   let do_loop () =
     (* Mark all rows having zeros in marked columns. *)
@@ -175,27 +155,28 @@ let mark_zeros (m : mat) (assignments : (int * int) list) : int list * int list 
 	if is_zero x && not (List.mem !marked_rows i)
 	then marked_rows := i :: !marked_rows in
       Array.iteri ~f m.(c) in
-    List.iter ~f:f1 !marked_cols;
+    List.iter ~f:f1 !unmarked_cols;
     (* Mark all columns having assignments in marked rows. *)
     let f2 (r : int) : unit =
       let f i _ =
-	if List.mem assignments (i,r) && not (List.mem !marked_cols i)
-	then marked_cols := i :: !marked_cols in
+	if List.mem assignments (i,r) && not (List.mem !unmarked_cols i)
+	then unmarked_cols := i :: !unmarked_cols in
       Array.iteri ~f (transpose m).(r) in
     List.iter ~f:f2 !marked_rows
   in
   let rec call_loop () : unit =
-    let (curr_marked_rows, curr_marked_cols) = (!marked_rows, !marked_cols) in
+    let (curr_marked_rows, curr_marked_cols) = (!marked_rows, !unmarked_cols) in
     do_loop ();
-    if curr_marked_rows = !marked_rows && curr_marked_cols = !marked_cols then ()
+    if curr_marked_rows = !marked_rows && curr_marked_cols = !unmarked_cols
+    then ()
     else call_loop ()
   in
   call_loop ();
-  let new_marked_cols = ref [] in
+  let marked_cols = ref [] in
   for i = 0 to dim - 1 do
-    if not (List.mem !marked_cols i) then new_marked_cols := i :: !new_marked_cols
+    if not (List.mem !unmarked_cols i) then marked_cols := i :: !marked_cols
   done;
-  (!new_marked_cols, !marked_rows)
+  (!marked_cols, !marked_rows)
       
 
 (* Carries out steps 3 and 4 of the Hungarian algorithm, assuming that the
@@ -204,8 +185,6 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
   let dim = Array.length m in
   if List.length assignments = dim then assignments
   else
-    (* This is inefficient -- the mark_zeros function gets called separately on each recursive call *)
-    (*let _ = (print_mat m; Printf.printf "\n\n"; flush_all ()) in*)
     let (marked_cols, marked_rows) = mark_zeros m assignments in
     let unmarked = Array.map ~f:(Array.filteri ~f:(fun r _ -> not (List.mem marked_rows r))) (Array.filteri ~f:(fun c _ -> not (List.mem marked_cols c)) m) in
     (*********** This structure here is terrible -- figure out a better way to check whether the matrix is assignable without risking an error, and without having the dummy line "raise AlgorithmError", if possible ***********)
@@ -213,12 +192,7 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
     if Array.length unmarked = 0 || Array.length unmarked.(0) = 0 then
       match is_finished m with
       | Finished lst -> lst
-      | Unfinished lst -> (print_mat m;
-			   Printf.printf "Marked columns:"; List.iter ~f:(fun x -> Printf.printf " %i" x) marked_cols;
-			   Printf.printf "\nMarked rows:"; List.iter ~f:(fun x -> Printf.printf " %i" x) marked_rows;
-			   Printf.printf "\n";
-			   print_results lst;
-			   raise AlgorithmError)
+      | Unfinished _ -> raise AlgorithmError
     else
       let min (c : vec) : float = Array.fold_right ~f:Float.min ~init:c.(0) c in
       let min_unmarked = Array.fold_right ~f:(fun col init -> Float.min (min col) init) ~init:unmarked.(0).(0) unmarked in
@@ -237,6 +211,7 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
       | Finished lst -> lst
       | Unfinished lst -> steps_34 m lst
 
+(* Helpful function used for testing. *)
 let hungarian_test (m : mat) : unit =
   print_mat m;
   let m = steps_12 m in
@@ -246,7 +221,8 @@ let hungarian_test (m : mat) : unit =
     let results = steps_34 m results in
     print_results results
 
-(* shitty function for testing *)
+(* Generates a random set of assignments, andn returns the "cost" of that
+ * random permutation. Helps for testing optimality. *)
 let brute_force (m : mat) : float =
   let len = Array.length m in
   if len = 0 then 0.
@@ -263,6 +239,8 @@ let brute_force (m : mat) : float =
     done;
     !cost
 
+(* Carries out brute_force n times and asserts that each randomly generated
+ * assignment has cost greater than or equal to the lowest cost inputted. *)
 let brute_force_n (m : mat) (n : int) (lowest_cost : float) : unit =
   let costs = ref [] in
   for _i = 0 to n - 1 do
@@ -283,6 +261,7 @@ let random_matrix (dim : int) : mat =
   done;
   m
 
+(* Carries out all steps of the algorithm. *)
 let hungarian (m : mat) : (int * int) list =
   let m = steps_12 m in
   match is_finished m with
@@ -305,7 +284,6 @@ let rec test1 () : unit =
   let m = random_matrix 4 in
   print_mat m; Printf.printf "\n";
   let m' = steps_12 m in
-  Printf.printf "After steps 1 and 2:\n"; print_mat m'; Printf.printf "\n";
   (match is_finished m' with
   | Unfinished _ -> Printf.printf "Failed attempt.\n"; test1 ()
   | Finished r -> print_results r);
@@ -320,21 +298,16 @@ hungarian_test my_matrix;
 Printf.printf "\n"
 
 
-(* Test function that gives a feel for how often steps 1 and 2 of the
- * algorithm are sufficient to solve the problem. *)
+(* Test function that gives a feel for runtimes and optimality. *)
 let test2 (dim : int) (num_tries : int) : unit =
-  let counter = ref 0 in
   let total_time = ref 0. in
   for _i = 0 to num_tries - 1 do
-    (* NOTE: This "gettimeofday" function will give weird values if the program
-   is run at 11:59:59, since it resets
-     * to zero at 00:00:00.*)
     let start_time = Unix.gettimeofday () in
     let matrix = random_matrix dim in
     let m = steps_12 matrix in
     let solution = is_finished m in
     let pairs = (match solution with
-    | Finished assignments -> counter := !counter + 1; assignments
+    | Finished assignments -> assignments
     | Unfinished assignments -> steps_34 m assignments) in
     let end_time = Unix.gettimeofday () in
     total_time := !total_time +. end_time -. start_time;
@@ -343,8 +316,7 @@ let test2 (dim : int) (num_tries : int) : unit =
     brute_force_n matrix 100 cost
   done;
   let avg_time = !total_time /. (float num_tries) in
-  Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2 alone, when working on %ix%i matrices.\n" !counter num_tries dim dim;
-  Printf.printf "On average, each test took %f, " avg_time;
+  Printf.printf "On average, for %ix%i matrices, each test took %f, " dim dim avg_time;
   Printf.printf "or (%i * %f)^3, seconds.\n" dim (avg_time ** (1. /. 3.) /. (float dim));
   flush_all ()
 
