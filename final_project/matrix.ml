@@ -129,16 +129,18 @@ struct
     let len = Array.length v in
     if len = 0 then ()
     else 
-      Printf.printf "[|%f" v.(0);
+      Printf.printf "{%f" v.(0);
       for i = 1 to len - 1 do
-	Printf.printf "; %f" v.(i)
+	Printf.printf ", %f" v.(i)
       done;
-      Printf.printf "|]";
+      Printf.printf "}";
       flush_all ()
 
   (* Prints out a matrix. *)
   let print_mat (m : mat) : unit =
-    Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
+    Printf.printf "{";
+    Array.iter ~f:(fun v -> print_vec v; Printf.printf ",\n") (transpose m);
+    Printf.printf "}\n"
 
   (* Multiplies the vector v by a scalar value. *)
   let scalar_mult_vec (v : vec) (factor : float) : vec =
@@ -367,6 +369,7 @@ struct
     let rec find (start_vec : vec) (v : vec) (curr : mat) : (float * vec) list =
       let next_vec = mult_vec m v in
       let curr = Array.append curr [|next_vec|] in
+      Printf.printf "\n"; print_mat curr; Printf.printf "\n";
       let size = Array.length curr in
       let (test_mat, piv) = row_reduce curr in
       if size = piv then find start_vec next_vec curr
@@ -393,12 +396,13 @@ struct
     in
     let rec find_all (already_found : int) : (float * vec) list =
       let start = gen_vec () in
+      Printf.printf "\nStarting with vector: "; print_vec start; Printf.printf "\n\n";
       let remove_repeats (evs : (float * vec) list) : (float * vec) list =
 	let f lst (e,v) =
 	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_multiple v v' 0.1)) lst)
 	in List.fold_left ~f ~init:[] evs
       in
-      let e = remove_repeats (find start start [||]) in
+      let e = remove_repeats (find start start [|start|]) in
       let num_found = List.length e + already_found in
       if num_found < dim then remove_repeats (e @ (find_all num_found))
       else e
@@ -425,10 +429,19 @@ struct
     let eigenbasis = zero_mat dim dim in
     let diagonal = zero_mat dim dim in
     let f i (value, vector) : unit =
+      Printf.printf "Dimension: %i. Constructing %ith standard basis vector.\n" dim i;
       diagonal.(i) <- scalar_mult_vec (basis_vec ~dim i) ((e 15) ** value);
       eigenbasis.(i) <- vector
     in
-    Array.iteri ~f (eigen_new m);
+    let g (value, vector) =
+      Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
+      print_vec vector;
+      Printf.printf "\n"
+    in
+    let es = eigen_new m in
+    Array.iter ~f:g es;
+    Printf.printf "\n";
+    Array.iteri ~f es;
     Printf.printf "Matrix of eigenvectors:\n"; print_mat eigenbasis; Printf.printf "\n";
     let inv = match inverse eigenbasis with
       | None -> raise InversionError

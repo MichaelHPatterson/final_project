@@ -12,8 +12,9 @@ open Matrix.FloatMatrix
 let pageranks (matrix : mat) =
   let dot_products = mult_mat matrix (transpose matrix) in
   Out_channel.output_string stdout "hi I'm here haaands \n";
-  flush_all();
+  Printf.printf "ORIGINAL MATRIX:\n";
   print_mat dot_products;
+  Printf.printf "===================";
   flush_all();
   let mat_exponential = exponentiate dot_products in
   print_mat mat_exponential;
