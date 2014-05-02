@@ -1,0 +1,201 @@
+Alex
+He : 7.
+Be : 3.
+B : 1.
+C : 4.
+F : 6.
+Na : 4.
+Al : 2.
+S : 4.
+Bill
+B : 3.
+C : 3.
+N : 8.
+O : 6.
+Ne : 9.
+P : 7.
+Ar : 6.
+K : 8.
+Carl
+H : 2.
+Be : 6.
+N : 9.
+O : 1.
+Ne : 10.
+S : 5.
+K : 5.
+Ca : 7.
+David
+H : 10.
+O : 3.
+Na : 7.
+Si : 10.
+P : 5.
+S : 4.
+Ar : 9.
+Ca : 6.
+Edward
+O : 2.
+F : 10.
+Ne : 10.
+Na : 6.
+Al : 10.
+P : 8.
+K : 9.
+Ca : 1.
+Fabian
+H : 5.
+N : 7.
+Na : 4.
+Mg : 9.
+Al : 5.
+Si : 3.
+Ar : 0.
+Ca : 10.
+George
+H : 3.
+C : 6.
+F : 2.
+Mg : 9.
+Si : 7.
+P : 1.
+Cl : 10.
+Ca : 1.
+Henry
+Li : 3.
+B : 6.
+Ne : 5.
+Na : 7.
+S : 2.
+Cl : 9.
+Ar : 4.
+K : 6.
+Ian
+Be : 8.
+N : 9.
+O : 3.
+F : 8.
+Na : 5.
+Al : 2.
+Cl : 6.
+Ca : 7.
+Joseph
+Be : 6.
+B : 4.
+F : 8.
+Ne : 4.
+Na : 3.
+Al : 7.
+Si : 1.
+K : 2.
+Kim
+He : 10.
+Na : 5.
+Al : 6.
+Si : 3.
+P : 5.
+Cl : 5.
+Ar : 1.
+Ca : 7.
+Liam
+Be : 1.
+B : 1.
+N : 8.
+Ne : 5.
+Na : 2.
+Si : 9.
+K : 9.
+Ca : 7.
+Michael
+H : 6.
+Li : 1.
+B : 2.
+F : 3.
+Mg : 3.
+S : 0.
+K : 3.
+Ca : 6.
+Noel
+He : 2.
+Li : 6.
+N : 1.
+O : 5.
+F : 9.
+S : 8.
+Cl : 5.
+Ca : 2.
+Owen
+H : 9.
+Be : 10.
+B : 3.
+O : 1.
+Al : 9.
+Si : 2.
+K : 1.
+Ca : 10.
+Paul
+Be : 0.
+B : 0.
+N : 8.
+F : 0.
+Na : 4.
+Mg : 8.
+Cl : 7.
+K : 5.
+Quentin
+Li : 8.
+Ne : 3.
+Na : 3.
+Mg : 1.
+P : 6.
+Ar : 9.
+K : 1.
+Ca : 0.
+Robert
+He : 1.
+Li : 4.
+Be : 2.
+C : 8.
+F : 8.
+Ne : 4.
+Na : 5.
+K : 3.
+Shaun
+H : 7.
+B : 3.
+F : 1.
+Ne : 10.
+Mg : 10.
+Si : 10.
+S : 1.
+K : 10.
+Timothy
+He : 4.
+B : 3.
+O : 7.
+Ne : 10.
+P : 6.
+S : 0.
+Cl : 1.
+Ca : 2.
+
+0 H
+1 He
+2 Li
+3 Be
+4 B
+5 C
+6 N
+7 O
+8 F
+9 Ne
+10 Na
+11 Mg
+12 Al
+13 Si
+14 P
+15 S
+16 Cl
+17 Ar
+18 K
+19 Ca

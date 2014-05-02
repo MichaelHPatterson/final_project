@@ -249,37 +249,27 @@ let hungarian_test (m : mat) : unit =
 (* shitty function for testing *)
 let brute_force (m : mat) : float =
   let len = Array.length m in
-  let generate_perm () : int array =
+  if len = 0 then 0.
+  else
     let perm = Array.create ~len (-1) in
+    let cost = ref 0. in
     for i = 0 to len - 1 do
       let rec gen_num () : unit =
 	let new_num = Random.int len in
 	if Array.mem perm new_num then gen_num ()
 	else perm.(i) <- new_num
-      in gen_num ()
+      in gen_num ();
+	 cost := !cost +. m.(i).(perm.(i))
     done;
-    (* NOTE: This screws up if the size of the matrix is 0... but it's just a shitty test function anyway *)
-    Printf.printf "[|%i" perm.(0);
-    for i = 1 to len - 1 do
-      Printf.printf "; %i" perm.(i)
-    done;
-    Printf.printf "|]";
-    flush_all ();
-    perm
-  in
-  let perm = generate_perm () in
-  let cost = ref 0. in
-  for i = 0 to len - 1 do
-    cost := !cost +. m.(i).(perm.(i))
-  done;
-  !cost
+    !cost
 
-let brute_force_n (m : mat) (n : int) : unit =
+let brute_force_n (m : mat) (n : int) (lowest_cost : float) : unit =
+  let costs = ref [] in
   for _i = 0 to n - 1 do
     let cost = brute_force m in
-    Printf.printf "\t=====>\t%f\n" cost;
-    flush_all ()
-  done
+    costs := cost :: !costs
+  done;
+  List.iter ~f:(fun c -> assert (c >= lowest_cost)) !costs
 
 (* Generates a random dim x dim matrix of integers from 0 to 99 *)
 let random_matrix (dim : int) : mat =
@@ -340,14 +330,17 @@ let test2 (dim : int) (num_tries : int) : unit =
    is run at 11:59:59, since it resets
      * to zero at 00:00:00.*)
     let start_time = Unix.gettimeofday () in
-    let m = random_matrix dim in
-    let m = steps_12 m in
+    let matrix = random_matrix dim in
+    let m = steps_12 matrix in
     let solution = is_finished m in
-    (match solution with
-    | Finished _ -> (counter := !counter + 1)
-    | Unfinished assignments -> ignore (steps_34 m assignments));
+    let pairs = (match solution with
+    | Finished assignments -> counter := !counter + 1; assignments
+    | Unfinished assignments -> steps_34 m assignments) in
     let end_time = Unix.gettimeofday () in
-    total_time := !total_time +. end_time -. start_time
+    total_time := !total_time +. end_time -. start_time;
+    let f c (a,b) = c +. matrix.(a).(b) in
+    let cost = List.fold_left ~f ~init:0. pairs in
+    brute_force_n matrix 100 cost
   done;
   let avg_time = !total_time /. (float num_tries) in
   Printf.printf "%i attempts (of %i total) led to a solution from steps 1 and 2 alone, when working on %ix%i matrices.\n" !counter num_tries dim dim;

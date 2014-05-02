@@ -22,10 +22,8 @@ let pageranks (matrix : mat) =
   let avg = sum /. (float (Array.length matrix) ** 2.) in
   let dot_products = scalar_mult_mat dot_products (1. /. max) in
   (*Printf.printf "DIVIDED MATRIX:\n"; print_mat dot_products; Printf.printf "\n"; flush_all ();*)
-  (*let mat_exponential = *)ignore(exponentiate2 dot_products)(* in
-  print_mat mat_exponential;
-  flush_all();
-  mult_mat mat_exponential matrix*)
+  let mat_exponential = exponentiate2 dot_products in
+  mult_mat mat_exponential matrix
 
 
 (* Converts a matrix of rankings into a matrix of rankings, and then into a
