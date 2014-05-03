@@ -356,7 +356,7 @@ let rec get_functor x lst =
   | y :: ys -> if x <= 0 then y else get_functor (x - 1) ys
   | _ -> failwith "ran out of elts in list";;
 
-let my_functor = get_functor (!(Main.functor_ind));;
+let my_functor = get_functor !(Main.functor_ind);;
 
 module MatrixRank = (val my_functor : MATRIX_ARG);;
 
