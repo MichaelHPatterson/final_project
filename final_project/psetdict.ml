@@ -46,6 +46,7 @@ sig
   val string_of_dict : dict -> string
   val key_of_string : string -> key
   val val_of_int : int -> value
+  val int_of_val : value -> int
 
   (* Runs all the tests. see TESTING EXPLANATION below *)
   val run_tests : unit -> unit
@@ -61,6 +62,7 @@ sig
   val string_of_value : value -> string
   val key_of_string : string -> key
   val val_of_int : int -> value
+  val int_of_val : value -> int
 
   (* Functions used for testing. *)
 
@@ -107,6 +109,7 @@ struct
   let string_of_value = string_of_int
   let key_of_string my_string = my_string
   let val_of_int my_int = my_int
+  let int_of_val my_int = my_int
   let gen_key () = "0"
   let gen_key_gt x () = string_of_int ((int_of_string x) + 1)
   let gen_key_lt x () = string_of_int ((int_of_string x) - 1)
@@ -189,6 +192,7 @@ struct
     List.fold_left ~f:f ~init:"" d
   let key_of_string = D.key_of_string
   let val_of_int = D.val_of_int
+  let int_of_val = D.int_of_val
 
   (* adds a list of (key,value) pairs in left-to-right order *)
   let insert_list (d: dict) (lst: (key * value) list) : dict =
@@ -306,6 +310,9 @@ struct
   
   (* empty dict is just a leaf *)
   let empty : dict = Leaf
+
+  let string_of_key = D.string_of_key
+  let int_of_val = D.int_of_val
 
   (* folds over the whole function, starting with the top node of the tree and
    * then moving down, evaluating right branches of Two Branches before left
@@ -463,6 +470,7 @@ struct
     fold f "" d
   let key_of_string = D.key_of_string
   let val_of_int = D.val_of_int
+  let int_of_val = D.int_of_val
 
   (* a function that checks the balancing of a tree for testing purposes *)
   let rec is_balanced (d : dict) : bool = 

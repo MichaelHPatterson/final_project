@@ -5,49 +5,6 @@
 
 open Core.Std
 
-module type MATRIX_ARG =
-sig
-  (* type for matrix implementation *)
-  type value
-
-  val string_of_val : value -> string
-
-  val val_of_string : string -> value
-
-  val zero_value : value
-
-  val big_test_matrix : value array array
-end
-
-module type PRINT =
-sig
-  type value
-
-  val print_matrix : value array array -> unit
-end
-
-(* A basic matrix command-line printing function for debugging that prints a
- * matrix of arbitrary type. Rows will be displayed one elt per line, and they
- * are separated by a newline. Feel free to modify this so it's more readable
- * in the terminal. Also note that the module is needed because of the need for 
- * a matrix functor *)
-
-module Printer (M: MATRIX_ARG) : (PRINT with type value = M.value) =
-struct
-  type value = M.value
-
-  let print_matrix (matrix : 'a array array) : unit =
-    let print_line (my_row : 'a array) : unit =
-      let print_cell rank =
-	let my_string = (M.string_of_val rank) ^ "\n" in
-	Out_channel.output_string stdout my_string in
-      Array.iter my_row ~f:print_cell;
-      Out_channel.output_string stdout "\n";
-      Out_channel.flush stdout in
-    Array.iter matrix ~f:print_line;
-    Out_channel.flush stdout
-end
-
 let get_mat (tuple : ('a * 'b * 'c)) : 'a = 
   match tuple with
   | (x, _, _) -> x

@@ -259,15 +259,49 @@ let hungarian (m : mat) : (int * int) list =
   | Finished lst -> lst
   | Unfinished lst -> steps_34 m lst
 
-(*
+(* formats the results of the Hungarian algorithm in terms of string pairs,
+ * assuming that the argument is (owner index * elt index) pairs *)
 let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   (elt_dict : dict) : string list =
-  let extract (x : int option) : int =
-    match x with
-    | None -> failwith "not in dict"
-    | Some index -> index in
-  let converted = List.map ~f:(fun (x,y) -> (extract (lookup *)
-
+  let open Read_write in
+  let convert_to_string = MakeDict.string_of_key in
+  let convert_to_int = MakeDict.int_of_val in
+  let dict_list (d : dict) : ((string * int) list) = MakeDict.fold (
+    fun k v acc -> ((convert_to_string k),(convert_to_int v)) :: acc) [] d in
+  let fst_sort a b : int =
+    let (x, _) = a in
+    let (y, _) = b in
+    Int.compare x y in
+  let snd_sort a b : int =
+    let (_, x) = a in
+    let (_, y) = b in
+    Int.compare x y in
+  let elt_sorted = List.sort ~cmp:snd_sort (dict_list elt_dict) in
+  let owner_sorted = List.sort ~cmp:snd_sort (dict_list owner_dict) in
+  let snd_results_sorted = List.sort ~cmp:snd_sort lst in
+  let elt_strings = List.map2_exn elt_sorted snd_results_sorted ~f:(
+    fun (x,_) (z,_) -> (z,x)) in
+  let fst_results_sorted = List.sort ~cmp:fst_sort elt_strings in
+  let add_owner_strings = List.map2_exn owner_sorted fst_results_sorted ~f:(
+    fun (x,_) (_,a) -> (x,a)) in
+  let string_format (s1 : string) (s2 : string) : string =
+	s1 ^ " matched with " ^ s2 in
+  List.map add_owner_strings ~f:(fun (x,y) -> string_format x y)
+  
+(* expected results for our float_write_test *)
+let float_write_results = [("Bob", "Tobacco"); ("Janet", "Alcohol"); 
+    ("Morgan", "LSD"); ("Po", "Weed"); ("Dan", "Heroin")]
+(*
+let format_test (test_ints : ((int * int) list))
+  (expected_results : ((string * string) list)) (hung_owners : dict)
+  (hung_elts : dict) : unit =
+  let my_results = format_hungarian test_ints hung_owners hung_elts in
+  let print_results (my_list : (string * string) list) : unit =
+    List.fold_left my_list ~init:() ~f:(fun _ (x,y) -> 
+      Out_channel.output_string stdout (x ^ "  " ^ y ^ "\n"); flush_all()) in
+  if (expected_results = my_results) then 
+    Out_channel.output_string stdout "Success" else print_results my_results
+ *)
 (* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
  * generating a matrix, and testing the algorithm. If it yields a result,
  * stop; else try again with another random matrix until it works. *)

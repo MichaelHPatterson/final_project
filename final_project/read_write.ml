@@ -5,7 +5,7 @@
 
 open Core.Std
 open Psetdict
-open Matrix
+open Matrix.FloatMatrix
 
 exception TODO
 exception SizeMismatch
@@ -20,8 +20,15 @@ sig
   type value = float
 
   val string_of_val : value -> string
-
   val val_of_string : string -> value
+		
+  (* the default value for when an elt does not have a ranking for an owner *)
+  val default : value
+
+  (* the maximum and minimum values of our ranking system. If a value is found
+   * that is found outside these bounds, then throw an error *)
+  val min : value
+  val max : value
 end
 
 
@@ -29,14 +36,23 @@ end
  * file and running tests, which provides a favorable abstraction layer. *)
 module type WRITE =
 sig
+  (* types for dictionary use*)
+  type key
+  type value
+  type dict
+
   (* types for the matrix implementation *)
-  type value = float
-  type vec = value array
+  type mat_value = float
+  type vec = mat_value array
   type mat = vec array
 
   (* prepares a whole matrix for writing to a file by formatting the matrix to
    * be written into a list of strings to be printed *)
   val mat_formatted : mat  -> string list
+
+  (* writes the matrix, owner dict, and elt dict to the invariant that the data
+   * is originally read from *)
+  val data_to_file : (mat * dict * dict) -> string -> unit
 
   (* writes a matrix to a file of specified name *)
   val mat_to_file : mat -> string -> unit
@@ -60,32 +76,81 @@ sig
   type vec = mat_value array
   type mat = vec array
 
-  (* allows us to look up indices for use in Hungarian algorithm *)
-  val dict_fold : (key -> value -> 'a -> 'a) -> 'a -> dict -> 'a
+  val default : mat_value
 
   (* reads a .txt file of a specific invariant, returning the ranking matrix
    * Note: The ranking matrix will have the owners as rows and the elements as
    * columns. *)
   val process_file : string -> (mat * dict * dict)
 end
- 
+
+
+(* A functor for 0-10 rankings. *)
 module FloatMatrixArg : MATRIX_ARG =
 struct
   type value = float
-  type vec = value array
-  type mat = vec array
 
   let string_of_val = Float.to_string
 
   let val_of_string = Float.of_string
+
+  let default = 5.
+  let min = 0.
+  let max = 10.
+end
+
+
+(* A functor for 0-5 rankings. *)
+module FloatMatrix5Arg : MATRIX_ARG =
+struct
+  type value = float
+
+  let string_of_val = Float.to_string
+
+  let val_of_string = Float.of_string
+
+  let default = 2.5
+  let min = 0.
+  let max = 5.
+end
+
+
+(* A functor for Like/Dislike ratings *)
+module FloatLikeArg : MATRIX_ARG =
+struct
+  type value = float
+
+  let string_of_val my_float =
+    match my_float with
+    | 0. -> "None"
+    | 1. -> "Like"
+    | -1. -> "Dislike"
+    | _ -> failwith "invalid value for Like ratings"
+
+  let val_of_string my_string =
+    match my_string with
+    | "None" -> 0.
+    | "Like" -> 1.
+    | "Dislike" -> -1.
+    | _ -> failwith "invalid value for Like string"
+
+  let default = 0.
+
+  let min = -1.0
+  let max = 1.0
 end
 
 
 (* Writes matrices of some type given by M to a text file. *)
-module Write(M: MATRIX_ARG) : WRITE =
+module Write(M: MATRIX_ARG) (D: DICT) : (WRITE with type key = D.key
+  with type value = D.value with type dict = D.dict) =
 struct
-  type value = float
-  type vec = value array
+  type key = D.key
+  type value = D.value
+  type dict = D.dict
+
+  type mat_value = float
+  type vec = mat_value array
   type mat = vec array
 
   (* formats a row of a string matrix for display in .txt file *)
@@ -107,7 +172,8 @@ struct
       : string list  =
     Array.fold_right matrix ~f:(fun x acc -> (row_concat x space) :: acc)
       ~init:[]
-
+   
+  (* formats a matrix for display, but does not write to file *)
   let mat_formatted (matrix : mat) : string list =
     let string_matrix = Helpers.matrix_map matrix ~f:M.string_of_val in
     let max_len = Helpers.matrix_fold string_matrix ~f:(fun acc x -> max 
@@ -118,6 +184,44 @@ struct
   (* converts matrix to string matrix, formats, and writes to file *)
   let mat_to_file (matrix : mat) (filename : string) : unit =
     Out_channel.write_lines filename (mat_formatted matrix)
+
+  (* converts the matrix, owner dict, and elt dict into the file invariant of
+   * inputs *)
+  let data_to_file (input : (mat * dict * dict)) (filename : string) : unit =
+    let (input_mat, owner_dict, elt_dict) = input in
+    let key_value_list (d: dict) = D.fold (fun k v acc -> ((D.string_of_key k),
+      (D.int_of_val v)) :: acc) [] d in
+    let snd_sort a b : int =
+      let (_, x) = a in
+      let (_, y) = b in
+      Int.compare x y in
+    let sort_owners_by_vals = 
+      List.to_array (List.sort ~cmp:snd_sort (key_value_list owner_dict)) in
+    let sort_elts_by_vals = 
+      List.to_array (List.sort ~cmp:snd_sort (key_value_list elt_dict)) in
+
+    let format_owners (input : (string * int)) : string list =
+      let (owner_string, owner_ind) = input in
+      let owner_row = input_mat.(owner_ind) in
+      let string_format (elt_str : string) (rank_str : string) : string =
+	elt_str ^ " : " ^ rank_str in
+      let get_string a : string =
+	let (x, _) = a in x in
+      let current_elt (x : int) : string = 
+	get_string (sort_elts_by_vals.(x)) in
+      let list_of_rankings = Array.fold owner_row ~init:([],0) ~f:(
+       fun acc x -> let (lst, index) = acc in
+         ((string_format (current_elt index) (M.string_of_val x)) :: lst,
+	  index + 1)) in
+      owner_string :: (List.rev (fst list_of_rankings)) in
+
+    let my_strings = Array.fold sort_owners_by_vals ~init:[] ~f:(
+      fun acc x -> (format_owners x) :: acc) in
+    let lists_append (lst : string list list) : string list =
+      List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
+    let formatted_out = lists_append (List.rev my_strings) in
+    Out_channel.write_lines filename formatted_out
+
 
   let test_row () =
     let my_array = [| "1"; "2"; "3"; "4" |] in
@@ -158,22 +262,27 @@ struct
   type vec = mat_value array
   type mat = vec array
 
+  let default = M.default
+
   (* instantiates a square matrix of len dimensions *)
-  let rank_matrix (len : int) = Array.make_matrix ~dimx:len ~dimy:len 0.0
+  let rank_matrix (len : int) = Array.make_matrix ~dimx:len ~dimy:len M.default
   
   (* The following code screws things up -- all of the columns become uniform.
    * I think this is because the m.(x).(y) notation doesn't work for normal
    * two-dimensional arrays. However, it works for the make_matrix two-
    * dimensional arrays.
    * Array.create ~len:len (Array.create ~len:len 0.0) *)
-  
-  let dict_fold = D.fold
 
   (* converts the element-rank line into a (string, mat_value) tuple by 
-   * splitting at the colon *)
+   * splitting at the colon. Also, checks that all rankings are in the bounds of
+   * the limits in the matrix functor *)
   let process_elt (line : string) =
     let (a, b) = String.rsplit2_exn line ~on:':' in
-    (String.strip a, M.val_of_string (String.strip b))
+    let check_bounds my_val = (my_val >= M.min) && (my_val <= M.max) in
+    let processed = M.val_of_string (String.strip b) in
+    if check_bounds processed 
+    then (String.strip a, processed)
+    else failwith "ranking not in bounds"
     
   let process_file (filename : string) : (mat * dict * dict) =
     (* a ref for storing owners and their indices *)
@@ -229,20 +338,25 @@ struct
 	   elt_index := !elt_index + 1)
 	| Some x ->
 	   update_matrix return_matrix (!owner_index - 1) 
-	     (int_of_string (D.string_of_value x)) b in
+	     (D.int_of_val x) b in
     List.iter file_lines ~f:add_to_dict;
     (return_matrix, !owner_dict, !elt_dict)
 end
 
-module FloatRead = Read (FloatMatrixArg) (Make(StringIntDictArg));;
-module FloatWrite = Write (FloatMatrixArg);;
+module MakeDict = Make(StringIntDictArg);;
+
+module FloatRead = Read (FloatMatrixArg)(MakeDict);;
+module FloatWrite = Write (FloatMatrixArg)(MakeDict);;
 
 (* Tests with Matrix operations *)
 FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
   "test_float_input.txt")) "test_output1.txt";;
 
-let my_float_matrix = Helpers.get_mat (FloatRead.process_file
- "test_float_input.txt");;
+let (my_float_matrix, my_owner_dict, my_elt_dict) = 
+  FloatRead.process_file "test_float_input.txt";;
 
-FloatWrite.mat_to_file (FloatMatrix.add_mat my_float_matrix 
-  (FloatMatrix.identity 5)) "test_output2.txt";;
+FloatWrite.mat_to_file ((add_mat my_float_matrix 
+  (identity 5))) "test_output2.txt";;
+
+FloatWrite.data_to_file (my_float_matrix, my_owner_dict, my_elt_dict)
+  "test_data_output.txt";;
