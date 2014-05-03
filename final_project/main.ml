@@ -11,14 +11,12 @@ let run_algorithms (input : string) (output : string) : unit =
   let open Read_write in
   let (input_mat, owner_dict, elt_dict) = FloatRead.process_file input in
   let formatted_input = FloatWrite.mat_formatted input_mat in
-  let open Pagerank in
-  let pagerank_mat = pageranks(input_mat) in
+  let pagerank_mat = Pagerank.pageranks(input_mat) in
   let pagerank_formatted = FloatWrite.mat_formatted pagerank_mat in
-  let cost_convert = cost_matrix(pagerank_mat) in
+  let cost_convert = Pagerank.cost_matrix(pagerank_mat) in
   let cost_formatted = FloatWrite.mat_formatted cost_convert in
-  let open Hungarian in
-  let hungarian_results = hungarian(cost_convert) in
-  let hungarian_formatted = format_hungarian hungarian_results owner_dict
+  let hungarian_results = Hungarian.hungarian(cost_convert) in
+  let hungarian_formatted = Hungarian.format_hungarian hungarian_results owner_dict
     elt_dict in
   let lists_append (lst : string list list) : string list =
     List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
@@ -55,4 +53,6 @@ let remove_rating (file : string) (owner : string) (elt : string) : unit =
 let parse_args () =
   let usage () = Printf.printf "usage: %s argument\n" Sys.argv.(0); exit 1 in
   if Array.length Sys.argv <> 3 then usage ()
-  else run_algorithms Sys.argv.(1) Sys.argv.(2)
+  else run_algorithms Sys.argv.(1) Sys.argv.(2);;
+
+parse_args ();

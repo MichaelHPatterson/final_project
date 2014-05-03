@@ -13,8 +13,8 @@ let pageranks (matrix : mat) =
   let dot_products = mult_mat matrix (transpose matrix) in
   let maxes = Array.map ~f:(Array.fold ~f:Float.max ~init:0.) dot_products in
   let max = Array.fold ~f:Float.max ~init:0. maxes in
-  let sum_vec v = Array.fold ~f:(+.) ~init:0. v in
-  let sum = sum_vec (Array.map ~f:sum_vec dot_products) in
+  (* let sum_vec v = Array.fold ~f:(+.) ~init:0. v in *)
+  (* let sum = sum_vec (Array.map ~f:sum_vec dot_products) in *)
   (* let avg = sum /. (float (Array.length matrix) ** 2.) in *)
   let dot_products = scalar_mult_mat dot_products (1. /. max) in
   let mat_exponential = exponentiate2 dot_products in
@@ -51,5 +51,3 @@ let tests (times : int) : unit =
     (*Thread.delay 1.*)
   done;
   Printf.printf "==============\nAVERAGE TIME: %f seconds\n\n" (!total_time /. (float times));;
-
-tests 20;;
