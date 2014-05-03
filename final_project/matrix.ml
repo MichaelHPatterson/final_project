@@ -543,7 +543,7 @@ let inv_print (m : M.mat) : unit =
   match M.inverse m with
   | None -> Printf.printf "The matrix is not invertible.\n\n"
   | Some m' -> Printf.printf "Inverse:\n"; M.print_mat m'; Printf.printf "\n"
-
+(*
 (* Verifying that the 5x5 identity matrix has an eigenbasis and is invertible *)
 let m1 = M.identity 5 in
 eigen_print m1;
@@ -584,3 +584,4 @@ inv_print m6;
 M.print_mat (M.exponentiate m6); Printf.printf "\n"
 ;;
 
+  *)

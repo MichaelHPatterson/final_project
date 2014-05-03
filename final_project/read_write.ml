@@ -76,10 +76,7 @@ sig
   type vec = mat_value array
   type mat = vec array
 
-  (* allows us to look up indices for use in Hungarian algorithm *)
-  val string_of_key : key -> string
-  val int_of_val : value -> int
-  val dict_fold : (key -> value -> 'a -> 'a) -> 'a -> dict -> 'a
+  val default : mat_value
 
   (* reads a .txt file of a specific invariant, returning the ranking matrix
    * Note: The ranking matrix will have the owners as rows and the elements as
@@ -103,8 +100,50 @@ struct
 end
 
 
+(* A functor for 1-5 rankings. *)
+module FloatMatrix5Arg : MATRIX_ARG =
+struct
+  type value = float
+
+  let string_of_val = Float.to_string
+
+  let val_of_string = Float.of_string
+
+  let default = 2.5
+  let min = 0.
+  let max = 5.
+end
+
+
+(* A functor for Like/Dislike ratings *)
+module FloatLikeArg : MATRIX_ARG =
+struct
+  type value = float
+
+  let string_of_val my_float =
+    match my_float with
+    | 0. -> "None"
+    | 1. -> "Like"
+    | -1. -> "Dislike"
+    | _ -> failwith "invalid value for Like ratings"
+
+  let val_of_string my_string =
+    match my_string with
+    | "None" -> 0.
+    | "Like" -> 1.
+    | "Dislike" -> -1.
+    | _ -> failwith "invalid value for Like string"
+
+  let default = 0.
+
+  let min = -1.0
+  let max = 1.0
+end
+
+
 (* Writes matrices of some type given by M to a text file. *)
-module Write(M: MATRIX_ARG) (D: DICT) : WRITE =
+module Write(M: MATRIX_ARG) (D: DICT) : (WRITE with type key = D.key
+  with type value = D.value with type dict = D.dict) =
 struct
   type key = D.key
   type value = D.value
@@ -223,6 +262,8 @@ struct
   type vec = mat_value array
   type mat = vec array
 
+  let default = M.default
+
   (* instantiates a square matrix of len dimensions *)
   let rank_matrix (len : int) = Array.make_matrix ~dimx:len ~dimy:len M.default
   
@@ -231,11 +272,6 @@ struct
    * two-dimensional arrays. However, it works for the make_matrix two-
    * dimensional arrays.
    * Array.create ~len:len (Array.create ~len:len 0.0) *)
-  
-
-  let string_of_key = D.string_of_key
-  let int_of_val = D.int_of_val
-  let dict_fold = D.fold
 
   (* converts the element-rank line into a (string, mat_value) tuple by 
    * splitting at the colon. Also, checks that all rankings are in the bounds of
@@ -243,11 +279,10 @@ struct
   let process_elt (line : string) =
     let (a, b) = String.rsplit2_exn line ~on:':' in
     let check_bounds my_val = (my_val >= M.min) && (my_val <= M.max) in
-    let process_val (str : string) =
-      let processed = M.val_of_string (String.strip b) in
-      if check_bounds processed 
-      then (String.strip a, M.val_of_string (String.strip b))
-      else failwith "ranking not in bounds"
+    let processed = M.val_of_string (String.strip b) in
+    if check_bounds processed 
+    then (String.strip a, processed)
+    else failwith "ranking not in bounds"
     
   let process_file (filename : string) : (mat * dict * dict) =
     (* a ref for storing owners and their indices *)
@@ -317,39 +352,11 @@ module FloatWrite = Write (FloatMatrixArg)(MakeDict);;
 FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
   "test_float_input.txt")) "test_output1.txt";;
 
-let my_float_matrix = Helpers.get_mat (FloatRead.process_file
- "test_float_input.txt");;
+let (my_float_matrix, my_owner_dict, my_elt_dict) = 
+  FloatRead.process_file "test_float_input.txt";;
 
 FloatWrite.mat_to_file ((add_mat my_float_matrix 
   (identity 5))) "test_output2.txt";;
 
-(* Test for Hungarian algorithm *)
-open FloatRead;;
-
-let format_hungarian (lst : (int * int) list) (owner_dict : dict)
-  (elt_dict : dict) : (string * string) list =
-  let open FloatRead in
-  let dict_list (d : dict) : ((string * int) list) = dict_fold (
-    fun k v acc -> ((string_of_key k),(int_of_val v)) :: acc) [] d in
-  let fst_sort a b : int =
-    let (x, _) = a in
-    let (y, _) = b in
-    Int.compare x y in
-  let snd_sort a b : int =
-    let (_, x) = a in
-    let (_, y) = b in
-    Int.compare x y in
-  let elt_sorted = List.sort ~cmp:snd_sort (dict_list elt_dict) in
-  let owner_sorted = List.sort ~cmp:snd_sort (dict_list owner_dict) in
-  let snd_results_sorted = List.sort ~cmp:snd_sort lst in
-  let elt_strings = List.map2_exn elt_sorted snd_results_sorted ~f:(
-    fun (x,_) (z,_) -> (z,x)) in
-  let fst_results_sorted = List.sort ~cmp:fst_sort elt_strings in
-  let add_owner_strings = List.map2_exn owner_sorted fst_results_sorted ~f:(
-    fun (x,_) (_,a) -> (x,a)) in
-  add_owner_strings
-
-let test_ints = [(0,4); (2,1); (1,3); (4,2); (3,0)];;
-
-let (hung_matrix, hung_owners, hung_elts) = FloatRead.process_file
-  "test_float_input.txt";;
+FloatWrite.data_to_file (my_float_matrix, my_owner_dict, my_elt_dict)
+  "test_data_output.txt";;

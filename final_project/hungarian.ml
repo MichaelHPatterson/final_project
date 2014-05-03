@@ -302,9 +302,12 @@ let hungarian (m : mat) : (int * int) list =
 (* formats the results of the Hungarian algorithm in terms of string pairs,
  * assuming that the argument is (owner index * elt index) pairs *)
 let format_hungarian (lst : (int * int) list) (owner_dict : dict)
-  (elt_dict : dict) : (string * string) list =
-  let dict_list (d : dict) : ((string * int) list) = dict_fold (
-    fun k v acc -> ((string_of_key k),(int_of_val v)) :: acc) [] d in
+  (elt_dict : dict) : string list =
+  let open Read_write in
+  let convert_to_string = MakeDict.string_of_key in
+  let convert_to_int = MakeDict.int_of_val in
+  let dict_list (d : dict) : ((string * int) list) = MakeDict.fold (
+    fun k v acc -> ((convert_to_string k),(convert_to_int v)) :: acc) [] d in
   let fst_sort a b : int =
     let (x, _) = a in
     let (y, _) = b in
@@ -321,12 +324,14 @@ let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   let fst_results_sorted = List.sort ~cmp:fst_sort elt_strings in
   let add_owner_strings = List.map2_exn owner_sorted fst_results_sorted ~f:(
     fun (x,_) (_,a) -> (x,a)) in
-  add_owner_strings
+  let string_format (s1 : string) (s2 : string) : string =
+	s1 ^ " matched with " ^ s2 in
+  List.map add_owner_strings ~f:(fun (x,y) -> string_format x y)
   
 (* expected results for our float_write_test *)
 let float_write_results = [("Bob", "Tobacco"); ("Janet", "Alcohol"); 
     ("Morgan", "LSD"); ("Po", "Weed"); ("Dan", "Heroin")]
-
+(*
 let format_test (test_ints : ((int * int) list))
   (expected_results : ((string * string) list)) (hung_owners : dict)
   (hung_elts : dict) : unit =
@@ -336,7 +341,7 @@ let format_test (test_ints : ((int * int) list))
       Out_channel.output_string stdout (x ^ "  " ^ y ^ "\n"); flush_all()) in
   if (expected_results = my_results) then 
     Out_channel.output_string stdout "Success" else print_results my_results
-
+ *)
 (* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
  * generating a matrix, and testing the algorithm. If it yields a result,
  * stop; else try again with another random matrix until it works. *)

@@ -9,23 +9,16 @@ open Matrix.FloatMatrix
 
 (* Returns an array of vectors, where each vector represents the pageranks of an
  * owner. pagerank = exponential of dot product matrix * owner's preference *)
-let pageranks (matrix : mat) : mat =
+let pageranks (matrix : mat) =
   let dot_products = mult_mat matrix (transpose matrix) in
-  (*Printf.printf "ORIGINAL MATRIX:\n"; print_mat dot_products; Printf.printf "\n";
-  let mat_exponential = exponentiate dot_products in
-  print_mat mat_exponential;
-  flush_all();*)
   let maxes = Array.map ~f:(Array.fold ~f:Float.max ~init:0.) dot_products in
   let max = Array.fold ~f:Float.max ~init:0. maxes in
   let sum_vec v = Array.fold ~f:(+.) ~init:0. v in
   let sum = sum_vec (Array.map ~f:sum_vec dot_products) in
-  let avg = sum /. (float (Array.length matrix) ** 2.) in
+  (* let avg = sum /. (float (Array.length matrix) ** 2.) in *)
   let dot_products = scalar_mult_mat dot_products (1. /. max) in
-  (*Printf.printf "DIVIDED MATRIX:\n"; print_mat dot_products; Printf.printf "\n"; flush_all ();*)
-  (*let mat_exponential = *)ignore(exponentiate2 dot_products)(* in
-  print_mat mat_exponential;
-  flush_all();
-  mult_mat mat_exponential matrix*)
+  let mat_exponential = exponentiate2 dot_products in
+  mult_mat mat_exponential matrix
 
 (* Converts a matrix of pageranks into a matrix of costs *)
 let cost_matrix (matrix : mat) : mat = 
