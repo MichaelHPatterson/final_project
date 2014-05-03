@@ -53,8 +53,6 @@ let run_algorithms (input : string) (output : string) : unit =
   let time7 = Unix.gettimeofday () in
   let hungarian_formatted = Hungarian.format_hungarian hungarian_results
     owner_dict elt_dict in
-  let hungarian_with_ranks = Pagerank.hungarian_ranks hungarian_formatted
-    (Pagerank.owners_ranks hungarian_results pagerank_mat) in
   let time8 = Unix.gettimeofday () in
 
   let lists_append (lst : string list list) : string list =
@@ -62,7 +60,7 @@ let run_algorithms (input : string) (output : string) : unit =
   let formatted_output = lists_append [["Input Rankings:\n"]; 
     formatted_input; ["Pagerank Rankings:\n"]; pagerank_formatted;
     ["Cost Matrix\n"]; cost_formatted; ["Hungarian Algorithm Results\n"];
-    hungarian_with_ranks] in
+    hungarian_formatted] in
   let time9 = Unix.gettimeofday () in
   Out_channel.write_lines output formatted_output;
   let time10 = Unix.gettimeofday () in
@@ -75,7 +73,7 @@ let run_algorithms (input : string) (output : string) : unit =
   Printf.printf "Time for formatting the Hungarian algorithm results for printing: %f\n" (time8 -. time7);
   Printf.printf "Time for combining all output for printing: %f\n" (time9 -. time8);
   Printf.printf "Time for printing to files: %f\n" (time10 -. time9);
-  flush_all ()
+  flush_all ())
   with (Sys_error error) ->
     if error = input ^ ": No such file or directory" then
       Printf.printf "The input file does not exist!\n"

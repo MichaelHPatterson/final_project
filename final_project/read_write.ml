@@ -54,6 +54,9 @@ sig
    * is originally read from *)
   val data_formatted : (mat * dict * dict) -> string list
 
+  (* writes matrix, owner dict, and elt dict directly to a file *)
+  val data_to_file : (mat * dict * dict) -> string -> unit
+
   (* runs tests for writing *)
   val run_tests : unit -> unit
 end
@@ -214,6 +217,10 @@ struct
       List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
     let formatted_out = lists_append (List.rev my_strings) in
     formatted_out
+
+  let data_to_file (input : (mat * dict * dict)) (file : string) : unit =
+    let string_list = data_formatted input in
+    Out_channel.write_lines file string_list
 
   let test_row () =
     let my_array = [| "1"; "2"; "3"; "4" |] in
