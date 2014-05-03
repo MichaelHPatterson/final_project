@@ -52,10 +52,7 @@ sig
 
   (* writes the matrix, owner dict, and elt dict to the invariant that the data
    * is originally read from *)
-  val data_to_file : (mat * dict * dict) -> string -> unit
-
-  (* writes a matrix to a file of specified name *)
-  val mat_to_file : mat -> string -> unit
+  val data_formatted : (mat * dict * dict) -> string list
 
   (* runs tests for writing *)
   val run_tests : unit -> unit
@@ -181,13 +178,9 @@ struct
     let to_strings = string_mat_to_strings string_matrix (max_len + 1) in
       to_strings
 
-  (* converts matrix to string matrix, formats, and writes to file *)
-  let mat_to_file (matrix : mat) (filename : string) : unit =
-    Out_channel.write_lines filename (mat_formatted matrix)
-
   (* converts the matrix, owner dict, and elt dict into the file invariant of
    * inputs *)
-  let data_to_file (input : (mat * dict * dict)) (filename : string) : unit =
+  let data_formatted (input : (mat * dict * dict)) : string list =
     let (input_mat, owner_dict, elt_dict) = input in
     let key_value_list (d: dict) = D.fold (fun k v acc -> ((D.string_of_key k),
       (D.int_of_val v)) :: acc) [] d in
@@ -220,8 +213,7 @@ struct
     let lists_append (lst : string list list) : string list =
       List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
     let formatted_out = lists_append (List.rev my_strings) in
-    Out_channel.write_lines filename formatted_out
-
+    formatted_out
 
   let test_row () =
     let my_array = [| "1"; "2"; "3"; "4" |] in
@@ -233,15 +225,9 @@ struct
     let result = string_mat_to_strings my_mat 2 in
     assert (result = [" 1 2 3 4"; " 2 3 4 5"])
 
-  let test_mat_to_file () =
-    let my_mat = [| [| 1.5; 2.0; 3.0; 4.0 |]; [| 5.0; 6.0; 7.0; 8.0 |];
-    [| 9.0; 10.0; 11.0; 12.0 |]; [| 13.0; 14.0; 15.0; 16.0 |] |] in
-    mat_to_file my_mat "write_test.txt"
-
   let run_tests () =
     test_row ();
     test_mat ();
-    test_mat_to_file ();
     ()
 end
 

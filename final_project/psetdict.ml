@@ -311,8 +311,8 @@ struct
   (* empty dict is just a leaf *)
   let empty : dict = Leaf
 
-  let string_of_key = D.string_of_key
-  let int_of_val = D.int_of_val
+  let _string_of_key = D.string_of_key
+  let _int_of_val = D.int_of_val
 
   (* folds over the whole function, starting with the top node of the tree and
    * then moving down, evaluating right branches of Two Branches before left

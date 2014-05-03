@@ -263,7 +263,8 @@ let hungarian (m : mat) : (int * int) list =
   | Unfinished lst -> (print_mat m; Printf.printf "\n"; print_results lst; let time3 = Unix.gettimeofday () in let x = steps_34 m lst in let time4 = Unix.gettimeofday () in Printf.printf "Proceeded to steps 3 and 4. Checking is_finished took %f seconds, while steps 3 and 4 took %f seconds.\n" (time3 -. time2) (time4 -. time3); x)
   
 (* formats the results of the Hungarian algorithm in terms of string pairs,
- * assuming that the argument is (owner index * elt index) pairs *)
+ * assuming that the argument is (owner index * elt index) pairs. Sorted in 
+ * ascending order based on owner index *)
 let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   (elt_dict : dict) : string list =
   let convert_to_string = string_of_key in

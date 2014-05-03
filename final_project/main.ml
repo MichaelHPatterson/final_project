@@ -35,31 +35,34 @@ module FloatWrite = Write(FloatMatrixArg)(MakeDict);;
 let run_algorithms (input : string) (output : string) : unit =
   let time1 = Unix.gettimeofday () in
   let (input_mat, owner_dict, elt_dict) = FloatRead.process_file input in
-  let formatted_input = FloatWrite.mat_formatted input_mat in
+  let formatted_input = 
+    FloatWrite.data_formatted (input_mat, owner_dict, elt_dict) in
   let time2 = Unix.gettimeofday () in
   let pagerank_mat = Pagerank.pageranks(input_mat) in
   let time3 = Unix.gettimeofday () in
-  let pagerank_formatted = FloatWrite.mat_formatted pagerank_mat in
+  let pagerank_formatted = 
+    FloatWrite.data_formatted (pagerank_mat, owner_dict, elt_dict) in
   let time4 = Unix.gettimeofday () in
   let cost_convert = Pagerank.cost_matrix(pagerank_mat) in
   let time5 = Unix.gettimeofday () in
-  let cost_formatted = FloatWrite.mat_formatted cost_convert in
+  let cost_formatted = 
+    FloatWrite.data_formatted (cost_convert, owner_dict, elt_dict) in
   let time6 = Unix.gettimeofday () in
   let hungarian_results = Hungarian.hungarian(cost_convert) in
   let time7 = Unix.gettimeofday () in
-
   let hungarian_formatted = Hungarian.format_hungarian hungarian_results
     owner_dict elt_dict in
+  let hungarian_with_ranks = Pagerank.hungarian_ranks hungarian_formatted
+    (Pagerank.owners_ranks hungarian_results pagerank_mat) in
   let time8 = Unix.gettimeofday () in
 
   let lists_append (lst : string list list) : string list =
     List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
-  let formatted_output = lists_append [["Input Matrix of Rankings:"]; 
-    formatted_input; ["Matrix of Pageranks:"]; pagerank_formatted;
-    ["Cost Matrix"]; cost_formatted; ["Hungarian Algorithm Results"];
-     hungarian_formatted] in
+  let formatted_output = lists_append [["Input Rankings:\n"]; 
+    formatted_input; ["Pagerank Rankings:\n"]; pagerank_formatted;
+    ["Cost Matrix\n"]; cost_formatted; ["Hungarian Algorithm Results\n"];
+    hungarian_with_ranks] in
   let time9 = Unix.gettimeofday () in
-  FloatWrite.data_to_file (input_mat, owner_dict, elt_dict) "saved_output";
   Out_channel.write_lines output formatted_output;
   let time10 = Unix.gettimeofday () in
   Printf.printf "Time for reading and formatting input: %f\n" (time2 -. time1);
@@ -89,7 +92,8 @@ let update_rating (file : string) (owner: string) (elt : string)
   | (Some _, None) -> failwith "invalid elt string -- not in file!"
   | (Some x, Some y) -> update_matrix input_mat (MakeDict.int_of_val x) 
       (MakeDict.int_of_val y) updated_value);
-  FloatWrite.data_to_file (input_mat, owner_dict, elt_dict) file
+  let string_results = FloatWrite.data_formatted (input_mat, owner_dict, elt_dict) in
+    Out_channel.write_lines file string_results
   
 let remove_rating (file : string) (owner : string) (elt : string) : unit =
   update_rating file owner elt FloatRead.default
