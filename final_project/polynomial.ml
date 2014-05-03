@@ -2,13 +2,12 @@ open Core.Std
 
 exception AlgorithmError
 
-(********************* TYPES AND OPERATIONS FOR POLYNOMIALS *********************)
-
 (* Type for polynomials; stores coefficients, starting with the constant value.
  * (Starting from the constant instead of the highest exponent ensures that the
  * index of each element equals the corresponding exponent.) *)
 type poly = float array
 
+(* Prints out the coefficients in a polynomial. *)
 let print_poly (p : poly) : unit =
   Printf.printf "[|%f" p.(0);
   for i = 1 to Array.length p - 1 do
