@@ -6,7 +6,7 @@
 
 open Core.Std
 open Matrix.FloatMatrix
-open Read_write.FloatRead
+open Psetdict.StringIntDict
 
 exception Empty
 exception AlgorithmError
@@ -269,15 +269,14 @@ let hungarian (m : mat) : (int * int) list =
   match is_finished m with
   | Finished lst -> (let time3 = Unix.gettimeofday () in Printf.printf "Finished using just steps 1 and 2. Checking is_finished took %f seconds.\n" (time3 -. time2); lst)
   | Unfinished lst -> (print_mat m; Printf.printf "\n"; print_results lst; let time3 = Unix.gettimeofday () in let x = steps_34 m lst in let time4 = Unix.gettimeofday () in Printf.printf "Proceeded to steps 3 and 4. Checking is_finished took %f seconds, while steps 3 and 4 took %f seconds.\n" (time3 -. time2) (time4 -. time3); x)
-
+  
 (* formats the results of the Hungarian algorithm in terms of string pairs,
  * assuming that the argument is (owner index * elt index) pairs *)
 let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   (elt_dict : dict) : string list =
-  let open Read_write in
-  let convert_to_string = MakeDict.string_of_key in
-  let convert_to_int = MakeDict.int_of_val in
-  let dict_list (d : dict) : ((string * int) list) = MakeDict.fold (
+  let convert_to_string = string_of_key in
+  let convert_to_int = int_of_val in
+  let dict_list (d : dict) : ((string * int) list) = fold (
     fun k v acc -> ((convert_to_string k),(convert_to_int v)) :: acc) [] d in
   let fst_sort (x,_) (y,_) : int = Int.compare x y in
   let snd_sort (_,x) (_,y) : int = Int.compare x y in
@@ -292,7 +291,7 @@ let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   let string_format (s1 : string) (s2 : string) : string =
 	s1 ^ " matched with " ^ s2 in
   List.map add_owner_strings ~f:(fun (x,y) -> string_format x y)
-  
+
 (* expected results for our float_write_test *)
 let float_write_results = [("Bob", "Tobacco"); ("Janet", "Alcohol"); 
     ("Morgan", "LSD"); ("Po", "Weed"); ("Dan", "Heroin")]

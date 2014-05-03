@@ -345,24 +345,6 @@ end
 
 module MakeDict = Make(StringIntDictArg);;
 
-let ranking1 = (module FloatMatrixArg : MATRIX_ARG);;
-let ranking2 = (module FloatMatrix5Arg : MATRIX_ARG);;
-let ranking3 = (module FloatLikeArg : MATRIX_ARG);;
-
-let my_functor_list = [ranking1; ranking2; ranking3];;
-
-let rec get_functor x lst =
-  match lst with
-  | y :: ys -> if x <= 0 then y else get_functor (x - 1) ys
-  | _ -> failwith "ran out of elts in list";;
-
-let my_functor = get_functor !(Main.functor_ind);;
-
-module MatrixRank = (val my_functor : MATRIX_ARG);;
-
-module FloatRead = Read(MatrixRank)(MakeDict);;
-module FloatWrite = Write(MatrixRank)(MakeDict);;
-
 (*
 (* Tests with Matrix operations *)
 FloatWrite.mat_to_file ((fun (x,_,_) -> x) (FloatRead.process_file 

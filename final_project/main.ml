@@ -7,47 +7,32 @@
 open Core.Std
 open Read_write
 
+
 let functor_ind = ref 0;;
 
-(* Parses command-line arguments, running the algorithms on the specified file.
- * Returns an error if incorrect number of args provided. *)
-let parse_args () =
-  let match_rank_type (str : string) : unit =
-    match str with
-    | "0to10" -> functor_ind := 0;
-    | "0to5" -> functor_ind := 1;
-    | "LiketoDislike" -> functor_ind := 2;
-    | _ -> failwith "invalid ranking type" in
+let ranking1 = (module FloatMatrixArg : MATRIX_ARG);;
+let ranking2 = (module FloatMatrix5Arg : MATRIX_ARG);;
+let ranking3 = (module FloatLikeArg : MATRIX_ARG);;
 
-  let usage () =
-    let main = "usage " ^ Sys.argv.(0) in
-    let my_string = main ^ " [input file] [output file] [rank method] OR \n" ^
-      main ^ " update [input file] [owner] [elt] [value] [rank method] OR \n" ^
-	main ^ " remove [input file] [owner] [elt] [rank method] \n" in
-    Out_channel.output_string stdout my_string; exit 1 in
+let my_functor_list = [ranking1; ranking2; ranking3];;
 
-  match Array.length Sys.argv with
-  | 4 -> match_rank_type (Sys.argv.(3)); 
-	 run_algorithms Sys.argv.(1) Sys.argv.(2);
-  | 6 -> 
-     (match Sys.argv.(1) with
-      | "remove" -> match_rank_type (Sys.argv.(5));
-		    remove_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4);
-      | _ -> failwith "invalid argument: expected \"remove\"")
-  | 7 -> 
-     (match Sys.argv.(1) with
-      | "update" -> 
-	 match_rank_type (Sys.argv.(6));
-	 update_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4) 
-           (Float.of_string Sys.argv.(5));
-      | _ -> failwith "invalid argument: expected \"update\"")
-  | _ -> usage ();;
+let rec get_functor x lst =
+  match lst with
+  | y :: ys -> if x <= 0 then y else get_functor (x - 1) ys
+  | _ -> failwith "ran out of elts in list";;
 
-parse_args ();;
+let my_functor = get_functor (!(functor_ind)) my_functor_list;;
 
+module MatrixRank = (val my_functor : MATRIX_ARG);;
+
+module FloatRead = Read(MatrixRank)(MakeDict);;
+module FloatWrite = Write(MatrixRank)(MakeDict);;
+
+(*
+module FloatRead = Read(FloatMatrixArg)(MakeDict);;
+module FloatWrite = Write(FloatMatrixArg)(MakeDict);;
+ *)
 let run_algorithms (input : string) (output : string) : unit =
-
-
   let time1 = Unix.gettimeofday () in
   let (input_mat, owner_dict, elt_dict) = FloatRead.process_file input in
   let formatted_input = FloatWrite.mat_formatted input_mat in
@@ -108,3 +93,39 @@ let update_rating (file : string) (owner: string) (elt : string)
   
 let remove_rating (file : string) (owner : string) (elt : string) : unit =
   update_rating file owner elt FloatRead.default
+
+(* Parses command-line arguments, running the algorithms on the specified file.
+ * Returns an error if incorrect number of args provided. *)
+let parse_args () =
+  let match_rank_type (str : string) : unit =
+    match str with
+    | "0to10" -> functor_ind := 0;
+    | "0to5" -> functor_ind := 1;
+    | "LiketoDislike" -> functor_ind := 2;
+    | _ -> failwith "invalid ranking type" in
+
+  let usage () =
+    let main = "usage " ^ Sys.argv.(0) in
+    let my_string = main ^ " [input file] [output file] [rank method] OR \n" ^
+      main ^ " update [input file] [owner] [elt] [value] [rank method] OR \n" ^
+	main ^ " remove [input file] [owner] [elt] [rank method] \n" in
+    Out_channel.output_string stdout my_string; exit 1 in
+
+  match Array.length Sys.argv with
+  | 4 -> match_rank_type (Sys.argv.(3));
+	 run_algorithms Sys.argv.(1) Sys.argv.(2);
+  | 6 -> 
+     (match Sys.argv.(1) with
+      | "remove" -> match_rank_type (Sys.argv.(5));
+		    remove_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4);
+      | _ -> failwith "invalid argument: expected \"remove\"")
+  | 7 -> 
+     (match Sys.argv.(1) with
+      | "update" -> 
+	 match_rank_type (Sys.argv.(6));
+	 update_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4) 
+           (Float.of_string Sys.argv.(5));
+      | _ -> failwith "invalid argument: expected \"update\"")
+  | _ -> usage ();;
+
+parse_args ();;
