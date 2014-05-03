@@ -1,11 +1,11 @@
-all: read_write.ml psetdict.ml helpers.ml hungarian.ml pagerank.ml main.ml
+all: main.ml read_write.ml psetdict.ml helpers.ml hungarian.ml pagerank.ml
+	corebuild main.native
 	corebuild read_write.native
 	corebuild psetdict.native
 	corebuild helpers.native
 	corebuild hungarian.native
 	corebuild matrix.native
 	corebuild pagerank.native
-	corebuild main.native
 
 read_write: corebuild read_write.native
 
