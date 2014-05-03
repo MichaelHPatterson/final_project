@@ -314,14 +314,6 @@ let rec test1 () : unit =
   | Finished r -> print_results r);
   flush_all ()
 
-let my_matrix = [| [| 586.; 12909.; 3164.; 8271.; 16741. |]; 
-                   [| 8421.; 17309.; 10279.; 13950.; 20069. |]; 
-                   [| 10386.; 18385.; 12054.; 15384.; 20891. |];
-                   [| 0.; 12578.; 2628.; 7845.; 16494. |];
-                   [| 6742.; 16370.; 8761.; 12743.; 19361. |] |] in
-hungarian_test my_matrix;
-Printf.printf "\n"
-
 
 (* Test function that gives a feel for runtimes and optimality. *)
 let test2 (dim : int) (num_tries : int) : unit =
@@ -345,4 +337,5 @@ let test2 (dim : int) (num_tries : int) : unit =
   Printf.printf "took %f seconds.\n" avg_time;
   flush_all ()
 
-in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 100; test2 18 100; test2 20 100; test2 30 1; test2 40 1
+let run_tests () =
+  test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 100; test2 18 100; test2 20 100; test2 30 1; test2 40 1; test2 50 1; test2 75 1; test2 90 1; test2 100 1; test2 250 1
