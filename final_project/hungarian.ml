@@ -208,7 +208,12 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
       | Finished lst -> lst
       | Unfinished lst -> steps_34 m lst
 
-(* Helpful function used for testing. *)
+
+
+(****************************FUNCTIONS FOR TESTING*****************************)
+
+(* Tests the algorithm by printing a matrix, carrying out the algorithm, and
+ * printing out the results. *)
 let hungarian_test (m : mat) : unit =
   print_mat m;
   let m = steps_12 m in
