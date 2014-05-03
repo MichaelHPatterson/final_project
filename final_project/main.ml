@@ -47,19 +47,15 @@ let run_algorithms (input : string) (output : string) : unit =
     let cost_formatted = FloatWrite.mat_formatted cost_convert in
     let time6 = Unix.gettimeofday () in
     let hungarian_results = Hungarian.hungarian(cost_convert) in
-    let lowest_cost = List.fold_left ~f:(fun c (a,b) -> c +. cost_convert.(a).(b)) ~init:0. hungarian_results in
-    Hungarian.brute_force_n cost_convert 100000 lowest_cost;
-    Printf.printf "LOWEST COST: %f\n" lowest_cost;
     let time7 = Unix.gettimeofday () in
     let hungarian_formatted = Hungarian.format_hungarian hungarian_results
 							 owner_dict elt_dict in
     let time8 = Unix.gettimeofday () in
-    let formatted_output = List.concat [["Input Matrix of Rankings:"]; 
-      formatted_input; ["Matrix of Pageranks:"]; pagerank_formatted;
-      ["Cost Matrix"]; cost_formatted; ["Hungarian Algorithm Results"];
+    let formatted_output = List.concat [["Input Rankings:\n"]; 
+      formatted_input; ["Pagerank Rankings:\n"]; pagerank_formatted;
+      ["Cost Matrix\n"]; cost_formatted; ["Hungarian Algorithm Results\n"];
       hungarian_formatted] in
     let time9 = Unix.gettimeofday () in
-    FloatWrite.data_to_file (input_mat, owner_dict, elt_dict) "saved_output";
     Out_channel.write_lines output formatted_output;
     let time10 = Unix.gettimeofday () in
     Printf.printf "Time for reading and formatting input: %f\n" (time2 -. time1);
