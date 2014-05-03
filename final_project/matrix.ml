@@ -217,10 +217,11 @@ struct
         (* (b) DIVIDE by this entry to get a pivotal 1. *)
         m.(n) <- scalar_mult_vec m.(n) (1. /. value);
 
-        (* (c) SUBTRACT multiples of the first row from the others to clear out the
-            rest of the column under the pivotal 1. *)
+        (* (c) SUBTRACT multiples of the first row from the others to clear out
+            the rest of the column under the pivotal 1. *)
         for i = 0 to len - 1 do
-	  if i <> n then m.(i) <- add_vec m.(i) (scalar_mult_vec m.(n) (-1. *. m.(i).(n)))
+	  if i <> n then
+	    m.(i) <- add_vec m.(i) (scalar_mult_vec m.(n) (-1. *. m.(i).(n)))
 	done;
 
 	col_reduce_past m (n + 1) (piv + 1)
@@ -237,8 +238,10 @@ struct
       if Array.length m.(i) <> n then raise NotSquare;
       for j = 0 to n - 1 do
 	if i = j then
-	  (if Float.abs (m.(i).(j) -. 1.) > precision then id_tracker := false)
-	else if Float.abs m.(i).(j) > precision then id_tracker := false
+	  (if Float.abs (m.(i).(j) -. 1.) > precision then
+	     id_tracker := false)
+	else if Float.abs m.(i).(j) > precision then
+	  id_tracker := false
       done
     done;
     !id_tracker
@@ -259,42 +262,14 @@ struct
 	done;
 	Some result
 
-  (* Returns the eigenvalues and eigenvectors of a matrix m. This is an old
-   * function that we abandoned -- it is unable to deal with matrices that
-   * have repeated eigenvalues but have a basis of eigenvectors. *)
-  let eigen_old (m : mat) : (float * vec) array =
-    let dim = Array.length m in
-    let start : vec = zero_vec dim in
-    Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 100. +. 5.) start;
-    let new_vec = ref start in
-    let new_mat = zero_mat (dim + 1) dim in
-    new_mat.(0) <- !new_vec;
-    for i = 0 to dim - 1 do
-      new_vec := mult_vec m !new_vec;
-      new_mat.(i+1) <- !new_vec
-    done;
-    let p =
-      let (matrix,_) = row_reduce new_mat in
-      Array.append (scalar_mult_vec matrix.(dim) (-1.)) [|1.|] in
-    let roots = Polynomial.newton_all_slow p (-1000., 1000.) 1. 0.01 0.0001 in
-    let eigenvalues = List.to_array roots in
-    let f (index : int) (e : float) : float * vec =
-      let v = ref start in
-      for j = 0 to Array.length eigenvalues - 1 do
-	if index <> j then
-	  let matrix = add_identity m ((-1.) *. eigenvalues.(j)) in
-	  v := mult_vec matrix !v
-      done;
-      (e, !v)
-    in
-    Array.mapi ~f eigenvalues
-
   (* Returns the eigenvalues and eigenvectors of m. The algorithm starts with
    * some vector v, then keeps applying m to that matrix until a linearly
    * independent set is found. That linear combination can be used to
    * construct a polynomial, whose roots (found in polynomial.ml) are
    * eigenvalues of m. *)
-  let eigen_new (m : mat) : (float * vec) array =
+  (* Note: As stated in the documentation, this function sometimes fails, so
+   * we are not using it for any of the real functionality. *)
+  let eigen (m : mat) : (float * vec) array =
     let dim = Array.length m in
     let rec find (start_vec : vec) (v : vec) (curr : mat)
 		 ((l,u) : float * float) : (float * vec) list =
@@ -334,24 +309,15 @@ struct
     let rec find_all (found : (float * vec) list) ((l,u) : float * float)
 	    : (float * vec) list =
       let start = gen_vec () in
-      Printf.printf "\nStarting with vector: "; print_vec start; Printf.printf "\n\n";
       let remove_repeats (evs : (float * vec) list) : (float * vec) list =
 	let f lst (e,v) =
-	  (e,v) :: (List.filter ~f:(fun (_,v') -> let b = not (is_mult v v' 0.01) in if b then true else (Printf.printf "The vector: "; print_vec v; Printf.printf "\nis a scalar multiple of the vector: "; print_vec v'; Printf.printf "\n"; false)) lst)
+	  (e,v) :: (List.filter ~f:(fun (_,v') -> not (is_mult v v' 0.01)) lst)
 	in List.fold_left ~f ~init:[] evs
       in
-      let evs = find start start [|start|] (l,u) @ found in
-      Printf.printf "WITHOUT REMOVING REPEATS:\n";
-      List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
-      Printf.printf "\n";
+      let evs = remove_repeats (find start start [|start|] (l,u) @ found) in
       let evs = remove_repeats evs in
-      Printf.printf "AFTER REMOVING REPEATS:\n";
-      List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
-      Printf.printf "\n"; flush_all ();
       let num_found = List.length evs in
-      Printf.printf "Have found a total of %i so far.\n" num_found; flush_all ();
-      if num_found < dim then find_all evs (l,u)
-      else (Printf.printf "Done!\n"; List.iter ~f:(fun (_,v) -> print_vec v; Printf.printf "\n") evs; flush_all (); evs)
+      if num_found < dim then find_all evs (l,u) else evs
     in
     let rec call_finder ((l,u) : float * float) : (float * vec) list =
       try (try (
@@ -375,7 +341,6 @@ struct
       )
       with IndexOutOfBounds -> call_finder (2. *. l, 2. *. u))
       with InversionError -> call_finder (2. *. l, 2. *. u) in
-    Printf.printf "Analyzing the matrix:\n"; print_mat m; flush_all ();
     List.to_array (call_finder (-100.,100.))
 
   (* Estimates e by summing 1/i! from i=0 to i=precision. This could also be
@@ -392,30 +357,10 @@ struct
       else e_rec (from + 1) (curr +. (1. /. (float (factorial from))))
     in e_rec 0 0.
 
-  (* Exponentiates a matrix nearly exactly, by (1) computing a decomposition
-   * and writing m as P*D*(inverse P) for a matrix P and a diagonal matrix D
-   * using the eigenvalue/vector function above, and then (2) computing exp(m),
-   * which is equal to P*exp(D)*(inverse P). *)
+  (* Computes exp(m) by summing m^i/i! from i=1 to i=2*dim, where dim is the
+   * dimension of the matrix. (The value 2*dim is used because typically, terms
+   * past m^(2*dim)/(2*dim)! are small enough to be negligible. *)
   let exponentiate (m : mat) : mat =
-    let dim = Array.length m in
-    let eigenbasis = zero_mat dim dim in
-    let diagonal = zero_mat dim dim in
-    let f i (value, vector) : unit =
-      diagonal.(i) <- scalar_mult_vec (basis_vec ~dim i) ((e 15) ** value);
-      eigenbasis.(i) <- vector
-    in
-    let es = eigen_new m in
-    Array.iteri ~f es;
-    let inv = match inverse eigenbasis with
-      | None -> raise InversionError
-      | Some matrix -> matrix
-    in mult_mat eigenbasis (mult_mat diagonal inv)
-
-  (* Computes exp(m) more roughly by summing m^i/i! from i=1 to i=2*dim,
-   * where dim is the dimension of the matrix. (The value 2*dim is used
-   * because typically, terms past m^(2*dim)/(2*dim)! are basically
-   * negligible. *)
-  let exponentiate2 (m : mat) : mat =
     let dim = Array.length m in
     let stop = dim * 2 in
     let rec exp_helper (curr : mat) (last : mat) (pos : int) : mat =
@@ -425,6 +370,27 @@ struct
 	exp_helper (add_mat curr next) next (pos + 1) in
     let i = identity dim in
     exp_helper i i 1
+
+  (* Exponentiates a matrix by (1) computing an eigendecomposition and writing
+   * m as P*D*(inverse P) for a matrix P and a diagonal matrix D by using the
+   * eigen function above, and then (2) computing exp(m), which is equal to
+   * P*exp(D)*(inverse P). *)
+  (* Because of issues with the eigen function, we do not use this function
+   * anywhere. *)
+  let exponentiate_old (m : mat) : mat =
+    let dim = Array.length m in
+    let eigenbasis = zero_mat dim dim in
+    let diagonal = zero_mat dim dim in
+    let f i (value, vector) : unit =
+      diagonal.(i) <- scalar_mult_vec (basis_vec ~dim i) ((e 15) ** value);
+      eigenbasis.(i) <- vector
+    in
+    let es = eigen m in
+    Array.iteri ~f es;
+    let inv = match inverse eigenbasis with
+      | None -> raise InversionError
+      | Some matrix -> matrix
+    in mult_mat eigenbasis (mult_mat diagonal inv)
 
   (* Takes a matrix m of rankings, and computes m^T * m (where m^T is the
    * transpose of m), which is the matrix of element relationships. *)
@@ -441,7 +407,7 @@ let eigen_print (m : M.mat) : unit =
     M.print_vec vector;
     Printf.printf "\n"
   in
-  Array.iter ~f (M.eigen_new m);
+  Array.iter ~f (M.eigen m);
   Printf.printf "\n"
 
 let inv_print (m : M.mat) : unit =
