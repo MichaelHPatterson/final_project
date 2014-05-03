@@ -14,8 +14,11 @@ exception AlgorithmError
 Random.self_init ();;
 
 (* Represents how sensitive the program is about values close to zero. A value
- * that is less than zero_sensitivity is*)
+ * that is less than zero_sensitivity is considered equal to 0. *)
 let zero_sensitivity = 0.01;;
+
+
+(*******************************HELPER FUNCTIONS*******************************)
 
 (* Adds a scalar value to every element in a vector. *)
 let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
@@ -47,6 +50,10 @@ let find_min_vec (v : vec) : float =
 (* Subtracts the smallest element of v from each element, so that its lowest
  * element is zero and all other elements are nonnegative. *)
 let shift_to_zero (v : vec) : vec = add_to_vec v ((-1.) *. (find_min_vec v))
+
+
+
+(********************************CORE ALGORITHM********************************)
 
 (* Subtracts the lowest element from each row, and from each column. Called
  * "steps_12" because these actions are described as steps 1 and 2 of the
@@ -159,9 +166,10 @@ let mark_zeros (m : mat) (curr : (int * int) list) : int list * int list =
   done;
   (!marked_cols, !marked_rows)
       
-
 (* Carries out steps 3 and 4 of the Hungarian algorithm, assuming that the
- * parameter matrix m has already undergone steps 1 and 2. *)
+ * parameter matrix m has already undergone steps 1 and 2. Subtracts the
+ * smallest unmarked value from all unmarked values and adds it to all double-
+ * marked values, and repeats that process until an assignment can be done. *)
 let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
   let dim = Array.length m in
   if List.length assignments = dim then assignments
@@ -200,7 +208,12 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
       | Finished lst -> lst
       | Unfinished lst -> steps_34 m lst
 
-(* Helpful function used for testing. *)
+
+
+(****************************FUNCTIONS FOR TESTING*****************************)
+
+(* Tests the algorithm by printing a matrix, carrying out the algorithm, and
+ * printing out the results. *)
 let hungarian_test (m : mat) : unit =
   print_mat m;
   let m = steps_12 m in
