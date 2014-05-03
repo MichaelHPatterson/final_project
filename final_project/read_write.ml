@@ -271,10 +271,9 @@ struct
    * the limits in the matrix functor *)
   let process_elt (line : string) =
     let (a, b) = String.rsplit2_exn line ~on:':' in
-    let check_bounds my_val = (my_val >= M.min) && (my_val <= M.max) in
+    let check_bounds my_val = my_val >= M.min && my_val <= M.max in
     let processed = M.val_of_string (String.strip b) in
-    if check_bounds processed 
-    then (String.strip a, processed)
+    if check_bounds processed then (String.strip a, processed)
     else failwith "ranking not in bounds"
     
   let process_file (filename : string) : (mat * dict * dict) =
