@@ -275,7 +275,6 @@ struct
 		 ((l,u) : float * float) : (float * vec) list =
       let next_vec = mult_vec m v in
       let curr = Array.append curr [|next_vec|] in
-      print_mat curr; Printf.printf "\n";
       let size = Array.length curr in
       let (test_mat, piv) = row_reduce curr in
       if size = piv then find start_vec next_vec curr (l,u)
@@ -286,11 +285,8 @@ struct
 	    let _ = test_mat.(size - 1).(size - 1) <- (-1.) in
 	    test_mat.(size - 1)
         in
-	Printf.printf "Analyzing polynomial: "; print_vec p; Printf.printf "\n";
-	let roots = Polynomial.newton_all_slow p (l,u) 0.1 0.01 0.00001 in
+	let roots = Polynomial.newton_all p (l,u) 0.1 0.01 0.00001 in
 	let eigenvalues = List.to_array roots in
-	Printf.printf "Found %i eigenvalues:" (Array.length eigenvalues);
-	Array.iter ~f:(fun e -> Printf.printf " %f" e) eigenvalues; Printf.printf "\n";
 	let f (index : int) (e : float) : float * vec =
 	  let v = ref start_vec in
 	  for j = 0 to Array.length eigenvalues - 1 do
@@ -299,7 +295,8 @@ struct
 	      v := mult_vec matrix !v
 	  done;
 	  (e, !v)
-	in let a = Array.to_list (Array.filter ~f:(fun (e,v) -> let b = not (is_zero_vec v 0.00001) in if b then true else (Printf.printf "The following vector, with eigenvalue %f, is the zero vector and is being excluded: " e; print_vec v; Printf.printf "\n"; flush_all (); false)) (Array.mapi ~f eigenvalues)) in (Printf.printf "Length: %i\n" (List.length a); a)
+	in let not_zero (_,v) = not (is_zero_vec v 0.00001) in
+        Array.to_list (Array.filter ~f:not_zero (Array.mapi ~f eigenvalues))
       in
     let gen_vec () : vec =
       let start : vec = zero_vec dim in

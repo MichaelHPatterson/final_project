@@ -5,7 +5,6 @@
  * algorithm, which minimizes the cost of matching in a cost matrix. *)
 
 open Core.Std
-open Polynomial
 open Matrix.FloatMatrix
 open Psetdict.StringIntDict
 
