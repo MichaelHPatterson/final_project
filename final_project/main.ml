@@ -7,8 +7,45 @@
 open Core.Std
 open Read_write
 
+let functor_ind = ref 0;;
+
+(* Parses command-line arguments, running the algorithms on the specified file.
+ * Returns an error if incorrect number of args provided. *)
+let parse_args () =
+  let match_rank_type (str : string) : unit =
+    match str with
+    | "0to10" -> functor_ind := 0;
+    | "0to5" -> functor_ind := 1;
+    | "LiketoDislike" -> functor_ind := 2;
+    | _ -> failwith "invalid ranking type" in
+
+  let usage () =
+    let main = "usage " ^ Sys.argv.(0) in
+    let my_string = main ^ " [input file] [output file] [rank method] OR \n" ^
+      main ^ " update [input file] [owner] [elt] [value] [rank method] OR \n" ^
+	main ^ " remove [input file] [owner] [elt] [rank method] \n" in
+    Out_channel.output_string stdout my_string; exit 1 in
+
+  match Array.length Sys.argv with
+  | 4 -> match_rank_type (Sys.argv.(3)); 
+	 run_algorithms Sys.argv.(1) Sys.argv.(2);
+  | 6 -> 
+     (match Sys.argv.(1) with
+      | "remove" -> match_rank_type (Sys.argv.(5));
+		    remove_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4);
+      | _ -> failwith "invalid argument: expected \"remove\"")
+  | 7 -> 
+     (match Sys.argv.(1) with
+      | "update" -> 
+	 match_rank_type (Sys.argv.(6));
+	 update_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4) 
+           (Float.of_string Sys.argv.(5));
+      | _ -> failwith "invalid argument: expected \"update\"")
+  | _ -> usage ();;
+
+parse_args ();;
+
 let run_algorithms (input : string) (output : string) : unit =
-  let open Read_write in
   let (input_mat, owner_dict, elt_dict) = FloatRead.process_file input in
   let formatted_input = FloatWrite.mat_formatted input_mat in
   let pagerank_mat = Pagerank.pageranks(input_mat) in
@@ -16,8 +53,8 @@ let run_algorithms (input : string) (output : string) : unit =
   let cost_convert = Pagerank.cost_matrix(pagerank_mat) in
   let cost_formatted = FloatWrite.mat_formatted cost_convert in
   let hungarian_results = Hungarian.hungarian(cost_convert) in
-  let hungarian_formatted = Hungarian.format_hungarian hungarian_results owner_dict
-    elt_dict in
+  let hungarian_formatted = Hungarian.format_hungarian hungarian_results
+    owner_dict elt_dict in
   let lists_append (lst : string list list) : string list =
     List.fold_right lst ~f:(fun x acc -> x @ acc) ~init:[] in
   let formatted_output = lists_append [["Input Matrix of Rankings:"]; 
@@ -46,13 +83,3 @@ let update_rating (file : string) (owner: string) (elt : string)
   
 let remove_rating (file : string) (owner : string) (elt : string) : unit =
   update_rating file owner elt FloatRead.default
-
-
-(* Parses command-line arguments, running the algorithms on the specified file.
- * Returns an error if incorrect number of args provided. *)
-let parse_args () =
-  let usage () = Printf.printf "usage: %s argument\n" Sys.argv.(0); exit 1 in
-  if Array.length Sys.argv <> 3 then usage ()
-  else run_algorithms Sys.argv.(1) Sys.argv.(2);;
-
-parse_args ();
