@@ -12,34 +12,11 @@ open Read_write.FloatRead
 exception Empty
 exception AlgorithmError
 
-Random.self_init ();
+Random.self_init ();;
 
-module type HUNGARIAN =
-sig
-  type value
-  type vec
-  type mat
-
-  (* allows us to compensate for floating-point inprecision -- this allows us to
-   * treat numbers so close to 0 as practically 0 *)
-  val zero_sensitivity : float
-
-  (* runs the Hungarian algorithm on the matrix, returning (int * int) tuples
-   * that represent the matches of columns and rows *)
-  val optimize : mat -> (int * int) option
-
-  (* prints the results of running the Hungarian algorithm  *)
-  val print_results : (int * int) list -> unit
-end
-
-(* NOTE: I have switched the meaning of columns and rows, relative to the
- * Wikipedia article (i.e. in this implementation, each column represents
- * a person and each row represents a choice, rather than vice versa). *)
-
+(* Represents how sensitive the program is about values close to zero. A value
+ * that is less than zero_sensitivity is*)
 let zero_sensitivity = 0.01;;
-
-
-
 
 (* Adds a scalar value to every element in a vector. *)
 let add_to_vec (v : vec) (x : float) : vec = Array.map ~f:((+.) x) v
@@ -76,11 +53,13 @@ let shift_to_zero (v : vec) : vec = add_to_vec v ((-1.) *. (find_min_vec v))
  * "steps_12" because these actions are described as steps 1 and 2 of the
  * algorithm on Wikipedia. *)
 let steps_12 (m : mat) : mat =
-  transpose (Array.map ~f:shift_to_zero (transpose (Array.map ~f:shift_to_zero m)))
+  let m = Array.map ~f:shift_to_zero m in
+  transpose (Array.map ~f:shift_to_zero (transpose m))
 
 (* A type used below to check whether ALL assignments can be made (Finished), or
  * that's not yet possible (Unfinished). *)
-type hungarian_status = Finished of (int * int) list | Unfinished of (int * int) list
+type hungarian_status = Finished of (int * int) list
+		      | Unfinished of (int * int) list
 
 (* Checks the current matrix to see if an optimal assignment can be carried out
  * based on the locations of 0's in m, after applying steps_12. *)
@@ -88,8 +67,8 @@ let is_finished (m : mat) : hungarian_status =
   let zeros : int list array = Array.map ~f:zero_indices m in
   let dim = Array.length m in
   let result : (int * int) list ref = ref [] in
-  let is_assigned ((person, element) : int * int) (results : (int * int) list) : bool =
-    List.exists ~f:(fun (p,e) -> p = person || e = element ) results in
+  let is_assigned ((a,b) : int * int) (results : (int * int) list) : bool =
+    List.exists ~f:(fun (a',b') -> a' = a || b' = b ) results in
   let f i l =
     match l with
     | [j] -> if not (is_assigned (i,j) !result) then result := (i,j) :: !result
@@ -108,44 +87,47 @@ let is_finished (m : mat) : hungarian_status =
     let unassigned_people = ref [] in
     let unassigned_elts = ref [] in
     for i = 0 to dim - 1 do
-      if not (List.exists ~f:(fun (p,_) -> p = i) !result)
+      if not (List.exists ~f:(fun (a,_) -> a = i) !result)
       then unassigned_people := i :: !unassigned_people;
-      if not (List.exists ~f:(fun (_,e) -> e = i) !result)
+      if not (List.exists ~f:(fun (_,b) -> b = i) !result)
       then unassigned_elts := i :: !unassigned_elts;
     done;
-    let possible_new = List.cartesian_product !unassigned_people !unassigned_elts in
-    let possible_new = List.filter ~f:(fun (p,e) -> not (is_assigned (p,e) !result) && is_zero m.(p).(e)) possible_new in
+    let poss_new = List.cartesian_product !unassigned_people !unassigned_elts in
+    let f (a,b) = not (is_assigned (a,b) !result) && is_zero m.(a).(b) in
+    let poss_new = List.filter ~f poss_new in
     let best_possible = ref !result in
-    let rec check_finished (possible_pairs : (int * int) list) (curr_results : (int * int) list) : hungarian_status =
-      match possible_pairs with
+    let rec check_finished (possible : (int * int) list)
+			   (curr : (int * int) list) : hungarian_status =
+      match possible with
       | [] ->
-	 (match Int.compare (List.length curr_results) dim with
+	 (match Int.compare (List.length curr) dim with
 	  | 1 -> raise AlgorithmError
-	  | 0 -> Finished curr_results
-	  | _ -> Unfinished curr_results)
-      | (p,e) :: possible_pairs' ->
-	 if is_assigned (p,e) curr_results then check_finished possible_pairs' curr_results
+	  | 0 -> Finished curr
+	  | _ -> Unfinished curr)
+      | (p,e) :: possible' ->
+	 if is_assigned (p,e) curr then check_finished possible' curr
 	 else
-	   (match check_finished possible_pairs' ((p,e) :: curr_results) with
+	   (match check_finished possible' ((p,e) :: curr) with
 	    | Unfinished r ->
-	       if List.length r > List.length !best_possible then best_possible := r;
-	       check_finished possible_pairs' curr_results
+	       if List.length r > List.length !best_possible then
+		 best_possible := r;
+	       check_finished possible' curr
 	    | Finished r -> Finished r)
     in
-    match check_finished possible_new !result with
+    match check_finished poss_new !result with
     | Finished r -> Finished r
     | Unfinished _ -> Unfinished !best_possible
 
 (* "Marks" the columns and rows of m, returning the smallest set of markings
  * required to cover all zeros in m. Takes the matrix m and the assignments made
- * so far as arguments. *)
-let mark_zeros (m : mat) (assignments : (int * int) list) : int list * int list =
+ * so far as arguments (which is the list "curr"). *)
+let mark_zeros (m : mat) (curr : (int * int) list) : int list * int list =
   let unmarked_cols : int list ref = ref [] in
   let marked_rows : int list ref = ref [] in
   let dim = Array.length m in
   (* Mark all columns having no assignments. *)
   for i = 0 to dim - 1 do
-    if List.fold_left ~f:(fun b (c,_) -> b && c <> i) ~init:true assignments then
+    if List.fold_left ~f:(fun b (c,_) -> b && c <> i) ~init:true curr then
       unmarked_cols := i :: !unmarked_cols
   done;
   let do_loop () =
@@ -159,7 +141,7 @@ let mark_zeros (m : mat) (assignments : (int * int) list) : int list * int list 
     (* Mark all columns having assignments in marked rows. *)
     let f2 (r : int) : unit =
       let f i _ =
-	if List.mem assignments (i,r) && not (List.mem !unmarked_cols i)
+	if List.mem curr (i,r) && not (List.mem !unmarked_cols i)
 	then unmarked_cols := i :: !unmarked_cols in
       Array.iteri ~f (transpose m).(r) in
     List.iter ~f:f2 !marked_rows
@@ -186,23 +168,31 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
   if List.length assignments = dim then assignments
   else
     let (marked_cols, marked_rows) = mark_zeros m assignments in
-    let unmarked = Array.map ~f:(Array.filteri ~f:(fun r _ -> not (List.mem marked_rows r))) (Array.filteri ~f:(fun c _ -> not (List.mem marked_cols c)) m) in
-    (*********** This structure here is terrible -- figure out a better way to check whether the matrix is assignable without risking an error, and without having the dummy line "raise AlgorithmError", if possible ***********)
-    (**************************** THIS SOMETIMES CAUSES ALGORITHMERROR TO GET RAISED ****************************)
+    let f c _ = not (List.mem marked_cols c) in
+    let unmarked = Array.filteri ~f m in
+    let f = Array.filteri ~f:(fun r _ -> not (List.mem marked_rows r)) in
+    let unmarked = Array.map ~f unmarked in
     if Array.length unmarked = 0 || Array.length unmarked.(0) = 0 then
       match is_finished m with
       | Finished lst -> lst
-      | Unfinished _ -> raise AlgorithmError
+      | Unfinished _ ->
+	 (* This branch should never be reached; if it is, something's wrong *)
+	 raise AlgorithmError
     else
       let min (c : vec) : float = Array.fold_right ~f:Float.min ~init:c.(0) c in
-      let min_unmarked = Array.fold_right ~f:(fun col init -> Float.min (min col) init) ~init:unmarked.(0).(0) unmarked in
-      let is_double_marked c r = List.mem marked_cols c && List.mem marked_rows r in
-      let is_unmarked c r = not (List.mem marked_cols c || List.mem marked_rows r) in
+      let f col init = Float.min (min col) init in
+      let min_unmarked = Array.fold_right ~f ~init:unmarked.(0).(0) unmarked in
+      let is_double_marked c r =
+	List.mem marked_cols c && List.mem marked_rows r in
+      let is_unmarked c r =
+	not (List.mem marked_cols c || List.mem marked_rows r) in
       let _ = try
 	  (for c = 0 to dim - 1 do
 	     for r = 0 to dim - 1 do
-	       if is_double_marked c r then m.(c).(r) <- m.(c).(r) +. min_unmarked
-	       else if is_unmarked c r then m.(c).(r) <- m.(c).(r) -. min_unmarked
+	       if is_double_marked c r then
+		 m.(c).(r) <- m.(c).(r) +. min_unmarked
+	       else if is_unmarked c r then
+		 m.(c).(r) <- m.(c).(r) -. min_unmarked
 	     done
 	   done)
 	with (Invalid_argument "index out of bounds") -> raise Matrix.NotSquare
@@ -221,7 +211,7 @@ let hungarian_test (m : mat) : unit =
     let results = steps_34 m results in
     print_results results
 
-(* Generates a random set of assignments, andn returns the "cost" of that
+(* Generates a random set of assignments, andn return the cost of that
  * random permutation. Helps for testing optimality. *)
 let brute_force (m : mat) : float =
   let len = Array.length m in
@@ -249,7 +239,8 @@ let brute_force_n (m : mat) (n : int) (lowest_cost : float) : unit =
   done;
   List.iter ~f:(fun c -> assert (c >= lowest_cost)) !costs
 
-(* Generates a random dim x dim matrix of integers from 0 to 99 *)
+(* Generates a random dim x dim matrix of integers (casted as floats) from 0 to
+ * 99, inclusive. *)
 let random_matrix (dim : int) : mat =
   let m : mat = zero_mat dim dim in
   for i = 0 to dim - 1 do
@@ -316,8 +307,8 @@ let test2 (dim : int) (num_tries : int) : unit =
     brute_force_n matrix 100 cost
   done;
   let avg_time = !total_time /. (float num_tries) in
-  Printf.printf "On average, for %ix%i matrices, each test took %f, " dim dim avg_time;
-  Printf.printf "or (%i * %f)^3, seconds.\n" dim (avg_time ** (1. /. 3.) /. (float dim));
+  Printf.printf "On average, for %ix%i matrices, each test " dim dim;
+  Printf.printf "took %f seconds.\n" avg_time;
   flush_all ()
 
-in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 100; test2 18 100; test2 20 100; test2 30 1; test2 40 1; test2 50 1; test2 75 1; test2 90 1; test2 100 1; test2 250 1
+in test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 100; test2 18 100; test2 20 100; test2 30 1; test2 40 1

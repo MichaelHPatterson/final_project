@@ -13,88 +13,14 @@ exception NotSquare
 exception InversionError
 
 Random.self_init ();;
-
-module type MATRIX =
-sig
-  (* type of elements in the matrix *)
-  type value = float
-  (* type for the vector *)
-  type vec = value array
-  (* type for the matrix - an array of columns *)
-  type mat = vec array
-
-  (* takes dimension as an int argument and returns 0 vec of that dim *)
-  val zero_vec : int -> vec
-
-  (* takes number of columns as first arg, number of rows as second arg, and 
-   * returns 0 matrix of those dimensions *)
-  val zero_mat : int -> int -> mat
-
-  (* Constructs the nth standard basis vector (zero-indexed) in R^dim, where
-   * dim is the first int argument and n is the second *)
-  val basis_vec : dim:int -> int -> vec
-
-  (* takes one argument for dimension and returns identity matrix *)
-  val identity : int -> mat
-
-  (* performs specified operation on two vectors, returning another vector *)
-  val map2 : f:(value -> value -> 'a) -> vec -> vec -> 'a array
-	 
-  (* adds two vectors together *)
-  val add_vec : vec -> vec -> vec
-
-  (* adds two same-dimension matrices together *)
-  val add_mat : mat -> mat -> mat
-
-  (* returns the scalar multiple of a vector *)
-  val scalar_mult_vec : vec -> float -> vec
-
-  (* returns the scalar multiple of a matrix *)
-  val scalar_mult_mat : mat -> float -> mat
-
-  (* Multiplies a square matrix m with a vector v. *)
-  val mult_vec : mat -> vec -> vec
-
-  (* Multiplies two square matrices in order *)
-  val mult_mat : mat -> mat -> mat
-
-  (* Takes the tranpose of the matrix, making their columns into rows *)
-  val transpose : mat -> mat
- 
-  (* Swaps two columns, denoted by int arguments, in the matrix *)
-  val swap : mat -> int -> int -> unit
-
-  (* Performs row-reduction on a matrix, returning a mat * int tuple because
-   * the int keeps track of pivotal columns used in eigenvalue calculation *)
-  val row_reduce : mat -> (mat * int)
-
-  (* Prints vectors or matrices to the command line *)
-  val print_vec : vec -> unit
-  val print_mat : mat -> unit
-
-  (* Returns the inverse of matrix, or None if it is not invertible *)
-  val inverse : mat -> mat option
-
-  (* Finds the eigensystem of a matrix, defined as an array of float-vector
-   * tuples. *)
-  val eigen : mat -> (float * vec) array
-
-  (* calculates e to a certain level of precision, given by an int *)
-  val e : int -> float
-  
-  (* calculates the matrix exponential of a given matrix *)
-  val exponentiate : mat -> mat
-
-  (* diagonalizes a matrix, returning a tuple of a matrix of an orthnormal
-     eigenbasis and a diagonal matrix of eigenvalues *)
-  val diagonalize : mat -> (mat * mat)
-end
 								  
-(* Note: this is just preliminary and could require some modifications. *)
+(* A module for matrices of floats. *)
 module FloatMatrix =
 struct
   type value = float
+  (* each vector is an array of floats *)
   type vec = value array
+  (* each matrix is an array of vectors (where each sub-array is a column) *)
   type mat = vec array
 
   (* Generates a vector of 0's with length len. *)
@@ -108,7 +34,7 @@ struct
   let is_zero_vec (v : vec) (precision : float) : bool =
     Array.for_all v ~f:(fun x -> Float.abs x <= precision)
 
-  (* Computes the transpose of the matrix m. *)
+  (* Computes the transpose of the m (switching columns and rows). *)
   let transpose (m : mat) : mat =
     let num_cols = Array.length m in
     if num_cols = 0 then m
@@ -124,7 +50,7 @@ struct
       done;
       result
 
-  (* Prints out a vector. *)
+  (* Prints out a vector (used for testing). *)
   let print_vec (v : vec) : unit =
     let len = Array.length v in
     if len = 0 then ()
@@ -136,7 +62,7 @@ struct
       Printf.printf "}";
       flush_all ()
 
-  (* Prints out a matrix. *)
+  (* Prints out a matrix (for testing purposes). *)
   let print_mat (m : mat) : unit =
     Printf.printf "{";
     Array.iter ~f:(fun v -> print_vec v; Printf.printf ",\n") (transpose m);
@@ -150,11 +76,13 @@ struct
   let scalar_mult_mat (m : mat) (factor : float) : mat =
     Array.map ~f:(fun v -> scalar_mult_vec v factor) m
 
+  (* Checks whether v1 and v2 are equal, given a specified precision level. *)
   let equal_vec (v1 : vec) (v2 : vec) (precision : float) : bool =
     let f a b = Float.abs (a -. b) <= precision in
     try (Array.for_all2_exn ~f v1 v2)
     with (Invalid_argument _) -> raise SizeMismatch
 
+  (* Checks whether m1 and m2 are equal, given a specified precision level. *)
   let equal_mat (m1 : mat) (m2 : mat) (precision : float) : bool =
     try (Array.for_all2_exn ~f:(fun v1 v2 -> equal_vec v1 v2 precision) m1 m2)
     with (Invalid_argument _) -> raise SizeMismatch
@@ -174,9 +102,8 @@ struct
       let v1' = scalar_mult_vec v2 first_non_nan in
       let min_val = Array.fold ~f:Float.min ~init:v1'.(0) v1' in
       equal_vec v1 (scalar_mult_vec v2 first_non_nan) (perc *. min_val)
-      (* Array.for_all ~f:(fun r -> first_non_nan -. r <= precision || Float.is_nan r) ratios *)
 
-  (* Constructs the nth basis vector (zero-indexed) in R^dim. *)
+  (* Constructs the nth standard basis vector (zero-indexed) in R^dim. *)
   let basis_vec ~(dim : int) (n : int) : vec =
     if n >= dim then raise IndexOutOfBounds
     else
@@ -188,7 +115,7 @@ struct
   let identity (dim : int) : mat =
     Array.init dim ~f:(fun i -> basis_vec ~dim i)
 
-  (* Computes [|f l1.(0) l2.(0); f l1.(1); f l2.(1); ...|]. *)
+  (* Computes [|f l1.(0) l2.(0); f l1.(1) l2.(1); ...; f l1.(n) l2.(n)|]. *)
   let map2 ~(f : float -> float -> 'a) (l1 : vec) (l2 : vec) : 'a array =
     let len1 = Array.length l1 in
     if len1 <> Array.length l2 then raise SizeMismatch
@@ -255,35 +182,36 @@ struct
       m.(n1) <- m.(n2);
       m.(n2) <- v
 
-  (* Row_reduces a matrix. Seems to be working properly, but further testing
-   * couldn't hurt. The steps of the algorithm, from my math class, are pasted
-   * in as comments. *)
+  (* Row_reduces a matrix. The steps of the algorithm (taken directly from Math
+   * 23a lecture notes) are pasted in as comments. Returns the row-reduced
+   * matrix and the rank (number of pivotal columns) of m. *)
   let row_reduce (m : mat) : mat * int =
-    (* Column reduces rows n through Array.length m - 1 of m. Assumes that <piv>
+    (* Column reduces rows n through Array.length m - 1 of m. Assumes that piv
      * pivotal 1's have been generated so far. *)
     let rec col_reduce_past (m : mat) (n : int) (piv : int) : mat * int =
       let len = Array.length m in
       if len = 0 then (m, piv)
       else let height = Array.length m.(0) in
-      if n >= len || n >= height || piv >= len || piv >= height then (m, piv) else
+      if n >= len || n >= height || piv >= len || piv >= height then (m, piv)
+      else
       (* (a) SWAP rows so that the leftmost column that is not all zeroes has a
              nonzero entry in the first row. *)
       (* Returns the column index of the first nonzero element in the specified
        * row <row>, ignoring the first <piv> elements. *)
-      let first_nonzero (m : mat) (row : int) : (int * float) option =
-	let len = Array.length m in
-        let ans = ref (len, 0.) in
-        for i = len - 1 downto piv do
-	  if m.(i).(row) <> 0. then ans := (i, m.(i).(row))
-	done;
-        let (c, _) = !ans in if c = len then None else Some !ans
-      in
-      match first_nonzero m n with
-      | None ->
-        (* No pivotal 1 found in that row. *)
-        col_reduce_past m (n + 1) piv
-      | Some (swap_col, value) ->
-        (* Pivotal value of <value> found in <swap_col>th position. *)
+	let first_nonzero (m : mat) (row : int) : (int * float) option =
+	  let len = Array.length m in
+          let ans = ref (len, 0.) in
+          for i = len - 1 downto piv do
+	    if m.(i).(row) <> 0. then ans := (i, m.(i).(row))
+	  done;
+          let (c, _) = !ans in if c = len then None else Some !ans
+	in
+	match first_nonzero m n with
+	| None ->
+           (* No pivotal 1 found in that row. *)
+           col_reduce_past m (n + 1) piv
+	| Some (swap_col, value) ->
+           (* Pivotal value of <value> found in <swap_col>th position. *)
 	swap m n swap_col;
 
         (* (b) DIVIDE by this entry to get a pivotal 1. *)
@@ -305,27 +233,24 @@ struct
       try (Array.sub m ~pos:0 ~len:n)
       with (Invalid_argument _) -> raise IndexOutOfBounds in
     let id_tracker = ref true in
-    let _ = try
-    (for i = 0 to n - 1 do
+    for i = 0 to n - 1 do
       if Array.length m.(i) <> n then raise NotSquare;
       for j = 0 to n - 1 do
 	if i = j then
 	  (if Float.abs (m.(i).(j) -. 1.) > precision then id_tracker := false)
 	else if Float.abs m.(i).(j) > precision then id_tracker := false
       done
-    done)
-    (* Given a properly constructed matrix, the only way an index could go out
-     * of bounds in the statements above is if m is not square. *)
-    with (Invalid_argument "index out of bounds") -> raise NotSquare
-    in !id_tracker
+    done;
+    !id_tracker
 
-  (* Inverts a square matrix with the help of row-reduction. *)
+  (* Inverts a square matrix with the help of row-reduction. Returns None if
+   * the matrix is not invertible, or Some of the inverse if it is.*)
   let inverse (m : mat) : mat option =
     let width = Array.length m in
     let height = Array.length m.(0) in
     if width <> height then raise NotSquare
     else
-      let new_mat : mat = let (m,_) = row_reduce (Array.append m (identity width)) in m in
+      let (new_mat,_) = row_reduce (Array.append m (identity width)) in
       if not (is_identity new_mat width 0.001) then None
       else
 	let result : mat = zero_mat width height in
@@ -334,13 +259,10 @@ struct
 	done;
 	Some result
 
-  (* Returns the eigenvalues and eigenvectors of a matrix m. *)
-  (* Note: The call to Polynomial.newton_all_slow doesn't work with C-c C-e; it
-   * requires compilation from the terminal. *)
-  (* Note: I'm not sure if this works with matrices that have repeated
-   * eigenvalues but still have an eigenbasis (e.g. it doesn't work for identity
-   * matrices). *)
-  let eigen (m : mat) : (float * vec) array =
+  (* Returns the eigenvalues and eigenvectors of a matrix m. This is an old
+   * function that we abandoned -- it is unable to deal with matrices that
+   * have repeated eigenvalues but have a basis of eigenvectors. *)
+  let eigen_old (m : mat) : (float * vec) array =
     let dim = Array.length m in
     let start : vec = zero_vec dim in
     Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 100. +. 5.) start;
@@ -352,8 +274,10 @@ struct
       new_mat.(i+1) <- !new_vec
     done;
     let p =
-      Array.append (scalar_mult_vec (let (m,_) = row_reduce new_mat in m).(dim) (-1.)) [|1.|] in
-    let eigenvalues = List.to_array (Polynomial.newton_all_slow p (-1000., 1000.) 1. 0.01 0.0001) in
+      let (matrix,_) = row_reduce new_mat in
+      Array.append (scalar_mult_vec matrix.(dim) (-1.)) [|1.|] in
+    let roots = Polynomial.newton_all_slow p (-1000., 1000.) 1. 0.01 0.0001 in
+    let eigenvalues = List.to_array roots in
     let f (index : int) (e : float) : float * vec =
       let v = ref start in
       for j = 0 to Array.length eigenvalues - 1 do
@@ -365,16 +289,15 @@ struct
     in
     Array.mapi ~f eigenvalues
 
-  (* This version of the function is slower (it row-reduces after every
-   * application of the matrix instead of applying the matrix n times first).
-   * It might be necessary to prevent a corner case in which the starting
-   * vector is an eigenvector of m. However, it's probably better to just use
-   * the version above, because: (1) given the infinitude of the real numbers,
-   * the probability of that corner case should be 0, and (2) I'm pretty sure
-   * the other version would still work with that corner case. *)
+  (* Returns the eigenvalues and eigenvectors of m. The algorithm starts with
+   * some vector v, then keeps applying m to that matrix until a linearly
+   * independent set is found. That linear combination can be used to
+   * construct a polynomial, whose roots (found in polynomial.ml) are
+   * eigenvalues of m. *)
   let eigen_new (m : mat) : (float * vec) array =
     let dim = Array.length m in
-    let rec find (start_vec : vec) (v : vec) (curr : mat) ((l,u) : float * float) : (float * vec) list =
+    let rec find (start_vec : vec) (v : vec) (curr : mat)
+		 ((l,u) : float * float) : (float * vec) list =
       let next_vec = mult_vec m v in
       let curr = Array.append curr [|next_vec|] in
       print_mat curr; Printf.printf "\n";
@@ -384,10 +307,13 @@ struct
       else
 	let p =
 	  if size > dim then Array.append test_mat.(size - 1) [|-1.|]
-          else let _ = test_mat.(size - 1).(size - 1) <- (-1.) in test_mat.(size - 1)
+	  else
+	    let _ = test_mat.(size - 1).(size - 1) <- (-1.) in
+	    test_mat.(size - 1)
         in
 	Printf.printf "Analyzing polynomial: "; print_vec p; Printf.printf "\n";
-	let eigenvalues = List.to_array (Polynomial.newton_all_slow p (l,u) 0.1 0.01 0.00001) in
+	let roots = Polynomial.newton_all_slow p (l,u) 0.1 0.01 0.00001 in
+	let eigenvalues = List.to_array roots in
 	Printf.printf "Found %i eigenvalues:" (Array.length eigenvalues);
 	Array.iter ~f:(fun e -> Printf.printf " %f" e) eigenvalues; Printf.printf "\n";
 	let f (index : int) (e : float) : float * vec =
@@ -405,7 +331,8 @@ struct
       Array.iteri ~f:(fun i _ -> start.(i) <- Random.float 10. +. 5.) start;
       start
     in
-    let rec find_all (already_found : (float * vec) list) ((l,u) : float * float) : (float * vec) list =
+    let rec find_all (found : (float * vec) list) ((l,u) : float * float)
+	    : (float * vec) list =
       let start = gen_vec () in
       Printf.printf "\nStarting with vector: "; print_vec start; Printf.printf "\n\n";
       let remove_repeats (evs : (float * vec) list) : (float * vec) list =
@@ -413,7 +340,7 @@ struct
 	  (e,v) :: (List.filter ~f:(fun (_,v') -> let b = not (is_mult v v' 0.01) in if b then true else (Printf.printf "The vector: "; print_vec v; Printf.printf "\nis a scalar multiple of the vector: "; print_vec v'; Printf.printf "\n"; false)) lst)
 	in List.fold_left ~f ~init:[] evs
       in
-      let evs = find start start [|start|] (l,u) @ already_found in
+      let evs = find start start [|start|] (l,u) @ found in
       Printf.printf "WITHOUT REMOVING REPEATS:\n";
       List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
       Printf.printf "\n";
@@ -422,9 +349,9 @@ struct
       List.iter ~f:(fun (e,v) -> Printf.printf "Eigenvalue %f ===> Eigenvector " e; print_vec v; Printf.printf "\n") evs;
       Printf.printf "\n"; flush_all ();
       let num_found = List.length evs in
-      Printf.printf "Have found a total of %i so far.\n" num_found; flush_all (); Thread.delay (if dim > 3 then 1. else 0.5);
+      Printf.printf "Have found a total of %i so far.\n" num_found; flush_all ();
       if num_found < dim then find_all evs (l,u)
-      else (Printf.printf "Done!\n"; List.iter ~f:(fun (_,v) -> print_vec v; Printf.printf "\n") evs; flush_all (); (*Thread.delay 1.; *)evs)
+      else (Printf.printf "Done!\n"; List.iter ~f:(fun (_,v) -> print_vec v; Printf.printf "\n") evs; flush_all (); evs)
     in
     let rec call_finder ((l,u) : float * float) : (float * vec) list =
       try (try (
@@ -434,18 +361,20 @@ struct
 	  let p : mat ref = ref [||] in
 	  let d : mat ref = ref [||] in
 	  let n : int ref = ref 0 in
-	  List.iter ~f:(fun (a,v) -> p := Array.append !p [|v|]; d := Array.append !d [|scalar_mult_vec (basis_vec ~dim !n) a|]; n := !n + 1) e;
+	  let f (a,v) =
+	    p := Array.append !p [|v|];
+	    d := Array.append !d [|scalar_mult_vec (basis_vec ~dim !n) a|];
+	    n := !n + 1 in
+	  List.iter ~f e;
 	  let m' =
 	    match inverse !p with
 	    | None -> raise InversionError
 	    | Some matrix -> mult_mat (mult_mat !p !d) matrix in
-	  if (let b = equal_mat m m' 0.1 in if b then true else let _ = (Printf.printf "Function screwed up!\n"; flush_all (); print_mat m') in false) then e
+	  if equal_mat m m' 0.1 then e
 	  else call_finder (2. *. l, 2. *. u)
-(*	if List.for_all ~f:(fun (_,v) -> let b = is_mult (mult_vec m v) v 0.5 in if b then true else (let _ = (Printf.printf "Function screwed up!\nVector: "; print_vec v; Printf.printf "\nMultiplied by matrix: "; print_vec (mult_vec m v); Printf.printf "\n"; flush_all ()) in false)) e then e
-	else call_finder (2. *. l, 2. *. u)*)
       )
-      with IndexOutOfBounds -> (Printf.printf "Index out of bounds!\n"; flush_all (); call_finder (2. *. l, 2. *. u)))
-      with InversionError -> (Printf.printf "Algorithm error!\n"; flush_all (); call_finder (2. *. l, 2. *. u)) in
+      with IndexOutOfBounds -> call_finder (2. *. l, 2. *. u))
+      with InversionError -> call_finder (2. *. l, 2. *. u) in
     Printf.printf "Analyzing the matrix:\n"; print_mat m; flush_all ();
     List.to_array (call_finder (-100.,100.))
 
@@ -463,53 +392,29 @@ struct
       else e_rec (from + 1) (curr +. (1. /. (float (factorial from))))
     in e_rec 0 0.
 
-  (* This is still in development -- e.g. it has an incomplete match statement at the bottom. *)
+  (* Exponentiates a matrix nearly exactly, by (1) computing a decomposition
+   * and writing m as P*D*(inverse P) for a matrix P and a diagonal matrix D
+   * using the eigenvalue/vector function above, and then (2) computing exp(m),
+   * which is equal to P*exp(D)*(inverse P). *)
   let exponentiate (m : mat) : mat =
     let dim = Array.length m in
     let eigenbasis = zero_mat dim dim in
     let diagonal = zero_mat dim dim in
     let f i (value, vector) : unit =
-      Printf.printf "Dimension: %i. Constructing %ith standard basis vector.\n" dim i;
       diagonal.(i) <- scalar_mult_vec (basis_vec ~dim i) ((e 15) ** value);
       eigenbasis.(i) <- vector
     in
-    let g (value, vector) =
-      Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
-      print_vec vector;
-      Printf.printf "\n"
-    in
     let es = eigen_new m in
-    Array.iter ~f:g es;
-    Printf.printf "\n";
     Array.iteri ~f es;
-    Printf.printf "Matrix of eigenvectors:\n"; print_mat eigenbasis; Printf.printf "\n";
     let inv = match inverse eigenbasis with
       | None -> raise InversionError
       | Some matrix -> matrix
     in mult_mat eigenbasis (mult_mat diagonal inv)
 
-  (*let exponentiate2 (m : mat) : mat =
-    let dim = Array.length m in
-    let prec = Float.to_int (float dim *. 1.5) + 1 in
-    let mat_pow (m : mat) (p : int) =
-      let rec mat_pow_helper (curr : mat) (m : mat) (p : int) =
-	if p <= 0 then curr
-	else mat_pow_helper (mult_mat curr m) m (p - 1)
-      in mat_pow_helper (identity dim) m p
-    in
-    let rec factorial (n : int) : float =
-      if n <= 0 then 1.
-      else (float n) *. factorial (n - 1) in
-    let rec exp_helper (m : mat) (prec : int) (curr : mat) : mat =
-      if prec < 0 then curr
-      else
-	let next_term = scalar_mult_mat (mat_pow m prec) (1. /. (factorial prec)) in
-	if prec = dim || prec = Float.to_int (1.5 *. (float dim)) then
-	  (Printf.printf "\nNow adding m^%i/%i!, which is:\n" prec prec;
-	   print_mat next_term);
-	exp_helper m (prec - 1) (add_mat curr next_term)
-    in exp_helper m prec (zero_mat dim dim)*)
-
+  (* Computes exp(m) more roughly by summing m^i/i! from i=1 to i=2*dim,
+   * where dim is the dimension of the matrix. (The value 2*dim is used
+   * because typically, terms past m^(2*dim)/(2*dim)! are basically
+   * negligible. *)
   let exponentiate2 (m : mat) : mat =
     let dim = Array.length m in
     let stop = dim * 2 in
@@ -584,4 +489,4 @@ eigen_print m6;
 inv_print m6;
 M.print_mat (M.exponentiate m6); Printf.printf "\n"
 ;;
-  *)
+*)

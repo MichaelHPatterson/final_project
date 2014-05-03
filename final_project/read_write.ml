@@ -244,5 +244,5 @@ FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file
 let my_float_matrix = Helpers.get_mat (FloatRead.process_file
  "test_float_input.txt");;
 
-FloatWrite.mat_to_file ((FloatMatrix.add_mat my_float_matrix 
-  (FloatMatrix.identity 5))) "test_output2.txt";;
+FloatWrite.mat_to_file (FloatMatrix.add_mat my_float_matrix 
+  (FloatMatrix.identity 5)) "test_output2.txt";;
