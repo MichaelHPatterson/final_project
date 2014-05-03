@@ -81,13 +81,17 @@ let update_rating (file : string) (owner: string) (elt : string)
   (updated_value : FloatRead.mat_value) : unit =
   try (try (
     let (input_mat, owner_dict, elt_dict) = FloatRead.process_file file in
-    let keyified_owner = MakeDict.key_of_string owner in
-    let keyified_elt = MakeDict.key_of_string elt in
+    let check_bounds my_val = my_val >= MatrixRank.min && my_val <=
+        MatrixRank.max in
+    if check_bounds updated_value then ()
+    else failwith "updated value not in bounds";
+    let keyified_owner = MakeDict.key_of_string (String.strip owner) in
+    let keyified_elt = MakeDict.key_of_string(String.strip elt) in
     let owner_index = MakeDict.lookup owner_dict keyified_owner in
     let elt_index = MakeDict.lookup elt_dict keyified_elt in
     let update_matrix (matrix : FloatRead.mat) (row : int) (col : int) 
 		      (new_val : FloatRead.mat_value) : unit =
-      matrix.(row).(col) <- new_val in
+       matrix.(row).(col) <- new_val in
     match (owner_index, elt_index) with
     | (None, None) ->
        Printf.printf "Invalid owner and elt string -- not in file!\n"
