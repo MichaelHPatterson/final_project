@@ -88,7 +88,7 @@ sig
 end
 
 
-(* The functor that will be used for our owner and elt dicts. Owners and elts
+(* The module that will be used for our owner and elt dicts. Owners and elts
  * will be stored as strings, and their corresponding indices in the ranking
  * matrix will be stored as ints. *)
 module StringIntDictArg : DICT_ARG =
