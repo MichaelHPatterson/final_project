@@ -349,14 +349,14 @@ module FloatRead = Read (FloatMatrixArg)(MakeDict);;
 module FloatWrite = Write (FloatMatrixArg)(MakeDict);;
 
 (* Tests with Matrix operations *)
-FloatWrite.mat_to_file (Helpers.get_mat (FloatRead.process_file 
+FloatWrite.mat_to_file ((fun (x,_,_) -> x) (FloatRead.process_file 
   "test_float_input.txt")) "test_output1.txt";;
 
 let (my_float_matrix, my_owner_dict, my_elt_dict) = 
   FloatRead.process_file "test_float_input.txt";;
 
-FloatWrite.mat_to_file ((add_mat my_float_matrix 
-  (identity 5))) "test_output2.txt";;
+FloatWrite.mat_to_file (add_mat my_float_matrix (identity 5))
+		       "test_output2.txt";;
 
 FloatWrite.data_to_file (my_float_matrix, my_owner_dict, my_elt_dict)
   "test_data_output.txt";;

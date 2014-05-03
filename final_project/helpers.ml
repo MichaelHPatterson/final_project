@@ -5,18 +5,6 @@
 
 open Core.Std
 
-let get_mat (tuple : ('a * 'b * 'c)) : 'a = 
-  match tuple with
-  | (x, _, _) -> x
-
-let get_own_dict (tuple : ('a * 'b * 'c)) : 'a = 
-  match tuple with
-  | (_, x, _) -> x
-
-let get_elt_dict (tuple : ('a * 'b * 'c)) : 'a = 
-  match tuple with
-  | (_, _, x) -> x
-
 (* general fold function for matrices *)
 let matrix_fold (matrix : 'b array array) ~(f : 'a -> 'b -> 'a) ~(init : 'a)
     : 'a =

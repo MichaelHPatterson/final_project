@@ -254,10 +254,14 @@ let random_matrix (dim : int) : mat =
 
 (* Carries out all steps of the algorithm. *)
 let hungarian (m : mat) : (int * int) list =
+  print_mat m; Printf.printf "\n";
+  let time1 = Unix.gettimeofday () in
   let m = steps_12 m in
+  let time2 = Unix.gettimeofday () in
+  Printf.printf "Steps 1 and 2 took %f seconds.\n" (time2 -. time1);
   match is_finished m with
-  | Finished lst -> lst
-  | Unfinished lst -> steps_34 m lst
+  | Finished lst -> (let time3 = Unix.gettimeofday () in Printf.printf "Finished using just steps 1 and 2. Checking is_finished took %f seconds.\n" (time3 -. time2); lst)
+  | Unfinished lst -> (print_mat m; Printf.printf "\n"; print_results lst; let time3 = Unix.gettimeofday () in let x = steps_34 m lst in let time4 = Unix.gettimeofday () in Printf.printf "Proceeded to steps 3 and 4. Checking is_finished took %f seconds, while steps 3 and 4 took %f seconds.\n" (time3 -. time2) (time4 -. time3); x)
 
 (* formats the results of the Hungarian algorithm in terms of string pairs,
  * assuming that the argument is (owner index * elt index) pairs *)
@@ -268,14 +272,8 @@ let format_hungarian (lst : (int * int) list) (owner_dict : dict)
   let convert_to_int = MakeDict.int_of_val in
   let dict_list (d : dict) : ((string * int) list) = MakeDict.fold (
     fun k v acc -> ((convert_to_string k),(convert_to_int v)) :: acc) [] d in
-  let fst_sort a b : int =
-    let (x, _) = a in
-    let (y, _) = b in
-    Int.compare x y in
-  let snd_sort a b : int =
-    let (_, x) = a in
-    let (_, y) = b in
-    Int.compare x y in
+  let fst_sort (x,_) (y,_) : int = Int.compare x y in
+  let snd_sort (_,x) (_,y) : int = Int.compare x y in
   let elt_sorted = List.sort ~cmp:snd_sort (dict_list elt_dict) in
   let owner_sorted = List.sort ~cmp:snd_sort (dict_list owner_dict) in
   let snd_results_sorted = List.sort ~cmp:snd_sort lst in
