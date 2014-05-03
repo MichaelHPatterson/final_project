@@ -223,8 +223,8 @@ let hungarian_test (m : mat) : unit =
     let results = steps_34 m results in
     print_results results
 
-(* Generates a random set of assignments, andn return the cost of that
- * random permutation. Helps for testing optimality. *)
+(* Generates a random set of assignments, and return the cost of that random
+ * permutation. Helps for testing optimality. *)
 let brute_force (m : mat) : float =
   let len = Array.length m in
   if len = 0 then 0.

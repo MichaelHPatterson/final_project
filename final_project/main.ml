@@ -47,6 +47,9 @@ let run_algorithms (input : string) (output : string) : unit =
     let cost_formatted = FloatWrite.mat_formatted cost_convert in
     let time6 = Unix.gettimeofday () in
     let hungarian_results = Hungarian.hungarian(cost_convert) in
+    let lowest_cost = List.fold_left ~f:(fun c (a,b) -> c +. cost_convert.(a).(b)) ~init:0. hungarian_results in
+    Hungarian.brute_force_n cost_convert 100000 lowest_cost;
+    Printf.printf "LOWEST COST: %f\n" lowest_cost;
     let time7 = Unix.gettimeofday () in
     let hungarian_formatted = Hungarian.format_hungarian hungarian_results
 							 owner_dict elt_dict in
