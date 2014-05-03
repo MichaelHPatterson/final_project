@@ -85,7 +85,7 @@ sig
 end
 
 
-(* A functor for 1-10 rankings. *)
+(* A functor for 0-10 rankings. *)
 module FloatMatrixArg : MATRIX_ARG =
 struct
   type value = float
@@ -100,7 +100,7 @@ struct
 end
 
 
-(* A functor for 1-5 rankings. *)
+(* A functor for 0-5 rankings. *)
 module FloatMatrix5Arg : MATRIX_ARG =
 struct
   type value = float
