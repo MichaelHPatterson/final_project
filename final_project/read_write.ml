@@ -13,7 +13,8 @@ exception IndexOutOfBounds
 exception NotSquare
 exception InversionError
 
-(* a "helper functor" that is used for most tasks involving matrices *)
+(* A module type that is used for many tasks involving matrices. Used to
+ * represent ranking systems, as seen below. *)
 module type MATRIX_ARG =
 sig
   (* type for matrix implementation *)
@@ -85,7 +86,7 @@ sig
 end
 
 
-(* A functor for 0-10 rankings. *)
+(* A module for 0-10 rankings. *)
 module FloatMatrixArg : MATRIX_ARG =
 struct
   type value = float
@@ -99,10 +100,11 @@ struct
   let max = 10.
 end
 
+
 (* Note that, in its default configuration, the following two ranking types are
- * not used. However, a simple change in main.ml will allow them to be used,
+ * not used. However, a simple change in main.ml could allow them to be used,
  * albeit only one at a time. *)
-(* A functor for 0-5 rankings. *)
+(* A module for 0-5 rankings. *)
 module FloatMatrix5Arg : MATRIX_ARG =
 struct
   type value = float
@@ -117,7 +119,7 @@ struct
 end
 
 (* See the comment above FloatMatrix5Arg *)
-(* A functor for Like/Dislike ratings *)
+(* A module for Like/Dislike ratings *)
 module FloatLikeArg : MATRIX_ARG =
 struct
   type value = float
@@ -242,8 +244,8 @@ end
 
 
 (* Signature for reading a file and building a matrix, with dicts for indexing
- * the rows and columns. Requires a matrix functor, which defines the type of 
- * the matrix. Also requires a dict functor, which defines the dict that is 
+ * the rows and columns. Requires a MATRIX_ARG argument, which defines the type
+ * of the matrix. Also requires a DICT module, which defines the dict that is 
  * stored. *)
 module Read (M: MATRIX_ARG) (D: DICT) : (READ with type key = D.key
   with type value = D.value with type dict = D.dict) = 
