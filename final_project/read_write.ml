@@ -99,7 +99,9 @@ struct
   let max = 10.
 end
 
-
+(* Note that, in its default configuration, the following two ranking types are
+ * not used. However, a simple change in main.ml will allow them to be used,
+ * albeit only one at a time. *)
 (* A functor for 0-5 rankings. *)
 module FloatMatrix5Arg : MATRIX_ARG =
 struct
@@ -114,7 +116,7 @@ struct
   let max = 5.
 end
 
-
+(* See the comment above FloatMatrix5Arg *)
 (* A functor for Like/Dislike ratings *)
 module FloatLikeArg : MATRIX_ARG =
 struct
@@ -336,18 +338,3 @@ struct
 end
 
 module MakeDict = Make(StringIntDictArg);;
-
-(*
-(* Tests with Matrix operations *)
-FloatWrite.mat_to_file ((fun (x,_,_) -> x) (FloatRead.process_file 
-  "test_float_input.txt")) "test_output1.txt";;
-
-let (my_float_matrix, my_owner_dict, my_elt_dict) = 
-  FloatRead.process_file "test_float_input.txt";;
-
-FloatWrite.mat_to_file (add_mat my_float_matrix (identity 5))
-		       "test_output2.txt";;
-
-FloatWrite.data_to_file (my_float_matrix, my_owner_dict, my_elt_dict)
-  "test_data_output.txt";;
- *)
