@@ -1,0 +1,60 @@
+Alex
+He : 3.
+Be : 0.
+B : 8.
+N : 3.
+F : 3.
+Bill
+H : 3.
+Li : 1.
+B : 9.
+C : 1.
+N : 4.
+Carl
+He : 1.
+Li : 1.
+Be : 7.
+O : 7.
+Ne : 1.
+David
+Li : 7.
+N : 4.
+O : 4.
+F : 2.
+Ne : 1.
+Edward
+He : 3.
+Be : 8.
+B : 9.
+O : 9.
+Ne : 9.
+Fabian
+H : 7.
+Be : 2.
+B : 2.
+O : 9.
+F : 9.
+George
+He : 3.
+Li : 0.
+Be : 7.
+O : 0.
+Ne : 5.
+Henry
+He : 2.
+Li : 8.
+B : 8.
+C : 0.
+O : 0.
+Ian
+H : 6.
+He : 3.
+Be : 9.
+C : 3.
+O : 4.
+Joseph
+He : 0.
+B : 4.
+C : 1.
+F : 0.
+Ne : 1.
