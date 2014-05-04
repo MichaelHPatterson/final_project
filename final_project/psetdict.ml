@@ -366,7 +366,8 @@ struct
       | Two (_, left, _, right) -> (extract_height left)-(extract_height right)
 
   (* balances the tree by matching a tree with one of four unbalanced instances.
-   * For more information on how this works, see photo in our documentation. *)
+   * For more information on how this works, see the photo 
+   * avl_tree_rebalancing.png in our documentation. *)
   let balance (d : dict) : dict =
     let left_left (input : dict) : dict =
       match input with

@@ -30,8 +30,8 @@ let run_algorithms (input : string) (output : string) : unit =
     let hungarian_formatted = Hungarian.format_hungarian hungarian_results
 							 owner_dict elt_dict in
     let formatted_output = List.concat [["Input Rankings:\n"]; 
-      formatted_input; ["Pagerank Rankings:\n"]; pagerank_formatted;
-      ["Cost Matrix\n"]; cost_formatted; ["Hungarian Algorithm Results\n"];
+      formatted_input; ["\nPagerank Rankings:\n"]; pagerank_formatted;
+      ["\nCost Matrix\n"]; cost_formatted; ["\nHungarian Algorithm Results\n"];
       hungarian_formatted] in
     Out_channel.write_lines output formatted_output)
   with (Sys_error error) ->
