@@ -8,35 +8,13 @@ open Core.Std
 open Read_write
 
 
-let functor_ind = ref 0;;
 
-(*
-let ranking1 = (module FloatMatrixArg : MATRIX_ARG);;
-let ranking2 = (module FloatMatrix5Arg : MATRIX_ARG);;
-let ranking3 = (module FloatLikeArg : MATRIX_ARG);;
-let my_functor_list = [ranking1; ranking2; ranking3];;
-
-let rec get_functor x lst =
-  match lst with
-  | y :: ys -> if x <= 0 then y else get_functor (x - 1) ys
-  | _ -> failwith "ran out of elts in list";;
-
-let my_functor = get_functor !functor_ind my_functor_list;;
- *)
-
-let ranking0 = (module FloatMatrixArg : MATRIX_ARG);;
-let ranking1 = (module FloatMatrix5Arg : MATRIX_ARG);;
-let ranking2 = (module FloatLikeArg : MATRIX_ARG);;
-let functor_array = [|ranking0; ranking1; ranking2|];;
-let my_functor = functor_array.(!functor_ind)
-module MatrixRank = (val my_functor : MATRIX_ARG);;
+(* Note: The functors of the following modules are the only variables that must
+ * be changed to allow for different ranking types and dictionaries. *)
+module MatrixRank = FloatMatrixArg;;
 module FloatRead = Read(MatrixRank)(MakeDict);;
 module FloatWrite = Write(MatrixRank)(MakeDict);;
 
-(*
-module FloatRead = Read(FloatMatrixArg)(MakeDict);;
-module FloatWrite = Write(FloatMatrixArg)(MakeDict);;
- *)
 let run_algorithms (input : string) (output : string) : unit =
   try (
     let time1 = Unix.gettimeofday () in
@@ -121,32 +99,22 @@ let remove_rating (file : string) (owner : string) (elt : string) : unit =
 (* Parses command-line arguments, running the algorithms on the specified file.
  * Returns an error if incorrect number of args provided. *)
 let parse_args () =
-  let match_rank_type = function
-    | "0to10" -> functor_ind := 0;
-    | "0to5" -> functor_ind := 1;
-    | "LiketoDislike" -> functor_ind := 2;
-    | _ -> Printf.printf "Invalid ranking type! You must choose 0to10, ";
-	   Printf.printf "0to5, or LiketoDislike.\n";
-	   exit 1 in
   let usage () =
     let main = "usage " ^ Sys.argv.(0) in
-    let my_string = main ^ " [input file] [output file] [rank method] OR \n" ^
-      main ^ " update [input file] [owner] [elt] [value] [rank method] OR \n" ^
-	main ^ " remove [input file] [owner] [elt] [rank method] \n" in
+    let my_string = main ^ " [input file] [output file] OR \n" ^
+      main ^ " update [input file] [owner] [elt] [value] OR \n" ^
+	main ^ " remove [input file] [owner] [elt] \n" in
     Out_channel.output_string stdout my_string in
   match Array.length Sys.argv with
-  | 4 -> match_rank_type (Sys.argv.(3));
-	 run_algorithms Sys.argv.(1) Sys.argv.(2);
-  | 6 -> 
+  | 3 -> run_algorithms Sys.argv.(1) Sys.argv.(2);
+  | 5 -> 
      (match Sys.argv.(1) with
-      | "remove" -> match_rank_type (Sys.argv.(5));
-		    remove_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4);
+      | "remove" -> remove_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4);
       | _ -> Printf.printf "Invalid argument: expected \"remove\" as the ";
 	     Printf.printf "first argument.\n")
-  | 7 -> 
+  | 6 -> 
      (match Sys.argv.(1) with
       | "update" -> 
-	 match_rank_type (Sys.argv.(6));
 	 update_rating Sys.argv.(2) Sys.argv.(3) Sys.argv.(4) 
            (Float.of_string Sys.argv.(5));
       | _ -> Printf.printf "Invalid argument: expected \"update\" as the ";
