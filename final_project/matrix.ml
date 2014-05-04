@@ -30,6 +30,19 @@ struct
   let zero_mat (dimx : int) (dimy : int) : mat =
     Array.make_matrix ~dimx ~dimy 0.
 
+  (* Generates a random dim x dim matrix of integers (casted as floats) from 0
+   * to 99, inclusive. *)
+  let random_matrix (dim : int) : mat =
+    let m : mat = zero_mat dim dim in
+    for i = 0 to dim - 1 do
+      let v = Array.create ~len:dim 0. in
+      for j = 0 to dim - 1 do
+	v.(j) <- float (Random.int 100);
+      done;
+      m.(i) <- v
+    done;
+    m
+
   (* Checks whether v is the zero vector. *)
   let is_zero_vec (v : vec) (precision : float) : bool =
     Array.for_all v ~f:(fun x -> Float.abs x <= precision)
@@ -388,11 +401,6 @@ struct
       | None -> raise InversionError
       | Some matrix -> matrix
     in mult_mat eigenbasis (mult_mat diagonal inv)
-
-  (* Takes a matrix m of rankings, and computes m^T * m (where m^T is the
-   * transpose of m), which is the matrix of element relationships. *)
-  let rank_to_relations (m : mat) : mat =
-    mult_mat (transpose m) m
 end
 
 (* For typing convenience *)
@@ -411,6 +419,23 @@ let inv_print (m : M.mat) : unit =
   match M.inverse m with
   | None -> Printf.printf "The matrix is not invertible.\n\n"
   | Some m' -> Printf.printf "Inverse:\n"; M.print_mat m'; Printf.printf "\n"
+
+(* Generates n dim x dim matrices, and verifies that the inverse function
+ * returns the accurate result for invertible matrices. *)
+let rec test_inv (dim : int) (n : int) : unit =
+  if n <= 0 then ()
+  else
+    let m = M.random_matrix dim in
+    match M.inverse m with
+    | None -> test_inv dim n
+    | Some m_inv ->
+       assert(M.is_identity (M.mult_mat m m_inv) dim 0.001);
+       assert(M.is_identity (M.mult_mat m_inv m) dim 0.001);
+       test_inv dim (n - 1)
+
+let run_tests () =
+  test_inv 10 100
+
 (*
 (* Verifying that the 5x5 identity matrix has an eigenbasis and is invertible *)
 let m1 = M.identity 5 in

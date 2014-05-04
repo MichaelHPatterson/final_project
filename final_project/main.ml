@@ -10,10 +10,10 @@ open Read_write
 
 let functor_ind = ref 0;;
 
+(*
 let ranking1 = (module FloatMatrixArg : MATRIX_ARG);;
 let ranking2 = (module FloatMatrix5Arg : MATRIX_ARG);;
 let ranking3 = (module FloatLikeArg : MATRIX_ARG);;
-
 let my_functor_list = [ranking1; ranking2; ranking3];;
 
 let rec get_functor x lst =
@@ -21,10 +21,15 @@ let rec get_functor x lst =
   | y :: ys -> if x <= 0 then y else get_functor (x - 1) ys
   | _ -> failwith "ran out of elts in list";;
 
-let my_functor = get_functor (!(functor_ind)) my_functor_list;;
+let my_functor = get_functor !functor_ind my_functor_list;;
+ *)
 
+let ranking0 = (module FloatMatrixArg : MATRIX_ARG);;
+let ranking1 = (module FloatMatrix5Arg : MATRIX_ARG);;
+let ranking2 = (module FloatLikeArg : MATRIX_ARG);;
+let functor_array = [|ranking0; ranking1; ranking2|];;
+let my_functor = functor_array.(!functor_ind)
 module MatrixRank = (val my_functor : MATRIX_ARG);;
-
 module FloatRead = Read(MatrixRank)(MakeDict);;
 module FloatWrite = Write(MatrixRank)(MakeDict);;
 
@@ -75,16 +80,16 @@ let run_algorithms (input : string) (output : string) : unit =
     if error = input ^ ": No such file or directory" then
       Printf.printf "The input file does not exist!\n"
     else
-      Printf.printf "An error occurred.\n"
+      Printf.printf "An error occurred: \"%s\"\n" error
 
 let update_rating (file : string) (owner: string) (elt : string) 
   (updated_value : FloatRead.mat_value) : unit =
   try (try (
     let (input_mat, owner_dict, elt_dict) = FloatRead.process_file file in
-    let check_bounds my_val = my_val >= MatrixRank.min && my_val <=
-        MatrixRank.max in
+    let check_bounds my_val = my_val >= MatrixRank.min &&
+			      my_val <= MatrixRank.max in
     if check_bounds updated_value then ()
-    else failwith "updated value not in bounds";
+    else (Printf.printf "Your ranking was out of bounds!\n"; exit 1);
     let keyified_owner = MakeDict.key_of_string (String.strip owner) in
     let keyified_elt = MakeDict.key_of_string(String.strip elt) in
     let owner_index = MakeDict.lookup owner_dict keyified_owner in
@@ -104,11 +109,11 @@ let update_rating (file : string) (owner: string) (elt : string)
   with (Sys_error error) ->
     if error = file ^ ": No such file or directory" then
       Printf.printf "That file does not exist!\n"
-    else Printf.printf "An error occurred.\n")
+    else Printf.printf "An error occurred: \"%s\"\n" error)
   with (Failure error) ->
     if error = "ranking not in bounds" then
       Printf.printf "Your ranking was out of bounds!\n"
-    else Printf.printf "An error occurred.\n"
+    else Printf.printf "An error occurred: \"%s\"\n" error
   
 let remove_rating (file : string) (owner : string) (elt : string) : unit =
   update_rating file owner elt FloatRead.default

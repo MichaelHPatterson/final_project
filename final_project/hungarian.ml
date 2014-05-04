@@ -208,6 +208,12 @@ let rec steps_34 (m : mat) (assignments : (int * int) list) : (int * int) list =
       | Finished lst -> lst
       | Unfinished lst -> steps_34 m lst
 
+(* Carries out all steps of the algorithm. *)
+let hungarian (m : mat) : (int * int) list =
+  match is_finished (steps_12 m) with
+  | Finished lst -> lst
+  | Unfinished lst -> steps_34 m lst
+  
 
 
 (****************************FUNCTIONS FOR TESTING*****************************)
@@ -251,30 +257,6 @@ let brute_force_n (m : mat) (n : int) (lowest_cost : float) : unit =
   done;
   List.iter ~f:(fun c -> assert (c >= lowest_cost)) !costs
 
-(* Generates a random dim x dim matrix of integers (casted as floats) from 0 to
- * 99, inclusive. *)
-let random_matrix (dim : int) : mat =
-  let m : mat = zero_mat dim dim in
-  for i = 0 to dim - 1 do
-    let v = Array.create ~len:dim 0. in
-    for j = 0 to dim - 1 do
-      v.(j) <- float (Random.int 100);
-    done;
-    m.(i) <- v
-  done;
-  m
-
-(* Carries out all steps of the algorithm. *)
-let hungarian (m : mat) : (int * int) list =
-  print_mat m; Printf.printf "\n";
-  let time1 = Unix.gettimeofday () in
-  let m = steps_12 m in
-  let time2 = Unix.gettimeofday () in
-  Printf.printf "Steps 1 and 2 took %f seconds.\n" (time2 -. time1);
-  match is_finished m with
-  | Finished lst -> (let time3 = Unix.gettimeofday () in Printf.printf "Finished using just steps 1 and 2. Checking is_finished took %f seconds.\n" (time3 -. time2); lst)
-  | Unfinished lst -> (print_mat m; Printf.printf "\n"; print_results lst; let time3 = Unix.gettimeofday () in let x = steps_34 m lst in let time4 = Unix.gettimeofday () in Printf.printf "Proceeded to steps 3 and 4. Checking is_finished took %f seconds, while steps 3 and 4 took %f seconds.\n" (time3 -. time2) (time4 -. time3); x)
-  
 (* formats the results of the Hungarian algorithm in terms of string pairs,
  * assuming that the argument is (owner index * elt index) pairs. Sorted in 
  * ascending order based on owner index *)
@@ -312,40 +294,39 @@ let format_test (test_ints : ((int * int) list))
   if (expected_results = my_results) then 
     Out_channel.output_string stdout "Success" else print_results my_results
  *)
-(* Tests steps 1 and 2 of the algorithm (what we have so far) by randomly
- * generating a matrix, and testing the algorithm. If it yields a result,
- * stop; else try again with another random matrix until it works. *)
-let rec test1 () : unit =
-  let m = random_matrix 4 in
-  print_mat m; Printf.printf "\n";
-  let m' = steps_12 m in
-  (match is_finished m' with
-  | Unfinished _ -> Printf.printf "Failed attempt.\n"; test1 ()
-  | Finished r -> print_results r);
-  flush_all ()
 
-
-(* Test function that gives a feel for runtimes and optimality. *)
-let test2 (dim : int) (num_tries : int) : unit =
+(* Test function that runs the algorithm on a series of random dim x dim
+ * matrices, and uses brute_force_n to run 100 assert statements on each one to
+ * verify optimality of the final assignments. *)
+let test (dim : int) (num_tries : int) : unit =
   let total_time = ref 0. in
   for _i = 0 to num_tries - 1 do
     let start_time = Unix.gettimeofday () in
     let matrix = random_matrix dim in
-    let m = steps_12 matrix in
-    let solution = is_finished m in
-    let pairs = (match solution with
-    | Finished assignments -> assignments
-    | Unfinished assignments -> steps_34 m assignments) in
+    let pairs = hungarian matrix in
     let end_time = Unix.gettimeofday () in
     total_time := !total_time +. end_time -. start_time;
     let f c (a,b) = c +. matrix.(a).(b) in
-    let cost = List.fold_left ~f ~init:0. pairs in
-    brute_force_n matrix 100 cost
+    let lowest_cost = List.fold_left ~f ~init:0. pairs in
+    brute_force_n matrix 100 lowest_cost
   done;
   let avg_time = !total_time /. (float num_tries) in
-  Printf.printf "On average, for %ix%i matrices, each test " dim dim;
-  Printf.printf "took %f seconds.\n" avg_time;
+  Printf.printf "On average, for %ix%i matrices, each application of " dim dim;
+  Printf.printf "the Hungarian algorithm took %f seconds.\n" avg_time;
   flush_all ()
 
+(* A function that runs a series of tests. The tests run a series of assert
+ * statements (in brute_force_n) to ensure optimality, and print average
+ * runtimes. *)
 let run_tests () =
-  test1 (); test2 4 1000; test2 5 1000; test2 6 1000; test2 7 1000; test2 8 1000; test2 9 1000; test2 10 1000; test2 12 1000; test2 15 100; test2 18 100; test2 20 100; test2 30 1; test2 40 1; test2 50 1; test2 75 1; test2 90 1; test2 100 1; test2 250 1
+  test 4 1000;
+  test 5 1000;
+  test 6 1000;
+  test 7 1000;
+  test 8 1000;
+  test 9 1000;
+  test 10 1000;
+  test 12 1000;
+  test 15 100;
+  test 18 100;
+  test 20 100
