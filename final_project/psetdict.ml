@@ -1,14 +1,14 @@
 (* CS51 Final Project: N x N Matching
  * CS51 Spring 2014
  * Authors: Madhu Vijay & Michael Patterson
- * dict.ml -- provides dict functionality for use in reading from files; adapted
- * from PS5 but with new AVLDict, which uses an AVL tree *)
+ * psetdict.ml -- provides dict functionality for use in reading from files;
+ * adapted from PS5 but with new AVLDict, which uses an AVL tree *)
 
 open Core.Std
 
 exception TODO
 
-(* Interfaces for a dictionary, which associates values with keys. *)
+(* Interface for a dictionary, which associates values with keys. *)
 module type DICT =
 sig
   type key
@@ -529,7 +529,7 @@ struct
     done
 end
 
-(* Make will return the dict specified below, allowing for the dict to be easily
+(* Make will return the dict specified below, allowing the dict to be easily
  * changed *)
 module Make (D:DICT_ARG) : (DICT with type key = D.key
   with type value = D.value) =

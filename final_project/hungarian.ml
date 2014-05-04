@@ -318,6 +318,9 @@ let test (dim : int) (num_tries : int) : unit =
 (* A function that runs a series of tests. The tests run a series of assert
  * statements (in brute_force_n) to ensure optimality, and print average
  * runtimes. *)
+(* Feel free to include "run_tests ()" at the bottom of this file in order to
+ * test the algorithm. We have not included that by default, since doing so
+ * would slow down the core operations that are called from this file. *)
 let run_tests () =
   test 4 1000;
   test 5 1000;

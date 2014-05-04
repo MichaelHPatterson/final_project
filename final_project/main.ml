@@ -7,14 +7,14 @@
 open Core.Std
 open Read_write
 
-
-
 (* Note: The functors of the following modules are the only variables that must
  * be changed to allow for different ranking types and dictionaries. *)
 module MatrixRank = FloatMatrixArg;;
 module FloatRead = Read(MatrixRank)(MakeDict);;
 module FloatWrite = Write(MatrixRank)(MakeDict);;
 
+(* Takes an input and output file as string inputs. Processes the input,
+ * calls the relevant algorithms, and generates output. *)
 let run_algorithms (input : string) (output : string) : unit =
   try (
     let (input_mat, owner_dict, elt_dict) = FloatRead.process_file input in
@@ -40,6 +40,8 @@ let run_algorithms (input : string) (output : string) : unit =
     else
       Printf.printf "An error occurred: \"%s\"\n" error
 
+(* Function that updates an owner's rating for an element in an existing
+ * .txt file. *)
 let update_rating (file : string) (owner: string) (elt : string) 
   (updated_value : FloatRead.mat_value) : unit =
   try (try (
@@ -72,7 +74,9 @@ let update_rating (file : string) (owner: string) (elt : string)
     if error = "ranking not in bounds" then
       Printf.printf "Your ranking was out of bounds!\n"
     else Printf.printf "An error occurred: \"%s\"\n" error
-  
+
+(* Removes an owner's expressed preference for an element in an existing .txt
+ * file, by updating that preference to the default value. *)  
 let remove_rating (file : string) (owner : string) (elt : string) : unit =
   update_rating file owner elt FloatRead.default
 

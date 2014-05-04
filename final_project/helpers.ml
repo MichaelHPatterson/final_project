@@ -1,7 +1,7 @@
 (* CS51 Final Project: N x N Matching
  * CS51 Spring 2014
  * Authors : Madhu Vijay & Michael Patterson
- * helpers.ml -- misc. helper functions *)
+ * helpers.ml -- misc. helper functions related to matrices *)
 
 open Core.Std
 

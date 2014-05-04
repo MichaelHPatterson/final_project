@@ -1,3 +1,9 @@
+(* CS51 Final Project: N x N Matching
+ * CS51 Spring 2014
+ * Authors : Madhu Vijay & Michael Patterson
+ * polynomial.ml -- Uses Newton's method to find the roots of a polynomial,
+ * for the purposes of matrix eigendecomposition. *)
+
 (* NOTE: This file is no longer used in our core exponentiation function. We
  * have included it anyway, since it took a lot of work and was critical to
  * our eigen function in matrix.ml. *)
@@ -47,7 +53,8 @@ let rec newton (p : poly) (g : float) (epsilon : float) : float option =
 
 (* Same as the newton function above, but assumes that you already know the
  * derivative (d) of p. *)
-let rec newton_d (p : poly) (d : poly) (g : float) (epsilon : float) : float option =
+let rec newton_d (p : poly) (d : poly) (g : float) (epsilon : float)
+	: float option =
   let abs_float : float -> float = fun x -> if x > 0. then x else (-.x) in
   if abs_float (evaluate p g) < epsilon then Some g
   else
@@ -65,7 +72,8 @@ let rec newton_d (p : poly) (d : poly) (g : float) (epsilon : float) : float opt
 let rec newton_all (p : poly) ((lower, upper) : float * float)
 			(try_prec : float) (duplicate_prec : float)
 			(answer_prec : float) : float list =
-  let rec newton_int_rec (d : poly) ((low, high) : float * float) (curr : float list) : float list =
+  let rec newton_int_rec (d : poly) ((low, high) : float * float)
+			 (curr : float list) : float list =
     if low > high then curr
     else
       let g = low in

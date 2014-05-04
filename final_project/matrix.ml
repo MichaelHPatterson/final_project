@@ -1,8 +1,8 @@
 (* CS51 Final Project: N x N Matching
  * CS51 Spring 2014
  * Authors : Madhu Vijay & Michael Patterson
- * matrix.ml -- Provides interface for matrix manipulation (e.g  addition,
- * row reduction, etc.) *)
+ * matrix.ml -- Provides operations for matrix manipulation (e.g  addition,
+ * row reduction, exponentiation, etc.) *)
 
 open Core.Std
 
@@ -30,14 +30,14 @@ struct
   let zero_mat (dimx : int) (dimy : int) : mat =
     Array.make_matrix ~dimx ~dimy 0.
 
-  (* Generates a random dim x dim matrix of integers (casted as floats) from 0
-   * to 99, inclusive. *)
+  (* Generates a random dim x dim matrix of floats between 0 and 1 (for
+   * testing purposes, here and elsewhere). *)
   let random_matrix (dim : int) : mat =
     let m : mat = zero_mat dim dim in
     for i = 0 to dim - 1 do
       let v = Array.create ~len:dim 0. in
       for j = 0 to dim - 1 do
-	v.(j) <- float (Random.int 100);
+	v.(j) <- Random.float 1.
       done;
       m.(i) <- v
     done;
@@ -68,18 +68,16 @@ struct
     let len = Array.length v in
     if len = 0 then ()
     else 
-      Printf.printf "{%f" v.(0);
+      Printf.printf "[|%f" v.(0);
       for i = 1 to len - 1 do
 	Printf.printf ", %f" v.(i)
       done;
-      Printf.printf "}";
+      Printf.printf "|]";
       flush_all ()
 
   (* Prints out a matrix (for testing purposes). *)
   let print_mat (m : mat) : unit =
-    Printf.printf "{";
-    Array.iter ~f:(fun v -> print_vec v; Printf.printf ",\n") (transpose m);
-    Printf.printf "}\n"
+    Array.iter ~f:(fun v -> print_vec v; Printf.printf "\n") (transpose m)
 
   (* Multiplies the vector v by a scalar value. *)
   let scalar_mult_vec (v : vec) (factor : float) : vec =
@@ -195,8 +193,8 @@ struct
       m.(n1) <- m.(n2);
       m.(n2) <- v
 
-  (* Row_reduces a matrix. The steps of the algorithm (taken directly from Math
-   * 23a lecture notes) are pasted in as comments. Returns the row-reduced
+  (* Row_reduces a matrix. The steps of the algorithm (taken from Math 23a
+   * lecture notes) are pasted in as comments. Returns the row-reduced
    * matrix and the rank (number of pivotal columns) of m. *)
   let row_reduce (m : mat) : mat * int =
     (* Column reduces rows n through Array.length m - 1 of m. Assumes that piv
@@ -207,8 +205,8 @@ struct
       else let height = Array.length m.(0) in
       if n >= len || n >= height || piv >= len || piv >= height then (m, piv)
       else
-      (* (a) SWAP rows so that the leftmost column that is not all zeroes has a
-             nonzero entry in the first row. *)
+      (* "(a) SWAP rows so that the leftmost column that is not all zeroes has a
+          nonzero entry in the first row." *)
       (* Returns the column index of the first nonzero element in the specified
        * row <row>, ignoring the first <piv> elements. *)
 	let first_nonzero (m : mat) (row : int) : (int * float) option =
@@ -221,24 +219,20 @@ struct
 	in
 	match first_nonzero m n with
 	| None ->
-           (* No pivotal 1 found in that row. *)
+	   (* No pivotal 1 found in that row. *)
            col_reduce_past m (n + 1) piv
 	| Some (swap_col, value) ->
            (* Pivotal value of <value> found in <swap_col>th position. *)
 	swap m n swap_col;
-
-        (* (b) DIVIDE by this entry to get a pivotal 1. *)
+        (* "(b) DIVIDE by this entry to get a pivotal 1." *)
         m.(n) <- scalar_mult_vec m.(n) (1. /. value);
-
-        (* (c) SUBTRACT multiples of the first row from the others to clear out
-            the rest of the column under the pivotal 1. *)
+        (* "(c) SUBTRACT multiples of the first row from the others to clear out
+           the rest of the column under the pivotal 1." *)
         for i = 0 to len - 1 do
 	  if i <> n then
 	    m.(i) <- add_vec m.(i) (scalar_mult_vec m.(n) (-1. *. m.(i).(n)))
 	done;
-
 	col_reduce_past m (n + 1) (piv + 1)
-
     in let (m,p) = col_reduce_past (transpose m) 0 0 in (transpose m, p)
 
   (* Checks whether the first n columns of m are the identity matrix. *)
@@ -367,12 +361,12 @@ struct
       else e_rec (from + 1) (curr +. (1. /. (float (factorial from))))
     in e_rec 0 0.
 
-  (* Computes exp(m) by summing m^i/i! from i=1 to i=2*dim, where dim is the
-   * dimension of the matrix. (The value 2*dim is used because typically, terms
-   * past m^(2*dim)/(2*dim)! are small enough to be negligible. *)
+  (* Computes exp(m) by summing m^i/i! from i=1 to i=3*dim, where dim is the
+   * dimension of the matrix. (The value 3*dim is used because typically, terms
+   * past m^(3*dim)/(3*dim)! are small enough to be negligible. *)
   let exponentiate (m : mat) : mat =
     let dim = Array.length m in
-    let stop = dim * 2 in
+    let stop = dim * 3 in
     let rec exp_helper (curr : mat) (last : mat) (pos : int) : mat =
       if pos > stop then curr
       else
@@ -403,77 +397,20 @@ struct
     in mult_mat eigenbasis (mult_mat diagonal inv)
 end
 
-(* For typing convenience *)
-module M = FloatMatrix
-
-let eigen_print (m : M.mat) : unit =
-  let f (value, vector) =
-    Printf.printf "Eigenvalue %f corresponds to eigenvector " value;
-    M.print_vec vector;
-    Printf.printf "\n"
-  in
-  Array.iter ~f (M.eigen m);
-  Printf.printf "\n"
-
-let inv_print (m : M.mat) : unit =
-  match M.inverse m with
-  | None -> Printf.printf "The matrix is not invertible.\n\n"
-  | Some m' -> Printf.printf "Inverse:\n"; M.print_mat m'; Printf.printf "\n"
-
-(* Generates n dim x dim matrices, and verifies that the inverse function
- * returns the accurate result for invertible matrices. *)
-let rec test_inv (dim : int) (n : int) : unit =
+(* Exponentiates n random dim x dim matrices. Since there's no easy way to
+ * use assert statements to verify correctness, this function just outputs
+ * the original matrix and its computed exponential, which can then be verified
+ * using a tool like Mathematica. *)
+(* Feel free to add a line "run_tests ()" at the bottom of the file, in order to
+ * help test exponentiation. *)
+let rec run_tests (dim : int) (n : int) : unit =
   if n <= 0 then ()
   else
-    let m = M.random_matrix dim in
-    match M.inverse m with
-    | None -> test_inv dim n
-    | Some m_inv ->
-       assert(M.is_identity (M.mult_mat m m_inv) dim 0.001);
-       assert(M.is_identity (M.mult_mat m_inv m) dim 0.001);
-       test_inv dim (n - 1)
-
-let run_tests () =
-  test_inv 10 100
-
-(*
-(* Verifying that the 5x5 identity matrix has an eigenbasis and is invertible *)
-let m1 = M.identity 5 in
-eigen_print m1;
-inv_print m1;
-M.print_mat (M.exponentiate m1); Printf.printf "\n"
-;;
-
-(* A more difficult invertible matrix *)
-let m2 = [|[|0.127131; 0.873108; 0.116526; 0.452341|]; [|0.405467; 0.91256; 0.0373603; 0.50571|]; [|0.703187; 0.126679; 0.537015; 0.710102|]; [|0.964194; 0.052814; 0.731034; 0.103877|]|] in
-inv_print m2;
-M.print_mat (M.exponentiate m2); Printf.printf "\n\n\n"
-;;
-
-(* A non-invertible matrix *)
-inv_print [|[|1.; 0.; 0.; 0.; 0.|]; [|0.; 1.; 0.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 1.; 0.; 0.|]; [|0.; 0.; 0.; 0.; 1.|]|]
-;;
-
-(* Simple invertible test matrix, with eigenvalues -1, 4, and 7 *)
-let m4 = [|[|4.;0.;0.|]; [|-2.;2.;-5.|]; [|4.5;-3.;4.|]|] in
-eigen_print m4;
-inv_print m4;
-M.print_mat (M.exponentiate m4); Printf.printf "\n\n"
-;;
-
-(* More difficult matrix -- has eigenvalues 1, 2, and 2 *)
-let m5 = [|[|2.;0.;0.|]; [|1.;2.;1.|]; [|-1.;0.;1.|]|] in
-eigen_print m5;
-inv_print m5;
-M.print_mat (M.exponentiate m5); Printf.printf "\n"
-;;
-
-(* Another weird matrix, with eigenvalues 1, 1, and 3 *)
-(* NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTE: This example sometimes results in 1 or more of the following 5 problems: (1) eigen_new only finds 1 or 2 eigenvectors but not all 3; (2) eigen_new returns MORE than 3 vectors, and some vectors are scalar multiples ofe ach other; (3) eigen_new returns a zero vector; (4) the exponentiation function throws the InversionError exception (probably caused by problems #1, #2, and perhaps #3 above); and/or (5) the exponentiation function causes the basis_vec function to throw an IndexOutOfBounds exception *)
-(* UPDATE: I think it's fixed now *)
-let m6 = [|[|1.;0.;0.|]; [|0.;1.;0.|]; [|2.;0.;3.;|]|] in
-eigen_print m6;
-inv_print m6;
-M.print_mat (M.exponentiate m6); Printf.printf "\n"
-;;
-*)
+    let m = FloatMatrix.random_matrix dim in
+    Printf.printf "ORIGINAL MATRIX:\n";
+    FloatMatrix.print_mat m;
+    let m_exp = FloatMatrix.exponentiate m in
+    Printf.printf "\nMATRIX EXPONENTIAL:\n";
+    FloatMatrix.print_mat m_exp;
+    Printf.printf "\n\n";
+    run_tests dim (n - 1)
